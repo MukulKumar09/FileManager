@@ -1,0 +1,11 @@
+sorting
+    modified
+    case insensetive
+
+search
+    case insensetive
+
+window
+    breadcrumb back home bug
+
+Home bug
