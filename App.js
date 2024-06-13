@@ -53,6 +53,7 @@ const App = () => {
     const windowRefs = useRef([])
     const currTabStatic = useRef(0)
     const [tabs, setTabs] = useState([])
+    const [tabsCache, setTabsCache] = ([])
     const [tabVisible, setTabVisible] = useState([])
     const [tabCounter, setTabCounter] = useState(0)
     const [tabType, setTabType] = useState([])
@@ -113,28 +114,19 @@ const App = () => {
         }
     }, [tabCounter])
 
-    const buildCache = async (path, isHardReload) => {
-        const reload = async () => {
-            let dirListing
-            try {
-                dirListing = await RNFS.readDir(path)
-            } catch (e) {
-                showToast("Error loading folder")
-                dirListing = []
-            }
-            setMainCache({
-                ...mainCache,
-                [path]: dirListing
-            })
-            console.log("build cache")
+    const buildCache = async (path) => {
+        let dirListing
+        try {
+            dirListing = await RNFS.readDir(path)
+        } catch (e) {
+            showToast("Error loading folder")
+            dirListing = []
         }
-        if (isHardReload) {
-            reload()
-        } else {
-            if (!(path in mainCache)) {
-                reload()
-            }
-        }
+        setMainCache({
+            ...mainCache,
+            [path]: dirListing
+        })
+        console.log("build cache")
         return 1
     }
 
@@ -273,7 +265,7 @@ const App = () => {
         setInputModal(0)
         if (type == 0) {
             await RNFS.mkdir(path + "/" + value)
-            await buildCache(path, 1)
+            await buildCache(path)
             ToastAndroid.showWithGravity(
                 "Folder created",
                 ToastAndroid.SHORT,
@@ -281,7 +273,7 @@ const App = () => {
             );
         } else {
             await RNFS.writeFile(path + "/" + value, "")
-            await buildCache(path, 1)
+            await buildCache(path)
             ToastAndroid.showWithGravity(
                 "File created",
                 ToastAndroid.SHORT,
@@ -468,7 +460,7 @@ const App = () => {
             })
 
         } else { //else only dest
-            await buildCache(operationDest.current, 1)
+            await buildCache(operationDest.current)
         }
 
         if (breakOperation == 1) {
@@ -540,7 +532,7 @@ const App = () => {
 
             failedItems.current = []
             selectedItemsforOperation.current = []
-            await buildCache(operationDest.current, 1)
+            await buildCache(operationDest.current)
             setDeleteModal(0)
             setBreakOperation(0)
         }
@@ -553,7 +545,7 @@ const App = () => {
         })
         setInputModal(0)
         await moveHandler(item["path"], operationDest.current + "/" + value)
-        await buildCache(operationDest.current, 1)
+        await buildCache(operationDest.current)
         ToastAndroid.showWithGravity(
             "Item(s) renamed",
             ToastAndroid.SHORT,

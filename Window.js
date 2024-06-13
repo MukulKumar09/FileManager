@@ -35,14 +35,13 @@ const Window = forwardRef((props, ref) => {
     }
 
     useEffect(() => { //first
-        props.buildCache(currPath, 0)
+        if (props.mainCache[currPath] == undefined)
+            props.buildCache(currPath)
         setBreadCrumbs(props.breadCrumbsTabName(currPath, props.index))
     }, [currPath])
-
     useEffect(() => {
-        if (props.mainCache[currPath] !== undefined) {
+        if (props.mainCache[currPath] !== undefined)
             handleSort(props.mainCache[currPath])
-        }
     }, [props.mainCache[currPath]])
 
     useEffect(() => {
@@ -450,7 +449,7 @@ styles.listItem]}>
                 </View> :
                 <VirtualizedList
                     onRefresh={() => {
-                        props.buildCache(currPath, 1)
+                        props.buildCache(currPath)
                         setSelectedItems([])
                         setSelectedItem([])
                     }
@@ -601,7 +600,7 @@ styles.listItem]}>
                                     styles.padding
                                 ]}
                                 onPress={() => {
-                                    props.buildCache(currPath, 1)
+                                    props.buildCache(currPath)
                                     setSelectedItems([])
                                     setSelectedItem([])
                                 }}
