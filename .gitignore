@@ -1,3 +1,7 @@
+#CUSTOM
+/assets
+/old_files
+
 # OSX
 #
 .DS_Store
