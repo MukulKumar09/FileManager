@@ -7,6 +7,7 @@ import RNFS from 'react-native-fs';
 const Window = forwardRef((props, ref) => {
     console.log(props.index, " window render")
     const [filesList, setFilesList] = useState([])
+    const [currPath, setCurrPath] = useState("Home")
     const [properties, setProperties] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
     const [selectedItem, setSelectedItem] = useState([])
@@ -33,24 +34,16 @@ const Window = forwardRef((props, ref) => {
         setProperties(result)
     }
 
-    const changeTabPath = (path) => {
-        let tempTabPaths = [...props.tabPaths]
-        tempTabPaths[props.index] = path
-        console.log("temptabpath:", tempTabPaths)
-        props.setTabPaths(tempTabPaths)
-    }
-
     useEffect(() => { //first
-        if (props.mainCache[props.currPath] == undefined)
-            props.buildCache(props.currPath)
-        setBreadCrumbs(props.breadCrumbsTabName(props.currPath, props.index))
-    }, [props.currPath])
+        if (props.mainCache[currPath] == undefined)
+            props.buildCache(currPath)
+        setBreadCrumbs(props.breadCrumbsTabName(currPath, props.index)) //set breadcrumbs, tabname
+    }, [currPath])
 
     useEffect(() => {
-        console.log("cache changed-------------------------------------")
-        if (props.mainCache[props.currPath] !== undefined)
-            handleSort(props.mainCache[props.currPath])
-    }, [props.mainCache[props.currPath]])
+        if (props.mainCache[currPath] !== undefined)
+            handleSort(props.mainCache[currPath])
+    }, [props.mainCache[currPath]])
 
     useEffect(() => {
         if (selectedItems.length == 0)
@@ -66,7 +59,7 @@ const Window = forwardRef((props, ref) => {
         }
         else {
             if (item.isDirectory()) {
-                changeTabPath(item["path"])
+                setCurrPath(item["path"])
             }
             else
                 props.fileHandler(item), setSelectedItem(item)
@@ -269,9 +262,6 @@ const Window = forwardRef((props, ref) => {
                                                 styles.padding
                                             ]}
                                             onPress={() => {
-                                                let tempTabPaths = [...tabPaths]
-                                                tempTabPaths[props.index] = item["path"]
-                                                setTabPaths(tempTabPaths)
                                                 setFavItemsFlag(0)
                                             }}
                                         ><Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
@@ -301,12 +291,12 @@ const Window = forwardRef((props, ref) => {
                                     styles.padding
                                 ]}
                                 onPress={() => {
-                                    let title = props.currPath.split("/").pop()
+                                    let title = currPath.split("/").pop()
                                     let newFavItem = {
                                         'title': title,
-                                        "path": props.currPath
+                                        "path": currPath
                                     }
-                                    if (props.favItems.find((item) => item.path == props.currPath) == undefined) {
+                                    if (props.favItems.find((item) => item.path == currPath) == undefined) {
                                         props.setFavItems([...props.favItems, newFavItem])
                                     } else {
                                         ToastAndroid.showWithGravity(
@@ -464,7 +454,7 @@ styles.listItem]}>
                 </View> :
                 <VirtualizedList
                     onRefresh={() => {
-                        props.buildCache(props.currPath)
+                        props.buildCache(currPath)
                         setSelectedItems([])
                         setSelectedItem([])
                     }
@@ -615,7 +605,7 @@ styles.listItem]}>
                                     styles.padding
                                 ]}
                                 onPress={() => {
-                                    props.buildCache(props.currPath)
+                                    props.buildCache(currPath)
                                     setSelectedItems([])
                                     setSelectedItem([])
                                 }}
@@ -634,7 +624,7 @@ styles.listItem]}>
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPress={() => { props.newItem(1, props.currPath) }}
+                                onPress={() => { props.newItem(1, currPath) }}
                             ><Image source={require('./assets/newfile.png')} />
                                 <Text style={[styles.text]}>New File</Text>
                             </TouchableOpacity>
@@ -650,7 +640,7 @@ styles.listItem]}>
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPress={() => { props.newItem(0, props.currPath) }}
+                                onPress={() => { props.newItem(0, currPath) }}
                             ><Image source={require('./assets/newfolder.png')} />
                                 <Text style={[styles.text]}>New Folder</Text>
                             </TouchableOpacity>
@@ -730,7 +720,7 @@ styles.listItem]}>
                                 <TouchableOpacity
                                 >
                                     <Text
-                                        onPress={() => changeTabPath("Home")}
+                                        onPress={() => setCurrPath("Home")}
                                         style={[styles.smallPill,
                                         styles.smallText,
                                         styles.text,
@@ -746,7 +736,7 @@ styles.listItem]}>
                                                     style={[styles.text,
                                                     styles.smallText]} >></Text>
                                                 <TouchableOpacity
-                                                    onPress={() => changeTabPath(folder["path"])}
+                                                    onPress={() => setCurrPath(folder["path"])}
                                                 >
                                                     <Text
                                                         style={[styles.smallPill,
@@ -765,10 +755,10 @@ styles.listItem]}>
                         <Text style={{ color: secondaryColor }}>  |  </Text>
                         <TouchableOpacity
                             onPress={() => {
-                                let tempCurrPath = props.currPath.split("/")
+                                let tempCurrPath = currPath.split("/")
                                 tempCurrPath.pop()
                                 tempCurrPath = tempCurrPath.join("/")
-                                changeTabPath(tempCurrPath)
+                                setCurrPath(tempCurrPath)
                             }}
                         >
                             <Text
@@ -811,9 +801,9 @@ styles.listItem]}>
                                 placeholderTextColor={grey}
                                 onChangeText={text => {
                                     if (text == "")
-                                        handleSort(props.mainCache[props.currPath])
+                                        handleSort(props.mainCache[currPath])
                                     else
-                                        handleSort(props.mainCache[props.currPath].filter((item) => item["name"].includes(text)))
+                                        handleSort(props.mainCache[currPath].filter((item) => item["name"].includes(text)))
                                 }}
                             />
                         </View>
@@ -838,7 +828,7 @@ styles.listItem]}>
                                 style={[styles.pill,
                                 styles.padding]}
                                 onPress={() => {
-                                    handleSort(props.mainCache[props.currPath])
+                                    handleSort(props.mainCache[currPath])
                                     setSearchFlag(0)
                                 }}>
                                 <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
@@ -867,7 +857,7 @@ styles.listItem]}>
                                     <TouchableOpacity
                                         style={[styles.pill,
                                         styles.padding]}
-                                        onPress={() => { props.readySet(2, selectedItems, props.currPath) }}>
+                                        onPress={() => { props.readySet(2, selectedItems, currPath) }}>
                                         <Image source={require('./assets/delete.png')} />
                                     </TouchableOpacity>
                                     <TouchableOpacity
@@ -938,7 +928,7 @@ styles.padding]}
                     </ScrollView>
                 </View>
             </View >
-            <TouchableOpacity onPress={() => console.log(props.tabPaths, props.currPath)}><Text>Show progress</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log(props.tabPaths, currPath)}><Text>Show progress</Text></TouchableOpacity>
         </View >)
 });
 export default Window

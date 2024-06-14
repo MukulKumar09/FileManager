@@ -3,11 +3,15 @@ import { Text, TouchableOpacity, View, Image, } from "react-native";
 import styles from "./styles";
 
 const TabButton = forwardRef((props, ref) => {
-    console.log("tab button rerender")
+    // console.log("tab button rerender")
     const [rerend, setRerend] = useState(0)
+    const [tabName, setTabName] = useState("")
     useImperativeHandle(ref, () => ({
         rerender: () => {
             setRerend(!rerend)
+        },
+        tabName: (name) => {
+            setTabName(name)
         }
     }));
     return (<View style={[
@@ -26,7 +30,7 @@ const TabButton = forwardRef((props, ref) => {
             }>
             <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
             <Text style={[styles.text]}
-            >{props.tabName}</Text>
+            >{tabName}</Text>
         </TouchableOpacity>
         {rerend ?
             <TouchableOpacity

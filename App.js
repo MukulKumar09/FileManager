@@ -52,11 +52,8 @@ const App = () => {
     const buttonRefs = useRef([])
     const currTabStatic = useRef(0)
     const [tabs, setTabs] = useState([])
-    const tabVisible = useRef([]) //keep it useref
     const [tabCounter, setTabCounter] = useState(0)
-    const [tabType, setTabType] = useState([])
-    const [tabNames, setTabNames] = useState([])
-    const [tabPaths, setTabPaths] = useState([])
+    const tabPaths = useRef([])
 
     const [favItems, setFavItems] = useState([])
     const [clipBoardModal, setClipBoardModal] = useState(0)
@@ -98,17 +95,8 @@ const App = () => {
 
     useEffect(() => {
         if (!(tabs.includes(tabCounter))) {
-            setTabNames([...tabNames,
-            tabNames.length == 0 ? "Home" : tabNames[tabNames.length - 1]]
-            )
-            setTabPaths([...tabPaths,
-            tabPaths.length == 0 ? "Home" : tabPaths[tabPaths.length - 1]
-            ])
-            setTabType([...tabType,
-            tabType.length == 0 ? "Flatlist" : tabType[tabType.length - 1]]
-            )
-            tabVisible.current.push(0)
             setTabs([...tabs, tabCounter])
+            tabPaths.current.push("Home")
         }
     }, [tabCounter])
 
@@ -124,6 +112,7 @@ const App = () => {
         try {
             dirListing = await RNFS.readDir(path)
         } catch (e) {
+            console.log(e)
             showToast("Error loading folder")
             dirListing = []
         }
@@ -137,11 +126,11 @@ const App = () => {
 
     const breadCrumbsTabName = (path, index) => {
 
-        console.log("breadcrumb: ", path)
+        tabPaths.current[index] = path
 
-        let tempTabPaths = [...tabPaths]
-        tempTabPaths[index] = path
-        setTabPaths(tempTabPaths)
+        let folderName = path.split("/")
+        folderName = folderName.pop()
+        buttonRefs.current[index].tabName(folderName)
 
         if (path == "Home") {
             return []
@@ -205,20 +194,7 @@ const App = () => {
             tempTabs.splice(currTabStatic.current, 1)
             setTabs(tempTabs)
 
-
-            let tempTabNames = [...tabNames]
-            tempTabNames.splice(currTabStatic.current, 1)
-            setTabNames(tempTabNames)
-
-            let tempTabType = [...tabType]
-            tempTabType.splice(currTabStatic.current, 1)
-            setTabType(tempTabType)
-
-            // buttonRefs.current.splice(currTabStatic.current, 1)
-            let tempTabPaths = [...tabPaths]
-            tempTabPaths.splice(currTabStatic.current, 1)
-            setTabPaths(tempTabPaths)
-
+            buttonRefs.current.splice(currTabStatic.current, 1)
         }
         if (tabs.length == 1) {
             currTabStatic.current = 0
@@ -229,7 +205,6 @@ const App = () => {
         } else {//mid
             deleteLogic()
         }
-        // setCurrTab(actTab.toString())
     }
 
     const fileHandler = (item) => {
@@ -257,6 +232,7 @@ const App = () => {
                 // success
             })
             .catch((error) => {
+                console.log(error)
                 alert('No apps found')
             });
     }
@@ -306,7 +282,7 @@ const App = () => {
         selectedItemsforOperation.current = selectedItems
         if (type in [0, 1]) {
             operationType.current = type
-            operationSource.current = tabPaths[tabs.indexOf(currTabStatic.current)]
+            operationSource.current = tabPaths.current[currTabStatic.current]
             setShowPaste(1)
             ToastAndroid.showWithGravity(
                 selectedItemsforOperation.current.length + " items " + (type ? "ready to move" : "copied"),
@@ -316,26 +292,26 @@ const App = () => {
         }
         if (type == 2) {
             operationType.current = 2
-            operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
+            operationDest.current = tabPaths.current[currTabStatic.current]
             deleteHandler()
         }
         if (type == 3) {
             setShowPaste(0)
             operationType.current = 1 //rename is moveItem
-            operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
+            operationDest.current = tabPaths.current[currTabStatic.current]
             nameNewItem.current = selectedItemsforOperation.current["name"]
             renameHandler(selectedItemsforOperation.current)
         }
         if (type == 4) {
             operationType.current = 4
-            operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
+            operationDest.current = tabPaths.current[currTabStatic.current]
             zipHandler()
         }
     }
 
     const startShifting = async () => {
         setShowPaste(0)
-        operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
+        operationDest.current = tabPaths.current[currTabStatic.current]
         let collectedItems = []
         const collectFilesFromFolder = async () => {
             for (let i = 0; i < selectedItemsforOperation.current.length; i++) {
@@ -449,6 +425,7 @@ const App = () => {
             try {
                 srcListing = await RNFS.readDir(srcPath)
             } catch (e) {
+                console.log(e)
                 showToast("Error loading folder")
                 srcListing = []
             }
@@ -457,6 +434,7 @@ const App = () => {
             try {
                 destListing = await RNFS.readDir(operationDest.current)
             } catch (e) {
+                console.log(e)
                 showToast("Error loading folder")
                 destListing = []
             }
@@ -493,6 +471,7 @@ const App = () => {
         try {
             await RNFS.copyFile(item, dest)
         } catch (error) {
+            console.log(error)
             failedItems.current.push(item)
         }
     }
@@ -501,6 +480,7 @@ const App = () => {
         try {
             await RNFS.moveFile(item, dest)
         } catch (error) {
+            console.log(error)
             failedItems.current.push(item)
         }
     }
@@ -521,6 +501,7 @@ const App = () => {
                     try {
                         await RNFS.unlink(item["path"])
                     } catch (err) {
+                        console.log(err)
                         failedItems.current.push(item)
                     }
                     setProgress(((i + 1) / selectedItemsforOperation.current.length) * 100)
@@ -816,8 +797,8 @@ const App = () => {
                                 autoFocus={true}
                                 defaultValue={nameNewItem.current}
                                 onChangeText={text => {
-                                    for (let i = 0; i < mainCache[tabPaths[tabs.indexOf(currTabStatic.current)]].length; i++) {
-                                        if (mainCache[tabPaths[tabs.indexOf(currTabStatic.current)]][i]["name"] == text) {
+                                    for (let i = 0; i < mainCache[tabPaths.current[currTabStatic.current]].length; i++) {
+                                        if (mainCache[tabPaths.current[currTabStatic.current]][i]["name"] == text) {
                                             setAlreadyExists(1)
                                             break
                                         } else {
@@ -952,15 +933,6 @@ const App = () => {
                 {
                     useMemo(() =>
                         tabs.map((index, i) =>
-                            // {tabType[i] == "Home" ?
-                            //         <Home
-                            //             index={i}
-                            //             favPaths={favPaths}
-                            //             openFavourite={openFavourite}
-                            //             internalPath={RNFS.ExternalStorageDirectoryPath}
-                            //             style={{ flexDirection: 'column', width: Dimensions.get('window').width }}
-                            //         />
-                            //         : null}
 
                             <Window
                                 key={index}
@@ -968,22 +940,18 @@ const App = () => {
                                 breadCrumbsTabName={breadCrumbsTabName}
                                 index={i}
                                 mainCache={mainCache}
-                                tabPaths={tabPaths}
-                                currPath={tabPaths[i]}
-                                setTabPaths={setTabPaths}
                                 openExternally={openExternally}
                                 ref={ref => { windowRefs.current[i] = ref }}
                                 selectItem={selectItem}
                                 setMediaBox={setMediaBox}
                                 setMediaType={setMediaType}
                                 fileHandler={fileHandler}
-
                                 readySet={readySet}
                                 newItem={newItem}
                                 setClipBoardModal={setClipBoardModal}
                             />
                         )
-                        , [tabs, tabPaths, mainCache])
+                        , [tabs, mainCache])
                 }
             </View>
             {
@@ -1062,7 +1030,6 @@ const App = () => {
                                         ref={ref => { buttonRefs.current[i] = ref }}
                                         changeTab={changeTab}
                                         width={width}
-                                        tabName={tabNames[i]}
                                         deleteTab={deleteTab}
                                     />
 
@@ -1090,7 +1057,7 @@ const App = () => {
                     </TouchableOpacity>
                 </>
             </View>
-            <TouchableOpacity onPress={() => console.log(tabs, tabPaths)}><Text>Show progress</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log(tabs, tabPaths.current)}><Text>Show progress</Text></TouchableOpacity>
         </View >
     );
 };
