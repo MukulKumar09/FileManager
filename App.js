@@ -9,11 +9,6 @@ import styles, { backgroundColor } from "./styles";
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import { zip } from 'react-native-zip-archive'
 
-const folderName = (path) => {
-    const parts = path.split('/');
-    const folderName = parts[parts.length - 1];
-    return folderName
-}
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
         message,
@@ -23,8 +18,10 @@ const showToast = (message) => {
 }
 const App = () => {
     console.log("app render")
-    const favPaths = useRef([]) //find all mounting points
+    const [favPaths, setFavPaths] = useState([]) //find all mounting points
     useEffect(() => {
+        console.log("ran mount init")
+        let tempFavPaths = []
         const initExtPath = async () => {
             let allMounts = await RNFS.getAllExternalFilesDirs()
             allMounts.map((i) => {
@@ -33,7 +30,7 @@ const App = () => {
                 let indx = temp.indexOf("Android")
                 temp.length = indx
                 let pathFull = temp.join("/")
-                favPaths.current.push({
+                tempFavPaths.push({
                     path: pathFull,
                     isDirectory: () => 1,
                     isFile: () => 0,
@@ -41,24 +38,25 @@ const App = () => {
                 })
                 count++
             })
+            setFavPaths(tempFavPaths)
         }
         initExtPath()
     }, [])
-    const [mainCache, setMainCache] = useState({
-        "Home": favPaths.current
-    }
-    )
+    useEffect(() => {
+        setMainCache({ "Home": favPaths })
+    }, [favPaths])
+    const [mainCache, setMainCache] = useState({})
     // const buttonRefs = useRef([])
 
     const windowRefs = useRef([])
+    const buttonRefs = useRef([])
     const currTabStatic = useRef(0)
     const [tabs, setTabs] = useState([])
-    const [tabsCache, setTabsCache] = ([])
-    const [tabVisible, setTabVisible] = useState([])
+    const tabVisible = useRef([]) //keep it useref
     const [tabCounter, setTabCounter] = useState(0)
     const [tabType, setTabType] = useState([])
     const [tabNames, setTabNames] = useState([])
-    const tabPaths = useRef([])
+    const [tabPaths, setTabPaths] = useState([])
 
     const [favItems, setFavItems] = useState([])
     const [clipBoardModal, setClipBoardModal] = useState(0)
@@ -103,16 +101,23 @@ const App = () => {
             setTabNames([...tabNames,
             tabNames.length == 0 ? "Home" : tabNames[tabNames.length - 1]]
             )
-            tabPaths.current.push(
-                tabPaths.current.length == 0 ? "Home" : tabPaths.current[tabPaths.current.length - 1]
-            )
+            setTabPaths([...tabPaths,
+            tabPaths.length == 0 ? "Home" : tabPaths[tabPaths.length - 1]
+            ])
             setTabType([...tabType,
             tabType.length == 0 ? "Flatlist" : tabType[tabType.length - 1]]
             )
-            setTabVisible([...tabVisible, 0])
+            tabVisible.current.push(0)
             setTabs([...tabs, tabCounter])
         }
     }, [tabCounter])
+
+    const changeTab = (item) => {
+        windowRefs.current[item].rerender("flex")
+        buttonRefs.current[currTabStatic.current].rerender()
+        windowRefs.current[currTabStatic.current].rerender("none")
+        currTabStatic.current = item
+    }
 
     const buildCache = async (path) => {
         let dirListing
@@ -132,10 +137,11 @@ const App = () => {
 
     const breadCrumbsTabName = (path, index) => {
 
-        let tempTabNames = [...tabNames]
-        tempTabNames[index] = folderName(path)
-        setTabNames(tempTabNames)
-        tabPaths.current[index] = path
+        console.log("breadcrumb: ", path)
+
+        let tempTabPaths = [...tabPaths]
+        tempTabPaths[index] = path
+        setTabPaths(tempTabPaths)
 
         if (path == "Home") {
             return []
@@ -143,10 +149,10 @@ const App = () => {
             let obj = []
             let basePath
             let baseName
-            for (let i = 0; i < favPaths.current.length; i++) {
-                if (path.includes(favPaths.current[i]["path"])) {
-                    basePath = favPaths.current[i]["path"]
-                    baseName = favPaths.current[i]["name"]
+            for (let i = 0; i < favPaths.length; i++) {
+                if (path.includes(favPaths[i]["path"])) {
+                    basePath = favPaths[i]["path"]
+                    baseName = favPaths[i]["name"]
                     break
                 }
             }
@@ -209,7 +215,9 @@ const App = () => {
             setTabType(tempTabType)
 
             // buttonRefs.current.splice(currTabStatic.current, 1)
-            tabPaths.current.splice(currTabStatic.current, 1)
+            let tempTabPaths = [...tabPaths]
+            tempTabPaths.splice(currTabStatic.current, 1)
+            setTabPaths(tempTabPaths)
 
         }
         if (tabs.length == 1) {
@@ -298,7 +306,7 @@ const App = () => {
         selectedItemsforOperation.current = selectedItems
         if (type in [0, 1]) {
             operationType.current = type
-            operationSource.current = tabPaths.current[tabs.indexOf(currTabStatic.current)]
+            operationSource.current = tabPaths[tabs.indexOf(currTabStatic.current)]
             setShowPaste(1)
             ToastAndroid.showWithGravity(
                 selectedItemsforOperation.current.length + " items " + (type ? "ready to move" : "copied"),
@@ -308,26 +316,26 @@ const App = () => {
         }
         if (type == 2) {
             operationType.current = 2
-            operationDest.current = tabPaths.current[tabs.indexOf(currTabStatic.current)]
+            operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
             deleteHandler()
         }
         if (type == 3) {
             setShowPaste(0)
             operationType.current = 1 //rename is moveItem
-            operationDest.current = tabPaths.current[tabs.indexOf(currTabStatic.current)]
+            operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
             nameNewItem.current = selectedItemsforOperation.current["name"]
             renameHandler(selectedItemsforOperation.current)
         }
         if (type == 4) {
             operationType.current = 4
-            operationDest.current = tabPaths.current[tabs.indexOf(currTabStatic.current)]
+            operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
             zipHandler()
         }
     }
 
     const startShifting = async () => {
         setShowPaste(0)
-        operationDest.current = tabPaths.current[tabs.indexOf(currTabStatic.current)]
+        operationDest.current = tabPaths[tabs.indexOf(currTabStatic.current)]
         let collectedItems = []
         const collectFilesFromFolder = async () => {
             for (let i = 0; i < selectedItemsforOperation.current.length; i++) {
@@ -808,8 +816,8 @@ const App = () => {
                                 autoFocus={true}
                                 defaultValue={nameNewItem.current}
                                 onChangeText={text => {
-                                    for (let i = 0; i < mainCache[tabPaths.current[tabs.indexOf(currTabStatic.current)]].length; i++) {
-                                        if (mainCache[tabPaths.current[tabs.indexOf(currTabStatic.current)]][i]["name"] == text) {
+                                    for (let i = 0; i < mainCache[tabPaths[tabs.indexOf(currTabStatic.current)]].length; i++) {
+                                        if (mainCache[tabPaths[tabs.indexOf(currTabStatic.current)]][i]["name"] == text) {
                                             setAlreadyExists(1)
                                             break
                                         } else {
@@ -959,29 +967,23 @@ const App = () => {
                                 buildCache={buildCache}
                                 breadCrumbsTabName={breadCrumbsTabName}
                                 index={i}
-                                val={index}
                                 mainCache={mainCache}
-                                initPath={tabPaths.current[i]} //for updating tabname when folder click
                                 tabPaths={tabPaths}
-                                tabType={tabType}
-                                setTabType={setTabType}
+                                currPath={tabPaths[i]}
+                                setTabPaths={setTabPaths}
                                 openExternally={openExternally}
-                                favItems={favItems}
-                                setFavItems={setFavItems}
-                                // buttonRefs={buttonRefs}
                                 ref={ref => { windowRefs.current[i] = ref }}
-                                folderName={folderName}
                                 selectItem={selectItem}
                                 setMediaBox={setMediaBox}
                                 setMediaType={setMediaType}
                                 fileHandler={fileHandler}
 
-                                operationDest={operationDest}
                                 readySet={readySet}
                                 newItem={newItem}
                                 setClipBoardModal={setClipBoardModal}
                             />
-                        ), [tabs, tabType, mainCache, favItems])
+                        )
+                        , [tabs, tabPaths, mainCache])
                 }
             </View>
             {
@@ -1053,27 +1055,19 @@ const App = () => {
                     >
                         {
                             useMemo(() => (
-                                tabs.map((index, i) => {
-                                    return (
-                                        <TabButton
-                                            key={index}
-                                            index={i}
-                                            prevWindow={windowRefs.current[currTabStatic.current]}
-                                            selfWindow={windowRefs.current[i]}
-                                            width={width}
-                                            tabName={tabNames[i]}
-                                            currTabStatic={currTabStatic}
-                                            deleteTab={deleteTab}
-                                            // ref={ref => { buttonRefs.current[i] = ref }}
-                                            // buttonRefs={buttonRefs}
-                                            tabVisible={tabVisible}
-                                            setTabVisible={setTabVisible}
+                                tabs.map((index, i) =>
+                                    <TabButton
+                                        key={index}
+                                        index={i}
+                                        ref={ref => { buttonRefs.current[i] = ref }}
+                                        changeTab={changeTab}
+                                        width={width}
+                                        tabName={tabNames[i]}
+                                        deleteTab={deleteTab}
+                                    />
 
-                                        />
-                                    )
-                                }
                                 ))
-                                , [tabs, tabVisible, tabNames])
+                                , [tabs])
                         }
                     </View>
                 </ScrollView>
@@ -1096,7 +1090,7 @@ const App = () => {
                     </TouchableOpacity>
                 </>
             </View>
-            {/* <TouchableOpacity onPress={() => { setProgressModal(1) }}><Text>Show progress</Text></TouchableOpacity> */}
+            <TouchableOpacity onPress={() => console.log(tabs, tabPaths)}><Text>Show progress</Text></TouchableOpacity>
         </View >
     );
 };
