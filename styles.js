@@ -19,7 +19,7 @@ export default StyleSheet.create({
         flex: 1,
     },
     text: {
-        //fontFamily: 'Pop-reg',
+        fontFamily: 'Pop-reg',
         includeFontPadding: false,
         color: textColor,
     },

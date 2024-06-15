@@ -158,6 +158,17 @@ const App = () => {
         }
     }
 
+    const navigateUp = (path) => {
+        console.log(path, favPaths)
+        if (path == "Home" || favPaths.find((i) => i.path == path)) {
+            return "Home"
+        }
+        let tempCurrPath = path.split("/")
+        tempCurrPath.pop()
+        tempCurrPath = tempCurrPath.join("/")
+        return tempCurrPath
+    }
+
     useEffect(() => {
         if (mediaBox == 0) {
             height.value =
@@ -949,6 +960,7 @@ const App = () => {
                                 readySet={readySet}
                                 newItem={newItem}
                                 setClipBoardModal={setClipBoardModal}
+                                navigateUp={navigateUp}
                             />
                         )
                         , [tabs, mainCache])
@@ -1057,7 +1069,7 @@ const App = () => {
                     </TouchableOpacity>
                 </>
             </View>
-            <TouchableOpacity onPress={() => console.log(tabs, tabPaths.current)}><Text>Show progress</Text></TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => console.log(tabs, tabPaths.current)}><Text>Show progress</Text></TouchableOpacity> */}
         </View >
     );
 };

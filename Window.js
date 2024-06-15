@@ -491,14 +491,22 @@ styles.listItem]}>
                                 styles.wide,
                                 styles.bigGap,
                             ]}>
-                                {Icon(item)}
-                                <Text>{item["name"]}</Text>
+                                <View style={{ width: 30, }}>
+                                    {Icon(item)}
+                                </View>
+                                <View style={[
+                                    styles.wide,
+                                ]}>
+                                    <Text style={[styles.text]}>{item["name"]}</Text>
+                                </View>
                             </View>
                             {item.isFile() ?
-                                <Text style={[styles.text,
-                                styles.smallDarkText]}>
-                                    {item["size"]}
-                                </Text>
+                                <View style={{ width: 30, alignItems: 'flex-end' }}>
+                                    <Text style={[styles.text,
+                                    styles.smallDarkText]}>
+                                        {item["size"]}
+                                    </Text>
+                                </View>
                                 : null
                             }
                         </TouchableOpacity>
@@ -755,10 +763,7 @@ styles.listItem]}>
                         <Text style={{ color: secondaryColor }}>  |  </Text>
                         <TouchableOpacity
                             onPress={() => {
-                                let tempCurrPath = currPath.split("/")
-                                tempCurrPath.pop()
-                                tempCurrPath = tempCurrPath.join("/")
-                                setCurrPath(tempCurrPath)
+                                setCurrPath(props.navigateUp(currPath))
                             }}
                         >
                             <Text
@@ -928,7 +933,6 @@ styles.padding]}
                     </ScrollView>
                 </View>
             </View >
-            <TouchableOpacity onPress={() => console.log(props.tabPaths, currPath)}><Text>Show progress</Text></TouchableOpacity>
         </View >)
 });
 export default Window
