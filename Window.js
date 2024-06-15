@@ -1,14 +1,12 @@
-import { useEffect, useState, useImperativeHandle, forwardRef, useMemo } from "react";
-import { Text, TextInput, TouchableOpacity, View, FlatList, Image, ScrollView, Modal, Dimensions, TouchableWithoutFeedback, ToastAndroid, VirtualizedList } from "react-native";
+import { useEffect, useState } from "react";
+import { Text, TextInput, TouchableOpacity, View, Image, ScrollView, Modal, TouchableWithoutFeedback, VirtualizedList } from "react-native";
 import Share from 'react-native-share';
 import styles, { backgroundColor, grey, secondaryColor } from "./styles";
-import RNFS from 'react-native-fs';
 
-const Window = forwardRef((props, ref) => {
+// const Window = forwardRef((props, ref) => {
+const Window = (props) => {
     console.log(props.index, " window render")
     const [filesList, setFilesList] = useState([])
-    const [currPath, setCurrPath] = useState("Home")
-    const [properties, setProperties] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
     const [selectedItem, setSelectedItem] = useState([])
     const [selectionFlag, setSelectionFlag] = useState(0)
@@ -16,34 +14,27 @@ const Window = forwardRef((props, ref) => {
     const [sortType, setSortType] = useState(1)
     const [sortOrder, setSortOrder] = useState(0)
     const [searchFlag, setSearchFlag] = useState(0)
-    const [favItemsFlag, setFavItemsFlag] = useState()
     const [contextMenu, setContextMenu] = useState(0)
-    const [vIndex, setZIndex] = useState("flex")
 
     const [breadCrumbs, setBreadCrumbs] = useState([])
-    useImperativeHandle(ref, () => ({
-        rerender: (visibility) => {
-            setZIndex(visibility)
-        }
-    }));
 
+    // useImperativeHandle(ref, () => ({
+    //     rerender: (visibility) => {
+    //         setZIndex(visibility)
+    //     }
+    // }));
 
-    const loadDetails = async (path) => {
-        let result = await RNFS.stat(path)
-        console.log(result)
-        setProperties(result)
-    }
 
     useEffect(() => { //first
-        if (props.mainCache[currPath] == undefined)
-            props.buildCache(currPath)
-        setBreadCrumbs(props.breadCrumbsTabName(currPath, props.index)) //set breadcrumbs, tabname
-    }, [currPath])
+        if (props.mainCache[props.tabData["path"]] == undefined)
+            props.buildCache(props.tabData["path"])
+        setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
+    }, [props.tabData["path"]])
 
     useEffect(() => {
-        if (props.mainCache[currPath] !== undefined)
-            handleSort(props.mainCache[currPath])
-    }, [props.mainCache[currPath]])
+        if (props.mainCache[props.tabData["path"]] !== undefined)
+            handleSort(props.mainCache[props.tabData["path"]])
+    }, [props.mainCache[props.tabData["path"]]])
 
     useEffect(() => {
         if (selectedItems.length == 0)
@@ -59,7 +50,7 @@ const Window = forwardRef((props, ref) => {
         }
         else {
             if (item.isDirectory()) {
-                setCurrPath(item["path"])
+                props.setTabPath(item["path"])
             }
             else
                 props.fileHandler(item), setSelectedItem(item)
@@ -210,110 +201,11 @@ const Window = forwardRef((props, ref) => {
                 left: 0,
                 bottom: 0,
                 right: 0,
-                display: vIndex
+                display: props.tabData["visible"] ? "flex" : "none"
             }
         }>
             <Text>{props.index}</Text>
-            {favItemsFlag ?
-                <Modal
-                    transparent={true}>
-                    <TouchableWithoutFeedback
-                        onPress={() => setFavItemsFlag(0)}
-                    >
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            position: 'absolute'
-                        }}
-                        />
-                    </TouchableWithoutFeedback>
-                    <View style={[
-                        styles.pill,
-                        styles.modal,
-                        styles.padding,
-                        {
-                            backgroundColor: backgroundColor,
-                            position: 'absolute',
-                            left: 10,
-                            right: 10,
-                            bottom: 10,
-                        }
-                    ]}>
-                        <Text style={[styles.text,
-                        styles.headingText]}>Favourites</Text>
-                        <View style={[styles.divider]} />
-                        <View style={[styles.mediumGap, { flexDirection: 'column', width: '100%' }]}>
-                            {Object.keys(props.favItems).length > 0 && props.favItems.map(
-                                (item, i) =>
-                                    <View
-                                        key={i}
-                                        style={[
-                                            styles.rowLayout,
-                                            styles.pill
-                                        ]}>
-                                        <TouchableOpacity
-                                            style={[
-                                                styles.rowLayout,
-                                                styles.bigGap,
-                                                styles.wide,
-                                                styles.padding
-                                            ]}
-                                            onPress={() => {
-                                                setFavItemsFlag(0)
-                                            }}
-                                        ><Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
-                                            <Text style={[styles.text]}>{item["title"]}</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={[
-                                                styles.padding
-                                            ]}
-                                            onPress={() => {
-                                                let tempFavItems = [...props.favItems]
-                                                tempFavItems.splice(i, 1)
-                                                props.setFavItems(tempFavItems)
-                                            }}
-                                        >
-                                            <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                            )}
-                            <View style={[styles.divider]} />
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.pill,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    let title = currPath.split("/").pop()
-                                    let newFavItem = {
-                                        'title': title,
-                                        "path": currPath
-                                    }
-                                    if (props.favItems.find((item) => item.path == currPath) == undefined) {
-                                        props.setFavItems([...props.favItems, newFavItem])
-                                    } else {
-                                        ToastAndroid.showWithGravity(
-                                            "Item already exists",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.CENTER,
-                                        );
-                                    }
-                                }}
-                            ><Image source={require('./assets/newfolder.png')} />
-                                <Text style={[styles.text]}>Add Current Folder</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal >
-                : null
-            }
+
             {
                 sortModal ? <Modal
                     transparent={true}
@@ -454,7 +346,7 @@ styles.listItem]}>
                 </View> :
                 <VirtualizedList
                     onRefresh={() => {
-                        props.buildCache(currPath)
+                        props.buildCache(props.tabData["path"])
                         setSelectedItems([])
                         setSelectedItem([])
                     }
@@ -613,7 +505,7 @@ styles.listItem]}>
                                     styles.padding
                                 ]}
                                 onPress={() => {
-                                    props.buildCache(currPath)
+                                    props.buildCache(props.tabData["path"])
                                     setSelectedItems([])
                                     setSelectedItem([])
                                 }}
@@ -632,7 +524,7 @@ styles.listItem]}>
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPress={() => { props.newItem(1, currPath) }}
+                                onPress={() => { props.newItem(1, props.tabData["path"]) }}
                             ><Image source={require('./assets/newfile.png')} />
                                 <Text style={[styles.text]}>New File</Text>
                             </TouchableOpacity>
@@ -648,7 +540,7 @@ styles.listItem]}>
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPress={() => { props.newItem(0, currPath) }}
+                                onPress={() => { props.newItem(0, props.tabData["path"]) }}
                             ><Image source={require('./assets/newfolder.png')} />
                                 <Text style={[styles.text]}>New Folder</Text>
                             </TouchableOpacity>
@@ -728,7 +620,7 @@ styles.listItem]}>
                                 <TouchableOpacity
                                 >
                                     <Text
-                                        onPress={() => setCurrPath("Home")}
+                                        onPress={() => props.setTabPath("Home")}
                                         style={[styles.smallPill,
                                         styles.smallText,
                                         styles.text,
@@ -744,7 +636,7 @@ styles.listItem]}>
                                                     style={[styles.text,
                                                     styles.smallText]} >></Text>
                                                 <TouchableOpacity
-                                                    onPress={() => setCurrPath(folder["path"])}
+                                                    onPress={() => props.setTabPath(folder["path"])}
                                                 >
                                                     <Text
                                                         style={[styles.smallPill,
@@ -760,19 +652,24 @@ styles.listItem]}>
                                 }
                             </View>
                         </ScrollView>
-                        <Text style={{ color: secondaryColor }}>  |  </Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setCurrPath(props.navigateUp(currPath))
-                            }}
-                        >
-                            <Text
-                                style={[styles.smallPill,
-                                styles.smallText,
-                                styles.text,
-                                styles.textDisabled]}
-                            >Back</Text>
-                        </TouchableOpacity>
+
+                        {props.tabData["path"] == "Home" ? null :
+                            <>
+                                <Text style={{ color: secondaryColor }}>  |  </Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        props.setTabPath(null)
+                                    }}
+                                >
+                                    <Text
+                                        style={[styles.smallPill,
+                                        styles.smallText,
+                                        styles.text,
+                                        styles.textDisabled]}
+                                    >Back</Text>
+                                </TouchableOpacity>
+                            </>
+                        }
                     </View>
                 }
                 <View
@@ -806,9 +703,9 @@ styles.listItem]}>
                                 placeholderTextColor={grey}
                                 onChangeText={text => {
                                     if (text == "")
-                                        handleSort(props.mainCache[currPath])
+                                        handleSort(props.mainCache[props.tabData["path"]])
                                     else
-                                        handleSort(props.mainCache[currPath].filter((item) => item["name"].includes(text)))
+                                        handleSort(props.mainCache[props.tabData["path"]].filter((item) => item["name"].includes(text)))
                                 }}
                             />
                         </View>
@@ -833,7 +730,7 @@ styles.listItem]}>
                                 style={[styles.pill,
                                 styles.padding]}
                                 onPress={() => {
-                                    handleSort(props.mainCache[currPath])
+                                    handleSort(props.mainCache[props.tabData["path"]])
                                     setSearchFlag(0)
                                 }}>
                                 <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
@@ -862,7 +759,7 @@ styles.listItem]}>
                                     <TouchableOpacity
                                         style={[styles.pill,
                                         styles.padding]}
-                                        onPress={() => { props.readySet(2, selectedItems, currPath) }}>
+                                        onPress={() => { props.readySet(2, selectedItems, props.tabData["path"]) }}>
                                         <Image source={require('./assets/delete.png')} />
                                     </TouchableOpacity>
                                     <TouchableOpacity
@@ -899,7 +796,7 @@ styles.listItem]}>
                                         style={[styles.pill,
                                         styles.padding]}
                                         onPress={() => {
-                                            setFavItemsFlag(1)
+                                            props.setFavouritesModal(1)
                                         }}>
                                         <Image source={require('./assets/favourite.png')} />
                                     </TouchableOpacity>
@@ -934,5 +831,5 @@ styles.padding]}
                 </View>
             </View >
         </View >)
-});
+}
 export default Window

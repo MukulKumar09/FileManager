@@ -1,38 +1,21 @@
-import { useState, useImperativeHandle, forwardRef, } from "react";
 import { Text, TouchableOpacity, View, Image, } from "react-native";
 import styles from "./styles";
 
-const TabButton = forwardRef((props, ref) => {
-    // console.log("tab button rerender")
-    const [rerend, setRerend] = useState(0)
-    const [tabName, setTabName] = useState("")
-    useImperativeHandle(ref, () => ({
-        rerender: () => {
-            setRerend(!rerend)
-        },
-        tabName: (name) => {
-            setTabName(name)
-        }
-    }));
+const TabButton = (props) => {
     return (<View style={[
         styles.rowLayout,
         styles.pill,
-        //props.currTabStatic.current == props.index && styles.pillHighlight
-        rerend && styles.pillHighlight
+        props.tabData["visible"] && styles.pillHighlight
     ]}>
 
         <TouchableOpacity
             style={[styles.rowLayout, styles.mediumGap, styles.padding]}
-            onPress={() => {
-                props.changeTab(props.index)
-                setRerend(!rerend)
-            }
-            }>
+            onPress={() => props.changeTab(props.index)}>
             <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
             <Text style={[styles.text]}
-            >{tabName}</Text>
+            >{props.tabData["title"]}</Text>
         </TouchableOpacity>
-        {rerend ?
+        {props.tabData["visible"] ?
             <TouchableOpacity
                 style={[styles.paddingCloseLeft]}
                 onPress={() => { props.deleteTab() }}>
@@ -41,5 +24,5 @@ const TabButton = forwardRef((props, ref) => {
             : null}
 
     </View>)
-})
+}
 export default TabButton

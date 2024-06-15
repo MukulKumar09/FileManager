@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, TouchableWithoutFeedback, ActivityIndicator } from "react-native";
 import RNFS from 'react-native-fs';
 import TabButton from "./TabButton";
@@ -46,64 +46,119 @@ const App = () => {
         setMainCache({ "Home": favPaths })
     }, [favPaths])
     const [mainCache, setMainCache] = useState({})
-    // const buttonRefs = useRef([])
 
-    const windowRefs = useRef([])
-    const buttonRefs = useRef([])
+    // const windowRefs = useRef([])
+
     const currTabStatic = useRef(0)
-    const [tabs, setTabs] = useState([])
+
+    const [tabs, setTabs] = useState({})
     const [tabCounter, setTabCounter] = useState(0)
     const tabPaths = useRef([])
 
-    const [favItems, setFavItems] = useState([])
+    const [favouriteItems, setFavouriteItems] = useState([])
+
+    //modals
+    const [favouritesModal, setFavouritesModal] = useState(0)
     const [clipBoardModal, setClipBoardModal] = useState(0)
+    const [progressModal, setProgressModal] = useState(0)
+    const [inputModal, setInputModal] = useState(0)
+    const [deleteModal, setDeleteModal] = useState(0)
+    const [existsModal, setExistsModal] = useState(0)
 
     //copy move delete
+    const deleteRef = useRef("")
     const [breakOperation, setBreakOperation] = useState(0)
     const [showPaste, setShowPaste] = useState(0)
     const progressWidth = useSharedValue(0);
     const [progress, setProgress] = useState(0)
-    const [progressModal, setProgressModal] = useState(0)
     const height = useSharedValue(0);
     const animatedWidthStyle = useAnimatedStyle(() => ({
         width: `${progressWidth.value}%`
     })
     )
+    const [alreadyExists, setAlreadyExists] = useState(0)
+    const inputRef = useRef("")
+
     const selectedItemsforOperation = useRef([])
     const operationSource = useRef("")
     const operationDest = useRef("")
     const operationType = useRef(-1)
     const failedItems = useRef([])
+    const [selectedItem, setSelectedItem] = useState([]) //for media
+    const decisionRef = useRef("")
 
-    //modals
     const [mediaType, setMediaType] = useState(0)
     const [mediaBox, setMediaBox] = useState(0)
 
-    const [selectedItem, setSelectedItem] = useState([]) //for media
-    const [existsModal, setExistsModal] = useState(0)
-    const decisionRef = useRef("")
-
     const nameNewItem = useRef("")
-    const [inputModal, setInputModal] = useState(0)
-    const [alreadyExists, setAlreadyExists] = useState(0)
-    const inputRef = useRef("")
 
-    const [deleteModal, setDeleteModal] = useState(0)
-    const deleteRef = useRef("")
 
     let width = Dimensions.get('window').width
 
     useEffect(() => {
-        if (!(tabs.includes(tabCounter))) {
-            setTabs([...tabs, tabCounter])
+        if (!(Object.keys(tabs).includes(tabCounter))) {
+            setTabs({
+                ...tabs,
+                [tabCounter]: {
+                    title: "Home",
+                    path: "Home",
+                    type: "filebrowser",
+                    visible: 0
+                }
+            })
             tabPaths.current.push("Home")
         }
     }, [tabCounter])
 
+    const setTabPath = (path) => {
+
+        const updateTabDetails = () => {
+            setTabs({
+                ...tabs,
+                [currTabStatic.current]: {
+                    ...tabs[currTabStatic.current],
+                    title: folderName,
+                    path: path
+                }
+            })
+        }
+
+        let tempPath, folderName
+        if (path == null) { //go up
+            path = tabs[currTabStatic.current]["path"]
+            if (favPaths.find((i) => i.path == path)) {
+                path = "Home"
+                folderName = "Home"
+                updateTabDetails()
+                return 1
+            } else {
+                path = path.split("/")
+                path.pop()
+            }
+        } else { //go inside
+            path = path.split("/")
+        }
+        tempPath = [...path]
+        folderName = tempPath.pop()
+        path = path.join("/")
+        console.log(path)
+        updateTabDetails()
+    }
+
+
     const changeTab = (item) => {
-        windowRefs.current[item].rerender("flex")
-        buttonRefs.current[currTabStatic.current].rerender()
-        windowRefs.current[currTabStatic.current].rerender("none")
+        setTabs({
+            ...tabs,
+            [currTabStatic.current]: {
+                ...tabs[currTabStatic.current],
+                visible: 0
+            },
+            [item]: {
+                ...tabs[item],
+                visible: 1,
+            }
+        })
+
         currTabStatic.current = item
     }
 
@@ -124,13 +179,8 @@ const App = () => {
         return 1
     }
 
-    const breadCrumbsTabName = (path, index) => {
-
-        tabPaths.current[index] = path
-
-        let folderName = path.split("/")
-        folderName = folderName.pop()
-        buttonRefs.current[index].tabName(folderName)
+    const breadCrumbsTabName = () => {
+        let path = tabs[currTabStatic.current]["path"]
 
         if (path == "Home") {
             return []
@@ -156,17 +206,6 @@ const App = () => {
             })
             return obj
         }
-    }
-
-    const navigateUp = (path) => {
-        console.log(path, favPaths)
-        if (path == "Home" || favPaths.find((i) => i.path == path)) {
-            return "Home"
-        }
-        let tempCurrPath = path.split("/")
-        tempCurrPath.pop()
-        tempCurrPath = tempCurrPath.join("/")
-        return tempCurrPath
     }
 
     useEffect(() => {
@@ -204,8 +243,6 @@ const App = () => {
             let tempTabs = [...tabs]
             tempTabs.splice(currTabStatic.current, 1)
             setTabs(tempTabs)
-
-            buttonRefs.current.splice(currTabStatic.current, 1)
         }
         if (tabs.length == 1) {
             currTabStatic.current = 0
@@ -919,6 +956,107 @@ const App = () => {
             </Modal>
                 : null
             }
+            {favouritesModal ?
+                <Modal
+                    transparent={true}>
+                    <TouchableWithoutFeedback
+                        onPress={() => setFavouritesModal(0)}
+                    >
+                        <View style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            position: 'absolute'
+                        }}
+                        />
+                    </TouchableWithoutFeedback>
+                    <View style={[
+                        styles.pill,
+                        styles.modal,
+                        styles.padding,
+                        {
+                            backgroundColor: backgroundColor,
+                            position: 'absolute',
+                            left: 10,
+                            right: 10,
+                            bottom: 10,
+                        }
+                    ]}>
+                        <Text style={[styles.text,
+                        styles.headingText]}>Favourites</Text>
+                        <View style={[styles.divider]} />
+                        <View style={[styles.mediumGap, { flexDirection: 'column', width: '100%' }]}>
+                            {Object.keys(favouriteItems).length > 0 && favouriteItems.map(
+                                (item, i) =>
+                                    <View
+                                        key={i}
+                                        style={[
+                                            styles.rowLayout,
+                                            styles.pill
+                                        ]}>
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.rowLayout,
+                                                styles.bigGap,
+                                                styles.wide,
+                                                styles.padding
+                                            ]}
+                                            onPress={() => {
+                                                setFavouritesModal(0)
+                                            }}
+                                        ><Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
+                                            <Text style={[styles.text]}>{item["title"]}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.padding
+                                            ]}
+                                            onPress={() => {
+                                                let tempFavItems = [...favouriteItems]
+                                                tempFavItems.splice(i, 1)
+                                                props.setFavouriteItems(tempFavItems)
+                                            }}
+                                        >
+                                            <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                                        </TouchableOpacity>
+                                    </View>
+                            )}
+                            <View style={[styles.divider]} />
+                            <TouchableOpacity
+                                style={[
+                                    styles.rowLayout,
+                                    styles.pill,
+                                    styles.bigGap,
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPress={() => {
+                                    let favPath = tabPaths.current[currTabStatic.current]
+                                    let favTitle = favPath.split("/").pop()
+                                    let newFavItem = {
+                                        'title': favTitle,
+                                        "path": favPath
+                                    }
+                                    if (favouriteItems.find((item) => item.path == favPath) == undefined) {
+                                        setFavouriteItems([...favouriteItems, newFavItem])
+                                    } else {
+                                        ToastAndroid.showWithGravity(
+                                            "Item already exists",
+                                            ToastAndroid.SHORT,
+                                            ToastAndroid.CENTER,
+                                        );
+                                    }
+                                }}
+                            ><Image source={require('./assets/newfolder.png')} />
+                                <Text style={[styles.text]}>Add Current Folder</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal >
+                : null
+            }
             <Animated.View
                 style={{
                     height: height,
@@ -942,28 +1080,33 @@ const App = () => {
                 }
             >
                 {
-                    useMemo(() =>
-                        tabs.map((index, i) =>
+                    // useMemo(() =>
+                    Object.keys(tabs).map((index, i) =>
 
-                            <Window
-                                key={index}
-                                buildCache={buildCache}
-                                breadCrumbsTabName={breadCrumbsTabName}
-                                index={i}
-                                mainCache={mainCache}
-                                openExternally={openExternally}
-                                ref={ref => { windowRefs.current[i] = ref }}
-                                selectItem={selectItem}
-                                setMediaBox={setMediaBox}
-                                setMediaType={setMediaType}
-                                fileHandler={fileHandler}
-                                readySet={readySet}
-                                newItem={newItem}
-                                setClipBoardModal={setClipBoardModal}
-                                navigateUp={navigateUp}
-                            />
-                        )
-                        , [tabs, mainCache])
+                        <Window
+                            key={index}
+                            buildCache={buildCache}
+                            breadCrumbsTabName={breadCrumbsTabName}
+                            tabData={tabs[index]}
+                            setTabPath={setTabPath}
+                            index={i}
+                            mainCache={mainCache}
+                            openExternally={openExternally}
+                            // ref={(ref) => {
+                            //     windowRefs.current[i] = ref
+                            // }
+                            // }
+                            selectItem={selectItem}
+                            setMediaBox={setMediaBox}
+                            setMediaType={setMediaType}
+                            fileHandler={fileHandler}
+                            readySet={readySet}
+                            newItem={newItem}
+                            setClipBoardModal={setClipBoardModal}
+                            setFavouritesModal={setFavouritesModal}
+                        />
+                    )
+                    // , [tabs, mainCache])
                 }
             </View>
             {
@@ -1034,19 +1177,24 @@ const App = () => {
                         styles.mediumGap]}
                     >
                         {
-                            useMemo(() => (
-                                tabs.map((index, i) =>
-                                    <TabButton
-                                        key={index}
-                                        index={i}
-                                        ref={ref => { buttonRefs.current[i] = ref }}
-                                        changeTab={changeTab}
-                                        width={width}
-                                        deleteTab={deleteTab}
-                                    />
+                            // useMemo(() => (
+                            Object.keys(tabs).map((index, i) =>
+                                <TabButton
+                                    key={index}
+                                    tabData={tabs[index]}
+                                    index={i}
+                                    // ref={ref => {
+                                    //     buttonRefs.current[i] = ref
+                                    //     console.log(i, ref)
+                                    // }}
+                                    changeTab={changeTab}
+                                    width={width}
+                                    deleteTab={deleteTab}
+                                />
 
-                                ))
-                                , [tabs])
+                            )
+                            // )
+                            //     , [tabs])
                         }
                     </View>
                 </ScrollView>
@@ -1069,7 +1217,7 @@ const App = () => {
                     </TouchableOpacity>
                 </>
             </View>
-            {/* <TouchableOpacity onPress={() => console.log(tabs, tabPaths.current)}><Text>Show progress</Text></TouchableOpacity> */}
+            <TouchableOpacity onPress={() => console.log(tabs)}><Text>Show progress</Text></TouchableOpacity>
         </View >
     );
 };
