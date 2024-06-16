@@ -93,7 +93,6 @@ export default StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         flexDirection: 'column',
-        gap: 20,
     },
     progressBar: {
         padding: 10,

@@ -42,30 +42,24 @@ const Window = (props) => {
             setSelectionFlag(1)
     }, [selectedItems])
 
-    const finalList = useMemo(() => {
-        return (filesList)
-    }, [filesList])
-
-    const handlePress =
-        (item) => {
-            if (selectionFlag) {
-                selectItem(item)
-            }
-            else {
-                if (item.isDirectory()) {
-                    props.setTabPath(item["path"])
-                }
-                else
-                    props.fileHandler(item), setSelectedItem(item)
-            }
+    const handlePress = (item) => {
+        if (selectionFlag) {
+            selectItem(item)
         }
-    const handleLongPress =
-        (item) => {
-            if (selectionFlag)
-                rangeSelect(item)
+        else {
+            if (item.isDirectory()) {
+                props.setTabPath(item["path"])
+            }
             else
-                selectItem(item)
+                props.fileHandler(item), setSelectedItem(item)
         }
+    }
+    const handleLongPress = (item) => {
+        if (selectionFlag)
+            rangeSelect(item)
+        else
+            selectItem(item)
+    }
 
     const handleSort = (items) => {
         setSortModal(0)
@@ -200,7 +194,7 @@ const Window = (props) => {
                         styles.bigGap,
                     ]}>
                         <View style={{ width: 30, }}>
-                            {Icon(item)}
+                            {props.Icon(item)}
                         </View>
                         <View style={[
                             styles.wide,
@@ -221,24 +215,6 @@ const Window = (props) => {
             )
         }
     // , [selectedItem, selectedItems, selectionFlag])
-
-    const Icon = (item) => {
-        let ext = ""
-        if (item.isFile()) {
-            ext = item.name.split(".").pop()
-        } else {
-            return <Image source={require('./assets/folder.png')} />
-        }
-        switch (ext) {
-            case "mp3":
-                return (<Image source={require('./assets/music.png')} />)
-            case "exe":
-                return (<Image source={require('./assets/win.png')} />)
-            default:
-                return (<Text style={[styles.text,
-                styles.smallDarkText]}>{ext}</Text>)
-        }
-    }
 
     return (
         <View style={
@@ -270,6 +246,7 @@ const Window = (props) => {
                     <View style={[
                         styles.pill,
                         styles.modal,
+                        styles.mediumGap,
                         styles.padding,
                         {
                             backgroundColor: backgroundColor,
@@ -282,10 +259,11 @@ const Window = (props) => {
                         <Text style={[styles.text,
                         styles.headingText]}>Sort</Text>
                         <View style={[styles.divider]} />
-                        <View style={[styles.mediumGap, { flexDirection: 'column', width: '100%' }]}>
+                        <View style={[styles.rowLayout, styles.mediumGap]}>
                             <TouchableOpacity
                                 style={[
                                     styles.pill,
+                                    styles.wide,
                                     sortType == 0 ? styles.pillHighlight : null,
                                     styles.padding]}
                                 onPress={() => setSortType(0)}
@@ -295,15 +273,19 @@ const Window = (props) => {
                             <TouchableOpacity
                                 style={[
                                     styles.pill,
+                                    styles.wide,
                                     sortType == 1 ? styles.pillHighlight : null,
                                     styles.padding]}
                                 onPress={() => setSortType(1)}
                             >
                                 <Text style={[styles.text]}>Type</Text>
                             </TouchableOpacity>
+                        </View>
+                        <View style={[styles.rowLayout, styles.mediumGap]}>
                             <TouchableOpacity
                                 style={[
                                     styles.pill,
+                                    styles.wide,
                                     sortType == 2 ? styles.pillHighlight : null,
                                     styles.padding]}
                                 onPress={() => setSortType(2)}
@@ -313,45 +295,46 @@ const Window = (props) => {
                             <TouchableOpacity
                                 style={[
                                     styles.pill,
+                                    styles.wide,
                                     sortType == 3 ? styles.pillHighlight : null,
                                     styles.padding]}
                                 onPress={() => setSortType(3)}
                             >
                                 <Text style={[styles.text]}>Size</Text>
                             </TouchableOpacity>
-                            <View style={[styles.divider]} />
+                        </View>
+                        <View style={[styles.divider]} />
+                        <TouchableOpacity
+                            style={[
+                                styles.pill,
+                                sortOrder == 1 ? styles.pillHighlight : null,
+                                styles.padding, { width: '100%' }]}
+                            onPress={() => setSortOrder(!sortOrder)}
+                        >
+                            <Text style={[styles.text]}>{sortOrder ? "Descending" : "Ascending"}</Text>
+                        </TouchableOpacity>
+                        <View style={[styles.divider]} />
+                        <View style={[styles.rowLayout,
+                        styles.mediumGap]}>
                             <TouchableOpacity
                                 style={[
                                     styles.pill,
-                                    sortOrder == 1 ? styles.pillHighlight : null,
+                                    styles.wide,
                                     styles.padding]}
-                                onPress={() => setSortOrder(!sortOrder)}
+                                onPress={() => setSortModal(0)}
                             >
-                                <Text style={[styles.text]}>{sortOrder ? "Descending" : "Ascending"}</Text>
+                                <Text style={[styles.text]}>Cancel</Text>
                             </TouchableOpacity>
-                            <View style={[styles.divider]} />
-                            <View style={[styles.rowLayout,
-                            styles.mediumGap]}>
-                                <TouchableOpacity
-                                    style={[
-                                        styles.pill,
-                                        styles.wide,
-                                        styles.padding]}
-                                    onPress={() => setSortModal(0)}
-                                >
-                                    <Text style={[styles.text]}>Cancel</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[
-                                        styles.pill,
-                                        styles.wide,
-                                        styles.pillHighlight,
-                                        styles.padding]}
-                                    onPress={() => handleSort(filesList)}
-                                >
-                                    <Text style={[styles.text]}>Done</Text>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity
+                                style={[
+                                    styles.pill,
+                                    styles.wide,
+                                    styles.pillHighlight,
+                                    styles.padding]}
+                                onPress={() => handleSort(filesList)}
+                            >
+                                <Text style={[styles.text]}>Done</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -392,6 +375,7 @@ styles.listItem]}>
                     return (
                         <FilesList
                             buildCache={props.buildCache}
+                            tabData={props.tabData}
                             setSelectedItems={setSelectedItems}
                             setSelectedItem={setSelectedItem}
                             finalList={filesList}
@@ -446,6 +430,26 @@ styles.listItem]}>
                                     styles.wide,
                                     styles.padding
                                 ]}
+                                onPress={() => {
+                                    props.buildCache(props.tabData["path"])
+                                    setSelectedItems([])
+                                    setSelectedItem([])
+                                }}
+                            ><Image source={require('./assets/refresh.png')} />
+                                <Text style={[styles.text]}>Refresh</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <TouchableOpacity
+                                style={[
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.wide,
+                                    styles.padding
+                                ]}
                                 onPress={() => { props.setClipBoardModal(1) }}
                             >
                                 <Image source={require('./assets/archive.png')} />
@@ -489,26 +493,6 @@ styles.listItem]}>
                             </TouchableOpacity>
                         </View>
                         }
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    props.buildCache(props.tabData["path"])
-                                    setSelectedItems([])
-                                    setSelectedItem([])
-                                }}
-                            ><Image source={require('./assets/refresh.png')} />
-                                <Text style={[styles.text]}>Refresh</Text>
-                            </TouchableOpacity>
-                        </View>
                         <View
                             style={[
                                 styles.rowLayout
@@ -765,7 +749,7 @@ styles.listItem]}>
                             }
                         ]
                         }>
-                            {selectionFlag ?
+                            {!props.progressModal && selectionFlag ?
                                 <>
                                     <TouchableOpacity
                                         style={[styles.pill,

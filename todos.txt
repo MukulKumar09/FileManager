@@ -1,5 +1,6 @@
-tabs
-    bugs
+move
+delete
+copy
 
 sorting
     modified
@@ -8,5 +9,4 @@ sorting
 search
     case insensetive
 
-select all
 bootsrtap icons

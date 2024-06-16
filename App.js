@@ -143,15 +143,18 @@ const App = () => {
                 return 1
             } else {
                 path = path.split("/")
-                path.pop()
+                folderName = path.pop()
             }
         } else { //go inside
+            checkFavPath = favPaths.find((i) => i.path == path)
             path = path.split("/")
+            if (checkFavPath) {
+                folderName = checkFavPath["name"]
+            } else {
+                folderName = [...path].pop()
+            }
         }
-        tempPath = [...path]
-        folderName = tempPath.pop()
         path = path.join("/")
-
         updateTabDetails()
     }
 
@@ -620,10 +623,91 @@ const App = () => {
                 ToastAndroid.CENTER,
             );
         }
-    };
+    }
+
+    const Icon = (item) => {
+        let ext = ""
+        if (item.isFile()) {
+            ext = item.name.split(".").pop()
+        } else {
+            return <Image source={require('./assets/folder.png')} />
+        }
+        switch (ext) {
+            case "mp3":
+                return (<Image source={require('./assets/music.png')} />)
+            case "exe":
+                return (<Image source={require('./assets/win.png')} />)
+            default:
+                return (<Text style={[styles.text,
+                styles.smallDarkText]}>{ext}</Text>)
+        }
+    }
 
     return (
         <View style={[styles.mainBody]}>
+            {
+                progressModal == 1 &&
+                (<View style={[
+                    styles.pill,
+                    styles.paddingCloseBottom,
+                    {
+                        position: 'absolute',
+                        zIndex: 2,
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        alignItems: 'flex-start',
+                        overflow: 'hidden'
+                    }
+                ]}>
+                    <Animated.View style={[
+                        styles.pillHighlight,
+                        {
+                            height: '100%',
+                            position: 'absolute',
+                        },
+                        animatedWidthStyle
+                    ]}>
+                    </Animated.View>
+                    <View
+                        style={[
+                            styles.rowLayout,
+                            , {
+                                paddingHorizontal: 20,
+                                paddingVertical: 10,
+                                justifyContent: 'space-between'
+                            }]}
+                    >
+                        <View style={[
+                            styles.rowLayout,
+                            styles.mediumGap,
+                            styles.wide,
+                        ]}>
+                            <ActivityIndicator />
+                            <Text
+
+                                style={[
+                                    styles.text,
+                                    styles.smallText
+                                ]}>
+                                {operationType.current == 0 && "Copy "}
+                                {operationType.current == 1 && "Move "}
+                                {operationType.current == 2 && "Delete "}
+                                {operationType.current == 3 && "Zipping "}
+                                in progress   ({progress}%)
+                            </Text>
+                        </View>
+                        <Text style={[
+                            styles.text,
+                            styles.smallText,
+                            {
+                                textDecorationLine: 'underline'
+                            }
+                        ]} onPress={() => deselectAll()}>Cancel</Text>
+                    </View>
+                </View>
+                )
+            }
             {clipBoardModal ?
                 <Modal
                     transparent={true}>
@@ -643,6 +727,7 @@ const App = () => {
                     <View style={[
                         styles.pill,
                         styles.modal,
+                        styles.bigGap,
                         styles.padding,
                         {
                             backgroundColor: backgroundColor,
@@ -658,62 +743,73 @@ const App = () => {
                                 width: '100%',
                                 justifyContent: 'space-between'
                             }]}>
-                            <Text style={[styles.text,
-                            styles.headingText]}>Clipboard</Text>
+                            <Text style={[
+                                styles.text,
+                                styles.headingText
+                            ]}>Clipboard</Text>
                             <Text style={[
                                 styles.text,
                                 styles.textDisabled,
                                 {
                                     textDecorationLine: 'underline'
                                 }
-                            ]} onPress={() => selectedItemsforOperation.current = []}>Clear</Text>
+                            ]} onPress={() => {
+                                selectedItemsforOperation.current = []
+                                setShowPaste(0)
+                            }}>Clear</Text>
                         </View>
                         <View style={[styles.divider]} />
-                        <View style={[styles.mediumGap, { flexDirection: 'column', width: '100%' }]}>
-                            {selectedItemsforOperation.current.map(
-                                (item, i) =>
-                                    <View
-                                        key={i}
-                                        style={[
-                                            styles.rowLayout,
-                                            styles.pill
-                                        ]}>
-                                        <TouchableOpacity
+
+                        <View style={[
+                            {
+                                flexDirection: 'column',
+                                width: '100%',
+                            }
+                        ]}>
+                            {selectedItemsforOperation.current.length == 0 ?
+                                <Text style={[styles.text]}>No items</Text>
+                                : selectedItemsforOperation.current.map(
+                                    (item, i) =>
+                                        <View
+                                            key={i}
                                             style={[
                                                 styles.rowLayout,
-                                                styles.bigGap,
-                                                styles.wide,
-                                                styles.padding
-                                            ]}
-                                        ><Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
-                                            <Text style={[styles.text]}>{item["name"]}</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={[
-                                                styles.padding
-                                            ]}
-                                            onPress={() => {
-                                                selectedItemsforOperation.current.splice(i, 1)
-                                            }}
-                                        >
-                                            <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                            )}
-                            <View style={[styles.divider]} />
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.pill,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => selectedItemsforOperation.current = []}
-                            ><Image source={require('./assets/newfolder.png')} />
-                                <Text style={[styles.text]}>Clear</Text>
-                            </TouchableOpacity>
+                                            ]}>
+                                            <TouchableOpacity
+                                                style={[
+                                                    styles.rowLayout,
+                                                    styles.bigGap,
+                                                    styles.wide,
+                                                    {
+                                                        paddingVertical: 10
+                                                    }]}
+                                            >
+                                                {Icon(item)}
+                                                <Text style={[styles.text]}>{item["name"]}</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    selectedItemsforOperation.current.splice(i, 1)
+                                                }}
+                                            >
+                                                <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                )}
                         </View>
+                        <View style={[styles.divider]} />
+                        <TouchableOpacity
+                            style={[
+                                styles.rowLayout,
+                                styles.pill,
+                                styles.padding
+                                , {
+                                    width: '100%'
+                                }]}
+                            onPress={() => setClipBoardModal(0)}
+                        >
+                            <Text style={[styles.text]}>Close</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal >
                 : null
@@ -820,6 +916,7 @@ const App = () => {
                     <View style={[
                         styles.pill,
                         styles.modal,
+                        styles.bigGap,
                         styles.padding,
                         {
                             backgroundColor: backgroundColor,
@@ -829,8 +926,9 @@ const App = () => {
                             bottom: 10,
                         }
                     ]}>
-                        <Text style={[styles.text]}>
-                            New Name for {inputModal}
+                        <Text style={[styles.text,
+                        styles.headingText]}>
+                            New {inputModal}
                         </Text>
                         <View style={[styles.divider]} />
                         {alreadyExists ? <Text style={[styles.text,
@@ -975,6 +1073,7 @@ const App = () => {
                     <View style={[
                         styles.pill,
                         styles.modal,
+                        styles.bigGap,
                         styles.padding,
                         {
                             backgroundColor: backgroundColor,
@@ -984,75 +1083,97 @@ const App = () => {
                             bottom: 10,
                         }
                     ]}>
-                        <Text style={[styles.text,
-                        styles.headingText]}>Favourites</Text>
+                        <View style={[
+                            styles.rowLayout,
+                            , {
+                                width: '100%',
+                                justifyContent: 'space-between'
+                            }]}>
+                            <Text style={[
+                                styles.text,
+                                styles.headingText
+                            ]}>Favourites</Text>
+                            <Text style={[
+                                styles.text,
+                                styles.textDisabled,
+                                {
+                                    textDecorationLine: 'underline'
+                                }
+                            ]} onPress={() =>
+                                setFavouriteItems([])
+                            }>Clear</Text>
+                        </View>
                         <View style={[styles.divider]} />
-                        <View style={[styles.mediumGap, { flexDirection: 'column', width: '100%' }]}>
-                            {Object.keys(favouriteItems).length > 0 && favouriteItems.map(
-                                (item, i) =>
-                                    <View
-                                        key={i}
-                                        style={[
-                                            styles.rowLayout,
-                                            styles.pill
-                                        ]}>
-                                        <TouchableOpacity
+                        <View style={[
+                            {
+                                flexDirection: 'column',
+                                width: '100%',
+                            }
+                        ]}>
+                            {Object.keys(favouriteItems).length == 0 ?
+                                <Text style={[styles.text]}>No items</Text>
+                                : favouriteItems.map(
+                                    (item, i) =>
+                                        <View
+                                            key={i}
                                             style={[
                                                 styles.rowLayout,
-                                                styles.bigGap,
-                                                styles.wide,
-                                                styles.padding
-                                            ]}
-                                            onPress={() => {
-                                                setFavouritesModal(0)
-                                            }}
-                                        ><Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
-                                            <Text style={[styles.text]}>{item["title"]}</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={[
-                                                styles.padding
-                                            ]}
-                                            onPress={() => {
-                                                let tempFavItems = [...favouriteItems]
-                                                tempFavItems.splice(i, 1)
-                                                props.setFavouriteItems(tempFavItems)
-                                            }}
-                                        >
-                                            <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                            )}
-                            <View style={[styles.divider]} />
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.pill,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    let favPath = tabs[currTab]
-                                    let favTitle = favPath.split("/").pop()
-                                    let newFavItem = {
-                                        'title': favTitle,
-                                        "path": favPath
-                                    }
-                                    if (favouriteItems.find((item) => item.path == favPath) == undefined) {
-                                        setFavouriteItems([...favouriteItems, newFavItem])
-                                    } else {
-                                        ToastAndroid.showWithGravity(
-                                            "Item already exists",
-                                            ToastAndroid.SHORT,
-                                            ToastAndroid.CENTER,
-                                        );
-                                    }
-                                }}
-                            ><Image source={require('./assets/newfolder.png')} />
-                                <Text style={[styles.text]}>Add Current Folder</Text>
-                            </TouchableOpacity>
+                                            ]}>
+                                            <TouchableOpacity
+                                                style={[
+                                                    styles.rowLayout,
+                                                    styles.bigGap,
+                                                    styles.wide,
+                                                    {
+                                                        paddingVertical: 10
+                                                    }
+                                                ]}
+                                                onPress={() => {
+                                                    setFavouritesModal(0)
+                                                }}
+                                            >
+                                                <Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
+                                                <Text style={[styles.text]}>{item["title"]}</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    let tempFavItems = [...favouriteItems]
+                                                    tempFavItems.splice(i, 1)
+                                                    setFavouriteItems(tempFavItems)
+                                                }}
+                                            >
+                                                <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                )}
                         </View>
+
+                        <View style={[styles.divider]} />
+                        <TouchableOpacity
+                            style={[
+                                styles.rowLayout,
+                                styles.pill,
+                                styles.bigGap,
+                                styles.padding
+                                , {
+                                    width: '100%'
+                                }]}
+                            onPress={() => {
+                                let favPath = tabs[currTab]["path"]
+                                let favTitle = favPath.split("/").pop()
+                                let newFavItem = {
+                                    'title': favTitle,
+                                    "path": favPath
+                                }
+                                if (favouriteItems.find((item) => item.path == favPath) == undefined) {
+                                    setFavouriteItems([...favouriteItems, newFavItem])
+                                } else {
+                                    showToast("Item already exists")
+                                }
+                            }}
+                        ><Image source={require('./assets/newfolder.png')} />
+                            <Text style={[styles.text]}>Add Current Folder</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal >
                 : null
@@ -1088,6 +1209,7 @@ const App = () => {
                             buildCache={buildCache}
                             breadCrumbsTabName={breadCrumbsTabName}
                             index={index}
+                            Icon={Icon}
                             currTab={currTab}
                             tabData={tabs[index]}
                             setTabPath={setTabPath}
@@ -1101,6 +1223,7 @@ const App = () => {
                             newItem={newItem}
                             setClipBoardModal={setClipBoardModal}
                             setFavouritesModal={setFavouritesModal}
+                            progressModal={progressModal}
                         // ref={(ref) => {
                         //     windowRefs.current[i] = ref
                         // }
@@ -1163,92 +1286,7 @@ const App = () => {
                     </TouchableOpacity>
                 </>
             </View>
-
-            <View style={[
-                styles.rowLayout,
-                styles.pill,
-                styles.paddingCloseBottom,
-                {
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 20,
-                    paddingVertical: 10,
-                }
-            ]}>
-                <Text style={
-                    [
-                        styles.text
-                        , {
-                            color: '#979899',
-                            fontSize: 10
-                        }
-                    ]}>
-                    {tabs[currTab] && mainCache[tabs[currTab]["path"]] ? mainCache[tabs[currTab]["path"]].length : "0"} items
-                </Text>
-            </View>
-            {
-                progressModal == 1 &&
-                (<View style={[
-                    styles.pill,
-                    styles.paddingCloseBottom,
-                    {
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        zIndex: 5,
-                        alignItems: 'flex-start',
-                        overflow: 'hidden'
-                    }
-                ]}>
-                    <Animated.View style={[
-                        styles.pillHighlight,
-                        {
-                            height: '100%',
-                            position: 'absolute',
-                        },
-                        animatedWidthStyle
-                    ]}>
-                    </Animated.View>
-                    <View
-                        style={[
-                            styles.rowLayout,
-                            , {
-                                paddingHorizontal: 20,
-                                paddingVertical: 10,
-                                justifyContent: 'space-between'
-                            }]}
-                    >
-                        <View style={[
-                            styles.rowLayout,
-                            styles.mediumGap,
-                            styles.wide,
-                        ]}>
-                            <ActivityIndicator />
-                            <Text
-
-                                style={[
-                                    styles.text,
-                                    styles.smallText
-                                ]}>
-                                {operationType.current == 0 && "Copy "}
-                                {operationType.current == 1 && "Move "}
-                                {operationType.current == 2 && "Delete "}
-                                {operationType.current == 3 && "Zipping "}
-                                in progress   ({progress}%)
-                            </Text>
-                        </View>
-                        <Text style={[
-                            styles.text,
-                            styles.smallText,
-                            {
-                                textDecorationLine: 'underline'
-                            }
-                        ]} onPress={() => deselectAll()}>Cancel</Text>
-                    </View>
-                </View>
-                )
-            }
-            <TouchableOpacity onPress={() => console.log(tabs)}><Text>Show progress</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => setProgressModal(!progressModal)}><Text>Show progress</Text></TouchableOpacity>
         </View >
     );
 };
