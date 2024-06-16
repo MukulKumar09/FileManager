@@ -7,3 +7,6 @@ sorting
 
 search
     case insensetive
+
+select all
+bootsrtap icons

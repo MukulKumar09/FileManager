@@ -49,11 +49,10 @@ const App = () => {
 
     // const windowRefs = useRef([])
 
-    const currTabStatic = useRef(0)
+    const [currTab, setCurrTab] = useState("0")
 
     const [tabs, setTabs] = useState({})
     const [tabCounter, setTabCounter] = useState(0)
-    const tabPaths = useRef([])
 
     const [favouriteItems, setFavouriteItems] = useState([])
 
@@ -96,36 +95,47 @@ const App = () => {
     let width = Dimensions.get('window').width
 
     useEffect(() => {
-        if (!(Object.keys(tabs).includes(tabCounter))) {
+        if (tabCounter == 0) {
             setTabs({
-                ...tabs,
                 [tabCounter]: {
                     title: "Home",
                     path: "Home",
                     type: "filebrowser",
-                    visible: 0
                 }
             })
-            tabPaths.current.push("Home")
+
+        } else {
+            if (!(Object.keys(tabs).includes(tabCounter))) {
+                setTabs({
+                    ...tabs,
+                    [tabCounter]: {
+                        title: tabs[currTab]["title"],
+                        path: tabs[currTab]["path"],
+                        type: "filebrowser",
+                    }
+                })
+            }
         }
+        setCurrTab(tabCounter.toString())
     }, [tabCounter])
 
     const setTabPath = (path) => {
 
         const updateTabDetails = () => {
-            setTabs({
+            setTabs(tabs => ({
                 ...tabs,
-                [currTabStatic.current]: {
-                    ...tabs[currTabStatic.current],
+                [currTab]: {
+                    ...tabs[currTab],
                     title: folderName,
                     path: path
                 }
-            })
+            }
+            ))
         }
 
         let tempPath, folderName
         if (path == null) { //go up
-            path = tabs[currTabStatic.current]["path"]
+            path = tabs[currTab]["path"]
             if (favPaths.find((i) => i.path == path)) {
                 path = "Home"
                 folderName = "Home"
@@ -141,25 +151,8 @@ const App = () => {
         tempPath = [...path]
         folderName = tempPath.pop()
         path = path.join("/")
-        console.log(path)
+
         updateTabDetails()
-    }
-
-
-    const changeTab = (item) => {
-        setTabs({
-            ...tabs,
-            [currTabStatic.current]: {
-                ...tabs[currTabStatic.current],
-                visible: 0
-            },
-            [item]: {
-                ...tabs[item],
-                visible: 1,
-            }
-        })
-
-        currTabStatic.current = item
     }
 
     const buildCache = async (path) => {
@@ -180,7 +173,7 @@ const App = () => {
     }
 
     const breadCrumbsTabName = () => {
-        let path = tabs[currTabStatic.current]["path"]
+        let path = tabs[currTab]["path"]
 
         if (path == "Home") {
             return []
@@ -239,21 +232,28 @@ const App = () => {
     }, [progress])
 
     const deleteTab = () => {
-        const deleteLogic = () => {
-            let tempTabs = [...tabs]
-            tempTabs.splice(currTabStatic.current, 1)
+        const fire = () => {
+            let tempTabs = { ...tabs }
+            delete tempTabs[currTab]
             setTabs(tempTabs)
         }
-        if (tabs.length == 1) {
-            currTabStatic.current = 0
-            deleteLogic()
-        } else if (tabs[currTabStatic.current + 1] == undefined) { //last
-            deleteLogic()
-            currTabStatic.current = currTabStatic.current - 1
-        } else {//mid
-            deleteLogic()
+
+        let keys = Object.keys(tabs)
+        let indxCurrTab = keys.indexOf(currTab)
+        if (keys.length == 1) {
+            setCurrTab(0)
+            setTabCounter(0)
+        }
+        else if (keys[keys.length - 1] == currTab) { //last
+            setCurrTab(keys[indxCurrTab - 1])
+            fire()
+        }
+        else {//mid
+            setCurrTab(keys[indxCurrTab + 1])
+            fire()
         }
     }
+
 
     const fileHandler = (item) => {
         setSelectedItem(item)
@@ -330,7 +330,7 @@ const App = () => {
         selectedItemsforOperation.current = selectedItems
         if (type in [0, 1]) {
             operationType.current = type
-            operationSource.current = tabPaths.current[currTabStatic.current]
+            operationSource.current = tabs[currTab]
             setShowPaste(1)
             ToastAndroid.showWithGravity(
                 selectedItemsforOperation.current.length + " items " + (type ? "ready to move" : "copied"),
@@ -340,26 +340,26 @@ const App = () => {
         }
         if (type == 2) {
             operationType.current = 2
-            operationDest.current = tabPaths.current[currTabStatic.current]
+            operationDest.current = tabs[currTab]
             deleteHandler()
         }
         if (type == 3) {
             setShowPaste(0)
             operationType.current = 1 //rename is moveItem
-            operationDest.current = tabPaths.current[currTabStatic.current]
+            operationDest.current = tabs[currTab]
             nameNewItem.current = selectedItemsforOperation.current["name"]
             renameHandler(selectedItemsforOperation.current)
         }
         if (type == 4) {
             operationType.current = 4
-            operationDest.current = tabPaths.current[currTabStatic.current]
+            operationDest.current = tabs[currTab]
             zipHandler()
         }
     }
 
     const startShifting = async () => {
         setShowPaste(0)
-        operationDest.current = tabPaths.current[currTabStatic.current]
+        operationDest.current = tabs[currTab]
         let collectedItems = []
         const collectFilesFromFolder = async () => {
             for (let i = 0; i < selectedItemsforOperation.current.length; i++) {
@@ -845,8 +845,8 @@ const App = () => {
                                 autoFocus={true}
                                 defaultValue={nameNewItem.current}
                                 onChangeText={text => {
-                                    for (let i = 0; i < mainCache[tabPaths.current[currTabStatic.current]].length; i++) {
-                                        if (mainCache[tabPaths.current[currTabStatic.current]][i]["name"] == text) {
+                                    for (let i = 0; i < mainCache[tabs[currTab]].length; i++) {
+                                        if (mainCache[tabs[currTab]][i]["name"] == text) {
                                             setAlreadyExists(1)
                                             break
                                         } else {
@@ -1033,7 +1033,7 @@ const App = () => {
                                     styles.padding
                                 ]}
                                 onPress={() => {
-                                    let favPath = tabPaths.current[currTabStatic.current]
+                                    let favPath = tabs[currTab]
                                     let favTitle = favPath.split("/").pop()
                                     let newFavItem = {
                                         'title': favTitle,
@@ -1081,21 +1081,18 @@ const App = () => {
             >
                 {
                     // useMemo(() =>
-                    Object.keys(tabs).map((index, i) =>
+                    Object.keys(tabs).map((index) =>
 
                         <Window
                             key={index}
                             buildCache={buildCache}
                             breadCrumbsTabName={breadCrumbsTabName}
+                            index={index}
+                            currTab={currTab}
                             tabData={tabs[index]}
                             setTabPath={setTabPath}
-                            index={i}
-                            mainCache={mainCache}
+                            filesList={mainCache[tabs[index]["path"]]}
                             openExternally={openExternally}
-                            // ref={(ref) => {
-                            //     windowRefs.current[i] = ref
-                            // }
-                            // }
                             selectItem={selectItem}
                             setMediaBox={setMediaBox}
                             setMediaType={setMediaType}
@@ -1104,68 +1101,16 @@ const App = () => {
                             newItem={newItem}
                             setClipBoardModal={setClipBoardModal}
                             setFavouritesModal={setFavouritesModal}
+                        // ref={(ref) => {
+                        //     windowRefs.current[i] = ref
+                        // }
+                        // }
                         />
                     )
                     // , [tabs, mainCache])
                 }
             </View>
-            {
-                progressModal == 1 &&
-                (<View style={[
-                    styles.pill,
-                    styles.paddingCloseBottom,
-                    {
-                        alignItems: 'flex-start',
-                        overflow: 'hidden'
-                    }
-                ]}>
-                    <Animated.View style={[
-                        styles.pillHighlight,
-                        {
-                            height: '100%',
-                            position: 'absolute',
-                        },
-                        animatedWidthStyle
-                    ]}>
-                    </Animated.View>
-                    <View
-                        style={[
-                            styles.rowLayout,
-                            , {
-                                paddingHorizontal: 20,
-                                paddingVertical: 10,
-                                justifyContent: 'space-between'
-                            }]}
-                    >
-                        <View style={[
-                            styles.rowLayout,
-                            styles.mediumGap,
-                            styles.wide,
-                        ]}>
-                            <ActivityIndicator />
-                            <Text
-                                style={[
-                                    styles.text,
-                                    styles.smallText
-                                ]}>
-                                {operationType.current == 0 && "Copy "}
-                                {operationType.current == 1 && "Move "}
-                                {operationType.current == 2 && "Delete "}
-                                {operationType.current == 3 && "Zipping "}
-                                in progress   ({progress}%)
-                            </Text>
-                        </View>
-                        <Text style={[
-                            styles.text,
-                            styles.smallText,
-                            {
-                                textDecorationLine: 'underline'
-                            }
-                        ]} onPress={() => deselectAll()}>Cancel</Text>
-                    </View>
-                </View>
-                )
-            }
+
             <View style={[styles.rowLayout,
             styles.mediumGap, { paddingTop: 10, justifyContent: 'space-between' }]}>
                 <ScrollView
@@ -1178,16 +1123,17 @@ const App = () => {
                     >
                         {
                             // useMemo(() => (
-                            Object.keys(tabs).map((index, i) =>
+                            Object.keys(tabs).map((index) =>
                                 <TabButton
                                     key={index}
                                     tabData={tabs[index]}
-                                    index={i}
+                                    index={index}
+                                    currTab={currTab}
+                                    setCurrTab={setCurrTab}
                                     // ref={ref => {
                                     //     buttonRefs.current[i] = ref
                                     //     console.log(i, ref)
                                     // }}
-                                    changeTab={changeTab}
                                     width={width}
                                     deleteTab={deleteTab}
                                 />
@@ -1217,6 +1163,91 @@ const App = () => {
                     </TouchableOpacity>
                 </>
             </View>
+
+            <View style={[
+                styles.rowLayout,
+                styles.pill,
+                styles.paddingCloseBottom,
+                {
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                }
+            ]}>
+                <Text style={
+                    [
+                        styles.text
+                        , {
+                            color: '#979899',
+                            fontSize: 10
+                        }
+                    ]}>
+                    {tabs[currTab] && mainCache[tabs[currTab]["path"]] ? mainCache[tabs[currTab]["path"]].length : "0"} items
+                </Text>
+            </View>
+            {
+                progressModal == 1 &&
+                (<View style={[
+                    styles.pill,
+                    styles.paddingCloseBottom,
+                    {
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        zIndex: 5,
+                        alignItems: 'flex-start',
+                        overflow: 'hidden'
+                    }
+                ]}>
+                    <Animated.View style={[
+                        styles.pillHighlight,
+                        {
+                            height: '100%',
+                            position: 'absolute',
+                        },
+                        animatedWidthStyle
+                    ]}>
+                    </Animated.View>
+                    <View
+                        style={[
+                            styles.rowLayout,
+                            , {
+                                paddingHorizontal: 20,
+                                paddingVertical: 10,
+                                justifyContent: 'space-between'
+                            }]}
+                    >
+                        <View style={[
+                            styles.rowLayout,
+                            styles.mediumGap,
+                            styles.wide,
+                        ]}>
+                            <ActivityIndicator />
+                            <Text
+
+                                style={[
+                                    styles.text,
+                                    styles.smallText
+                                ]}>
+                                {operationType.current == 0 && "Copy "}
+                                {operationType.current == 1 && "Move "}
+                                {operationType.current == 2 && "Delete "}
+                                {operationType.current == 3 && "Zipping "}
+                                in progress   ({progress}%)
+                            </Text>
+                        </View>
+                        <Text style={[
+                            styles.text,
+                            styles.smallText,
+                            {
+                                textDecorationLine: 'underline'
+                            }
+                        ]} onPress={() => deselectAll()}>Cancel</Text>
+                    </View>
+                </View>
+                )
+            }
             <TouchableOpacity onPress={() => console.log(tabs)}><Text>Show progress</Text></TouchableOpacity>
         </View >
     );

@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View, Image, ScrollView, Modal, TouchableWithoutFeedback, VirtualizedList } from "react-native";
 import Share from 'react-native-share';
 import styles, { backgroundColor, grey, secondaryColor } from "./styles";
-
+import FilesList from "./FilesList";
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
-    console.log(props.index, " window render")
     const [filesList, setFilesList] = useState([])
-    const [selectedItems, setSelectedItems] = useState([])
     const [selectedItem, setSelectedItem] = useState([])
+    const [selectedItems, setSelectedItems] = useState([])
     const [selectionFlag, setSelectionFlag] = useState(0)
+
     const [sortModal, setSortModal] = useState(0)
     const [sortType, setSortType] = useState(1)
     const [sortOrder, setSortOrder] = useState(0)
     const [searchFlag, setSearchFlag] = useState(0)
     const [contextMenu, setContextMenu] = useState(0)
-
     const [breadCrumbs, setBreadCrumbs] = useState([])
 
     // useImperativeHandle(ref, () => ({
@@ -26,15 +25,15 @@ const Window = (props) => {
 
 
     useEffect(() => { //first
-        if (props.mainCache[props.tabData["path"]] == undefined)
+        if (props.filesList == undefined)
             props.buildCache(props.tabData["path"])
         setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
     }, [props.tabData["path"]])
 
     useEffect(() => {
-        if (props.mainCache[props.tabData["path"]] !== undefined)
-            handleSort(props.mainCache[props.tabData["path"]])
-    }, [props.mainCache[props.tabData["path"]]])
+        if (props.filesList !== undefined)
+            handleSort(props.filesList)
+    }, [props.filesList])
 
     useEffect(() => {
         if (selectedItems.length == 0)
@@ -43,25 +42,30 @@ const Window = (props) => {
             setSelectionFlag(1)
     }, [selectedItems])
 
+    const finalList = useMemo(() => {
+        return (filesList)
+    }, [filesList])
 
-    const handlePress = (item) => {
-        if (selectionFlag) {
-            selectItem(item)
-        }
-        else {
-            if (item.isDirectory()) {
-                props.setTabPath(item["path"])
+    const handlePress =
+        (item) => {
+            if (selectionFlag) {
+                selectItem(item)
             }
-            else
-                props.fileHandler(item), setSelectedItem(item)
+            else {
+                if (item.isDirectory()) {
+                    props.setTabPath(item["path"])
+                }
+                else
+                    props.fileHandler(item), setSelectedItem(item)
+            }
         }
-    }
-    const handleLongPress = (item) => {
-        if (selectionFlag)
-            rangeSelect(item)
-        else
-            selectItem(item)
-    }
+    const handleLongPress =
+        (item) => {
+            if (selectionFlag)
+                rangeSelect(item)
+            else
+                selectItem(item)
+        }
 
     const handleSort = (items) => {
         setSortModal(0)
@@ -151,10 +155,6 @@ const Window = (props) => {
         setSelectedItems(tempSelectedItems)
     }
 
-    const deselectAll = () => {
-        setSelectedItems([])
-    }
-
     const shareFiles = async () => {
         try {
             let filesToShare = [];
@@ -174,6 +174,53 @@ const Window = (props) => {
         }
     }
 
+    const renderItem =
+        // useCallback(
+        ({ item }) => {
+            return (
+                <TouchableOpacity
+                    style={
+                        [
+                            styles.rowLayout,
+                            styles.padding,
+                            selectedItems.includes(item) && styles.listItemHighlight,
+                            selectedItem == item && styles.listItemSelected
+                        ]
+                    }
+                    onPress={() => {
+                        handlePress(item)
+                    }}
+                    onLongPress={() => {
+                        handleLongPress(item)
+                    }}
+                >
+                    <View style={[
+                        styles.rowLayout,
+                        styles.wide,
+                        styles.bigGap,
+                    ]}>
+                        <View style={{ width: 30, }}>
+                            {Icon(item)}
+                        </View>
+                        <View style={[
+                            styles.wide,
+                        ]}>
+                            <Text style={[styles.text]}>{item["name"]}</Text>
+                        </View>
+                    </View>
+                    {item.isFile() ?
+                        <View style={{ width: 30, alignItems: 'flex-end' }}>
+                            <Text style={[styles.text,
+                            styles.smallDarkText]}>
+                                {item["size"]}
+                            </Text>
+                        </View>
+                        : null
+                    }
+                </TouchableOpacity>
+            )
+        }
+    // , [selectedItem, selectedItems, selectionFlag])
 
     const Icon = (item) => {
         let ext = ""
@@ -192,19 +239,15 @@ const Window = (props) => {
                 styles.smallDarkText]}>{ext}</Text>)
         }
     }
+
     return (
         <View style={
             {
                 backgroundColor: backgroundColor,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-                display: props.tabData["visible"] ? "flex" : "none"
+                height: '100%',
+                display: props.currTab == props.index ? "flex" : "none"
             }
         }>
-            <Text>{props.index}</Text>
 
             {
                 sortModal ? <Modal
@@ -334,76 +377,28 @@ styles.listItem]}>
                     </TouchableOpacity>
                 </View>
             </View> */}
-            {filesList.length == 0 ?
-                <View style={[
-                    styles.wide,
-                    styles.padding,
-                    {
-                        alignItems: 'center'
-                    }
-                ]}>
-                    <Text style={[styles.text]}>Nothing to show</Text>
-                </View> :
-                <VirtualizedList
-                    onRefresh={() => {
-                        props.buildCache(props.tabData["path"])
-                        setSelectedItems([])
-                        setSelectedItem([])
-                    }
-                    }
-                    refreshing={false}
-                    data={filesList}
-                    // data={filesList}
-                    extraData={filesList}
-                    keyExtractor={item => item.path}
-                    getItemCount={(data) => data.length}
-                    getItem={(data, index) => data[index]}
-                    maxToRenderPerBatch={5}
-                    windowSize={5}
-                    updateCellsBatchingPeriod={100}
-                    renderItem={({ item }) =>
-                        <TouchableOpacity
-                            style={
-                                [
-                                    styles.rowLayout,
-                                    styles.padding,
-                                    selectedItems.includes(item) && styles.listItemHighlight,
-                                    selectedItem == item && styles.listItemSelected
-                                ]
-                            }
-                            onPress={() => {
-                                handlePress(item)
-                            }}
-                            onLongPress={() => {
-                                handleLongPress(item)
-                            }}
-                        >
-                            <View style={[
-                                styles.rowLayout,
-                                styles.wide,
-                                styles.bigGap,
-                            ]}>
-                                <View style={{ width: 30, }}>
-                                    {Icon(item)}
-                                </View>
-                                <View style={[
-                                    styles.wide,
-                                ]}>
-                                    <Text style={[styles.text]}>{item["name"]}</Text>
-                                </View>
-                            </View>
-                            {item.isFile() ?
-                                <View style={{ width: 30, alignItems: 'flex-end' }}>
-                                    <Text style={[styles.text,
-                                    styles.smallDarkText]}>
-                                        {item["size"]}
-                                    </Text>
-                                </View>
-                                : null
-                            }
-                        </TouchableOpacity>
-                    }
-                />
+            {
+                // filesList.length == 0 ?
+                //     <View style={[
+                //         styles.wide,
+                //         styles.padding,
+                //         {
+                //             alignItems: 'center'
+                //         }
+                //     ]}>
+                //         <Text style={[styles.text]}>Nothing to show</Text>
+                //     </View> :
+                useMemo(() => {
+                    return (
+                        <FilesList
+                            buildCache={props.buildCache}
+                            setSelectedItems={setSelectedItems}
+                            setSelectedItem={setSelectedItem}
+                            finalList={filesList}
+                            renderItem={renderItem}
+                        />
+                    )
+                }, [filesList, selectedItem, selectedItems, selectionFlag])
             }
 
             {contextMenu ?
@@ -440,7 +435,7 @@ styles.listItem]}>
                             }
                         ]}
                     >
-                        {/* <View
+                        <View
                             style={[
                                 styles.rowLayout
                             ]}>
@@ -452,10 +447,11 @@ styles.listItem]}>
                                     styles.padding
                                 ]}
                                 onPress={() => { props.setClipBoardModal(1) }}
-                            ><Image source={require('./assets/archive.png')} />
+                            >
+                                <Image source={require('./assets/archive.png')} />
                                 <Text style={[styles.text]}>Clipboard</Text>
                             </TouchableOpacity>
-                        </View> */}
+                        </View>
                         {/* {selectionFlag ?
                             <View
                                 style={[
@@ -597,14 +593,29 @@ styles.listItem]}>
                         ], {
                             color: '#979899',
                             fontSize: 10
-                        }}>{selectedItems.length} items selected</Text>
-                        <Text style={[
-                            styles.text
-                        ], {
-                            color: '#979899',
-                            fontSize: 10,
-                            textDecorationLine: 'underline'
-                        }} onPress={() => deselectAll()}>Deselect All</Text>
+                        }}>
+                            {selectedItems.length} items selected</Text>
+                        <View style={[styles.rowLayout, styles.bigGap]}>
+                            <Text style={[
+                                styles.text
+                            ], {
+                                color: '#979899',
+                                fontSize: 10,
+                                textDecorationLine: 'underline'
+                            }}
+                                onPress={() => {
+                                    setSelectedItems([])
+                                    setSelectedItem([])
+                                }}>Deselect All</Text>
+                            <Text style={[
+                                styles.text
+                            ], {
+                                color: '#979899',
+                                fontSize: 10,
+                                textDecorationLine: 'underline'
+                            }}
+                                onPress={() => setSelectedItems(props.filesList)}>Select All</Text>
+                        </View>
                     </View>
                     :
                     <View style={[styles.rowLayout,
@@ -703,9 +714,9 @@ styles.listItem]}>
                                 placeholderTextColor={grey}
                                 onChangeText={text => {
                                     if (text == "")
-                                        handleSort(props.mainCache[props.tabData["path"]])
+                                        handleSort(props.filesList)
                                     else
-                                        handleSort(props.mainCache[props.tabData["path"]].filter((item) => item["name"].includes(text)))
+                                        handleSort(props.filesList.filter((item) => item["name"].includes(text)))
                                 }}
                             />
                         </View>
@@ -730,7 +741,7 @@ styles.listItem]}>
                                 style={[styles.pill,
                                 styles.padding]}
                                 onPress={() => {
-                                    handleSort(props.mainCache[props.tabData["path"]])
+                                    handleSort(props.filesList)
                                     setSearchFlag(0)
                                 }}>
                                 <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />

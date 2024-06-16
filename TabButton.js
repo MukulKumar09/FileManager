@@ -5,17 +5,17 @@ const TabButton = (props) => {
     return (<View style={[
         styles.rowLayout,
         styles.pill,
-        props.tabData["visible"] && styles.pillHighlight
+        props.index == props.currTab && styles.pillHighlight
     ]}>
 
         <TouchableOpacity
             style={[styles.rowLayout, styles.mediumGap, styles.padding]}
-            onPress={() => props.changeTab(props.index)}>
+            onPress={() => props.setCurrTab(props.index)}>
             <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
             <Text style={[styles.text]}
             >{props.tabData["title"]}</Text>
         </TouchableOpacity>
-        {props.tabData["visible"] ?
+        {props.index == props.currTab ?
             <TouchableOpacity
                 style={[styles.paddingCloseLeft]}
                 onPress={() => { props.deleteTab() }}>
