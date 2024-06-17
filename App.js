@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, TouchableWithoutFeedback, ActivityIndicator } from "react-native";
 import RNFS from 'react-native-fs';
-import TabButton from "./TabButton";
+import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
+import { zip } from 'react-native-zip-archive'
+import TabButton from "./TabButton";
 import Window from "./Window";
 import MediaViewer from "./MediaViewer";
 import styles, { backgroundColor } from "./styles";
-import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
-import { zip } from 'react-native-zip-archive'
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(

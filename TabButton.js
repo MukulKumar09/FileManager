@@ -5,7 +5,10 @@ const TabButton = (props) => {
     return (<View style={[
         styles.rowLayout,
         styles.pill,
-        props.index == props.currTab && styles.pillHighlight
+        props.index == props.currTab && styles.pillHighlight,
+        {
+            maxWidth: 200
+        }
     ]}>
 
         <TouchableOpacity
@@ -17,7 +20,7 @@ const TabButton = (props) => {
             }
         >
             <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
-            <Text style={[styles.text]}
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}
             >{props.tabData["title"]}</Text>
         </TouchableOpacity>
         {
