@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Text, TouchableOpacity, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, TouchableWithoutFeedback, ActivityIndicator } from "react-native";
+import { Text, Pressable, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, TouchableWithoutFeedback, ActivityIndicator } from "react-native";
 import RNFS from 'react-native-fs';
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
@@ -7,7 +7,7 @@ import { zip } from 'react-native-zip-archive'
 import TabButton from "./TabButton";
 import Window from "./Window";
 import MediaViewer from "./MediaViewer";
-import styles, { backgroundColor } from "./styles";
+import styles, { backgroundColor, secondaryColor } from "./styles";
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
@@ -65,6 +65,7 @@ const App = () => {
     const [inputModal, setInputModal] = useState(0)
     const [deleteModal, setDeleteModal] = useState(0)
     const [existsModal, setExistsModal] = useState(0)
+    const [contextMenu, setContextMenu] = useState(0)
 
     //copy move delete
     const deleteRef = useRef("")
@@ -80,10 +81,11 @@ const App = () => {
     const [alreadyExists, setAlreadyExists] = useState(0)
     const inputRef = useRef("")
 
-    const selectedItemsforOperation = useRef([])
+    const clipboardItems = useRef([])
     const operationSource = useRef("")
     const operationDest = useRef("")
     const operationType = useRef(-1)
+    const [funcId, setFuncId] = useState(-1)
     const failedItems = useRef([])
     const [selectedItem, setSelectedItem] = useState([]) //for media
     const decisionRef = useRef("")
@@ -122,7 +124,7 @@ const App = () => {
                         type: "filebrowser",
                     }
                 })
-                currTabStatic.current = tabCounter
+                currTabStatic.current = tabCounter.toString()
                 setCurrTab(currTabStatic.current)
             }
         }
@@ -135,7 +137,7 @@ const App = () => {
                     type: type,
                 }
             })
-            currTabStatic.current = tabCounter
+            currTabStatic.current = tabCounter.toString()
             setCurrTab(currTabStatic.current)
         }
         setTabCounter(tabCounter + 1)
@@ -178,13 +180,14 @@ const App = () => {
         let keys = Object.keys(tabs)
         let indxCurrTab = keys.indexOf(currTabStatic.current)
         if (keys[keys.length - 1] == currTabStatic.current) { //last
+            console.log("last", keys, indxCurrTab, currTabStatic.current, indxCurrTab in keys)
             fire()
-            currTabStatic.current = keys[indxCurrTab - 1]
+            currTabStatic.current = keys[indxCurrTab - 1].toString()
             setCurrTab(currTabStatic.current)
         }
         else {//mid
             fire()
-            currTabStatic.current = keys[indxCurrTab + 1]
+            currTabStatic.current = keys[indxCurrTab + 1].toString()
             setCurrTab(currTabStatic.current)
         }
     }
@@ -334,7 +337,8 @@ const App = () => {
             });
     }
 
-    const newItem = async (type, path) => {
+    const newItem = async (type) => {
+        let path = tabs[currTab]["path"]
         if (type == 0) {
             setInputModal("Folder")
         } else {
@@ -376,13 +380,14 @@ const App = () => {
     }
 
     const readySet = (type, selectedItems) => { //from source tab
-        selectedItemsforOperation.current = selectedItems
+        setFuncId(-1)
+        clipboardItems.current = selectedItems
         if (type in [0, 1]) {
             operationType.current = type
             operationSource.current = tabs[currTab]
             setShowPaste(1)
             ToastAndroid.showWithGravity(
-                selectedItemsforOperation.current.length + " items " + (type ? "ready to move" : "copied"),
+                clipboardItems.current.length + " items " + (type ? "ready to move" : "copied"),
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER,
             );
@@ -396,8 +401,8 @@ const App = () => {
             setShowPaste(0)
             operationType.current = 1 //rename is moveItem
             operationDest.current = tabs[currTab]
-            nameNewItem.current = selectedItemsforOperation.current["name"]
-            renameHandler(selectedItemsforOperation.current)
+            nameNewItem.current = clipboardItems.current["name"]
+            renameHandler(clipboardItems.current)
         }
         if (type == 4) {
             operationType.current = 4
@@ -411,8 +416,8 @@ const App = () => {
         operationDest.current = tabs[currTab]
         let collectedItems = []
         const collectFilesFromFolder = async () => {
-            for (let i = 0; i < selectedItemsforOperation.current.length; i++) {
-                let item = selectedItemsforOperation.current[i]
+            for (let i = 0; i < clipboardItems.current.length; i++) {
+                let item = clipboardItems.current[i]
                 if (item.isDirectory()) {
                     if (operationDest.current.includes(item["path"])) {
                         showToast("Skipping Source Folder")
@@ -514,7 +519,7 @@ const App = () => {
         let messageType = operationType.current == 1 ? "Move" : "Copy"
 
         if (operationType.current == 1) {//if move, reload both source and dest
-            let srcPath = selectedItemsforOperation.current[0]["path"].split("/")
+            let srcPath = clipboardItems.current[0]["path"].split("/")
             srcPath.pop()
             srcPath = srcPath.join("/")
 
@@ -590,18 +595,18 @@ const App = () => {
         if (decision) {
             setProgress(0)
             setProgressModal(1)
-            for (let i = 0; i < selectedItemsforOperation.current.length; i++) {
+            for (let i = 0; i < clipboardItems.current.length; i++) {
                 if (breakOperation == 1) {
                     break
                 } else {
-                    let item = selectedItemsforOperation.current[i]
+                    let item = clipboardItems.current[i]
                     try {
                         await RNFS.unlink(item["path"])
                     } catch (err) {
                         console.log(err)
                         failedItems.current.push(item)
                     }
-                    setProgress(((i + 1) / selectedItemsforOperation.current.length) * 100)
+                    setProgress(((i + 1) / clipboardItems.current.length) * 100)
                 }
             }
 
@@ -617,7 +622,7 @@ const App = () => {
             }
 
             failedItems.current = []
-            selectedItemsforOperation.current = []
+            clipboardItems.current = []
             await buildCache(operationDest.current)
             setDeleteModal(0)
             setBreakOperation(0)
@@ -648,8 +653,8 @@ const App = () => {
         setProgressModal(1)
         try {
             const filesToZip = []
-            for (let i = 0; i < selectedItemsforOperation.current.length; i++) {
-                filesToZip.push(selectedItemsforOperation.current[i]["path"]
+            for (let i = 0; i < clipboardItems.current.length; i++) {
+                filesToZip.push(clipboardItems.current[i]["path"]
                 )
             }
 
@@ -749,7 +754,7 @@ const App = () => {
                             {
                                 textDecorationLine: 'underline'
                             }
-                        ]} onPress={() => deselectAll()}>Cancel</Text>
+                        ]} onPressIn={() => deselectAll()}>Cancel</Text>
                     </View>
                 </View>
                 )
@@ -800,7 +805,7 @@ const App = () => {
                                     textDecorationLine: 'underline'
                                 }
                             ]} onPress={() => {
-                                selectedItemsforOperation.current = []
+                                clipboardItems.current = []
                                 setShowPaste(0)
                             }}>Clear</Text>
                         </View>
@@ -812,16 +817,16 @@ const App = () => {
                                 width: '100%',
                             }
                         ]}>
-                            {selectedItemsforOperation.current.length == 0 ?
+                            {clipboardItems.current.length == 0 ?
                                 <Text style={[styles.text]}>No items</Text>
-                                : selectedItemsforOperation.current.map(
+                                : clipboardItems.current.map(
                                     (item, i) =>
                                         <View
                                             key={i}
                                             style={[
                                                 styles.rowLayout,
                                             ]}>
-                                            <TouchableOpacity
+                                            <Pressable
                                                 style={[
                                                     styles.rowLayout,
                                                     styles.bigGap,
@@ -832,19 +837,19 @@ const App = () => {
                                             >
                                                 {Icon(item)}
                                                 <Text style={[styles.text]}>{item["name"]}</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    selectedItemsforOperation.current.splice(i, 1)
+                                            </Pressable>
+                                            <Pressable
+                                                onPressIn={() => {
+                                                    clipboardItems.current.splice(i, 1)
                                                 }}
                                             >
                                                 <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                                            </TouchableOpacity>
+                                            </Pressable>
                                         </View>
                                 )}
                         </View>
                         <View style={[styles.divider]} />
-                        <TouchableOpacity
+                        <Pressable
                             style={[
                                 styles.rowLayout,
                                 styles.pill,
@@ -852,12 +857,12 @@ const App = () => {
                                 , {
                                     width: '100%'
                                 }]}
-                            onPress={() => setClipBoardModal(0)}
+                            onPressIn={() => setClipBoardModal(0)}
                         >
                             <Text style={[styles.text]}>Close</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
-                </Modal >
+                </Modal>
                 : null
             }
             {existsModal ?
@@ -897,11 +902,11 @@ const App = () => {
                         <View style={[styles.divider]} />
                         <Text style={[styles.text]}>{nameNewItem.current} already exists in destination</Text>
                         <View style={[styles.mediumGap, { flexDirection: 'column', marginTop: 30, width: '100%' }]}>
-                            <TouchableOpacity
+                            <Pressable
                                 style={[styles.pill,
                                 styles.pillHighlight,
                                 styles.padding]}
-                                onPress={async () => {
+                                onPressIn={async () => {
                                     setInputModal("Rename")
                                     await new Promise((resolve) => {
                                         inputRef.current = { resolve }
@@ -914,28 +919,28 @@ const App = () => {
                                 }
                             >
                                 <Text style={[styles.text]}>Rename</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
+                            </Pressable>
+                            <Pressable
                                 style={[styles.pill,
                                 styles.padding]}
-                                onPress={() => {
+                                onPressIn={() => {
                                     decisionRef.current.resolve(0);
                                     setExistsModal(0)
                                 }
                                 }
                             >
                                 <Text style={[styles.text]}>Skip</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
+                            </Pressable>
+                            <Pressable
                                 style={[styles.pill,
                                 styles.padding]}
-                                onPress={() => {
+                                onPressIn={() => {
                                     decisionRef.current.resolve(1);
                                     setExistsModal(0)
                                 }}
                             >
                                 <Text style={[styles.text]}>Overwrite</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     </View>
                 </Modal>
@@ -1004,8 +1009,8 @@ const App = () => {
                         </View>
                         <View style={[styles.rowLayout,
                         styles.bigGap]}>
-                            <TouchableOpacity
-                                onPress={() => {
+                            <Pressable
+                                onPressIn={() => {
                                     nameNewItem.current = ""
                                     setInputModal(0)
                                 }
@@ -1014,10 +1019,10 @@ const App = () => {
                                 styles.wide,
                                 styles.padding]}>
                                 <Text style={[styles.text]}>Cancel</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
+                            </Pressable>
+                            <Pressable
                                 disabled={alreadyExists ? true : false}
-                                onPress={() => {
+                                onPressIn={() => {
                                     inputRef.current.resolve(nameNewItem.current)
                                 }
                                 }
@@ -1026,7 +1031,7 @@ const App = () => {
                                 styles.wide,
                                 styles.padding]}>
                                 <Text style={[styles.text, alreadyExists ? styles.textDisabled : null]}>Done</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     </View>
                 </Modal>
@@ -1066,26 +1071,27 @@ const App = () => {
                     <Text style={[styles.text,
                     styles.textDisabled]}>Following items will be deleted:</Text>
                     <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-                        {selectedItemsforOperation.current.map((item, i) =>
+                        {clipboardItems.current.map((item, i) =>
                             <Text key={i} style={[styles.text,
                             styles.smallText]}>{item["name"]}</Text>
                         )}
                     </View>
                     <View style={[styles.rowLayout,
                     styles.bigGap]}>
-                        <TouchableOpacity
-                            onPress={() => {
+                        <Pressable
+                            onPressIn={() => {
                                 deleteRef.current.resolve(0)
+                                setDeleteModal(0)
                             }
                             }
                             style={[styles.pill,
                             styles.wide,
                             styles.padding]}>
                             <Text style={[styles.text]}>Cancel</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                        </Pressable>
+                        <Pressable
                             disabled={alreadyExists ? true : false}
-                            onPress={() => {
+                            onPressIn={() => {
                                 deleteRef.current.resolve(1)
                             }
                             }
@@ -1094,7 +1100,7 @@ const App = () => {
                             styles.wide,
                             styles.padding]}>
                             <Text style={[styles.text, alreadyExists ? styles.textDisabled : null]}>Delete</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 </View>
             </Modal>
@@ -1165,7 +1171,7 @@ const App = () => {
                                             style={[
                                                 styles.rowLayout,
                                             ]}>
-                                            <TouchableOpacity
+                                            <Pressable
                                                 style={[
                                                     styles.rowLayout,
                                                     styles.bigGap,
@@ -1174,28 +1180,28 @@ const App = () => {
                                                         paddingVertical: 10
                                                     }
                                                 ]}
-                                                onPress={() => {
+                                                onPressIn={() => {
                                                     setFavouritesModal(0)
                                                 }}
                                             >
                                                 <Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
                                                 <Text style={[styles.text]}>{item["title"]}</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                onPress={() => {
+                                            </Pressable>
+                                            <Pressable
+                                                onPressIn={() => {
                                                     let tempFavItems = [...favouriteItems]
                                                     tempFavItems.splice(i, 1)
                                                     setFavouriteItems(tempFavItems)
                                                 }}
                                             >
                                                 <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                                            </TouchableOpacity>
+                                            </Pressable>
                                         </View>
                                 )}
                         </View>
 
                         <View style={[styles.divider]} />
-                        <TouchableOpacity
+                        <Pressable
                             style={[
                                 styles.rowLayout,
                                 styles.pill,
@@ -1204,7 +1210,7 @@ const App = () => {
                                 , {
                                     width: '100%'
                                 }]}
-                            onPress={() => {
+                            onPressIn={() => {
                                 let favPath = tabs[currTab]["path"]
                                 let favTitle = favPath.split("/").pop()
                                 let newFavItem = {
@@ -1219,9 +1225,9 @@ const App = () => {
                             }}
                         ><Image source={require('./assets/newfolder.png')} />
                             <Text style={[styles.text]}>Add Current Folder</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
-                </Modal >
+                </Modal>
                 : null
             }
             <Animated.View
@@ -1274,6 +1280,7 @@ const App = () => {
                             setClipBoardModal={setClipBoardModal}
                             setFavouritesModal={setFavouritesModal}
                             progressModal={progressModal}
+                            funcId={funcId}
                         // ref={(ref) => {
                         //     windowRefs.current[i] = ref
                         // }
@@ -1282,6 +1289,329 @@ const App = () => {
                     )
                     // , [tabs, mainCache])
                 }
+            </View>
+            {contextMenu ?
+                <View style={{
+                    position: 'absolute',
+                    zIndex: 1,
+                    height: '100%',
+                    width: '100%',
+                }}>
+                    <TouchableWithoutFeedback
+                        onPress={() => setContextMenu(0)}
+                    >
+                        <View
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                            }}
+                        />
+                    </TouchableWithoutFeedback>
+
+                    <View
+                        style={[
+                            styles.pill,
+                            {
+                                position: 'absolute',
+                                bottom: 100,
+                                right: 10,
+                                width: '50%',
+                                flexDirection: 'column',
+                                elevation: 10,
+                                shadowColor: 'black',
+                            }
+                        ]}
+                    >
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <Pressable
+                                style={[
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPressIn={() => {
+                                    deleteAllTabs()
+                                    setContextMenu(0)
+                                }}
+                            >
+                                <Text style={[styles.text]}>Close all tabs</Text>
+                            </Pressable>
+                        </View>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <Pressable
+                                style={[
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPressIn={() => {
+                                    deleteCurrTab()
+                                    setContextMenu(0)
+                                }}
+                            >
+                                <Text style={[styles.text]}>Close this tab</Text>
+                            </Pressable>
+                        </View>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <Pressable
+                                style={[
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPressIn={() => {
+                                    deleteOtherTabs()
+                                    setContextMenu(0)
+                                }}
+                            >
+                                <Text style={[styles.text]}>Close other tabs</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={[styles.textDisabled]}>-</Text>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <Pressable
+                                style={[
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPressIn={() => {
+                                    buildCache(props.tabData["path"])
+                                    setSelectedItems([])
+                                    setSelectedItem([])
+                                }}
+                            ><Image source={require('./assets/refresh.png')} />
+                                <Text style={[styles.text]}>Refresh</Text>
+                            </Pressable>
+                        </View>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <Pressable
+                                style={[
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPressIn={() => { setClipBoardModal(1) }}
+                            >
+                                <Image source={require('./assets/archive.png')} />
+                                <Text style={[styles.text]}>Clipboard</Text>
+                            </Pressable>
+                        </View>
+
+                        {/* {selectionFlag ?
+                            <View
+                                style={[
+                                    styles.rowLayout
+                                ]}>
+                                <Pressable
+                                    style={[
+                                        styles.rowLayout,
+                                        styles.bigGap,
+                                        styles.wide,
+                                        styles.padding
+                                    ]}
+                                    onPressIn={() => { readySet(4, selectedItems) }}
+                               ><Image source={require('./assets/archive.png')} />
+                                    <Text style={[styles.text]}>Archive</Text>
+                                </Pressable>
+                            </View>
+                            : null} */}
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <Pressable
+                                style={[
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPressIn={() => { setContextMenu(0) }}
+                            ><Image source={require('./assets/close.png')} />
+                                <Text style={[styles.text]}>Close</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+                : null
+            }
+            <View
+                style={[
+                    styles.paddingCloseBottom,
+                    styles.pill,
+                    {
+                        alignItems: 'flex-end',
+                        overflow: 'hidden'
+                    }]}
+            >
+                {/* {searchFlag ? <View style={[
+                    styles.rowLayout,
+                    styles.pill,
+                    styles.smallGap,
+                    {
+                        position: 'absolute',
+                        zIndex: 1,
+                        justifyContent: 'space-between',
+                    }
+                ]
+                }
+               >
+                    <View style={[styles.input,
+                    styles.wide]}>
+                        <TextInput
+                            autoFocus={true}
+                            style={[styles.text,
+                            styles.wide]}
+                            placeholder="Search"
+                            placeholderTextColor={grey}
+                            onChangeText={text => {
+                                if (text == "")
+                                    handleSort(props.filesList)
+                                else
+                                    handleSort(props.filesList.filter((item) => item["name"].includes(text)))
+                            }}
+                        />
+                    </View>
+
+                    <View style={[styles.rowLayout,
+                    styles.smallGap]}>
+                        <Pressable
+                                style={[styles.rowLayout,
+                                styles.pill, deepSearch ? styles.pillHighlight : null,
+                                styles.padding]}
+                                onPressIn={() => { setDeepSearch(!deepSearch) }}>
+                                <Text style={[styles.text]}>Deep</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.pill,
+                                styles.pillHighlight,
+                                styles.padding]}
+                                onPressIn={() => { }}>
+                                <Image source={require('./assets/search.png')} />
+                            </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPressIn={() => {
+                                handleSort(props.filesList)
+                                setSearchFlag(0)
+                            }}>
+                            <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                        </Pressable>
+                    </View>
+                </View>
+
+                    : null} */}
+
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={{
+                        transform: [{ scaleX: -1 }]
+                    }}
+                >
+                    <View style={[
+                        styles.rowLayout,
+                        {
+                            transform: [{ scaleX: -1 }]
+                        }
+                    ]
+                    }>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPress={() => {
+                                setFuncId(0)
+                            }}>
+                            <Image source={require('./assets/copy.png')} />
+                        </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPress={() => {
+                                setFuncId(1)
+                            }}>
+                            <Image source={require('./assets/move.png')} />
+                        </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPress={() => {
+                                setFuncId(3)
+                            }}>
+                            <Image source={require('./assets/rename.png')} />
+                        </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPress={() => {
+                                setFuncId(2)
+                            }}>
+                            <Image source={require('./assets/delete.png')} />
+                        </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.text,
+                            styles.padding]}
+                            onPress={() => { shareFiles() }}>
+                            <Image source={require('./assets/share.png')} />
+                        </Pressable>
+                        <Text style={{ color: secondaryColor }}>  |  </Text>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.text,
+                            styles.padding]}
+                            onPress={() => { newItem(1) }}>
+                            <Image source={require('./assets/newfile.png')} />
+                        </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.text,
+                            styles.padding]}
+                            onPress={() => { newItem(0) }}>
+                            <Image source={require('./assets/newfolder.png')} />
+                        </Pressable>
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPress={() => {
+                                setFavouritesModal(1)
+                            }}>
+                            <Image source={require('./assets/favourite.png')} />
+                        </Pressable>
+                        {/* <Pressable
+                        style={[styles.pill,
+                        styles.text,
+                        onPressIn={() => { loadDetails(selectedItems[0]["path"]) }}>
+                        </Pressable> */}
+                        <Pressable
+                            style={[styles.pill,
+                            styles.padding]}
+                            onPress={() => {
+                                setContextMenu(1)
+                            }}>
+                            <Image source={require('./assets/horzmenu.png')} />
+                        </Pressable>
+                    </View>
+                </ScrollView>
             </View>
             <View style={[styles.rowLayout,
             styles.mediumGap, { paddingTop: 10, justifyContent: 'space-between' }]}>
@@ -1319,25 +1649,28 @@ const App = () => {
                 </ScrollView>
                 <>
                     {showPaste ?
-                        <TouchableOpacity
+                        <Pressable
                             style={[styles.pill,
                             styles.bordered,
-                            styles.padding]}
+                            styles.padding
+                            ]}
                             onPress={() => { startShifting() }}>
                             <Image source={require('./assets/paste.png')} />
-                        </TouchableOpacity>
+                        </Pressable>
                         : null}
 
-                    <TouchableOpacity
-                        style={[styles.pill,
-                        styles.padding]}
+                    <Pressable
+                        style={[
+                            styles.pill,
+                            styles.padding
+                        ]}
                         onPress={() => { addNewTab(null, null, null) }}>
                         <Text style={styles.text}>+</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </>
             </View>
-            <TouchableOpacity onPress={() => console.log(currTabStatic.current)}><Text>Show progress</Text></TouchableOpacity>
-        </View >
+            {/* <Pressable onPressIn={() => console.log(currTabStatic.current)}><Text>Show progress</Text></Pressable> */}
+        </View>
     );
 };
 export default App

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View, Image, ScrollView, Modal, TouchableWithoutFeedback, VirtualizedList } from "react-native";
+import { Text, TextInput, Pressable, View, Image, ScrollView, Modal, TouchableWithoutFeedback, VirtualizedList } from "react-native";
 import Share from 'react-native-share';
 import styles, { backgroundColor, grey, secondaryColor } from "./styles";
 import FilesList from "./FilesList";
@@ -14,7 +14,6 @@ const Window = (props) => {
     const [sortType, setSortType] = useState(1)
     const [sortOrder, setSortOrder] = useState(0)
     const [searchFlag, setSearchFlag] = useState(0)
-    const [contextMenu, setContextMenu] = useState(0)
     const [breadCrumbs, setBreadCrumbs] = useState([])
 
     // useImperativeHandle(ref, () => ({
@@ -41,6 +40,30 @@ const Window = (props) => {
         else
             setSelectionFlag(1)
     }, [selectedItems])
+
+    useEffect(() => {
+        if (props.currTab == props.index) {
+            console.log(props.funcId)
+            switch (props.funcId) {
+                case 0: {//copy
+                    props.readySet(0, selectedItems)
+                    break
+                }
+                case 1: {//move
+                    props.readySet(1, selectedItems)
+                    break
+                }
+                case 2: {//delete
+                    props.readySet(2, selectedItems)
+                    break
+                }
+                case 3: {//rename
+                    props.readySet(3, selectedItem)
+                    break
+                }
+            }
+        }
+    }, [props.funcId])
 
     const handlePress = (item) => {
         if (selectionFlag) {
@@ -172,7 +195,7 @@ const Window = (props) => {
         // useCallback(
         ({ item }) => {
             return (
-                <TouchableOpacity
+                <Pressable
                     style={
                         [
                             styles.rowLayout,
@@ -211,7 +234,7 @@ const Window = (props) => {
                         </View>
                         : null
                     }
-                </TouchableOpacity>
+                </Pressable>
             )
         }
     // , [selectedItem, selectedItems, selectionFlag])
@@ -224,6 +247,65 @@ const Window = (props) => {
                 display: props.currTab == props.index ? "flex" : "none"
             }
         }>
+            {searchFlag ? <View style={[
+                styles.rowLayout,
+                styles.pill,
+                styles.paddingCloseBottom,
+                styles.smallGap,
+                {
+                    position: 'absolute',
+                    zIndex: 1,
+                    justifyContent: 'space-between',
+                }
+            ]}
+            >
+                <View style={[
+                    styles.input,
+                    styles.wide]}>
+                    <TextInput
+                        autoFocus={true}
+                        style={[styles.text,
+                        styles.wide]}
+                        placeholder="Search"
+                        placeholderTextColor={grey}
+                        onChangeText={text => {
+                            if (text == "")
+                                handleSort(props.filesList)
+                            else
+                                handleSort(props.filesList.filter((item) => item["name"].includes(text)))
+                        }}
+                    />
+                </View>
+
+                <View style={[styles.rowLayout,
+                styles.smallGap]}>
+                    {/* <Pressable
+                                style={[styles.rowLayout,
+                                styles.pill, deepSearch ? styles.pillHighlight : null,
+                                styles.padding]}
+                                onPressIn={() => { setDeepSearch(!deepSearch) }}>
+                                <Text style={[styles.text]}>Deep</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.pill,
+                                styles.pillHighlight,
+                                styles.padding]}
+                                onPressIn={() => { }}>
+                                <Image source={require('./assets/search.png')} />
+                            </Pressable> */}
+                    <Pressable
+                        style={[styles.pill,
+                        styles.padding]}
+                        onPressIn={() => {
+                            handleSort(props.filesList)
+                            setSearchFlag(0)
+                        }}>
+                        <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                    </Pressable>
+                </View>
+            </View>
+
+                : null}
 
             {
                 sortModal ? <Modal
@@ -260,81 +342,81 @@ const Window = (props) => {
                         styles.headingText]}>Sort</Text>
                         <View style={[styles.divider]} />
                         <View style={[styles.rowLayout, styles.mediumGap]}>
-                            <TouchableOpacity
+                            <Pressable
                                 style={[
                                     styles.pill,
                                     styles.wide,
                                     sortType == 0 ? styles.pillHighlight : null,
                                     styles.padding]}
-                                onPress={() => setSortType(0)}
+                                onPressIn={() => setSortType(0)}
                             >
                                 <Text style={[styles.text]}>Name</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
+                            </Pressable>
+                            <Pressable
                                 style={[
                                     styles.pill,
                                     styles.wide,
                                     sortType == 1 ? styles.pillHighlight : null,
                                     styles.padding]}
-                                onPress={() => setSortType(1)}
+                                onPressIn={() => setSortType(1)}
                             >
                                 <Text style={[styles.text]}>Type</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         <View style={[styles.rowLayout, styles.mediumGap]}>
-                            <TouchableOpacity
+                            <Pressable
                                 style={[
                                     styles.pill,
                                     styles.wide,
                                     sortType == 2 ? styles.pillHighlight : null,
                                     styles.padding]}
-                                onPress={() => setSortType(2)}
+                                onPressIn={() => setSortType(2)}
                             >
                                 <Text style={[styles.text]}>Date</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
+                            </Pressable>
+                            <Pressable
                                 style={[
                                     styles.pill,
                                     styles.wide,
                                     sortType == 3 ? styles.pillHighlight : null,
                                     styles.padding]}
-                                onPress={() => setSortType(3)}
+                                onPressIn={() => setSortType(3)}
                             >
                                 <Text style={[styles.text]}>Size</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         <View style={[styles.divider]} />
-                        <TouchableOpacity
+                        <Pressable
                             style={[
                                 styles.pill,
                                 sortOrder == 1 ? styles.pillHighlight : null,
                                 styles.padding, { width: '100%' }]}
-                            onPress={() => setSortOrder(!sortOrder)}
+                            onPressIn={() => setSortOrder(!sortOrder)}
                         >
                             <Text style={[styles.text]}>{sortOrder ? "Descending" : "Ascending"}</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                         <View style={[styles.divider]} />
                         <View style={[styles.rowLayout,
                         styles.mediumGap]}>
-                            <TouchableOpacity
+                            <Pressable
                                 style={[
                                     styles.pill,
                                     styles.wide,
                                     styles.padding]}
-                                onPress={() => setSortModal(0)}
+                                onPressIn={() => setSortModal(0)}
                             >
                                 <Text style={[styles.text]}>Cancel</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
+                            </Pressable>
+                            <Pressable
                                 style={[
                                     styles.pill,
                                     styles.wide,
                                     styles.pillHighlight,
                                     styles.padding]}
-                                onPress={() => handleSort(filesList)}
+                                onPressIn={() => handleSort(filesList)}
                             >
                                 <Text style={[styles.text]}>Done</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     </View>
                 </Modal>
@@ -353,11 +435,11 @@ styles.listItem]}>
                 </View>
                 <View style={{ backgroundColor: '#435860', justifyContent: 'space-between', flexDirection: 'row' }}>
                     <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text, { width: 350, color: 'white', paddingHorizontal: 20, paddingVertical: 10 }]}>Properties</Text>
-                    <TouchableOpacity
+                    <Pressable
                         style={{ paddingHorizontal: 20, paddingVertical: 10 }}
-                    >
+>
                         <Text style={{ color: 'white' }}>⨯</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </View> */}
             {
@@ -385,253 +467,7 @@ styles.listItem]}>
                 }, [filesList, selectedItem, selectedItems, selectionFlag])
             }
 
-            {contextMenu ?
-                <View style={{
-                    position: 'absolute',
-                    zIndex: 1,
-                    height: '100%',
-                    width: '100%',
-                }}>
-                    <TouchableWithoutFeedback
-                        onPress={() => setContextMenu(0)}
-                    >
-                        <View
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                            }}
-                        />
-                    </TouchableWithoutFeedback>
 
-                    <View
-                        style={[
-                            styles.pill,
-                            {
-                                position: 'absolute',
-                                bottom: 0,
-                                right: 10,
-                                width: '50%',
-                                flexDirection: 'column',
-                                elevation: 10,
-                                shadowColor: 'black',
-                            }
-                        ]}
-                    >
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    props.deleteAllTabs()
-                                    setContextMenu(0)
-                                }}
-                            >
-                                <Text style={[styles.text]}>Close all tabs</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    props.deleteCurrTab()
-                                    setContextMenu(0)
-                                }}
-                            >
-                                <Text style={[styles.text]}>Close this tab</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    props.deleteOtherTabs()
-                                    setContextMenu(0)
-                                }}
-                            >
-                                <Text style={[styles.text]}>Close other tabs</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={[styles.textDisabled]}>-</Text>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    props.buildCache(props.tabData["path"])
-                                    setSelectedItems([])
-                                    setSelectedItem([])
-                                }}
-                            ><Image source={require('./assets/refresh.png')} />
-                                <Text style={[styles.text]}>Refresh</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { props.setClipBoardModal(1) }}
-                            >
-                                <Image source={require('./assets/archive.png')} />
-                                <Text style={[styles.text]}>Clipboard</Text>
-                            </TouchableOpacity>
-                        </View>
-                        {selectedItem.length == 0 ? null :
-                            selectedItem.isDirectory() ?
-                                <View
-                                    style={[
-                                        styles.rowLayout
-                                    ]}>
-                                    <TouchableOpacity
-                                        style={[
-                                            styles.rowLayout,
-                                            styles.bigGap,
-                                            styles.wide,
-                                            styles.padding
-                                        ]}
-                                        onPress={() => { props.addNewTab(selectedItem["name"], selectedItem["path"], "filebrowser"); console.log(selectedItem) }}
-                                    ><Image source={require('./assets/newtab.png')} />
-                                        <Text style={[styles.text]}>Open in new tab</Text>
-                                    </TouchableOpacity>
-                                </View> :
-                                <View
-                                    style={[
-                                        styles.rowLayout
-                                    ]}>
-                                    <TouchableOpacity
-                                        style={[
-                                            styles.rowLayout,
-                                            styles.bigGap,
-                                            styles.wide,
-                                            styles.padding
-                                        ]}
-                                        onPress={() => {
-                                            props.openExternally(selectedItem.path)
-                                        }}
-                                    ><Image source={require('./assets/openwith.png')} />
-                                        <Text style={[styles.text]}>Open With</Text>
-                                    </TouchableOpacity>
-                                </View>
-                        }
-                        {/* {selectionFlag ?
-                            <View
-                                style={[
-                                    styles.rowLayout
-                                ]}>
-                                <TouchableOpacity
-                                    style={[
-                                        styles.rowLayout,
-                                        styles.bigGap,
-                                        styles.wide,
-                                        styles.padding
-                                    ]}
-                                    onPress={() => { props.readySet(4, selectedItems) }}
-                                ><Image source={require('./assets/archive.png')} />
-                                    <Text style={[styles.text]}>Archive</Text>
-                                </TouchableOpacity>
-                            </View>
-                            : null} */}
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { props.newItem(1, props.tabData["path"]) }}
-                            ><Image source={require('./assets/newfile.png')} />
-                                <Text style={[styles.text]}>New File</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { props.newItem(0, props.tabData["path"]) }}
-                            ><Image source={require('./assets/newfolder.png')} />
-                                <Text style={[styles.text]}>New Folder</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { setSortModal(1) }}
-                            ><Image source={require('./assets/sort.png')} />
-                                <Text style={[styles.text]}>Sort</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { setContextMenu(0) }}
-                            ><Image source={require('./assets/close.png')} />
-                                <Text style={[styles.text]}>Close</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View >
-                : null
-            }
             <View>
                 {selectionFlag ?
                     <View style={[
@@ -658,7 +494,7 @@ styles.listItem]}>
                                 fontSize: 10,
                                 textDecorationLine: 'underline'
                             }}
-                                onPress={() => {
+                                onPressIn={() => {
                                     setSelectedItems([])
                                     setSelectedItem([])
                                 }}>Deselect All</Text>
@@ -669,13 +505,40 @@ styles.listItem]}>
                                 fontSize: 10,
                                 textDecorationLine: 'underline'
                             }}
-                                onPress={() => setSelectedItems(props.filesList)}>Select All</Text>
+                                onPressIn={() => setSelectedItems(props.filesList)}>Select All</Text>
                         </View>
                     </View>
                     :
                     <View style={[styles.rowLayout,
                     styles.smallGap,
                     styles.paddingCloseBottom]}>
+                        <View style={[styles.rowLayout,
+                        styles.smallGap]}>
+                            <Pressable
+                                onPressIn={() => {
+                                    setSortModal(1)
+                                }}
+                                style={[
+                                    styles.smallPill,
+                                ]}>
+                                <Image
+                                    style={{ height: 20, resizeMode: 'contain' }}
+                                    source={require('./assets/sort.png')} />
+
+                            </Pressable>
+                            <Pressable
+                                onPressIn={() => {
+                                    setSearchFlag(1)
+                                }}
+                                style={[
+                                    styles.smallPill,
+                                ]}>
+                                <Image
+                                    style={{ height: 20, resizeMode: 'contain' }}
+                                    source={require('./assets/search.png')} />
+
+                            </Pressable>
+                        </View>
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -683,7 +546,7 @@ styles.listItem]}>
                         >
                             <View style={[styles.rowLayout,
                             styles.smallGap, { transform: [{ scaleX: -1 }] }]}>
-                                <TouchableOpacity
+                                <Pressable
                                 >
                                     <Text
                                         onPress={() => props.setTabPath("Home")}
@@ -692,7 +555,7 @@ styles.listItem]}>
                                         styles.text,
                                         styles.textDisabled]}
                                     >Home</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                                 {//convert this to ref control
                                     breadCrumbs.length > 0 && Object.values(breadCrumbs).map((folder, i) => {
                                         return (
@@ -700,8 +563,8 @@ styles.listItem]}>
                                             styles.smallGap]}>
                                                 <Text
                                                     style={[styles.text,
-                                                    styles.smallText]} >></Text>
-                                                <TouchableOpacity
+                                                    styles.smallText]}>></Text>
+                                                <Pressable
                                                     onPress={() => props.setTabPath(folder["path"])}
                                                 >
                                                     <Text
@@ -710,7 +573,7 @@ styles.listItem]}>
                                                         styles.text,
                                                         styles.textDisabled]}
                                                     >{folder["name"]}</Text>
-                                                </TouchableOpacity>
+                                                </Pressable>
                                             </View>
                                         )
                                     })
@@ -722,8 +585,8 @@ styles.listItem]}>
                         {props.tabData["path"] == "Home" ? null :
                             <>
                                 <Text style={{ color: secondaryColor }}>  |  </Text>
-                                <TouchableOpacity
-                                    onPress={() => {
+                                <Pressable
+                                    onPressIn={() => {
                                         props.setTabPath(null)
                                     }}
                                 >
@@ -733,169 +596,12 @@ styles.listItem]}>
                                         styles.text,
                                         styles.textDisabled]}
                                     >Back</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </>
                         }
                     </View>
                 }
-                <View
-                    style={[
-                        styles.paddingCloseBottom,
-                        styles.pill,
-                        {
-                            alignItems: 'flex-end',
-                            overflow: 'hidden'
-                        }]}
-                >
-                    {searchFlag ? <View style={[
-                        styles.rowLayout,
-                        styles.pill,
-                        styles.smallGap,
-                        {
-                            position: 'absolute',
-                            zIndex: 1,
-                            justifyContent: 'space-between',
-                        }
-                    ]
-                    }
-                    >
-                        <View style={[styles.input,
-                        styles.wide]}>
-                            <TextInput
-                                autoFocus={true}
-                                style={[styles.text,
-                                styles.wide]}
-                                placeholder="Search"
-                                placeholderTextColor={grey}
-                                onChangeText={text => {
-                                    if (text == "")
-                                        handleSort(props.filesList)
-                                    else
-                                        handleSort(props.filesList.filter((item) => item["name"].includes(text)))
-                                }}
-                            />
-                        </View>
-
-                        <View style={[styles.rowLayout,
-                        styles.smallGap]}>
-                            {/* <TouchableOpacity
-                                style={[styles.rowLayout,
-                                styles.pill, deepSearch ? styles.pillHighlight : null,
-                                styles.padding]}
-                                onPress={() => { setDeepSearch(!deepSearch) }}>
-                                <Text style={[styles.text]}>Deep</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.pill,
-                                styles.pillHighlight,
-                                styles.padding]}
-                                onPress={() => { }}>
-                                <Image source={require('./assets/search.png')} />
-                            </TouchableOpacity> */}
-                            <TouchableOpacity
-                                style={[styles.pill,
-                                styles.padding]}
-                                onPress={() => {
-                                    handleSort(props.filesList)
-                                    setSearchFlag(0)
-                                }}>
-                                <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                        : null}
-
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        style={{
-                            transform: [{ scaleX: -1 }]
-                        }}
-                    >
-                        <View style={[
-                            styles.rowLayout,
-                            {
-                                transform: [{ scaleX: -1 }]
-                            }
-                        ]
-                        }>
-                            {!props.progressModal && selectionFlag ?
-                                <>
-                                    <TouchableOpacity
-                                        style={[styles.pill,
-                                        styles.padding]}
-                                        onPress={() => { props.readySet(2, selectedItems, props.tabData["path"]) }}>
-                                        <Image source={require('./assets/delete.png')} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[styles.pill,
-                                        styles.padding]}
-                                        onPress={() => {
-                                            props.readySet(0, selectedItems)
-                                        }}>
-                                        <Image source={require('./assets/copy.png')} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[styles.pill,
-                                        styles.padding]}
-                                        onPress={() => { props.readySet(1, selectedItems) }}>
-                                        <Image source={require('./assets/move.png')} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[styles.pill,
-                                        styles.text,
-                                        styles.padding]}
-                                        onPress={() => { shareFiles() }}>
-                                        <Image source={require('./assets/share.png')} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[styles.pill,
-                                        styles.padding]}
-                                        onPress={() => { props.readySet(3, selectedItem) }}>
-                                        <Image source={require('./assets/rename.png')} />
-                                    </TouchableOpacity>
-                                    <Text style={{ color: secondaryColor }}>  |  </Text>
-                                </> :
-                                <>
-                                    <TouchableOpacity
-                                        style={[styles.pill,
-                                        styles.padding]}
-                                        onPress={() => {
-                                            props.setFavouritesModal(1)
-                                        }}>
-                                        <Image source={require('./assets/favourite.png')} />
-                                    </TouchableOpacity>
-                                </>
-                            }
-                            {/* <TouchableOpacity
-                                                        style={[styles.pill,
-styles.text,
-styles.padding]}
-                                                        onPress={() => { loadDetails(selectedItems[0]["path"]) }}>
-                                                        <Image source={require('./assets/about.png')} />
-                                                    </TouchableOpacity> */}
-
-                            <TouchableOpacity
-                                style={[styles.pill,
-                                styles.padding]}
-                                onPress={() => {
-                                    setSearchFlag(1)
-                                }}>
-                                <Image source={require('./assets/search.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.pill,
-                                styles.padding]}
-                                onPress={() => {
-                                    setContextMenu(1)
-                                }}>
-                                <Image source={require('./assets/horzmenu.png')} />
-                            </TouchableOpacity>
-                        </View>
-                    </ScrollView>
-                </View>
-            </View >
-        </View >)
+            </View>
+        </View>)
 }
 export default Window
