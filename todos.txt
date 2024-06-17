@@ -1,7 +1,3 @@
-move
-delete
-copy
-
 sorting
     modified
     case insensetive
@@ -10,3 +6,10 @@ search
     case insensetive
 
 bootsrtap icons
+
+central options bar, central copy move flag
+
+open in new tab
+tab options, close this tab, all tabs, other tabs
+
+scroll to beginning on tab delete

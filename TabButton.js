@@ -10,19 +10,26 @@ const TabButton = (props) => {
 
         <TouchableOpacity
             style={[styles.rowLayout, styles.mediumGap, styles.padding]}
-            onPress={() => props.setCurrTab(props.index)}>
+            onPress={() => {
+                props.setCurrTab(props.index)
+                props.currTabStatic.current = props.index
+            }
+            }
+        >
             <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
             <Text style={[styles.text]}
             >{props.tabData["title"]}</Text>
         </TouchableOpacity>
-        {props.index == props.currTab ?
-            <TouchableOpacity
-                style={[styles.paddingCloseLeft]}
-                onPress={() => { props.deleteTab() }}>
-                <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-            </TouchableOpacity>
-            : null}
+        {
+            props.index == props.currTab ?
+                <TouchableOpacity
+                    style={[styles.paddingCloseLeft]}
+                    onPress={() => { props.deleteCurrTab() }}>
+                    <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                </TouchableOpacity>
+                : null
+        }
 
-    </View>)
+    </View >)
 }
 export default TabButton

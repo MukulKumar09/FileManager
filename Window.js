@@ -405,6 +405,7 @@ styles.listItem]}>
                             }}
                         />
                     </TouchableWithoutFeedback>
+
                     <View
                         style={[
                             styles.pill,
@@ -419,6 +420,58 @@ styles.listItem]}>
                             }
                         ]}
                     >
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <TouchableOpacity
+                                style={[
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPress={() => {
+                                    props.deleteAllTabs()
+                                    setContextMenu(0)
+                                }}
+                            >
+                                <Text style={[styles.text]}>Close all tabs</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <TouchableOpacity
+                                style={[
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPress={() => {
+                                    props.deleteCurrTab()
+                                    setContextMenu(0)
+                                }}
+                            >
+                                <Text style={[styles.text]}>Close this tab</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View
+                            style={[
+                                styles.rowLayout
+                            ]}>
+                            <TouchableOpacity
+                                style={[
+                                    styles.wide,
+                                    styles.padding
+                                ]}
+                                onPress={() => {
+                                    props.deleteOtherTabs()
+                                    setContextMenu(0)
+                                }}
+                            >
+                                <Text style={[styles.text]}>Close other tabs</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={[styles.textDisabled]}>-</Text>
                         <View
                             style={[
                                 styles.rowLayout
@@ -456,6 +509,43 @@ styles.listItem]}>
                                 <Text style={[styles.text]}>Clipboard</Text>
                             </TouchableOpacity>
                         </View>
+                        {selectedItem.length == 0 ? null :
+                            selectedItem.isDirectory() ?
+                                <View
+                                    style={[
+                                        styles.rowLayout
+                                    ]}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.rowLayout,
+                                            styles.bigGap,
+                                            styles.wide,
+                                            styles.padding
+                                        ]}
+                                        onPress={() => { props.addNewTab(selectedItem["name"], selectedItem["path"], "filebrowser"); console.log(selectedItem) }}
+                                    ><Image source={require('./assets/newtab.png')} />
+                                        <Text style={[styles.text]}>Open in new tab</Text>
+                                    </TouchableOpacity>
+                                </View> :
+                                <View
+                                    style={[
+                                        styles.rowLayout
+                                    ]}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.rowLayout,
+                                            styles.bigGap,
+                                            styles.wide,
+                                            styles.padding
+                                        ]}
+                                        onPress={() => {
+                                            props.openExternally(selectedItem.path)
+                                        }}
+                                    ><Image source={require('./assets/openwith.png')} />
+                                        <Text style={[styles.text]}>Open With</Text>
+                                    </TouchableOpacity>
+                                </View>
+                        }
                         {/* {selectionFlag ?
                             <View
                                 style={[
@@ -474,25 +564,6 @@ styles.listItem]}>
                                 </TouchableOpacity>
                             </View>
                             : null} */}
-                        {selectedItem.length == [] ? null : <View
-                            style={[
-                                styles.rowLayout
-                            ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    props.openExternally(selectedItem.path)
-                                }}
-                            ><Image source={require('./assets/openwith.png')} />
-                                <Text style={[styles.text]}>Open With</Text>
-                            </TouchableOpacity>
-                        </View>
-                        }
                         <View
                             style={[
                                 styles.rowLayout

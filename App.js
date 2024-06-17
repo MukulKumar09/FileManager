@@ -41,6 +41,7 @@ const App = () => {
             setFavPaths(tempFavPaths)
         }
         initExtPath()
+        addNewTab(null, null, null)
     }, [])
     useEffect(() => {
         setMainCache({ "Home": favPaths })
@@ -49,7 +50,8 @@ const App = () => {
 
     // const windowRefs = useRef([])
 
-    const [currTab, setCurrTab] = useState("0")
+    const [currTab, setCurrTab] = useState("0") //to automatically change window display flex
+    const currTabStatic = useRef("0") //to set tab path with latest currtab value
 
     const [tabs, setTabs] = useState({})
     const [tabCounter, setTabCounter] = useState(0)
@@ -95,17 +97,23 @@ const App = () => {
     let width = Dimensions.get('window').width
 
     useEffect(() => {
-        if (tabCounter == 0) {
-            setTabs({
-                [tabCounter]: {
-                    title: "Home",
-                    path: "Home",
-                    type: "filebrowser",
-                }
-            })
+        console.log(currTab)
+    }, [currTab])
 
-        } else {
-            if (!(Object.keys(tabs).includes(tabCounter))) {
+    const addNewTab = (title, path, type) => {
+        if (title == null) {
+            if (Object.keys(tabs).length == 0) {
+                setTabs(
+                    {
+                        0: {
+                            title: "Home",
+                            path: "Home",
+                            type: "filebrowser",
+                        }
+                    }
+                )
+            }
+            else {
                 setTabs({
                     ...tabs,
                     [tabCounter]: {
@@ -114,18 +122,79 @@ const App = () => {
                         type: "filebrowser",
                     }
                 })
+                currTabStatic.current = tabCounter
+                setCurrTab(currTabStatic.current)
             }
         }
-        setCurrTab(tabCounter.toString())
-    }, [tabCounter])
+        else {
+            setTabs({
+                ...tabs,
+                [tabCounter]: {
+                    title: title,
+                    path: path,
+                    type: type,
+                }
+            })
+            currTabStatic.current = tabCounter
+            setCurrTab(currTabStatic.current)
+        }
+        setTabCounter(tabCounter + 1)
+    }
+    const deleteAllTabs = () => {
+        setTabs(
+            {
+                0: {
+                    title: "Home",
+                    path: "Home",
+                    type: "filebrowser",
+                }
+            }
+        )
+        currTabStatic.current = 0
+        setTabCounter(currTabStatic.current)
+        setCurrTab(currTabStatic.current)
+    }
+
+    const deleteCurrTab = () => {
+        if (Object.keys(tabs).length == 1)
+            deleteAllTabs()
+        else
+            deleteTab()
+    }
+    const deleteOtherTabs = () => {
+        setTabs(
+            {
+                [currTabStatic.current]: tabs[currTab]
+            }
+        )
+    }
+    const deleteTab = () => {
+        const fire = () => {
+            let tempTabs = { ...tabs }
+            delete tempTabs[currTabStatic.current]
+            setTabs(tempTabs)
+        }
+
+        let keys = Object.keys(tabs)
+        let indxCurrTab = keys.indexOf(currTabStatic.current)
+        if (keys[keys.length - 1] == currTabStatic.current) { //last
+            fire()
+            currTabStatic.current = keys[indxCurrTab - 1]
+            setCurrTab(currTabStatic.current)
+        }
+        else {//mid
+            fire()
+            currTabStatic.current = keys[indxCurrTab + 1]
+            setCurrTab(currTabStatic.current)
+        }
+    }
 
     const setTabPath = (path) => {
-
         const updateTabDetails = () => {
             setTabs(tabs => ({
                 ...tabs,
-                [currTab]: {
-                    ...tabs[currTab],
+                [currTabStatic.current]: {
+                    ...tabs[currTabStatic.current],
                     title: folderName,
                     path: path
                 }
@@ -133,9 +202,9 @@ const App = () => {
             ))
         }
 
-        let tempPath, folderName
+        let folderName
         if (path == null) { //go up
-            path = tabs[currTab]["path"]
+            path = tabs[currTabStatic.current]["path"]
             if (favPaths.find((i) => i.path == path)) {
                 path = "Home"
                 folderName = "Home"
@@ -233,29 +302,6 @@ const App = () => {
             }
             )
     }, [progress])
-
-    const deleteTab = () => {
-        const fire = () => {
-            let tempTabs = { ...tabs }
-            delete tempTabs[currTab]
-            setTabs(tempTabs)
-        }
-
-        let keys = Object.keys(tabs)
-        let indxCurrTab = keys.indexOf(currTab)
-        if (keys.length == 1) {
-            setCurrTab(0)
-            setTabCounter(0)
-        }
-        else if (keys[keys.length - 1] == currTab) { //last
-            setCurrTab(keys[indxCurrTab - 1])
-            fire()
-        }
-        else {//mid
-            setCurrTab(keys[indxCurrTab + 1])
-            fire()
-        }
-    }
 
 
     const fileHandler = (item) => {
@@ -1213,6 +1259,10 @@ const App = () => {
                             currTab={currTab}
                             tabData={tabs[index]}
                             setTabPath={setTabPath}
+                            deleteAllTabs={deleteAllTabs}
+                            deleteCurrTab={deleteCurrTab}
+                            deleteOtherTabs={deleteOtherTabs}
+                            addNewTab={addNewTab}
                             filesList={mainCache[tabs[index]["path"]]}
                             openExternally={openExternally}
                             selectItem={selectItem}
@@ -1233,7 +1283,6 @@ const App = () => {
                     // , [tabs, mainCache])
                 }
             </View>
-
             <View style={[styles.rowLayout,
             styles.mediumGap, { paddingTop: 10, justifyContent: 'space-between' }]}>
                 <ScrollView
@@ -1253,12 +1302,13 @@ const App = () => {
                                     index={index}
                                     currTab={currTab}
                                     setCurrTab={setCurrTab}
+                                    currTabStatic={currTabStatic}
                                     // ref={ref => {
                                     //     buttonRefs.current[i] = ref
                                     //     console.log(i, ref)
                                     // }}
                                     width={width}
-                                    deleteTab={deleteTab}
+                                    deleteCurrTab={deleteCurrTab}
                                 />
 
                             )
@@ -1281,12 +1331,12 @@ const App = () => {
                     <TouchableOpacity
                         style={[styles.pill,
                         styles.padding]}
-                        onPress={() => { setTabCounter(tabCounter + 1) }}>
+                        onPress={() => { addNewTab(null, null, null) }}>
                         <Text style={styles.text}>+</Text>
                     </TouchableOpacity>
                 </>
             </View>
-            <TouchableOpacity onPress={() => setProgressModal(!progressModal)}><Text>Show progress</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log(currTabStatic.current)}><Text>Show progress</Text></TouchableOpacity>
         </View >
     );
 };
