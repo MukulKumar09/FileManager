@@ -2,9 +2,6 @@ sorting
     modified
     case insensetive
 
-search
-    case insensetive
-
 bootsrtap icons
 central options bar, central copy move flag
 scroll to beginning on tab delete

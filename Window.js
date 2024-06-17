@@ -269,10 +269,13 @@ const Window = (props) => {
                         placeholder="Search"
                         placeholderTextColor={grey}
                         onChangeText={text => {
-                            if (text == "")
+                            if (text == "") {
                                 handleSort(props.filesList)
-                            else
-                                handleSort(props.filesList.filter((item) => item["name"].includes(text)))
+                            }
+                            else {
+                                text = new RegExp(text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
+                                handleSort(props.filesList.filter((item) => text.test(item["name"])))
+                            }
                         }}
                     />
                 </View>
@@ -522,7 +525,7 @@ styles.listItem]}>
                                     styles.smallPill,
                                 ]}>
                                 <Image
-                                    style={{ height: 20, resizeMode: 'contain' }}
+                                    style={[styles.smallImageIcon]}
                                     source={require('./assets/sort.png')} />
 
                             </Pressable>
@@ -534,7 +537,7 @@ styles.listItem]}>
                                     styles.smallPill,
                                 ]}>
                                 <Image
-                                    style={{ height: 20, resizeMode: 'contain' }}
+                                    style={[styles.smallImageIcon]}
                                     source={require('./assets/search.png')} />
 
                             </Pressable>
@@ -547,9 +550,9 @@ styles.listItem]}>
                             <View style={[styles.rowLayout,
                             styles.smallGap, { transform: [{ scaleX: -1 }] }]}>
                                 <Pressable
+                                    onPress={() => props.setTabPath("Home")}
                                 >
                                     <Text
-                                        onPress={() => props.setTabPath("Home")}
                                         style={[styles.smallPill,
                                         styles.smallText,
                                         styles.text,
@@ -559,15 +562,23 @@ styles.listItem]}>
                                 {//convert this to ref control
                                     breadCrumbs.length > 0 && Object.values(breadCrumbs).map((folder, i) => {
                                         return (
-                                            <View key={i} style={[styles.rowLayout,
-                                            styles.smallGap]}>
+                                            <View key={i} style={[
+                                                styles.rowLayout,
+                                                styles.smallGap, {
+                                                    maxWidth: 130
+                                                }
+                                            ]}>
                                                 <Text
-                                                    style={[styles.text,
-                                                    styles.smallText]}>></Text>
+                                                    style={[
+                                                        styles.text,
+                                                        styles.smallText
+                                                    ]}>></Text>
                                                 <Pressable
                                                     onPress={() => props.setTabPath(folder["path"])}
                                                 >
                                                     <Text
+                                                        numberOfLines={1}
+                                                        ellipsizeMode="tail"
                                                         style={[styles.smallPill,
                                                         styles.smallText,
                                                         styles.text,

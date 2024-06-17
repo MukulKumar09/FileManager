@@ -23,6 +23,15 @@ export default StyleSheet.create({
         includeFontPadding: false,
         color: textColor,
     },
+    imageIcon: {
+        maxHeight: 20,
+        width: 20,
+        resizeMode: 'contain'
+    },
+    smallImageIcon: {
+        height: 20,
+        resizeMode: 'contain'
+    },
     headingText: {
         fontSize: 20,
     },

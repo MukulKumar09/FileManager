@@ -681,13 +681,19 @@ const App = () => {
         if (item.isFile()) {
             ext = item.name.split(".").pop()
         } else {
-            return <Image source={require('./assets/folder.png')} />
+            return <Image
+                style={[styles.imageIcon]}
+                source={require('./assets/folder.png')} />
         }
         switch (ext) {
             case "mp3":
-                return (<Image source={require('./assets/music.png')} />)
+                return (<Image
+                    style={[styles.imageIcon]}
+                    source={require('./assets/music.png')} />)
             case "exe":
-                return (<Image source={require('./assets/win.png')} />)
+                return (<Image
+                    style={[styles.imageIcon]}
+                    source={require('./assets/win.png')} />)
             default:
                 return (<Text style={[styles.text,
                 styles.smallDarkText]}>{ext}</Text>)
@@ -843,7 +849,9 @@ const App = () => {
                                                     clipboardItems.current.splice(i, 1)
                                                 }}
                                             >
-                                                <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                                                <Image
+                                                    style={[styles.imageIcon]}
+                                                    source={require('./assets/close.png')} />
                                             </Pressable>
                                         </View>
                                 )}
@@ -1184,7 +1192,9 @@ const App = () => {
                                                     setFavouritesModal(0)
                                                 }}
                                             >
-                                                <Image style={{ height: 20, width: 20 }} source={require('./assets/folder.png')} />
+                                                <Image
+                                                    style={[styles.imageIcon]}
+                                                    source={require('./assets/folder.png')} />
                                                 <Text style={[styles.text]}>{item["title"]}</Text>
                                             </Pressable>
                                             <Pressable
@@ -1194,7 +1204,9 @@ const App = () => {
                                                     setFavouriteItems(tempFavItems)
                                                 }}
                                             >
-                                                <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                                                <Image
+                                                    style={[styles.imageIcon]}
+                                                    source={require('./assets/close.png')} />
                                             </Pressable>
                                         </View>
                                 )}
@@ -1223,7 +1235,8 @@ const App = () => {
                                     showToast("Item already exists")
                                 }
                             }}
-                        ><Image source={require('./assets/newfolder.png')} />
+                        ><Image style={[styles.imageIcon]}
+                            source={require('./assets/newfolder.png')} />
                             <Text style={[styles.text]}>Add Current Folder</Text>
                         </Pressable>
                     </View>
@@ -1393,7 +1406,9 @@ const App = () => {
                                     setSelectedItems([])
                                     setSelectedItem([])
                                 }}
-                            ><Image source={require('./assets/refresh.png')} />
+                            ><Image
+                                    style={[styles.imageIcon]}
+                                    source={require('./assets/refresh.png')} />
                                 <Text style={[styles.text]}>Refresh</Text>
                             </Pressable>
                         </View>
@@ -1410,7 +1425,9 @@ const App = () => {
                                 ]}
                                 onPressIn={() => { setClipBoardModal(1) }}
                             >
-                                <Image source={require('./assets/archive.png')} />
+                                <Image
+                                    style={[styles.imageIcon]}
+                                    source={require('./assets/archive.png')} />
                                 <Text style={[styles.text]}>Clipboard</Text>
                             </Pressable>
                         </View>
@@ -1445,7 +1462,9 @@ const App = () => {
                                     styles.padding
                                 ]}
                                 onPressIn={() => { setContextMenu(0) }}
-                            ><Image source={require('./assets/close.png')} />
+                            ><Image
+                                    style={[styles.imageIcon]}
+                                    source={require('./assets/close.png')} />
                                 <Text style={[styles.text]}>Close</Text>
                             </Pressable>
                         </View>
@@ -1541,7 +1560,9 @@ const App = () => {
                             onPress={() => {
                                 setFuncId(0)
                             }}>
-                            <Image source={require('./assets/copy.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/copy.png')} />
                         </Pressable>
                         <Pressable
                             style={[styles.pill,
@@ -1549,7 +1570,9 @@ const App = () => {
                             onPress={() => {
                                 setFuncId(1)
                             }}>
-                            <Image source={require('./assets/move.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/move.png')} />
                         </Pressable>
                         <Pressable
                             style={[styles.pill,
@@ -1557,7 +1580,9 @@ const App = () => {
                             onPress={() => {
                                 setFuncId(3)
                             }}>
-                            <Image source={require('./assets/rename.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/rename.png')} />
                         </Pressable>
                         <Pressable
                             style={[styles.pill,
@@ -1565,14 +1590,18 @@ const App = () => {
                             onPress={() => {
                                 setFuncId(2)
                             }}>
-                            <Image source={require('./assets/delete.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/delete.png')} />
                         </Pressable>
                         <Pressable
                             style={[styles.pill,
                             styles.text,
                             styles.padding]}
                             onPress={() => { shareFiles() }}>
-                            <Image source={require('./assets/share.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/share.png')} />
                         </Pressable>
                         <Text style={{ color: secondaryColor }}>  |  </Text>
                         <Pressable
@@ -1580,14 +1609,18 @@ const App = () => {
                             styles.text,
                             styles.padding]}
                             onPress={() => { newItem(1) }}>
-                            <Image source={require('./assets/newfile.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/newfile.png')} />
                         </Pressable>
                         <Pressable
                             style={[styles.pill,
                             styles.text,
                             styles.padding]}
                             onPress={() => { newItem(0) }}>
-                            <Image source={require('./assets/newfolder.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/newfolder.png')} />
                         </Pressable>
                         <Pressable
                             style={[styles.pill,
@@ -1595,7 +1628,9 @@ const App = () => {
                             onPress={() => {
                                 setFavouritesModal(1)
                             }}>
-                            <Image source={require('./assets/favourite.png')} />
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/favourite.png')} />
                         </Pressable>
                         {/* <Pressable
                         style={[styles.pill,
@@ -1669,7 +1704,7 @@ const App = () => {
                     </Pressable>
                 </>
             </View>
-            {/* <Pressable onPressIn={() => console.log(currTabStatic.current)}><Text>Show progress</Text></Pressable> */}
+            {/* <Pressable onPressIn={() => console.log("abcd[]efgh")}><Text>Show progress</Text></Pressable> */}
         </View>
     );
 };
