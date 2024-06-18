@@ -5,7 +5,7 @@ export default function FavouritesModal(props) {
     return (<Modal
         transparent={true}>
         <Pressable
-            onPressIn={() => setFavouritesModal(0)}
+            onPressIn={() => props.setFavouritesModal(0)}
             style={[styles.modalBackground]}
         />
         <View style={[
@@ -43,7 +43,7 @@ export default function FavouritesModal(props) {
                         textDecorationLine: 'underline'
                     }
                 ]} onPress={() =>
-                    setFavouriteItems([])
+                    props.setprops.favouriteItems([])
                 }>Clear</Text>
             </View>
             <View style={[styles.divider]} />
@@ -53,9 +53,9 @@ export default function FavouritesModal(props) {
                     width: '100%',
                 }
             ]}>
-                {Object.keys(favouriteItems).length == 0 ?
+                {Object.keys(props.favouriteItems).length == 0 ?
                     <Text style={[styles.text]}>No items</Text>
-                    : favouriteItems.map(
+                    : props.favouriteItems.map(
                         (item, i) =>
                             <View
                                 key={i}
@@ -72,8 +72,8 @@ export default function FavouritesModal(props) {
                                         }
                                     ]}
                                     onPressIn={() => {
-                                        setTabPath(item["path"])
-                                        setFavouritesModal(0)
+                                        props.setTabPath(item["path"])
+                                        props.setFavouritesModal(0)
                                     }}
                                 >
                                     <Image
@@ -83,9 +83,9 @@ export default function FavouritesModal(props) {
                                 </Pressable>
                                 <Pressable
                                     onPressIn={() => {
-                                        let tempFavItems = [...favouriteItems]
+                                        let tempFavItems = [...props.favouriteItems]
                                         tempFavItems.splice(i, 1)
-                                        setFavouriteItems(tempFavItems)
+                                        props.setprops.favouriteItems(tempFavItems)
                                     }}
                                 >
                                     <Image
@@ -107,16 +107,16 @@ export default function FavouritesModal(props) {
                         width: '100%'
                     }]}
                 onPressIn={() => {
-                    let favPath = tabs[currTab]["path"]
+                    let favPath = props.path
                     let favTitle = favPath.split("/").pop()
                     let newFavItem = {
                         'title': favTitle,
                         "path": favPath
                     }
-                    if (favouriteItems.find((item) => item.path == favPath) == undefined) {
-                        setFavouriteItems([...favouriteItems, newFavItem])
+                    if (props.favouriteItems.find((item) => item.path == favPath) == undefined) {
+                        props.setprops.favouriteItems([...props.favouriteItems, newFavItem])
                     } else {
-                        showToast("Item already exists")
+                        props.showToast("Item already exists")
                     }
                 }}
             ><Image style={[styles.imageIcon]}

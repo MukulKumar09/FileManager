@@ -8,8 +8,8 @@ export default function ItemExistsModal(props) {
         >
             <Pressable
                 onPressIn={() => {
-                    decisionRef.current.resolve(1);
-                    setExistsModal(0)
+                    props.decisionRef.resolve(1);
+                    props.setExistsModal(0)
                 }}
                 style={[styles.modalBackground]}
             />
@@ -36,14 +36,13 @@ export default function ItemExistsModal(props) {
                         styles.pillHighlight,
                         styles.padding]}
                         onPressIn={async () => {
-                            setInputModal("Rename")
+                            props.setInputModal("Rename")
                             await new Promise((resolve) => {
-                                inputRef.current = { resolve }
+                                props.inputRef = { resolve }
                             })
-                            console.log("rename promised")
-                            decisionRef.current.resolve(2);
-                            setExistsModal(0)
-                            setInputModal(0)
+                            props.decisionRef.resolve(2);
+                            props.setExistsModal(0)
+                            props.setInputModal(0)
                         }
                         }
                     >
@@ -54,8 +53,8 @@ export default function ItemExistsModal(props) {
                         styles.centered,
                         styles.padding]}
                         onPressIn={() => {
-                            decisionRef.current.resolve(0);
-                            setExistsModal(0)
+                            props.decisionRef.resolve(0);
+                            props.setExistsModal(0)
                         }
                         }
                     >
@@ -66,8 +65,8 @@ export default function ItemExistsModal(props) {
                         styles.centered,
                         styles.padding]}
                         onPressIn={() => {
-                            decisionRef.current.resolve(1);
-                            setExistsModal(0)
+                            props.decisionRef.resolve(1);
+                            props.setExistsModal(0)
                         }}
                     >
                         <Text style={[styles.text]}>Overwrite</Text>

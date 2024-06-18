@@ -19,6 +19,7 @@ import ContextMenu from "./Features/ContextMenu/ContextMenu";
 import ToolBar from "./Features/ToolBar/ToolBar";
 import Tabbar from "./Features/Tabbar/Tabbar";
 import MediaWindow from "./Features/MediaWindow/MediaWindow";
+import ItemExistsModal from "./Modals/ItemExistsModal/ItemExistsModal";
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
@@ -718,26 +719,58 @@ const App = () => {
                 <ProgressModal />
             } */}
             {clipBoardModal ?
-                <ClipboardModal />
+                <ClipboardModal
+                    setClipBoardModal={setClipBoardModal}
+                    setShowPaste={setShowPaste}
+                    Icon={Icon}
+                    setForceRefresh={setForceRefresh}
+                    clipboardItems={clipboardItems.current}
+                    inputRef={inputRef.current}
+                />
                 : null
             }
             {existsModal ?
-                <ItemExists />
+                <ItemExistsModal
+                    decisionRef={decisionRef.current}
+                    inputRef={inputRef.current}
+                    setExistsModal={setExistsModal}
+                    setInputModal={setInputModal}
+                />
                 : null
             }
             {aboutModal ?
-                <AboutModal />
+                <AboutModal
+                    setAboutModal={setAboutModal}
+                />
                 : null}
             {inputModal ?
-                <InputModal />
+                <InputModal
+                    inputModal={inputModal}
+                    setInputModal={setInputModal}
+                    alreadyExists={alreadyExists}
+                    nameNewItem={nameNewItem.current}
+                    cache={mainCache[tabs[currTab]["path"]]}
+                    inputRef={inputRef.current}
+                />
                 : null
             }
             {deleteModal ?
-                <DeleteModal />
+                <DeleteModal
+                    setDeleteModal={setDeleteModal}
+                    clipboardItems={clipboardItems.current}
+                    deleteRef={deleteRef.current}
+                />
                 : null
             }
             {favouritesModal ?
-                <FavouritesModal />
+                <FavouritesModal
+                    setFavouritesModal={setFavouritesModal}
+                    setFavouriteItems={setFavouriteItems}
+                    favouriteItems={favouriteItems}
+                    setTabPath={setTabPath}
+                    path={tabs[currTab]["path"]}
+                    showToast={showToast}
+                />
                 : null
             }
             <MediaWindow />

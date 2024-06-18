@@ -44,7 +44,7 @@ export default function ClipboardModal(props) {
                             textDecorationLine: 'underline'
                         }
                     ]} onPress={() => {
-                        clipboardItems.current = []
+                        props.clipboardItems = []
                         setShowPaste(0)
                     }}>Clear</Text>
                 </View>
@@ -56,9 +56,9 @@ export default function ClipboardModal(props) {
                         width: '100%',
                     }
                 ]}>
-                    {clipboardItems.current.length == 0 ?
+                    {props.clipboardItems.length == 0 ?
                         <Text style={[styles.text]}>No items</Text>
-                        : clipboardItems.current.map(
+                        : props.clipboardItems.map(
                             (item, i) =>
                                 <View
                                     key={i}
@@ -79,7 +79,7 @@ export default function ClipboardModal(props) {
                                     </Pressable>
                                     <Pressable
                                         onPressIn={() => {
-                                            clipboardItems.current.splice(i, 1)
+                                            props.clipboardItems.splice(i, 1)
                                             setForceRefresh(!forceRefresh)
                                         }}
                                     >

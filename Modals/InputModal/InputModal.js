@@ -10,7 +10,7 @@ export default function InputModal(props) {
         }}
     >
         <Pressable
-            onPressIn={() => setInputModal(0)}
+            onPressIn={() => props.inputModal(0)}
             style={[styles.modalBackground]}
         />
 
@@ -29,10 +29,10 @@ export default function InputModal(props) {
         ]}>
             <Text style={[styles.text,
             styles.headingText]}>
-                New {inputModal}
+                New {props.inputModal}
             </Text>
             <View style={[styles.divider]} />
-            {alreadyExists ? <Text style={[styles.text,
+            {props.alreadyExists ? <Text style={[styles.text,
             styles.smallText]}>Already exists!</Text> : null}
             <View style={[styles.rowLayout,
             styles.pill,
@@ -43,15 +43,15 @@ export default function InputModal(props) {
                     style={[styles.text,
                     styles.wide]}
                     multiline={true}
-                    defaultValue={nameNewItem.current}
+                    defaultValue={props.nameNewItem}
                     onChangeText={text => {
-                        for (let i = 0; i < mainCache[tabs[currTab]["path"]].length; i++) {
-                            if (mainCache[tabs[currTab]["path"]][i]["name"] == text) {
-                                setAlreadyExists(1)
+                        for (let i = 0; i < props.cache.length; i++) {
+                            if (props.cache[i]["name"] == text) {
+                                props.alreadyExists(1)
                                 break
                             } else {
-                                setAlreadyExists(0)
-                                nameNewItem.current = text
+                                props.alreadyExists(0)
+                                props.nameNewItem = text
                             }
                         }
                     }
@@ -62,8 +62,8 @@ export default function InputModal(props) {
             styles.bigGap]}>
                 <Pressable
                     onPressIn={() => {
-                        nameNewItem.current = ""
-                        setInputModal(0)
+                        props.nameNewItem = ""
+                        props.inputModal(0)
                     }
                     }
                     style={[
@@ -74,9 +74,9 @@ export default function InputModal(props) {
                     <Text style={[styles.text]}>Cancel</Text>
                 </Pressable>
                 <Pressable
-                    disabled={alreadyExists ? true : false}
+                    disabled={props.alreadyExists ? true : false}
                     onPressIn={() => {
-                        inputRef.current.resolve(nameNewItem.current)
+                        props.inputRef.resolve(props.nameNewItem)
                     }
                     }
                     style={[styles.pill,
@@ -84,7 +84,10 @@ export default function InputModal(props) {
                     styles.pillHighlight,
                     styles.wide,
                     styles.padding]}>
-                    <Text style={[styles.text, alreadyExists ? styles.textDisabled : null]}>Done</Text>
+                    <Text style={[
+                        styles.text,
+                        props.alreadyExists ? styles.textDisabled : null
+                    ]}>Done</Text>
                 </Pressable>
             </View>
         </View>

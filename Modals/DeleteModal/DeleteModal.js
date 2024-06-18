@@ -6,7 +6,7 @@ export default function DeleteModal(props) {
         transparent={true}
     >
         <Pressable
-            onPressIn={() => setDeleteModal(0)} style={[styles.modalBackground]}
+            onPressIn={() => props.setDeleteModal(0)} style={[styles.modalBackground]}
         />
 
         <View style={[
@@ -34,7 +34,7 @@ export default function DeleteModal(props) {
             <Text style={[styles.text,
             styles.textDisabled]}>Following items will be deleted:</Text>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-                {clipboardItems.current.map((item, i) =>
+                {props.clipboardItems.map((item, i) =>
                     <Text key={i} style={[styles.text,
                     styles.smallText]}>{item["name"]}</Text>
                 )}
@@ -43,8 +43,8 @@ export default function DeleteModal(props) {
             styles.bigGap]}>
                 <Pressable
                     onPressIn={() => {
-                        deleteRef.current.resolve(0)
-                        setDeleteModal(0)
+                        props.deleteRef.resolve(0)
+                        props.setDeleteModal(0)
                     }
                     }
                     style={[styles.pill,
@@ -56,7 +56,7 @@ export default function DeleteModal(props) {
                 <Pressable
                     disabled={alreadyExists ? true : false}
                     onPressIn={() => {
-                        deleteRef.current.resolve(1)
+                        props.deleteRef.resolve(1)
                     }
                     }
                     style={[styles.pill,

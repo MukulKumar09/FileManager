@@ -7,7 +7,7 @@ export default function AboutModal(props) {
             transparent={true}
         >
             <Pressable
-                onPressIn={() => setAboutModal(0)}
+                onPressIn={() => props.setAboutModal(0)}
                 style={[styles.modalBackground]}
             />
 
@@ -77,7 +77,7 @@ export default function AboutModal(props) {
                 >
                     <Pressable
                         onPressIn={() => {
-                            setAboutModal(0)
+                            props.setAboutModal(0)
                         }
                         }
                         style={[
@@ -90,7 +90,7 @@ export default function AboutModal(props) {
                     </Pressable>
                     <Pressable
                         onPressIn={() => {
-                            setAboutModal(0)
+                            props.setAboutModal(0)
                         }
                         }
                         style={[
