@@ -247,183 +247,119 @@ const Window = (props) => {
                 display: props.currTab == props.index ? "flex" : "none"
             }
         }>
-            {searchFlag ? <View style={[
-                styles.rowLayout,
-                styles.pill,
-                styles.paddingCloseBottom,
-                styles.smallGap,
-                {
-                    position: 'absolute',
-                    zIndex: 1,
-                    justifyContent: 'space-between',
-                }
-            ]}
+            {sortModal ? <Modal
+                transparent={true}
             >
-                <View style={[
-                    styles.input,
-                    styles.wide]}>
-                    <TextInput
-                        autoFocus={true}
-                        style={[styles.text,
-                        styles.wide]}
-                        placeholder="Search"
-                        placeholderTextColor={grey}
-                        onChangeText={text => {
-                            if (text == "") {
-                                handleSort(props.filesList)
-                            }
-                            else {
-                                text = new RegExp(text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
-                                handleSort(props.filesList.filter((item) => text.test(item["name"])))
-                            }
-                        }}
-                    />
-                </View>
-
-                <View style={[styles.rowLayout,
-                styles.smallGap]}>
-                    {/* <Pressable
-                                style={[styles.rowLayout,
-                                styles.pill, deepSearch ? styles.pillHighlight : null,
-                                styles.padding]}
-                                onPressIn={() => { setDeepSearch(!deepSearch) }}>
-                                <Text style={[styles.text]}>Deep</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[styles.pill,
-                                styles.pillHighlight,
-                                styles.padding]}
-                                onPressIn={() => { }}>
-                                <Image source={require('./assets/search.png')} />
-                            </Pressable> */}
-                    <Pressable
-                        style={[styles.pill,
-                        styles.padding]}
-                        onPressIn={() => {
-                            handleSort(props.filesList)
-                            setSearchFlag(0)
-                        }}>
-                        <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
-                    </Pressable>
-                </View>
-            </View>
-
-                : null}
-
-            {
-                sortModal ? <Modal
-                    transparent={true}
+                <TouchableWithoutFeedback
+                    onPress={() => setSortModal(0)}
                 >
-                    <TouchableWithoutFeedback
-                        onPress={() => setSortModal(0)}
-                    >
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            position: 'absolute'
-                        }}
-                        />
-                    </TouchableWithoutFeedback>
+                    <View style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        position: 'absolute'
+                    }}
+                    />
+                </TouchableWithoutFeedback>
 
-                    <View style={[
-                        styles.pill,
-                        styles.modal,
-                        styles.mediumGap,
-                        styles.padding,
-                        {
-                            backgroundColor: backgroundColor,
-                            position: 'absolute',
-                            left: 10,
-                            right: 10,
-                            bottom: 10,
-                        }
-                    ]}>
-                        <Text style={[styles.text,
-                        styles.headingText]}>Sort</Text>
-                        <View style={[styles.divider]} />
-                        <View style={[styles.rowLayout, styles.mediumGap]}>
-                            <Pressable
-                                style={[
-                                    styles.pill,
-                                    styles.wide,
-                                    sortType == 0 ? styles.pillHighlight : null,
-                                    styles.padding]}
-                                onPressIn={() => setSortType(0)}
-                            >
-                                <Text style={[styles.text]}>Name</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.pill,
-                                    styles.wide,
-                                    sortType == 1 ? styles.pillHighlight : null,
-                                    styles.padding]}
-                                onPressIn={() => setSortType(1)}
-                            >
-                                <Text style={[styles.text]}>Type</Text>
-                            </Pressable>
-                        </View>
-                        <View style={[styles.rowLayout, styles.mediumGap]}>
-                            <Pressable
-                                style={[
-                                    styles.pill,
-                                    styles.wide,
-                                    sortType == 2 ? styles.pillHighlight : null,
-                                    styles.padding]}
-                                onPressIn={() => setSortType(2)}
-                            >
-                                <Text style={[styles.text]}>Date</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.pill,
-                                    styles.wide,
-                                    sortType == 3 ? styles.pillHighlight : null,
-                                    styles.padding]}
-                                onPressIn={() => setSortType(3)}
-                            >
-                                <Text style={[styles.text]}>Size</Text>
-                            </Pressable>
-                        </View>
-                        <View style={[styles.divider]} />
+                <View style={[
+                    styles.pill,
+                    styles.modal,
+                    styles.mediumGap,
+                    styles.padding,
+                    {
+                        backgroundColor: backgroundColor,
+                        position: 'absolute',
+                        left: 10,
+                        right: 10,
+                        bottom: 10,
+                    }
+                ]}>
+                    <Text style={[styles.text,
+                    styles.headingText]}>Sort</Text>
+                    <View style={[styles.divider]} />
+                    <View style={[styles.rowLayout, styles.mediumGap]}>
                         <Pressable
                             style={[
                                 styles.pill,
-                                sortOrder == 1 ? styles.pillHighlight : null,
-                                styles.padding, { width: '100%' }]}
-                            onPressIn={() => setSortOrder(!sortOrder)}
+                                styles.wide,
+                                sortType == 0 ? styles.pillHighlight : null,
+                                styles.padding]}
+                            onPressIn={() => setSortType(0)}
                         >
-                            <Text style={[styles.text]}>{sortOrder ? "Descending" : "Ascending"}</Text>
+                            <Text style={[styles.text]}>Name</Text>
                         </Pressable>
-                        <View style={[styles.divider]} />
-                        <View style={[styles.rowLayout,
-                        styles.mediumGap]}>
-                            <Pressable
-                                style={[
-                                    styles.pill,
-                                    styles.wide,
-                                    styles.padding]}
-                                onPressIn={() => setSortModal(0)}
-                            >
-                                <Text style={[styles.text]}>Cancel</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.pill,
-                                    styles.wide,
-                                    styles.pillHighlight,
-                                    styles.padding]}
-                                onPressIn={() => handleSort(filesList)}
-                            >
-                                <Text style={[styles.text]}>Done</Text>
-                            </Pressable>
-                        </View>
+                        <Pressable
+                            style={[
+                                styles.pill,
+                                styles.wide,
+                                sortType == 1 ? styles.pillHighlight : null,
+                                styles.padding]}
+                            onPressIn={() => setSortType(1)}
+                        >
+                            <Text style={[styles.text]}>Type</Text>
+                        </Pressable>
                     </View>
-                </Modal>
-                    : null
+                    <View style={[styles.rowLayout, styles.mediumGap]}>
+                        <Pressable
+                            style={[
+                                styles.pill,
+                                styles.wide,
+                                sortType == 2 ? styles.pillHighlight : null,
+                                styles.padding]}
+                            onPressIn={() => setSortType(2)}
+                        >
+                            <Text style={[styles.text]}>Date</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[
+                                styles.pill,
+                                styles.wide,
+                                sortType == 3 ? styles.pillHighlight : null,
+                                styles.padding]}
+                            onPressIn={() => setSortType(3)}
+                        >
+                            <Text style={[styles.text]}>Size</Text>
+                        </Pressable>
+                    </View>
+                    <View style={[styles.divider]} />
+                    <Pressable
+                        style={[
+                            styles.pill,
+                            sortOrder == 1 ? styles.pillHighlight : null,
+                            styles.padding, { width: '100%' }]}
+                        onPressIn={() => setSortOrder(!sortOrder)}
+                    >
+                        <Text style={[styles.text]}>{sortOrder ? "Descending" : "Ascending"}</Text>
+                    </Pressable>
+                    <View style={[styles.divider]} />
+                    <View style={[styles.rowLayout,
+                    styles.mediumGap]}>
+                        <Pressable
+                            style={[
+                                styles.pill,
+                                styles.wide,
+                                styles.padding]}
+                            onPressIn={() => setSortModal(0)}
+                        >
+                            <Text style={[styles.text]}>Cancel</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[
+                                styles.pill,
+                                styles.wide,
+                                styles.pillHighlight,
+                                styles.padding]}
+                            onPressIn={() => handleSort(filesList)}
+                        >
+                            <Text style={[styles.text]}>Done</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+                : null
             }
             {/* <View style={[{ backgroundColor: backgroundColor, position: 'absolute', zIndex: 1, width: '100%' }]}>
                 <View style={[styles.padding]}>
@@ -590,6 +526,7 @@ styles.listItem]}>
                                     })
 
                                 }
+
                             </View>
                         </ScrollView>
 
@@ -613,6 +550,69 @@ styles.listItem]}>
                     </View>
                 }
             </View>
+            {searchFlag ? <View style={[
+                styles.rowLayout,
+                styles.pill,
+                styles.paddingCloseBottom,
+                styles.smallGap,
+                {
+                    // position: 'absolute',
+                    // zIndex: 1,
+                    justifyContent: 'space-between',
+                }
+            ]}
+            >
+                <View style={[
+                    styles.input,
+                    styles.wide]}>
+                    <TextInput
+                        autoFocus={true}
+                        style={[styles.text,
+                        styles.wide]}
+                        placeholder="Search"
+                        multiline={true}
+                        placeholderTextColor={grey}
+                        onChangeText={text => {
+                            if (text == "") {
+                                handleSort(props.filesList)
+                            }
+                            else {
+                                text = new RegExp(text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
+                                handleSort(props.filesList.filter((item) => text.test(item["name"])))
+                            }
+                        }}
+                    />
+                </View>
+
+                <View style={[styles.rowLayout,
+                styles.smallGap]}>
+                    {/* <Pressable
+                                style={[styles.rowLayout,
+                                styles.pill, deepSearch ? styles.pillHighlight : null,
+                                styles.padding]}
+                                onPressIn={() => { setDeepSearch(!deepSearch) }}>
+                                <Text style={[styles.text]}>Deep</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.pill,
+                                styles.pillHighlight,
+                                styles.padding]}
+                                onPressIn={() => { }}>
+                                <Image source={require('./assets/search.png')} />
+                            </Pressable> */}
+                    <Pressable
+                        style={[styles.pill,
+                        styles.padding]}
+                        onPressIn={() => {
+                            handleSort(props.filesList)
+                            setSearchFlag(0)
+                        }}>
+                        <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                    </Pressable>
+                </View>
+            </View>
+
+                : null}
         </View>)
 }
 export default Window

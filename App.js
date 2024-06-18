@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Text, Pressable, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, TouchableWithoutFeedback, ActivityIndicator } from "react-native";
+import { Text, Pressable, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, ActivityIndicator } from "react-native";
 import RNFS from 'react-native-fs';
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
@@ -311,7 +311,7 @@ const App = () => {
         setSelectedItem(item)
         const parts = item.name.split(".")
         const ext = parts[parts.length - 1]
-        if (["jpeg", "png", "jpg", "gif"].includes(ext)) {
+        if (["jpeg", "png", "jpg", "gif"].includes(ext.toLowerCase())) {
             setMediaType(1)
             setMediaBox(1)
         }
@@ -760,7 +760,7 @@ const App = () => {
                             {
                                 textDecorationLine: 'underline'
                             }
-                        ]} onPressIn={() => deselectAll()}>Cancel</Text>
+                        ]} onPress={() => deselectAll()}>Cancel</Text>
                     </View>
                 </View>
                 )
@@ -768,19 +768,17 @@ const App = () => {
             {clipBoardModal ?
                 <Modal
                     transparent={true}>
-                    <TouchableWithoutFeedback
-                        onPress={() => setClipBoardModal(0)}
-                    >
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                    <Pressable
+                        onPressIn={() => setClipBoardModal(0)}
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
                             top: 0,
                             bottom: 0,
                             left: 0,
                             right: 0,
                             position: 'absolute'
                         }}
-                        />
-                    </TouchableWithoutFeedback>
+                    />
                     <View style={[
                         styles.pill,
                         styles.modal,
@@ -800,10 +798,15 @@ const App = () => {
                                 width: '100%',
                                 justifyContent: 'space-between'
                             }]}>
-                            <Text style={[
-                                styles.text,
-                                styles.headingText
-                            ]}>Clipboard</Text>
+                            <View style={[styles.rowLayout, styles.bigGap]}>
+                                <Image
+                                    style={[styles.imageIcon]}
+                                    source={require('./assets/archive.png')} />
+                                <Text style={[
+                                    styles.text,
+                                    styles.headingText
+                                ]}>Clipboard</Text>
+                            </View>
                             <Text style={[
                                 styles.text,
                                 styles.textDisabled,
@@ -877,22 +880,20 @@ const App = () => {
                 <Modal
                     transparent={true}
                 >
-                    <TouchableWithoutFeedback
-                        onPress={() => {
+                    <Pressable
+                        onPressIn={() => {
                             decisionRef.current.resolve(1);
                             setExistsModal(0)
                         }}
-                    >
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
                             top: 0,
                             bottom: 0,
                             left: 0,
                             right: 0,
                             position: 'absolute'
                         }}
-                        />
-                    </TouchableWithoutFeedback>
+                    />
                     <View style={[
                         styles.pill,
                         styles.modal,
@@ -958,19 +959,17 @@ const App = () => {
                 <Modal
                     transparent={true}
                 >
-                    <TouchableWithoutFeedback
-                        onPress={() => setInputModal(0)}
-                    >
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                    <Pressable
+                        onPressIn={() => setInputModal(0)}
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
                             top: 0,
                             bottom: 0,
                             left: 0,
                             right: 0,
                             position: 'absolute'
                         }}
-                        />
-                    </TouchableWithoutFeedback>
+                    />
 
                     <View style={[
                         styles.pill,
@@ -996,10 +995,10 @@ const App = () => {
                         styles.pill,
                         styles.input]}>
                             <TextInput
+                                autoFocus={true}
                                 style={[styles.text,
                                 styles.wide]}
                                 multiline={true}
-                                autoFocus={true}
                                 defaultValue={nameNewItem.current}
                                 onChangeText={text => {
                                     for (let i = 0; i < mainCache[tabs[currTab]].length; i++) {
@@ -1048,19 +1047,16 @@ const App = () => {
             {deleteModal ? <Modal
                 transparent={true}
             >
-                <TouchableWithoutFeedback
-                    onPress={() => setInputModal(0)}
-                >
-                    <View style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                <Pressable
+                    onPressIn={() => setInputModal(0)} style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
                         top: 0,
                         bottom: 0,
                         left: 0,
                         right: 0,
                         position: 'absolute'
                     }}
-                    />
-                </TouchableWithoutFeedback>
+                />
 
                 <View style={[
                     styles.pill,
@@ -1117,19 +1113,17 @@ const App = () => {
             {favouritesModal ?
                 <Modal
                     transparent={true}>
-                    <TouchableWithoutFeedback
-                        onPress={() => setFavouritesModal(0)}
-                    >
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                    <Pressable
+                        onPressIn={() => setFavouritesModal(0)}
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
                             top: 0,
                             bottom: 0,
                             left: 0,
                             right: 0,
                             position: 'absolute'
                         }}
-                        />
-                    </TouchableWithoutFeedback>
+                    />
                     <View style={[
                         styles.pill,
                         styles.modal,
@@ -1149,10 +1143,15 @@ const App = () => {
                                 width: '100%',
                                 justifyContent: 'space-between'
                             }]}>
-                            <Text style={[
-                                styles.text,
-                                styles.headingText
-                            ]}>Favourites</Text>
+                            <View style={[styles.rowLayout, styles.bigGap]}>
+                                <Image
+                                    style={[styles.imageIcon]}
+                                    source={require('./assets/favourite.png')} />
+                                <Text style={[
+                                    styles.text,
+                                    styles.headingText
+                                ]}>Favourites</Text>
+                            </View>
                             <Text style={[
                                 styles.text,
                                 styles.textDisabled,
@@ -1310,19 +1309,17 @@ const App = () => {
                     height: '100%',
                     width: '100%',
                 }}>
-                    <TouchableWithoutFeedback
-                        onPress={() => setContextMenu(0)}
+                    <Pressable
+                        onPressIn={() => setContextMenu(0)}
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                        }}
                     >
-                        <View
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                            }}
-                        />
-                    </TouchableWithoutFeedback>
+                    </Pressable>
 
                     <View
                         style={[
@@ -1347,7 +1344,7 @@ const App = () => {
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPressIn={() => {
+                                onPress={() => {
                                     deleteAllTabs()
                                     setContextMenu(0)
                                 }}
@@ -1364,7 +1361,7 @@ const App = () => {
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPressIn={() => {
+                                onPress={() => {
                                     deleteCurrTab()
                                     setContextMenu(0)
                                 }}
@@ -1381,7 +1378,7 @@ const App = () => {
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPressIn={() => {
+                                onPress={() => {
                                     deleteOtherTabs()
                                     setContextMenu(0)
                                 }}
@@ -1401,7 +1398,7 @@ const App = () => {
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPressIn={() => {
+                                onPress={() => {
                                     buildCache(props.tabData["path"])
                                     setSelectedItems([])
                                     setSelectedItem([])
@@ -1423,7 +1420,7 @@ const App = () => {
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPressIn={() => { setClipBoardModal(1) }}
+                                onPress={() => { setClipBoardModal(1) }}
                             >
                                 <Image
                                     style={[styles.imageIcon]}
@@ -1461,7 +1458,7 @@ const App = () => {
                                     styles.wide,
                                     styles.padding
                                 ]}
-                                onPressIn={() => { setContextMenu(0) }}
+                                onPress={() => { setContextMenu(0) }}
                             ><Image
                                     style={[styles.imageIcon]}
                                     source={require('./assets/close.png')} />
@@ -1689,7 +1686,7 @@ const App = () => {
                             styles.bordered,
                             styles.padding
                             ]}
-                            onPress={() => { startShifting() }}>
+                            onPressIn={() => { startShifting() }}>
                             <Image source={require('./assets/paste.png')} />
                         </Pressable>
                         : null}
@@ -1699,7 +1696,7 @@ const App = () => {
                             styles.pill,
                             styles.padding
                         ]}
-                        onPress={() => { addNewTab(null, null, null) }}>
+                        onPressIn={() => { addNewTab(null, null, null) }}>
                         <Text style={styles.text}>+</Text>
                     </Pressable>
                 </>
