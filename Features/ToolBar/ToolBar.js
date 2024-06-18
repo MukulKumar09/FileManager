@@ -29,7 +29,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.padding]}
                         onPress={() => {
-                            setFuncId(0)
+                            props.setFuncId(0)
                         }}>
                         <Image
                             style={[styles.imageIcon]}
@@ -39,7 +39,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.padding]}
                         onPress={() => {
-                            setFuncId(1)
+                            props.setFuncId(1)
                         }}>
                         <Image
                             style={[styles.imageIcon]}
@@ -49,7 +49,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.padding]}
                         onPress={() => {
-                            setFuncId(3)
+                            props.setFuncId(3)
                         }}>
                         <Image
                             style={[styles.imageIcon]}
@@ -59,7 +59,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.padding]}
                         onPress={() => {
-                            setFuncId(2)
+                            props.setFuncId(2)
                         }}>
                         <Image
                             style={[styles.imageIcon]}
@@ -69,7 +69,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.text,
                         styles.padding]}
-                        onPress={() => { shareFiles() }}>
+                        onPress={() => { props.shareFiles() }}>
                         <Image
                             style={[styles.imageIcon]}
                             source={require('../../assets/share.png')} />
@@ -79,7 +79,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.text,
                         styles.padding]}
-                        onPress={() => { newItem(1) }}>
+                        onPress={() => { props.newItem(1) }}>
                         <Image
                             style={[styles.imageIcon]}
                             source={require('../../assets/newfile.png')} />
@@ -88,7 +88,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.text,
                         styles.padding]}
-                        onPress={() => { newItem(0) }}>
+                        onPress={() => { props.newItem(0) }}>
                         <Image
                             style={[styles.imageIcon]}
                             source={require('../../assets/newfolder.png')} />
@@ -97,7 +97,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.padding]}
                         onPress={() => {
-                            setFavouritesModal(1)
+                            props.setFavouritesModal(1)
                         }}>
                         <Image
                             style={[styles.imageIcon]}
@@ -112,7 +112,7 @@ export default function ToolBar(props) {
                         style={[styles.pill,
                         styles.padding]}
                         onPress={() => {
-                            setContextMenu(1)
+                            props.setContextMenu(1)
                         }}>
                         <Image source={require('../../assets/horzmenu.png')} />
                     </Pressable>

@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, View, Image, } from "react-native";
-import styles from "./styles";
+import styles from "../../styles";
 
 const TabButton = (props) => {
     return (<View style={[
@@ -19,7 +19,7 @@ const TabButton = (props) => {
             }
             }
         >
-            <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
+            <Image style={{ height: 15, width: 15 }} source={require('../../assets/folder.png')} />
             <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}
             >{props.tabData["title"]}</Text>
         </TouchableOpacity>
@@ -28,7 +28,7 @@ const TabButton = (props) => {
                 <TouchableOpacity
                     style={[styles.paddingCloseLeft]}
                     onPress={() => { props.deleteCurrTab() }}>
-                    <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                    <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />
                 </TouchableOpacity>
                 : null
         }

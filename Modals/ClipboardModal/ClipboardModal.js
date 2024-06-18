@@ -6,7 +6,7 @@ export default function ClipboardModal(props) {
         <Modal
             transparent={true}>
             <Pressable
-                onPressIn={() => setClipBoardModal(0)}
+                onPressIn={() => props.setClipBoardModal(0)}
                 style={[styles.modalBackground]}
             />
             <View style={[
@@ -45,7 +45,7 @@ export default function ClipboardModal(props) {
                         }
                     ]} onPress={() => {
                         props.clipboardItems = []
-                        setShowPaste(0)
+                        props.setShowPaste(0)
                     }}>Clear</Text>
                 </View>
                 <View style={[styles.divider]} />
@@ -80,7 +80,7 @@ export default function ClipboardModal(props) {
                                     <Pressable
                                         onPressIn={() => {
                                             props.clipboardItems.splice(i, 1)
-                                            setForceRefresh(!forceRefresh)
+                                            props.setForceRefresh(!forceRefresh)
                                         }}
                                     >
                                         <Image
@@ -99,7 +99,7 @@ export default function ClipboardModal(props) {
                         , {
                             width: '100%'
                         }]}
-                    onPressIn={() => setClipBoardModal(0)}
+                    onPressIn={() => props.setClipBoardModal(0)}
                 >
                     <Text style={[styles.text]}>Close</Text>
                 </Pressable>

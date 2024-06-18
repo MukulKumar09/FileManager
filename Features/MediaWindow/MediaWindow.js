@@ -4,17 +4,17 @@ export default function MediaWindow(props) {
     return (
         <Animated.View
             style={{
-                height: height,
+                height: props.height,
                 overflow: 'hidden'
             }}
         >
-            {mediaType == 0 ? null :
+            {props.mediaType == 0 ? null :
                 <MediaViewer
-                    selectedItem={selectedItem}
-                    setSelectedItem={setSelectedItem}
-                    mediaType={mediaType}
-                    setMediaBox={setMediaBox}
-                    setMediaType={setMediaType} />
+                    selectedItem={props.selectedItem}
+                    setSelectedItem={props.setSelectedItem}
+                    mediaType={props.mediaType}
+                    setMediaBox={props.setMediaBox}
+                    setMediaType={props.setMediaType} />
             }
         </Animated.View>
     )

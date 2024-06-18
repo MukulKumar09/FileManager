@@ -4,7 +4,7 @@ import RNFS from 'react-native-fs';
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
 import { zip } from 'react-native-zip-archive'
-import TabButton from "./TabButton";
+import TabButton from "./Common/TabButton/TabButton";
 import Window from "./Window";
 import MediaViewer from "./MediaViewer";
 import styles, { backgroundColor, secondaryColor } from "./styles";
@@ -773,7 +773,13 @@ const App = () => {
                 />
                 : null
             }
-            <MediaWindow />
+            <MediaWindow
+                mediaType={mediaType}
+                height={height}
+                setSelectedItem={setSelectedItem}
+                setMediaBox={setMediaBox}
+                setMediaType={setMediaType}
+            />
             <View
                 style={
                     {
@@ -782,7 +788,6 @@ const App = () => {
                 }
             >
                 {
-                    // useMemo(() =>
                     Object.keys(tabs).map((index) =>
 
                         <Window
@@ -816,16 +821,41 @@ const App = () => {
                         // }
                         />
                     )
-                    // , [tabs, mainCache])
                 }
             </View>
             {contextMenu ?
-                <ContextMenu />
+                <ContextMenu
+                    setContextMenu={setContextMenu}
+                    deleteAllTabs={deleteAllTabs}
+                    deleteCurrTab={deleteCurrTab}
+                    deleteOtherTabs={deleteOtherTabs}
+                    buildCache={buildCache}
+                    setClipBoardModal={setClipBoardModal}
+                    setAboutModal={setAboutModal}
+
+
+                />
                 : null
             }
-            <ToolBar />
-            <Tabbar />
-            {/* <Pressable onPressIn={() => console.log("abcd[]efgh")}><Text>Show progress</Text></Pressable> */}
+            <ToolBar
+                setFuncId={setFuncId}
+                newItem={newItem}
+                setContextMenu={setContextMenu}
+                setFavouritesModal={setFavouritesModal}
+
+            />
+            <Tabbar
+                tabs={tabs}
+                currTab={currTab}
+                setCurrTab={setCurrTab}
+                currTabStatic={currTabStatic}
+                showPaste={showPaste}
+                width={width}
+                deleteCurrTab={deleteCurrTab}
+                startShifting={startShifting}
+                addNewTab={addNewTab}
+            />
+            <Pressable onPressIn={() => console.log(currTabStatic)}><Text>Show progress</Text></Pressable>
         </View>
     );
 };

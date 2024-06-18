@@ -10,7 +10,7 @@ export default function InputModal(props) {
         }}
     >
         <Pressable
-            onPressIn={() => props.inputModal(0)}
+            onPressIn={() => props.setInputModal(0)}
             style={[styles.modalBackground]}
         />
 
@@ -63,7 +63,7 @@ export default function InputModal(props) {
                 <Pressable
                     onPressIn={() => {
                         props.nameNewItem = ""
-                        props.inputModal(0)
+                        props.setInputModal(0)
                     }
                     }
                     style={[
