@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Text, Pressable, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, ActivityIndicator } from "react-native";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { Text, Pressable, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, ActivityIndicator, Linking } from "react-native";
 import RNFS from 'react-native-fs';
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
@@ -19,6 +19,8 @@ const showToast = (message) => {
 const App = () => {
     console.log("app render")
     const [favPaths, setFavPaths] = useState([]) //find all mounting points
+    const [forceRefresh, setForceRefresh] = useState(0)
+
     useEffect(() => {
         console.log("ran mount init")
         let tempFavPaths = []
@@ -59,6 +61,7 @@ const App = () => {
     const [favouriteItems, setFavouriteItems] = useState([])
 
     //modals
+    const [aboutModal, setAboutModal] = useState(0)
     const [favouritesModal, setFavouritesModal] = useState(0)
     const [clipBoardModal, setClipBoardModal] = useState(0)
     const [progressModal, setProgressModal] = useState(0)
@@ -840,6 +843,7 @@ const App = () => {
                                             <Pressable
                                                 onPressIn={() => {
                                                     clipboardItems.current.splice(i, 1)
+                                                    setForceRefresh(!forceRefresh)
                                                 }}
                                             >
                                                 <Image
@@ -941,6 +945,110 @@ const App = () => {
                 </Modal>
                 : null
             }
+            {aboutModal ?
+                <Modal
+                    transparent={true}
+                >
+                    <Pressable
+                        onPressIn={() => setAboutModal(0)}
+                        style={[styles.modalBackground]}
+                    />
+
+                    <View style={[
+                        styles.pill,
+                        styles.modal,
+                        styles.bigGap,
+                        styles.padding,
+                        {
+                            backgroundColor: backgroundColor,
+                            position: 'absolute',
+                            left: 10,
+                            right: 10,
+                            bottom: 10,
+                        }
+                    ]}>
+                        <View style={[styles.rowLayout, styles.bigGap]}>
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/about.png')} />
+                            <Text style={[
+                                styles.text,
+                                styles.headingText
+                            ]}>About</Text>
+                        </View>
+                        <View style={[styles.divider]} />
+                        <View style={[styles.rowLayout, styles.bigGap, { alignItems: 'flex-start' }]}>
+                            <Image source={{ uri: 'https://github.com/MukulKumar09.png' }}
+                                style={{
+                                    height: 100,
+                                    width: 100,
+                                    borderRadius: 30
+                                }} />
+                            <View style={[styles.wide]}>
+                                <Text style={[styles.text]}>Author: Mukul Kumar{"\n"}</Text>
+                                <Pressable
+                                    onPressIn={() => Linking.openURL('https://github.com/MukulKumar09')}
+                                    style={[
+                                        styles.smallPill
+                                    ]}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.smallText,
+                                            styles.text,
+                                            styles.textDisabled
+                                        ]}>
+                                        https://github.com/MukulKumar09
+                                    </Text>
+                                </Pressable>
+                            </View>
+                        </View>
+
+                        <Text style={[styles.text, styles.smallText]}>
+                            {"\n"}
+                            Thanks for downloading my app!
+                            {"\n"}
+                            You can support this independent project by rating and leaving a feedback on Play Store.
+                            {"\n"}
+                        </Text>
+                        <View
+                            style={[
+                                styles.rowLayout,
+                                styles.mediumGap,
+                                styles.wide
+                            ]}
+                        >
+                            <Pressable
+                                onPressIn={() => {
+                                    setAboutModal(0)
+                                }
+                                }
+                                style={[
+                                    styles.pill,
+                                    styles.centered,
+                                    styles.wide,
+                                    styles.padding
+                                ]}>
+                                <Text style={[styles.text]}>Close</Text>
+                            </Pressable>
+                            <Pressable
+                                onPressIn={() => {
+                                    setAboutModal(0)
+                                }
+                                }
+                                style={[
+                                    styles.pill,
+                                    styles.pillHighlight,
+                                    styles.centered,
+                                    styles.wide,
+                                    styles.padding
+                                ]}>
+                                <Text style={[styles.text]}>⭐  Rate</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+                : null}
             {inputModal ?
                 <Modal
                     transparent={true}
@@ -1050,7 +1158,15 @@ const App = () => {
                         bottom: 10,
                     }
                 ]}>
-                    <Text style={[styles.text]}>Delete item(s)?</Text>
+                    <View style={[styles.rowLayout, styles.bigGap]}>
+                        <Image
+                            style={[styles.imageIcon]}
+                            source={require('./assets/delete.png')} />
+                        <Text style={[
+                            styles.text,
+                            styles.headingText
+                        ]}>Delete Item(s)?</Text>
+                    </View>
                     <View style={[styles.divider]} />
                     <Text style={[styles.text,
                     styles.textDisabled]}>Following items will be deleted:</Text>
@@ -1401,7 +1517,7 @@ const App = () => {
                                 styles.wide,
                                 styles.padding
                             ]}
-                            onPress={() => { setContextMenu(0) }}
+                            onPress={() => { setAboutModal(1) }}
                         ><Image
                                 style={[styles.imageIcon]}
                                 source={require('./assets/about.png')} />
