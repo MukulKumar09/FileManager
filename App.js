@@ -384,7 +384,7 @@ const App = () => {
         clipboardItems.current = selectedItems
         if (type in [0, 1]) {
             operationType.current = type
-            operationSource.current = tabs[currTab]
+            operationSource.current = tabs[currTab]["path"]
             setShowPaste(1)
             ToastAndroid.showWithGravity(
                 clipboardItems.current.length + " items " + (type ? "ready to move" : "copied"),
@@ -394,26 +394,26 @@ const App = () => {
         }
         if (type == 2) {
             operationType.current = 2
-            operationDest.current = tabs[currTab]
+            operationDest.current = tabs[currTab]["path"]
             deleteHandler()
         }
         if (type == 3) {
             setShowPaste(0)
             operationType.current = 1 //rename is moveItem
-            operationDest.current = tabs[currTab]
+            operationDest.current = tabs[currTab]["path"]
             nameNewItem.current = clipboardItems.current["name"]
             renameHandler(clipboardItems.current)
         }
         if (type == 4) {
             operationType.current = 4
-            operationDest.current = tabs[currTab]
+            operationDest.current = tabs[currTab]["path"]
             zipHandler()
         }
     }
 
     const startShifting = async () => {
         setShowPaste(0)
-        operationDest.current = tabs[currTab]
+        operationDest.current = tabs[currTab]["path"]
         let collectedItems = []
         const collectFilesFromFolder = async () => {
             for (let i = 0; i < clipboardItems.current.length; i++) {
@@ -574,6 +574,7 @@ const App = () => {
             await RNFS.copyFile(item, dest)
         } catch (error) {
             console.log(error)
+            showToast("Error occured. Check logs.")
             failedItems.current.push(item)
         }
     }
@@ -583,6 +584,7 @@ const App = () => {
             await RNFS.moveFile(item, dest)
         } catch (error) {
             console.log(error)
+            showToast("Error occured. Check logs.")
             failedItems.current.push(item)
         }
     }
@@ -637,11 +639,6 @@ const App = () => {
         setInputModal(0)
         await moveHandler(item["path"], operationDest.current + "/" + value)
         await buildCache(operationDest.current)
-        ToastAndroid.showWithGravity(
-            "Item(s) renamed",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
-        );
     }
 
     const zipHandler = async () => {
@@ -770,14 +767,7 @@ const App = () => {
                     transparent={true}>
                     <Pressable
                         onPressIn={() => setClipBoardModal(0)}
-                        style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            position: 'absolute'
-                        }}
+                        style={[styles.modalBackground]}
                     />
                     <View style={[
                         styles.pill,
@@ -862,8 +852,8 @@ const App = () => {
                         <View style={[styles.divider]} />
                         <Pressable
                             style={[
-                                styles.rowLayout,
                                 styles.pill,
+                                styles.centered,
                                 styles.padding
                                 , {
                                     width: '100%'
@@ -885,14 +875,7 @@ const App = () => {
                             decisionRef.current.resolve(1);
                             setExistsModal(0)
                         }}
-                        style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            position: 'absolute'
-                        }}
+                        style={[styles.modalBackground]}
                     />
                     <View style={[
                         styles.pill,
@@ -913,6 +896,7 @@ const App = () => {
                         <View style={[styles.mediumGap, { flexDirection: 'column', marginTop: 30, width: '100%' }]}>
                             <Pressable
                                 style={[styles.pill,
+                                styles.centered,
                                 styles.pillHighlight,
                                 styles.padding]}
                                 onPressIn={async () => {
@@ -931,6 +915,7 @@ const App = () => {
                             </Pressable>
                             <Pressable
                                 style={[styles.pill,
+                                styles.centered,
                                 styles.padding]}
                                 onPressIn={() => {
                                     decisionRef.current.resolve(0);
@@ -942,6 +927,7 @@ const App = () => {
                             </Pressable>
                             <Pressable
                                 style={[styles.pill,
+                                styles.centered,
                                 styles.padding]}
                                 onPressIn={() => {
                                     decisionRef.current.resolve(1);
@@ -958,17 +944,14 @@ const App = () => {
             {inputModal ?
                 <Modal
                     transparent={true}
+                    onShow={() => {
+                        this.textInput.blur();
+                        this.textInput.focus();
+                    }}
                 >
                     <Pressable
                         onPressIn={() => setInputModal(0)}
-                        style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            position: 'absolute'
-                        }}
+                        style={[styles.modalBackground]}
                     />
 
                     <View style={[
@@ -995,14 +978,15 @@ const App = () => {
                         styles.pill,
                         styles.input]}>
                             <TextInput
+                                ref={input => { this.textInput = input; }}
                                 autoFocus={true}
                                 style={[styles.text,
                                 styles.wide]}
                                 multiline={true}
                                 defaultValue={nameNewItem.current}
                                 onChangeText={text => {
-                                    for (let i = 0; i < mainCache[tabs[currTab]].length; i++) {
-                                        if (mainCache[tabs[currTab]][i]["name"] == text) {
+                                    for (let i = 0; i < mainCache[tabs[currTab]["path"]].length; i++) {
+                                        if (mainCache[tabs[currTab]["path"]][i]["name"] == text) {
                                             setAlreadyExists(1)
                                             break
                                         } else {
@@ -1022,9 +1006,11 @@ const App = () => {
                                     setInputModal(0)
                                 }
                                 }
-                                style={[styles.pill,
-                                styles.wide,
-                                styles.padding]}>
+                                style={[
+                                    styles.pill,
+                                    styles.wide,
+                                    styles.centered,
+                                    styles.padding]}>
                                 <Text style={[styles.text]}>Cancel</Text>
                             </Pressable>
                             <Pressable
@@ -1034,6 +1020,7 @@ const App = () => {
                                 }
                                 }
                                 style={[styles.pill,
+                                styles.centered,
                                 styles.pillHighlight,
                                 styles.wide,
                                 styles.padding]}>
@@ -1048,14 +1035,7 @@ const App = () => {
                 transparent={true}
             >
                 <Pressable
-                    onPressIn={() => setInputModal(0)} style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        position: 'absolute'
-                    }}
+                    onPressIn={() => setDeleteModal(0)} style={[styles.modalBackground]}
                 />
 
                 <View style={[
@@ -1089,6 +1069,7 @@ const App = () => {
                             }
                             }
                             style={[styles.pill,
+                            styles.centered,
                             styles.wide,
                             styles.padding]}>
                             <Text style={[styles.text]}>Cancel</Text>
@@ -1100,6 +1081,7 @@ const App = () => {
                             }
                             }
                             style={[styles.pill,
+                            styles.centered,
                             styles.pillHighlight,
                             styles.wide,
                             styles.padding]}>
@@ -1115,14 +1097,7 @@ const App = () => {
                     transparent={true}>
                     <Pressable
                         onPressIn={() => setFavouritesModal(0)}
-                        style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            position: 'absolute'
-                        }}
+                        style={[styles.modalBackground]}
                     />
                     <View style={[
                         styles.pill,
@@ -1184,10 +1159,11 @@ const App = () => {
                                                     styles.bigGap,
                                                     styles.wide,
                                                     {
-                                                        paddingVertical: 10
+                                                        paddingVertical: 20
                                                     }
                                                 ]}
                                                 onPressIn={() => {
+                                                    setTabPath(item["path"])
                                                     setFavouritesModal(0)
                                                 }}
                                             >
@@ -1329,105 +1305,76 @@ const App = () => {
                                 bottom: 100,
                                 right: 10,
                                 width: '50%',
-                                flexDirection: 'column',
                                 elevation: 10,
                                 shadowColor: 'black',
                             }
                         ]}
                     >
-                        <View
+                        <Pressable
                             style={[
-                                styles.rowLayout
-                            ]}>
-                            <Pressable
-                                style={[
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    deleteAllTabs()
-                                    setContextMenu(0)
-                                }}
-                            >
-                                <Text style={[styles.text]}>Close all tabs</Text>
-                            </Pressable>
-                        </View>
-                        <View
+                                styles.padding
+                            ]}
+                            onPress={() => {
+                                deleteAllTabs()
+                                setContextMenu(0)
+                            }}
+                        >
+                            <Text style={[styles.text]}>Close all tabs</Text>
+                        </Pressable>
+                        <Pressable
                             style={[
-                                styles.rowLayout
-                            ]}>
-                            <Pressable
-                                style={[
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    deleteCurrTab()
-                                    setContextMenu(0)
-                                }}
-                            >
-                                <Text style={[styles.text]}>Close this tab</Text>
-                            </Pressable>
-                        </View>
-                        <View
+                                styles.padding
+                            ]}
+                            onPress={() => {
+                                deleteCurrTab()
+                                setContextMenu(0)
+                            }}
+                        >
+                            <Text style={[styles.text]}>Close this tab</Text>
+                        </Pressable>
+                        <Pressable
                             style={[
-                                styles.rowLayout
-                            ]}>
-                            <Pressable
-                                style={[
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    deleteOtherTabs()
-                                    setContextMenu(0)
-                                }}
-                            >
-                                <Text style={[styles.text]}>Close other tabs</Text>
-                            </Pressable>
-                        </View>
-                        <Text style={[styles.textDisabled]}>-</Text>
-                        <View
+                                styles.wide,
+                                styles.padding
+                            ]}
+                            onPress={() => {
+                                deleteOtherTabs()
+                                setContextMenu(0)
+                            }}
+                        >
+                            <Text style={[styles.text]}>Close other tabs</Text>
+                        </Pressable>
+                        <Pressable
                             style={[
-                                styles.rowLayout
-                            ]}>
-                            <Pressable
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => {
-                                    buildCache(props.tabData["path"])
-                                    setSelectedItems([])
-                                    setSelectedItem([])
-                                }}
-                            ><Image
-                                    style={[styles.imageIcon]}
-                                    source={require('./assets/refresh.png')} />
-                                <Text style={[styles.text]}>Refresh</Text>
-                            </Pressable>
-                        </View>
-                        <View
+                                styles.rowLayout,
+                                styles.bigGap,
+                                styles.wide,
+                                styles.padding
+                            ]}
+                            onPress={() => {
+                                buildCache(tabs[currTab]["path"])
+                                setSelectedItems([])
+                                setSelectedItem([])
+                            }}
+                        ><Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/refresh.png')} />
+                            <Text style={[styles.text]}>Refresh</Text>
+                        </Pressable>
+                        <Pressable
                             style={[
-                                styles.rowLayout
-                            ]}>
-                            <Pressable
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { setClipBoardModal(1) }}
-                            >
-                                <Image
-                                    style={[styles.imageIcon]}
-                                    source={require('./assets/archive.png')} />
-                                <Text style={[styles.text]}>Clipboard</Text>
-                            </Pressable>
-                        </View>
+                                styles.rowLayout,
+                                styles.bigGap,
+                                styles.wide,
+                                styles.padding
+                            ]}
+                            onPress={() => { setClipBoardModal(1) }}
+                        >
+                            <Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/archive.png')} />
+                            <Text style={[styles.text]}>Clipboard</Text>
+                        </Pressable>
 
                         {/* {selectionFlag ?
                             <View
@@ -1447,24 +1394,32 @@ const App = () => {
                                 </Pressable>
                             </View>
                             : null} */}
-                        <View
+                        <Pressable
                             style={[
-                                styles.rowLayout
-                            ]}>
-                            <Pressable
-                                style={[
-                                    styles.rowLayout,
-                                    styles.bigGap,
-                                    styles.wide,
-                                    styles.padding
-                                ]}
-                                onPress={() => { setContextMenu(0) }}
-                            ><Image
-                                    style={[styles.imageIcon]}
-                                    source={require('./assets/close.png')} />
-                                <Text style={[styles.text]}>Close</Text>
-                            </Pressable>
-                        </View>
+                                styles.rowLayout,
+                                styles.bigGap,
+                                styles.wide,
+                                styles.padding
+                            ]}
+                            onPress={() => { setContextMenu(0) }}
+                        ><Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/about.png')} />
+                            <Text style={[styles.text]}>About</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[
+                                styles.rowLayout,
+                                styles.bigGap,
+                                styles.wide,
+                                styles.padding
+                            ]}
+                            onPress={() => { setContextMenu(0) }}
+                        ><Image
+                                style={[styles.imageIcon]}
+                                source={require('./assets/close.png')} />
+                            <Text style={[styles.text]}>Close</Text>
+                        </Pressable>
                     </View>
                 </View>
                 : null

@@ -3,6 +3,8 @@ sorting
     case insensetive
 
 bootsrtap icons
-central options bar, central copy move flag
 scroll to beginning on tab delete
  minimize media player
+
+ deselect after deletion, move, rename
+ fix share

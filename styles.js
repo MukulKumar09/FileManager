@@ -76,9 +76,11 @@ export default StyleSheet.create({
     pill: {
         backgroundColor: primaryColor,
         borderRadius: 30,
-        alignItems: 'center',
         justifyContent: 'center'
 
+    },
+    centered: {
+        alignItems: 'center'
     },
     pillHighlight: {
         backgroundColor: secondaryColor,
@@ -102,6 +104,14 @@ export default StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         flexDirection: 'column',
+    },
+    modalBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute'
     },
     progressBar: {
         padding: 10,

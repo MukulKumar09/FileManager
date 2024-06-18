@@ -433,7 +433,7 @@ styles.listItem]}>
                                 fontSize: 10,
                                 textDecorationLine: 'underline'
                             }}
-                                onPressIn={() => {
+                                onPress={() => {
                                     setSelectedItems([])
                                     setSelectedItem([])
                                 }}>Deselect All</Text>
@@ -444,7 +444,7 @@ styles.listItem]}>
                                 fontSize: 10,
                                 textDecorationLine: 'underline'
                             }}
-                                onPressIn={() => setSelectedItems(props.filesList)}>Select All</Text>
+                                onPress={() => setSelectedItems(props.filesList)}>Select All</Text>
                         </View>
                     </View>
                     :
