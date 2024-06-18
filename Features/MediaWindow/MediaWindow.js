@@ -1,5 +1,5 @@
 import Animated from 'react-native-reanimated';
-import MediaViewer from "../../MediaViewer";
+import MediaViewer from "../MediaViewer/MediaViewer";
 export default function MediaWindow(props) {
     return (
         <Animated.View

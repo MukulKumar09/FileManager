@@ -1,25 +1,15 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import { Text, Pressable, View, ScrollView, Dimensions, Image, ToastAndroid, Modal, TextInput, ActivityIndicator, Linking } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Text, View, Dimensions, Image, ToastAndroid } from "react-native";
 import RNFS from 'react-native-fs';
-import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
+import { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
-import { zip } from 'react-native-zip-archive'
-import TabButton from "./Common/TabButton/TabButton";
+import { zip } from 'react-native-zip-archive';
 import Window from "./Window";
-import MediaViewer from "./MediaViewer";
-import styles, { backgroundColor, secondaryColor } from "./styles";
-import ProgressModal from "./Modals/ProgressModal/ProgressModal";
-import ClipboardModal from "./Modals/ClipboardModal/ClipboardModal";
-import ItemExists from "./Modals/ItemExistsModal/ItemExistsModal";
-import AboutModal from "./Modals/AboutModal/AboutModal";
-import InputModal from "./Modals/InputModal/InputModal";
-import DeleteModal from "./Modals/DeleteModal/DeleteModal";
-import FavouritesModal from "./Modals/FavouritesModal/FavouritesModal";
-import ContextMenu from "./Features/ContextMenu/ContextMenu";
+import styles from "./styles";
 import ToolBar from "./Features/ToolBar/ToolBar";
 import Tabbar from "./Features/Tabbar/Tabbar";
 import MediaWindow from "./Features/MediaWindow/MediaWindow";
-import ItemExistsModal from "./Modals/ItemExistsModal/ItemExistsModal";
+import Modals from "./Modals/Modals";
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
@@ -73,14 +63,14 @@ const App = () => {
     const [favouriteItems, setFavouriteItems] = useState([])
 
     //modals
-    const [aboutModal, setAboutModal] = useState(0)
-    const [favouritesModal, setFavouritesModal] = useState(0)
-    const [clipBoardModal, setClipBoardModal] = useState(0)
+    const [contextMenu, setContextMenu] = useState(0)
     const [progressModal, setProgressModal] = useState(0)
     const [inputModal, setInputModal] = useState(0)
+    const [itemExistsModal, setItemExistsModal] = useState(0)
+    const [favouritesModal, setFavouritesModal] = useState(0)
+    const [clipBoardModal, setClipBoardModal] = useState(0)
     const [deleteModal, setDeleteModal] = useState(0)
-    const [existsModal, setExistsModal] = useState(0)
-    const [contextMenu, setContextMenu] = useState(0)
+    const [aboutModal, setAboutModal] = useState(0)
 
     //copy move delete
     const deleteRef = useRef("")
@@ -473,7 +463,7 @@ const App = () => {
                 if (await RNFS.exists(dest)) {
 
                     nameNewItem.current = item["name"] //to show item name on decision,rename modal
-                    setExistsModal(1)
+                    setItemExistsModal(1)
 
                     const decision = await new Promise((resolve) => {
                         decisionRef.current = { resolve }
@@ -482,6 +472,7 @@ const App = () => {
                     switch (decision) {
                         case 0: { //skip
                             transferredSize = transferredSize + item["size"]
+                            showToast("Skipped")
                             break
                         }
                         case 1: { //overwrite
@@ -714,68 +705,45 @@ const App = () => {
 
     return (
         <View style={[styles.mainBody]}>
-            {/* {
-                progressModal == 1 &&
-                <ProgressModal />
-            } */}
-            {clipBoardModal ?
-                <ClipboardModal
-                    setClipBoardModal={setClipBoardModal}
-                    setShowPaste={setShowPaste}
-                    Icon={Icon}
-                    setForceRefresh={setForceRefresh}
-                    clipboardItems={clipboardItems.current}
-                    inputRef={inputRef.current}
-                />
-                : null
-            }
-            {existsModal ?
-                <ItemExistsModal
-                    decisionRef={decisionRef.current}
-                    inputRef={inputRef.current}
-                    setExistsModal={setExistsModal}
-                    setInputModal={setInputModal}
-                />
-                : null
-            }
-            {aboutModal ?
-                <AboutModal
-                    setAboutModal={setAboutModal}
-                />
-                : null}
-            {inputModal ?
-                <InputModal
-                    inputModal={inputModal}
-                    setInputModal={setInputModal}
-                    alreadyExists={alreadyExists}
-                    nameNewItem={nameNewItem.current}
-                    cache={mainCache[tabs[currTab]["path"]]}
-                    inputRef={inputRef.current}
-                />
-                : null
-            }
-            {deleteModal ?
-                <DeleteModal
-                    setDeleteModal={setDeleteModal}
-                    clipboardItems={clipboardItems.current}
-                    deleteRef={deleteRef.current}
-                />
-                : null
-            }
-            {favouritesModal ?
-                <FavouritesModal
-                    setFavouritesModal={setFavouritesModal}
-                    setFavouriteItems={setFavouriteItems}
-                    favouriteItems={favouriteItems}
-                    setTabPath={setTabPath}
-                    path={tabs[currTab]["path"]}
-                    showToast={showToast}
-                />
-                : null
-            }
+            {/* <Pressable onPressIn={() => console.log(nameNewItem)}><Text>Show progress</Text></Pressable> */}
+            {
+                aboutModal || favouritesModal || clipBoardModal || progressModal || inputModal || deleteModal || itemExistsModal ?
+                    <Modals
+                        clipboardItems={clipboardItems}
+                        inputRef={inputRef}
+                        decisionRef={decisionRef}
+                        inputModal={inputModal}
+                        alreadyExists={alreadyExists}
+                        deleteRef={deleteRef}
+                        nameNewItem={nameNewItem}
+                        path={tabs[currTab]["path"]}
+                        cache={mainCache[tabs[currTab]["path"]]}
+                        favouriteItems={favouriteItems}
+                        clipBoardModal={clipBoardModal}
+                        itemExistsModal={itemExistsModal}
+                        aboutModal={aboutModal}
+                        deleteModal={deleteModal}
+                        favouritesModal={favouritesModal}
+                        showToast={showToast}
+                        setAlreadyExists={setAlreadyExists}
+                        setClipBoardModal={setClipBoardModal}
+                        setShowPaste={setShowPaste}
+                        Icon={Icon}
+                        setForceRefresh={setForceRefresh}
+                        setItemExistsModal={setItemExistsModal}
+                        setInputModal={setInputModal}
+                        setDeleteModal={setDeleteModal}
+                        setFavouritesModal={setFavouritesModal}
+                        setFavouriteItems={setFavouriteItems}
+                        setAboutModal={setAboutModal}
+                        setProgressModal={setProgressModal}
+                        setTabPath={setTabPath}
+                    />
+                    : null}
             <MediaWindow
                 mediaType={mediaType}
                 height={height}
+                selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
                 setMediaBox={setMediaBox}
                 setMediaType={setMediaType}
@@ -823,26 +791,18 @@ const App = () => {
                     )
                 }
             </View>
-            {contextMenu ?
-                <ContextMenu
-                    setContextMenu={setContextMenu}
-                    deleteAllTabs={deleteAllTabs}
-                    deleteCurrTab={deleteCurrTab}
-                    deleteOtherTabs={deleteOtherTabs}
-                    buildCache={buildCache}
-                    setClipBoardModal={setClipBoardModal}
-                    setAboutModal={setAboutModal}
-
-
-                />
-                : null
-            }
             <ToolBar
+                contextMenu={contextMenu}
                 setFuncId={setFuncId}
                 newItem={newItem}
                 setContextMenu={setContextMenu}
                 setFavouritesModal={setFavouritesModal}
-
+                deleteAllTabs={deleteAllTabs}
+                deleteCurrTab={deleteCurrTab}
+                deleteOtherTabs={deleteOtherTabs}
+                buildCache={buildCache}
+                setClipBoardModal={setClipBoardModal}
+                setAboutModal={setAboutModal}
             />
             <Tabbar
                 tabs={tabs}
@@ -855,7 +815,6 @@ const App = () => {
                 startShifting={startShifting}
                 addNewTab={addNewTab}
             />
-            <Pressable onPressIn={() => console.log(currTabStatic)}><Text>Show progress</Text></Pressable>
         </View>
     );
 };

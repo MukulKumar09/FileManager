@@ -1,3 +1,5 @@
+save maincache, favourites localstorage
+
 sorting
     modified
     case insensetive

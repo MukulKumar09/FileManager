@@ -1,4 +1,6 @@
 import { VirtualizedList } from "react-native";
+import ListItem from "../../Common/ListItem/ListItem";
+
 const FilesList = (props) => {
     return (
         <VirtualizedList
@@ -16,7 +18,17 @@ const FilesList = (props) => {
             maxToRenderPerBatch={5}
             windowSize={5}
             updateCellsBatchingPeriod={100}
-            renderItem={props.renderItem}
+            renderItem={({ item }) =>
+                <ListItem
+                    key={item["path"]}
+                    item={item}
+                    selectedItems={props.selectedItems}
+                    selectedItem={props.selectedItem}
+                    handlePress={props.handlePress}
+                    handleLongPress={props.handleLongPress}
+                    Icon={props.Icon}
+                />
+            }
         />
     )
 }

@@ -8,14 +8,15 @@ export default function ItemExistsModal(props) {
         >
             <Pressable
                 onPressIn={() => {
-                    props.decisionRef.resolve(1);
-                    props.setExistsModal(0)
+                    props.decisionRef.current.resolve(1);
+                    props.setItemExistsModal(0)
                 }}
                 style={[styles.modalBackground]}
             />
             <View style={[
                 styles.pill,
                 styles.modal,
+                styles.bigGap,
                 styles.padding,
                 {
                     backgroundColor: backgroundColor,
@@ -28,7 +29,7 @@ export default function ItemExistsModal(props) {
                 <Text style={[styles.text,
                 styles.headingText]}>Item Exists!</Text>
                 <View style={[styles.divider]} />
-                <Text style={[styles.text]}>{nameNewItem.current} already exists in destination</Text>
+                <Text style={[styles.text]}>{props.nameNewItem.current} already exists in destination.</Text>
                 <View style={[styles.mediumGap, { flexDirection: 'column', marginTop: 30, width: '100%' }]}>
                     <Pressable
                         style={[styles.pill,
@@ -38,10 +39,10 @@ export default function ItemExistsModal(props) {
                         onPressIn={async () => {
                             props.setInputModal("Rename")
                             await new Promise((resolve) => {
-                                props.inputRef = { resolve }
+                                props.inputRef.current = { resolve }
                             })
-                            props.decisionRef.resolve(2);
-                            props.setExistsModal(0)
+                            props.decisionRef.current.resolve(2);
+                            props.setItemExistsModal(0)
                             props.setInputModal(0)
                         }
                         }
@@ -53,8 +54,8 @@ export default function ItemExistsModal(props) {
                         styles.centered,
                         styles.padding]}
                         onPressIn={() => {
-                            props.decisionRef.resolve(0);
-                            props.setExistsModal(0)
+                            props.decisionRef.current.resolve(0);
+                            props.setItemExistsModal(0)
                         }
                         }
                     >
@@ -65,8 +66,8 @@ export default function ItemExistsModal(props) {
                         styles.centered,
                         styles.padding]}
                         onPressIn={() => {
-                            props.decisionRef.resolve(1);
-                            props.setExistsModal(0)
+                            props.decisionRef.current.resolve(1);
+                            props.setItemExistsModal(0)
                         }}
                     >
                         <Text style={[styles.text]}>Overwrite</Text>

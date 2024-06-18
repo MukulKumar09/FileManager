@@ -43,15 +43,15 @@ export default function InputModal(props) {
                     style={[styles.text,
                     styles.wide]}
                     multiline={true}
-                    defaultValue={props.nameNewItem}
+                    defaultValue={props.nameNewItem.current}
                     onChangeText={text => {
                         for (let i = 0; i < props.cache.length; i++) {
                             if (props.cache[i]["name"] == text) {
-                                props.alreadyExists(1)
+                                props.setAlreadyExists(1)
                                 break
                             } else {
-                                props.alreadyExists(0)
-                                props.nameNewItem = text
+                                props.setAlreadyExists(0)
+                                props.nameNewItem.current = text
                             }
                         }
                     }
@@ -62,10 +62,9 @@ export default function InputModal(props) {
             styles.bigGap]}>
                 <Pressable
                     onPressIn={() => {
-                        props.nameNewItem = ""
+                        props.nameNewItem.current = ""
                         props.setInputModal(0)
-                    }
-                    }
+                    }}
                     style={[
                         styles.pill,
                         styles.wide,
@@ -76,7 +75,7 @@ export default function InputModal(props) {
                 <Pressable
                     disabled={props.alreadyExists ? true : false}
                     onPressIn={() => {
-                        props.inputRef.resolve(props.nameNewItem)
+                        props.inputRef.current.resolve(props.nameNewItem.current)
                     }
                     }
                     style={[styles.pill,

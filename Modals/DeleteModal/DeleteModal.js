@@ -12,6 +12,7 @@ export default function DeleteModal(props) {
         <View style={[
             styles.pill,
             styles.modal,
+            styles.bigGap,
             styles.padding,
             {
                 backgroundColor: backgroundColor,
@@ -34,16 +35,15 @@ export default function DeleteModal(props) {
             <Text style={[styles.text,
             styles.textDisabled]}>Following items will be deleted:</Text>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-                {props.clipboardItems.map((item, i) =>
-                    <Text key={i} style={[styles.text,
-                    styles.smallText]}>{item["name"]}</Text>
+                {props.clipboardItems.current.map((item, i) =>
+                    <Text key={i} style={[styles.text]}>{item["name"]}</Text>
                 )}
             </View>
             <View style={[styles.rowLayout,
             styles.bigGap]}>
                 <Pressable
                     onPressIn={() => {
-                        props.deleteRef.resolve(0)
+                        props.deleteRef.current.resolve(0)
                         props.setDeleteModal(0)
                     }
                     }
@@ -54,9 +54,8 @@ export default function DeleteModal(props) {
                     <Text style={[styles.text]}>Cancel</Text>
                 </Pressable>
                 <Pressable
-                    disabled={alreadyExists ? true : false}
                     onPressIn={() => {
-                        props.deleteRef.resolve(1)
+                        props.deleteRef.current.resolve(1)
                     }
                     }
                     style={[styles.pill,
@@ -64,7 +63,7 @@ export default function DeleteModal(props) {
                     styles.pillHighlight,
                     styles.wide,
                     styles.padding]}>
-                    <Text style={[styles.text, alreadyExists ? styles.textDisabled : null]}>Delete</Text>
+                    <Text style={[styles.text]}>Delete</Text>
                 </Pressable>
             </View>
         </View>

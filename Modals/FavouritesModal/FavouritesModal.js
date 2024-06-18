@@ -54,7 +54,7 @@ export default function FavouritesModal(props) {
                 }
             ]}>
                 {Object.keys(props.favouriteItems).length == 0 ?
-                    <Text style={[styles.text]}>No items</Text>
+                    <Text style={[styles.text, styles.textDisabled]}>No items</Text>
                     : props.favouriteItems.map(
                         (item, i) =>
                             <View
@@ -114,7 +114,7 @@ export default function FavouritesModal(props) {
                         "path": favPath
                     }
                     if (props.favouriteItems.find((item) => item.path == favPath) == undefined) {
-                        props.setprops.favouriteItems([...props.favouriteItems, newFavItem])
+                        props.setFavouriteItems([...props.favouriteItems, newFavItem])
                     } else {
                         props.showToast("Item already exists")
                     }
