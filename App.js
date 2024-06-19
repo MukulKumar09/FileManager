@@ -387,32 +387,39 @@ const App = () => {
     const readySet = (type, selectedItems) => { //from source tab
         setFuncId(-1)
         clipboardItems.current = selectedItems
-        if (type in [0, 1]) {
-            operationType.current = type
-            operationSource.current = tabs[currTab]["path"]
-            setShowPaste(1)
-            ToastAndroid.showWithGravity(
-                clipboardItems.current.length + " items " + (type ? "ready to move" : "copied"),
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-            );
-        }
-        if (type == 2) {
-            operationType.current = 2
-            operationDest.current = tabs[currTab]["path"]
-            deleteHandler()
-        }
-        if (type == 3) {
-            setShowPaste(0)
-            operationType.current = 1 //rename is moveItem
-            operationDest.current = tabs[currTab]["path"]
-            nameNewItem.current = clipboardItems.current["name"]
-            renameHandler(clipboardItems.current)
-        }
-        if (type == 4) {
-            operationType.current = 4
-            operationDest.current = tabs[currTab]["path"]
-            zipHandler()
+        switch (type) {
+            case 0:
+            case 1: {
+                operationType.current = type
+                operationSource.current = tabs[currTab]["path"]
+                setShowPaste(1)
+                ToastAndroid.showWithGravity(
+                    clipboardItems.current.length + " items " + (type ? "ready to move" : "copied"),
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER,
+                );
+                break
+            }
+            case 2: {
+                operationType.current = 2
+                operationDest.current = tabs[currTab]["path"]
+                deleteHandler()
+                break
+            }
+            case 3: {
+                setShowPaste(0)
+                operationType.current = 1 //rename is moveItem
+                operationDest.current = tabs[currTab]["path"]
+                nameNewItem.current = clipboardItems.current["name"]
+                renameHandler(clipboardItems.current)
+                break
+            }
+            case 4: {
+                operationType.current = 4
+                operationDest.current = tabs[currTab]["path"]
+                zipHandler()
+                break
+            }
         }
     }
 

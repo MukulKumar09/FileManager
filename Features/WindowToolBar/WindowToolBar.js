@@ -1,53 +1,20 @@
-import { Text, Pressable, View, ScrollView, Image, TextInput } from "react-native";
-import styles, { secondaryColor } from "../../styles";
+import { Text, View } from "react-native";
+import styles from "../../styles";
 import SearchBar from "../SearchBar/SearchBar";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
+import StatusBar from "../StatusBar/StatusBar";
 
 export default function WindowToolBar(props) {
     return (
         <>
             <View>
                 {props.selectionFlag ?
-                    <View style={[
-                        styles.rowLayout,
-                        styles.pill,
-                        styles.paddingCloseBottom, {
-                            justifyContent: 'space-between',
-                            paddingHorizontal: 20,
-                            paddingVertical: 10,
-                        }
-                    ]}>
-                        <Text style={[
-                            styles.text
-                            , {
-                                color: '#979899',
-                                fontSize: 10
-                            }
-                        ]}>
-                            {props.selectedItems.length} items selected</Text>
-                        <View style={[styles.rowLayout, styles.bigGap]}>
-                            <Text style={[
-                                styles.text,
-                                {
-                                    color: '#979899',
-                                    fontSize: 10,
-                                    textDecorationLine: 'underline'
-                                }]}
-                                onPress={() => {
-                                    props.setSelectedItems([])
-                                    props.setSelectedItem([])
-                                }}>Deselect All</Text>
-                            <Text style={[
-                                styles.text,
-                                {
-                                    color: '#979899',
-                                    fontSize: 10,
-                                    textDecorationLine: 'underline'
-                                }
-                            ]}
-                                onPress={() => setSelectedItems(props.filesList)}>Select All</Text>
-                        </View>
-                    </View>
+                    <StatusBar
+                        selectedItems={props.selectedItems}
+                        setSelectedItems={props.setSelectedItems}
+                        setSelectedItem={props.setSelectedItem}
+                        filesList={props.filesList}
+                    />
                     : null
                 }
                 <BreadCrumbs

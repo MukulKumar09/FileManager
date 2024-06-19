@@ -1,6 +1,7 @@
-import { Text, Pressable, View, ScrollView, Image } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 import styles, { secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
+import CircularButton from "../../Common/CircularButton/CircularButton";
 export default function ToolBar(props) {
     return (
         <>
@@ -40,97 +41,47 @@ export default function ToolBar(props) {
                         }
                     ]
                     }>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.padding]}
-                            onPress={() => {
-                                props.setFuncId(0)
-                            }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/copy.png')} />
-                        </Pressable>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.padding]}
-                            onPress={() => {
-                                props.setFuncId(1)
-                            }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/move.png')} />
-                        </Pressable>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.padding]}
-                            onPress={() => {
-                                props.setFuncId(3)
-                            }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/rename.png')} />
-                        </Pressable>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.padding]}
-                            onPress={() => {
-                                props.setFuncId(2)
-                            }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/delete.png')} />
-                        </Pressable>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.text,
-                            styles.padding]}
-                            onPress={() => { props.shareFiles() }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/share.png')} />
-                        </Pressable>
+                        <CircularButton
+                            functionName={() => props.setFuncId(0)}
+                            imageUrl={require('../../assets/copy.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.setFuncId(1)}
+                            imageUrl={require('../../assets/move.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.setFuncId(2)}
+                            imageUrl={require('../../assets/delete.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.setFuncId(3)}
+                            imageUrl={require('../../assets/rename.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.shareFiles()}
+                            imageUrl={require('../../assets/share.png')}
+                        />
                         <Text style={{ color: secondaryColor }}>  |  </Text>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.text,
-                            styles.padding]}
-                            onPress={() => { props.newItem(1) }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/newfile.png')} />
-                        </Pressable>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.text,
-                            styles.padding]}
-                            onPress={() => { props.newItem(0) }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/newfolder.png')} />
-                        </Pressable>
-                        <Pressable
-                            style={[styles.pill,
-                            styles.padding]}
-                            onPress={() => {
-                                props.setFavouritesModal(1)
-                            }}>
-                            <Image
-                                style={[styles.imageIcon]}
-                                source={require('../../assets/favourite.png')} />
-                        </Pressable>
-                        {/* <Pressable
-                        style={[styles.pill,
-                        styles.text,
-                        onPressIn={() => { loadDetails(selectedItems[0]["path"]) }}>
-                        </Pressable> */}
-                        <Pressable
-                            style={[styles.pill,
-                            styles.padding]}
-                            onPress={() => {
-                                props.setContextMenu(1)
-                            }}>
-                            <Image source={require('../../assets/horzmenu.png')} />
-                        </Pressable>
+                        <CircularButton
+                            functionName={() => props.newItem(1)}
+                            imageUrl={require('../../assets/newfile.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.newItem(0)}
+                            imageUrl={require('../../assets/newfolder.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.setFavouritesModal(1)}
+                            imageUrl={require('../../assets/favourite.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.newItem(1)}
+                            imageUrl={require('../../assets/newfile.png')}
+                        />
+                        <CircularButton
+                            functionName={() => props.setContextMenu(1)}
+                            imageUrl={require('../../assets/horzmenu.png')}
+                        />
                     </View>
                 </ScrollView>
             </View>
