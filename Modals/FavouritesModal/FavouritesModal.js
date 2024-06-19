@@ -1,7 +1,12 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
+import { useContext } from "react";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 
 export default function FavouritesModal(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
+
     return (<Modal
         transparent={true}>
         <Pressable

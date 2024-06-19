@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
+import { CombinedReducersContext, CombinedDispatchContext } from "./Context/Context"
 import Share from 'react-native-share';
 import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
@@ -8,6 +9,8 @@ import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
 
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     const [filesList, setFilesList] = useState([])
     const [selectedItem, setSelectedItem] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
@@ -46,27 +49,26 @@ const Window = (props) => {
 
     useEffect(() => {
         if (props.currTab == props.index) {
-            console.log(props.funcId)
-            switch (props.funcId) {
+            switch (state.functionId) {
                 case 0: {//copy
-                    props.readySet(0, selectedItems)
+                    props.StageItems(0, selectedItems)
                     break
                 }
                 case 1: {//move
-                    props.readySet(1, selectedItems)
+                    props.StageItems(1, selectedItems)
                     break
                 }
                 case 2: {//delete
-                    props.readySet(2, selectedItems)
+                    props.StageItems(2, selectedItems)
                     break
                 }
                 case 3: {//rename
-                    props.readySet(3, selectedItem)
+                    props.StageItems(3, selectedItem)
                     break
                 }
             }
         }
-    }, [props.funcId])
+    }, [state.functionId])
 
     const handlePress = (item) => {
         if (selectionFlag) {

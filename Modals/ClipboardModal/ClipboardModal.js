@@ -1,7 +1,12 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
+import { useContext } from "react";
 
 export default function ClipboardModal(props) {
+
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <Modal
             transparent={true}>
@@ -44,7 +49,9 @@ export default function ClipboardModal(props) {
                             textDecorationLine: 'underline'
                         }
                     ]} onPress={() => {
-                        props.clipboardItems.current = []
+                        dispatch({
+                            type: 'CLEARCB'
+                        })
                         props.setShowPaste(0)
                     }}>Clear</Text>
                 </View>
@@ -56,9 +63,9 @@ export default function ClipboardModal(props) {
                         width: '100%',
                     }
                 ]}>
-                    {props.clipboardItems.current.length == 0 ?
+                    {state.clipboardItems.length == 0 ?
                         <Text style={[styles.text, styles.textDisabled]}>No items</Text>
-                        : props.clipboardItems.current.map(
+                        : state.clipboardItems.map(
                             (item, i) =>
                                 <View
                                     key={i}
@@ -79,8 +86,10 @@ export default function ClipboardModal(props) {
                                     </Pressable>
                                     <Pressable
                                         onPressIn={() => {
-                                            props.clipboardItems.current.splice(i, 1)
-                                            props.setForceRefresh(!forceRefresh)
+                                            dispatch({
+                                                type: 'DELETECB',
+                                                payload: item["path"]
+                                            })
                                         }}
                                     >
                                         <Image

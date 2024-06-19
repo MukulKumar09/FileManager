@@ -1,8 +1,12 @@
 import { Text, View, ScrollView } from "react-native";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import CircularButton from "../../Common/CircularButton/CircularButton";
+import { useContext } from "react";
 export default function ToolBar(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <>
             {
@@ -42,19 +46,31 @@ export default function ToolBar(props) {
                     ]
                     }>
                         <CircularButton
-                            functionName={() => props.setFuncId(0)}
+                            functionName={() => dispatch({
+                                type: "FUNCTIONID",
+                                payload: 0
+                            })}
                             imageUrl={require('../../assets/copy.png')}
                         />
                         <CircularButton
-                            functionName={() => props.setFuncId(1)}
+                            functionName={() => dispatch({
+                                type: "FUNCTIONID",
+                                payload: 1
+                            })}
                             imageUrl={require('../../assets/move.png')}
                         />
                         <CircularButton
-                            functionName={() => props.setFuncId(2)}
+                            functionName={() => dispatch({
+                                type: "FUNCTIONID",
+                                payload: 2
+                            })}
                             imageUrl={require('../../assets/delete.png')}
                         />
                         <CircularButton
-                            functionName={() => props.setFuncId(3)}
+                            functionName={() => dispatch({
+                                type: "FUNCTIONID",
+                                payload: 3
+                            })}
                             imageUrl={require('../../assets/rename.png')}
                         />
                         <CircularButton
