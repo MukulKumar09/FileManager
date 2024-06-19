@@ -760,18 +760,20 @@ const App = () => {
 
                         <Window
                             key={index}
+                            currTab={currTab}
+                            tabData={tabs[index]}
+                            filesList={mainCache[tabs[index]["path"]]}
+                            progressModal={progressModal}
+                            funcId={funcId}
                             buildCache={buildCache}
                             breadCrumbsTabName={breadCrumbsTabName}
                             index={index}
                             Icon={Icon}
-                            currTab={currTab}
-                            tabData={tabs[index]}
                             setTabPath={setTabPath}
                             deleteAllTabs={deleteAllTabs}
                             deleteCurrTab={deleteCurrTab}
                             deleteOtherTabs={deleteOtherTabs}
                             addNewTab={addNewTab}
-                            filesList={mainCache[tabs[index]["path"]]}
                             openExternally={openExternally}
                             selectItem={selectItem}
                             setMediaBox={setMediaBox}
@@ -781,8 +783,6 @@ const App = () => {
                             newItem={newItem}
                             setClipBoardModal={setClipBoardModal}
                             setFavouritesModal={setFavouritesModal}
-                            progressModal={progressModal}
-                            funcId={funcId}
                         // ref={(ref) => {
                         //     windowRefs.current[i] = ref
                         // }
@@ -807,10 +807,10 @@ const App = () => {
             <Tabbar
                 tabs={tabs}
                 currTab={currTab}
-                setCurrTab={setCurrTab}
                 currTabStatic={currTabStatic}
                 showPaste={showPaste}
                 width={width}
+                setCurrTab={setCurrTab}
                 deleteCurrTab={deleteCurrTab}
                 startShifting={startShifting}
                 addNewTab={addNewTab}

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Text, TextInput, Pressable, View, Image, ScrollView, Modal, TouchableWithoutFeedback, VirtualizedList } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import Share from 'react-native-share';
-import styles, { backgroundColor, grey, secondaryColor } from "./styles";
+import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
+
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
     const [filesList, setFilesList] = useState([])
@@ -201,14 +202,15 @@ const Window = (props) => {
                 display: props.currTab == props.index ? "flex" : "none"
             }
         }>
-            {sortModal ? <SortModal
-                sortType={sortType}
-                sortOrder={sortOrder}
-                setSortModal={setSortModal}
-                setSortType={setSortType}
-                handleSort={handleSort}
-                setSortOrder={setSortOrder}
-            />
+            {sortModal ?
+                <SortModal
+                    sortType={sortType}
+                    sortOrder={sortOrder}
+                    setSortModal={setSortModal}
+                    setSortType={setSortType}
+                    handleSort={handleSort}
+                    setSortOrder={setSortOrder}
+                />
                 : null
             }
             {

@@ -97,7 +97,7 @@ export default function ContextMenu(props) {
                 <Text style={[styles.text]}>Clipboard</Text>
             </Pressable>
 
-            {/* {selectionFlag ?
+            {/* 
                             <View
                                 style={[
                                     styles.rowLayout
@@ -114,7 +114,7 @@ export default function ContextMenu(props) {
                                     <Text style={[styles.text]}>Archive</Text>
                                 </Pressable>
                             </View>
-                            : null} */}
+                             */}
             <Pressable
                 style={[
                     styles.rowLayout,

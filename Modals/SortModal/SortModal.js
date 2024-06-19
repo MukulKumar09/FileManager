@@ -7,8 +7,12 @@ export default function SortModal(props) {
             transparent={true}
         >
             <Pressable
+                style={
+                    [
+                        styles.modalBackground
+                    ]
+                }
                 onPress={() => props.setSortModal(0)}
-                style={[styles.modalBackground]}
             >
                 <View style={
                     {
@@ -59,8 +63,7 @@ export default function SortModal(props) {
                                 props.sortType == 0 ? styles.pillHighlight : null,
                                 styles.padding]
                         }
-                        onPressIn={() => props.setSortType(0)
-                        }
+                        onPressIn={() => props.setSortType(0)}
                     >
                         <Text style={[styles.text]}> Name </Text>
                     </Pressable>

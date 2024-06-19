@@ -1,3 +1,4 @@
+search bug
 save maincache, favourites localstorage
 
 sorting
