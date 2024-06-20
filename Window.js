@@ -31,9 +31,14 @@ const Window = (props) => {
 
     useEffect(() => { //first
         if (props.filesList == undefined)
-            props.buildCache(props.tabData["path"])
+            props.buildCache(state.tabs[state.currentTab]["path"])
         setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
-    }, [props.tabData["path"]])
+    }, [state.tabs[state.currentTab]["path"]])
+
+    // useEffect(() => {
+    //     if (state.cache[state.tabs[props.index]["path"]] !== undefined)
+    //         handleSort(state.cache[state.tabs[props.index]["path"]])
+    // }, [state.cache[state.tabs[props.index]["path"]]])
 
     useEffect(() => {
         if (props.filesList !== undefined)
@@ -76,6 +81,20 @@ const Window = (props) => {
         }
         else {
             if (item.isDirectory()) {
+                dispatch({
+                    type: "MODIFYTABPATH",
+                    payload: {
+                        tabId: state.currentTab,
+                        value: item["path"]
+                    }
+                })
+                dispatch({
+                    type: "MODIFYTABNAME",
+                    payload: {
+                        tabId: state.currentTab,
+                        value: item["name"]
+                    }
+                })
                 props.setTabPath(item["path"])
             }
             else

@@ -17,6 +17,9 @@ import OperationTypeReducer from "./Reducers/OperationTypeReducer";
 import OperationDestReducer from "./Reducers/OperationDestReducer";
 import OperationSourceReducer from "./Reducers/OperationSourceReducer";
 import FunctionIdReducer from "./Reducers/FunctionIDReducer";
+import CacheReducer from "./Reducers/CacheReducer";
+import CurrentTabReducer from "./Reducers/CurrentTabReducer";
+import TabsReducer from "./Reducers/TabsReducer";
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
@@ -112,6 +115,9 @@ const App = () => {
     const addNewTab = (title, path, type) => {
         if (title == null) {
             if (Object.keys(tabs).length == 0) {
+                dispatch({
+                    type: "RESETTABS"
+                })
                 setTabs(
                     {
                         0: {
@@ -123,6 +129,15 @@ const App = () => {
                 )
             }
             else {
+                dispatch({
+                    type: "DUPLICATETAB",
+                    payload: {
+                        tabKey: tabCounter,
+                        title: state.tabs[state.currentTab]["title"],
+                        path: state.tabs[state.currentTab]["path"],
+                        type: "filebrowser",
+                    }
+                })
                 setTabs({
                     ...tabs,
                     [tabCounter]: {
@@ -132,6 +147,14 @@ const App = () => {
                     }
                 })
                 currTabStatic.current = tabCounter.toString()
+                dispatch({
+                    type: "ADDTOCACHE",
+                    payload: tabCounter.toString(),
+                })
+                dispatch({
+                    type: "SETCURRENTTAB",
+                    payload: tabCounter.toString(),
+                })
                 setCurrTab(currTabStatic.current)
             }
         }
@@ -150,6 +173,9 @@ const App = () => {
         setTabCounter(tabCounter + 1)
     }
     const deleteAllTabs = () => {
+        dispatch({
+            type: "RESETTABS"
+        })
         setTabs(
             {
                 0: {
@@ -160,17 +186,34 @@ const App = () => {
             }
         )
         currTabStatic.current = 0
+        dispatch({
+            type: "SETCURRENTTAB",
+            payload: currTabStatic.current
+        })
         setTabCounter(currTabStatic.current)
         setCurrTab(currTabStatic.current)
     }
 
     const deleteCurrTab = () => {
-        if (Object.keys(tabs).length == 1)
+        if (Object.keys(tabs).length == 1) {
+            dispatch({
+                type: "RESETTABS"
+            })
             deleteAllTabs()
-        else
+        }
+        else {
+            dispatch({
+                type: "DELETETAB",
+                payload: state.currentTab
+            })
             deleteTab()
+        }
     }
     const deleteOtherTabs = () => {
+        dispatch({
+            type: "DELETEOTHERTABS",
+            payload: state.currentTab
+        })
         setTabs(
             {
                 [currTabStatic.current]: tabs[currTab]
@@ -184,17 +227,24 @@ const App = () => {
             setTabs(tempTabs)
         }
 
-        let keys = Object.keys(tabs)
-        let indxCurrTab = keys.indexOf(currTabStatic.current)
-        if (keys[keys.length - 1] == currTabStatic.current) { //last
-            console.log("last", keys, indxCurrTab, currTabStatic.current, indxCurrTab in keys)
+        let keys = Object.keys(state.tabs)
+        let indxCurrTab = keys.indexOf(state.currentTab)
+        if (keys[keys.length - 1] == state.currentTab) { //last
             fire()
             currTabStatic.current = keys[indxCurrTab - 1].toString()
+            dispatch({
+                type: "SETCURRENTTAB",
+                payload: currTabStatic.current
+            })
             setCurrTab(currTabStatic.current)
         }
         else {//mid
             fire()
             currTabStatic.current = keys[indxCurrTab + 1].toString()
+            dispatch({
+                type: "SETCURRENTTAB",
+                payload: currTabStatic.current
+            })
             setCurrTab(currTabStatic.current)
         }
     }
@@ -249,6 +299,13 @@ const App = () => {
             })
             dirListing = []
         }
+        dispatch({
+            type: "ADDTOCACHE",
+            payload: {
+                key: path,
+                value: dirListing
+            }
+        })
         setMainCache({
             ...mainCache,
             [path]: dirListing
@@ -792,6 +849,9 @@ const App = () => {
 
 
     const initialState = {
+        cache: {},
+        tabs: {},
+        currentTab: 0,
         clipboardItems: [],
         operationType: -1,
         operationDest: "",
@@ -799,6 +859,9 @@ const App = () => {
         functionId: -1
     }
     const combineReducers = (state, action) => ({
+        tabs: TabsReducer(state.tabs, action),
+        cache: CacheReducer(state.cache, action),
+        currentTab: CurrentTabReducer(state.currentTab, action),
         clipboardItems: ClipBoardReducer(state.clipboardItems, action),
         operationType: OperationTypeReducer(state.operationType, action),
         operationSource: OperationSourceReducer(state.operationSource, action),
@@ -898,7 +961,6 @@ const App = () => {
                     </View>
                     <ToolBar
                         contextMenu={contextMenu}
-                        setFuncId={setFuncId}
                         newItem={newItem}
                         setContextMenu={setContextMenu}
                         setFavouritesModal={setFavouritesModal}

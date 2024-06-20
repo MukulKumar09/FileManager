@@ -1,7 +1,11 @@
 import { Text, TouchableOpacity, View, Image, } from "react-native";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles from "../../styles";
+import { useContext } from "react";
 
 const TabButton = (props) => {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (<View style={[
         styles.rowLayout,
         styles.pill,
@@ -14,6 +18,10 @@ const TabButton = (props) => {
         <TouchableOpacity
             style={[styles.rowLayout, styles.mediumGap, styles.padding]}
             onPress={() => {
+                dispatch({
+                    type: "SETCURRENTTAB",
+                    payload: props.index
+                })
                 props.setCurrTab(props.index)
                 props.currTabStatic.current = props.index
             }
