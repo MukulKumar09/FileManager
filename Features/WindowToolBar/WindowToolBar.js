@@ -1,5 +1,4 @@
-import { Text, View } from "react-native";
-import styles from "../../styles";
+import { View } from "react-native";
 import SearchBar from "../SearchBar/SearchBar";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import StatusBar from "../StatusBar/StatusBar";

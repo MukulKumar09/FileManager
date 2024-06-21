@@ -1,7 +1,12 @@
 import { Text, Pressable, View, Image } from "react-native";
+import { useContext } from "react";
 import styles from "../../styles";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import CacheHandler from "../../Helpers/CacheHandler";
 
 export default function ContextMenu(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (<View style={{
         position: 'absolute',
         zIndex: 1,
@@ -38,7 +43,9 @@ export default function ContextMenu(props) {
                     styles.padding
                 ]}
                 onPress={() => {
-                    props.deleteAllTabs()
+                    dispatch({
+                        type: "RESETTABS"
+                    })
                     props.setContextMenu(0)
                 }}
             >
@@ -49,7 +56,28 @@ export default function ContextMenu(props) {
                     styles.padding
                 ]}
                 onPress={() => {
-                    props.deleteCurrTab()
+                    let tempTabs = Object.keys(state.tabs)
+                    let tabKey = tempTabs.indexOf(state.currentTab.toString())
+                    let currentTab
+                    if (tempTabs[tabKey + 1]) {
+                        currentTab = tempTabs[tabKey + 1]
+                    } else {
+                        currentTab = tempTabs[tabKey - 1]
+                    }
+                    if (currentTab) {
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: currentTab
+                        })
+                        dispatch({
+                            type: "DELETETAB",
+                            payload: state.currentTab
+                        })
+                    } else {
+                        dispatch({
+                            type: "RESETTABS"
+                        })
+                    }
                     props.setContextMenu(0)
                 }}
             >
@@ -61,7 +89,10 @@ export default function ContextMenu(props) {
                     styles.padding
                 ]}
                 onPress={() => {
-                    props.deleteOtherTabs()
+                    dispatch({
+                        type: "DELETEOTHERTABS",
+                        payload: state.currentTab
+                    })
                     props.setContextMenu(0)
                 }}
             >
@@ -74,13 +105,33 @@ export default function ContextMenu(props) {
                     styles.wide,
                     styles.padding
                 ]}
-                onPress={() => {
-                    props.buildCache(tabs[currTab]["path"])
-                }}
+                onPress={
+                    async () => dispatch({
+                        type: "UPDATECACHE",
+                        payload: {
+                            key: state.tabs[state.currentTab]["path"],
+                            value: await CacheHandler(state.tabs[state.currentTab]["path"])
+                        }
+                    })
+                }
             ><Image
                     style={[styles.imageIcon]}
                     source={require('../../assets/refresh.png')} />
                 <Text style={[styles.text]}>Refresh</Text>
+            </Pressable>
+            <Pressable
+                style={[
+                    styles.rowLayout,
+                    styles.bigGap,
+                    styles.wide,
+                    styles.padding
+                ]}
+                onPress={() => { }}
+            >
+                <Image
+                    style={[styles.imageIcon]}
+                    source={require('../../assets/newtab.png')} />
+                <Text style={[styles.text]}>Open in new tab</Text>
             </Pressable>
             <Pressable
                 style={[

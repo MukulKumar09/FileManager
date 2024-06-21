@@ -20,6 +20,7 @@ import FunctionIdReducer from "./Reducers/FunctionIDReducer";
 import CacheReducer from "./Reducers/CacheReducer";
 import CurrentTabReducer from "./Reducers/CurrentTabReducer";
 import TabsReducer from "./Reducers/TabsReducer";
+import TabCounterReducer from "./Reducers/TabCounterReducer";
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
@@ -29,7 +30,32 @@ const showToast = (message) => {
     )
 }
 const App = () => {
-    console.log("app render")
+
+    const initialState = {
+        cache: {},
+        tabs: {},
+        tabCounter: 0,
+        currentTab: 0,
+        clipboardItems: [],
+        operationType: -1,
+        operationDest: "",
+        operationSource: "",
+        functionId: -1
+    }
+    const combineReducers = (state, action) => ({
+        tabs: TabsReducer(state.tabs, action),
+        tabCounter: TabCounterReducer(state.tabCounter, action),
+        cache: CacheReducer(state.cache, action),
+        currentTab: CurrentTabReducer(state.currentTab, action),
+        clipboardItems: ClipBoardReducer(state.clipboardItems, action),
+        operationType: OperationTypeReducer(state.operationType, action),
+        operationSource: OperationSourceReducer(state.operationSource, action),
+        operationDest: OperationDestReducer(state.operationDest, action),
+        functionId: FunctionIdReducer(state.functionId, action),
+        toast: ToastReducer(state.toast, action)
+    })
+    const [state, dispatch] = useReducer(combineReducers, initialState);
+
     const [favPaths, setFavPaths] = useState([]) //find all mounting points
     const [forceRefresh, setForceRefresh] = useState(0)
 
@@ -55,20 +81,24 @@ const App = () => {
             setFavPaths(tempFavPaths)
         }
         initExtPath()
-        addNewTab(null, null, null)
+        dispatch({
+            type: "RESETTABS"
+        })
     }, [])
     useEffect(() => {
-        setMainCache({ "Home": favPaths })
+        dispatch({
+            type: "UPDATECACHE",
+            payload: {
+                key: "Home",
+                value: favPaths
+            }
+        })
     }, [favPaths])
     const [mainCache, setMainCache] = useState({})
 
     // const windowRefs = useRef([])
 
-    const [currTab, setCurrTab] = useState("0") //to automatically change window display flex
     const currTabStatic = useRef("0") //to set tab path with latest currtab value
-
-    const [tabs, setTabs] = useState({})
-    const [tabCounter, setTabCounter] = useState(0)
 
     const [favouriteItems, setFavouriteItems] = useState([])
 
@@ -108,185 +138,6 @@ const App = () => {
 
     let width = Dimensions.get('window').width
 
-    useEffect(() => {
-        console.log(currTab)
-    }, [currTab])
-
-    const addNewTab = (title, path, type) => {
-        if (title == null) {
-            if (Object.keys(tabs).length == 0) {
-                dispatch({
-                    type: "RESETTABS"
-                })
-                setTabs(
-                    {
-                        0: {
-                            title: "Home",
-                            path: "Home",
-                            type: "filebrowser",
-                        }
-                    }
-                )
-            }
-            else {
-                dispatch({
-                    type: "DUPLICATETAB",
-                    payload: {
-                        tabKey: tabCounter,
-                        title: state.tabs[state.currentTab]["title"],
-                        path: state.tabs[state.currentTab]["path"],
-                        type: "filebrowser",
-                    }
-                })
-                setTabs({
-                    ...tabs,
-                    [tabCounter]: {
-                        title: tabs[currTab]["title"],
-                        path: tabs[currTab]["path"],
-                        type: "filebrowser",
-                    }
-                })
-                currTabStatic.current = tabCounter.toString()
-                dispatch({
-                    type: "ADDTOCACHE",
-                    payload: tabCounter.toString(),
-                })
-                dispatch({
-                    type: "SETCURRENTTAB",
-                    payload: tabCounter.toString(),
-                })
-                setCurrTab(currTabStatic.current)
-            }
-        }
-        else {
-            setTabs({
-                ...tabs,
-                [tabCounter]: {
-                    title: title,
-                    path: path,
-                    type: type,
-                }
-            })
-            currTabStatic.current = tabCounter.toString()
-            setCurrTab(currTabStatic.current)
-        }
-        setTabCounter(tabCounter + 1)
-    }
-    const deleteAllTabs = () => {
-        dispatch({
-            type: "RESETTABS"
-        })
-        setTabs(
-            {
-                0: {
-                    title: "Home",
-                    path: "Home",
-                    type: "filebrowser",
-                }
-            }
-        )
-        currTabStatic.current = 0
-        dispatch({
-            type: "SETCURRENTTAB",
-            payload: currTabStatic.current
-        })
-        setTabCounter(currTabStatic.current)
-        setCurrTab(currTabStatic.current)
-    }
-
-    const deleteCurrTab = () => {
-        if (Object.keys(tabs).length == 1) {
-            dispatch({
-                type: "RESETTABS"
-            })
-            deleteAllTabs()
-        }
-        else {
-            dispatch({
-                type: "DELETETAB",
-                payload: state.currentTab
-            })
-            deleteTab()
-        }
-    }
-    const deleteOtherTabs = () => {
-        dispatch({
-            type: "DELETEOTHERTABS",
-            payload: state.currentTab
-        })
-        setTabs(
-            {
-                [currTabStatic.current]: tabs[currTab]
-            }
-        )
-    }
-    const deleteTab = () => {
-        const fire = () => {
-            let tempTabs = { ...tabs }
-            delete tempTabs[currTabStatic.current]
-            setTabs(tempTabs)
-        }
-
-        let keys = Object.keys(state.tabs)
-        let indxCurrTab = keys.indexOf(state.currentTab)
-        if (keys[keys.length - 1] == state.currentTab) { //last
-            fire()
-            currTabStatic.current = keys[indxCurrTab - 1].toString()
-            dispatch({
-                type: "SETCURRENTTAB",
-                payload: currTabStatic.current
-            })
-            setCurrTab(currTabStatic.current)
-        }
-        else {//mid
-            fire()
-            currTabStatic.current = keys[indxCurrTab + 1].toString()
-            dispatch({
-                type: "SETCURRENTTAB",
-                payload: currTabStatic.current
-            })
-            setCurrTab(currTabStatic.current)
-        }
-    }
-
-    const setTabPath = (path) => {
-        const updateTabDetails = () => {
-            setTabs(tabs => ({
-                ...tabs,
-                [currTabStatic.current]: {
-                    ...tabs[currTabStatic.current],
-                    title: folderName,
-                    path: path
-                }
-            }
-            ))
-        }
-
-        let folderName
-        if (path == null) { //go up
-            path = tabs[currTabStatic.current]["path"]
-            if (favPaths.find((i) => i.path == path)) {
-                path = "Home"
-                folderName = "Home"
-                updateTabDetails()
-                return 1
-            } else {
-                path = path.split("/")
-                folderName = path.pop()
-            }
-        } else { //go inside
-            checkFavPath = favPaths.find((i) => i.path == path)
-            path = path.split("/")
-            if (checkFavPath) {
-                folderName = checkFavPath["name"]
-            } else {
-                folderName = [...path].pop()
-            }
-        }
-        path = path.join("/")
-        updateTabDetails()
-    }
-
     const buildCache = async (path) => {
         let dirListing
         try {
@@ -306,16 +157,12 @@ const App = () => {
                 value: dirListing
             }
         })
-        setMainCache({
-            ...mainCache,
-            [path]: dirListing
-        })
         console.log("build cache")
         return 1
     }
 
     const breadCrumbsTabName = () => {
-        let path = tabs[currTab]["path"]
+        let path = state.tabs[state.currentTab]["path"]
 
         if (path == "Home") {
             return []
@@ -405,7 +252,7 @@ const App = () => {
     }
 
     const newItem = async (type) => {
-        let path = tabs[currTab]["path"]
+        let path = state.tabs[state.currentTab]["path"]
         if (type == 0) {
             setInputModal("Folder")
         } else {
@@ -457,7 +304,7 @@ const App = () => {
         })
         dispatch({
             type: "OPERATIONSOURCE",
-            payload: tabs[currTab]["path"],
+            payload: state.tabs[state.currentTab]["path"],
         })
         switch (type) {
             case 0:
@@ -488,7 +335,7 @@ const App = () => {
                 })
                 dispatch({
                     type: "OPERATIONDEST",
-                    payload: tabs[currTab]["path"],
+                    payload: state.tabs[state.currentTab]["path"],
                 })
                 deleteHandler()
                 break
@@ -501,7 +348,7 @@ const App = () => {
                 })
                 dispatch({
                     type: "OPERATIONDEST",
-                    payload: tabs[currTab]["path"],
+                    payload: state.tabs[state.currentTab]["path"],
                 })
                 nameNewItem.current = state.clipboardItems["name"]
                 renameHandler(state.clipboardItems)
@@ -514,7 +361,7 @@ const App = () => {
                 })
                 dispatch({
                     type: "OPERATIONDEST",
-                    payload: tabs[currTab]["path"],
+                    payload: state.tabs[state.currentTab]["path"],
                 })
                 zipHandler()
                 break
@@ -528,7 +375,7 @@ const App = () => {
         setShowPaste(0)
         dispatch({
             type: "OPERATIONDEST",
-            payload: tabs[currTab]["path"],
+            payload: state.tabs[state.currentTab]["path"],
         })
         let collectedItems = []
         const collectFilesFromFolder = async () => {
@@ -847,30 +694,6 @@ const App = () => {
         }
     }
 
-
-    const initialState = {
-        cache: {},
-        tabs: {},
-        currentTab: 0,
-        clipboardItems: [],
-        operationType: -1,
-        operationDest: "",
-        operationSource: "",
-        functionId: -1
-    }
-    const combineReducers = (state, action) => ({
-        tabs: TabsReducer(state.tabs, action),
-        cache: CacheReducer(state.cache, action),
-        currentTab: CurrentTabReducer(state.currentTab, action),
-        clipboardItems: ClipBoardReducer(state.clipboardItems, action),
-        operationType: OperationTypeReducer(state.operationType, action),
-        operationSource: OperationSourceReducer(state.operationSource, action),
-        operationDest: OperationDestReducer(state.operationDest, action),
-        functionId: FunctionIdReducer(state.functionId, action),
-        toast: ToastReducer(state.toast, action)
-    })
-    const [state, dispatch] = useReducer(combineReducers, initialState);
-
     return (
         <CombinedReducersContext.Provider value={state}>
             <CombinedDispatchContext.Provider value={dispatch}>
@@ -885,8 +708,6 @@ const App = () => {
                                 alreadyExists={alreadyExists}
                                 deleteRef={deleteRef}
                                 nameNewItem={nameNewItem}
-                                path={tabs[currTab]["path"]}
-                                cache={mainCache[tabs[currTab]["path"]]}
                                 favouriteItems={favouriteItems}
                                 clipBoardModal={clipBoardModal}
                                 itemExistsModal={itemExistsModal}
@@ -906,7 +727,6 @@ const App = () => {
                                 setFavouriteItems={setFavouriteItems}
                                 setAboutModal={setAboutModal}
                                 setProgressModal={setProgressModal}
-                                setTabPath={setTabPath}
                             />
                             : null}
                     <MediaWindow
@@ -925,23 +745,14 @@ const App = () => {
                         }
                     >
                         {
-                            Object.keys(tabs).map((index) =>
+                            Object.keys(state.tabs).map((index) =>
 
                                 <Window
                                     key={index}
-                                    currTab={currTab}
-                                    tabData={tabs[index]}
-                                    filesList={mainCache[tabs[index]["path"]]}
-                                    progressModal={progressModal}
-                                    buildCache={buildCache}
-                                    breadCrumbsTabName={breadCrumbsTabName}
                                     index={index}
+                                    progressModal={progressModal}
+                                    breadCrumbsTabName={breadCrumbsTabName}
                                     Icon={Icon}
-                                    setTabPath={setTabPath}
-                                    deleteAllTabs={deleteAllTabs}
-                                    deleteCurrTab={deleteCurrTab}
-                                    deleteOtherTabs={deleteOtherTabs}
-                                    addNewTab={addNewTab}
                                     openExternally={openExternally}
                                     selectItem={selectItem}
                                     setMediaBox={setMediaBox}
@@ -964,23 +775,14 @@ const App = () => {
                         newItem={newItem}
                         setContextMenu={setContextMenu}
                         setFavouritesModal={setFavouritesModal}
-                        deleteAllTabs={deleteAllTabs}
-                        deleteCurrTab={deleteCurrTab}
-                        deleteOtherTabs={deleteOtherTabs}
-                        buildCache={buildCache}
                         setClipBoardModal={setClipBoardModal}
                         setAboutModal={setAboutModal}
                     />
                     <Tabbar
-                        tabs={tabs}
-                        currTab={currTab}
                         currTabStatic={currTabStatic}
                         showPaste={showPaste}
                         width={width}
-                        setCurrTab={setCurrTab}
-                        deleteCurrTab={deleteCurrTab}
                         startShifting={startShifting}
-                        addNewTab={addNewTab}
                     />
                 </View>
                 <Pressable onPress={() => console.log(state)}><Text>SHow all</Text></Pressable>

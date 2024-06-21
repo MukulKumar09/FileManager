@@ -9,7 +9,7 @@ const TabButton = (props) => {
     return (<View style={[
         styles.rowLayout,
         styles.pill,
-        props.index == props.currTab && styles.pillHighlight,
+        props.index == state.currentTab && styles.pillHighlight,
         {
             maxWidth: 200
         }
@@ -22,17 +22,15 @@ const TabButton = (props) => {
                     type: "SETCURRENTTAB",
                     payload: props.index
                 })
-                props.setCurrTab(props.index)
-                props.currTabStatic.current = props.index
             }
             }
         >
             <Image style={{ height: 15, width: 15 }} source={require('../../assets/folder.png')} />
             <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}
-            >{props.tabData["title"]}</Text>
+            >{state.tabs[props.index]["title"]}</Text>
         </TouchableOpacity>
         {
-            props.index == props.currTab ?
+            props.index == state.currentTab ?
                 <TouchableOpacity
                     style={[styles.paddingCloseLeft]}
                     onPress={() => { props.deleteCurrTab() }}>

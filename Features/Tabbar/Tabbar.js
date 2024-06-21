@@ -1,8 +1,12 @@
 import { Text, Pressable, View, ScrollView, Image } from "react-native";
 import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
+import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
+import { useContext } from "react";
 
 export default function Tabbar(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <View style={[styles.rowLayout,
         styles.mediumGap, { paddingTop: 10, justifyContent: 'space-between' }]}>
@@ -15,15 +19,11 @@ export default function Tabbar(props) {
                     styles.mediumGap]}
                 >
                     {
-                        Object.keys(props.tabs).map((index) => {
-                            console.log("button: ", index)
+                        Object.keys(state.tabs).map((index) => {
                             return (
                                 <TabButton
                                     key={index}
-                                    tabData={props.tabs[index]}
                                     index={index}
-                                    currTab={props.currTab}
-                                    setCurrTab={props.setCurrTab}
                                     currTabStatic={props.currTabStatic}
                                     // ref={ref => {
                                     //     buttonRefs.current[i] = ref
@@ -55,7 +55,25 @@ export default function Tabbar(props) {
                         styles.pill,
                         styles.padding
                     ]}
-                    onPressIn={() => { props.addNewTab(null, null, null) }}>
+                    onPressIn={() => {
+                        dispatch({
+                            type: "DUPLICATETAB",
+                            payload: {
+                                tabKey: state.tabCounter,
+                                title: state.tabs[state.currentTab]["title"],
+                                path: state.tabs[state.currentTab]["path"],
+                                type: "filebrowser",
+                            }
+                        })
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: state.tabCounter
+                        })
+                        dispatch({
+                            type: "INCREASETABCOUNTER",
+                        })
+
+                    }}>
                     <Text style={styles.text}>+</Text>
                 </Pressable>
             </>

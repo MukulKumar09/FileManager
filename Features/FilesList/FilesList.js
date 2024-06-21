@@ -1,15 +1,22 @@
 import { VirtualizedList } from "react-native";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useContext } from "react";
 import ListItem from "../../Common/ListItem/ListItem";
+import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
+import CacheHandler from "../../Helpers/CacheHandler";
 
 const FilesList = (props) => {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <VirtualizedList
-            onRefresh={() => {
-                props.buildCache(props.tabData["path"])
-                props.setSelectedItems([])
-                props.setSelectedItem([])
-            }
+            onRefresh={
+                async () => dispatch({
+                    type: "UPDATECACHE",
+                    payload: {
+                        key: state.tabs[state.currentTab]["path"],
+                        value: await CacheHandler(state.tabs[state.currentTab]["path"])
+                    }
+                })
             }
             refreshing={false}
             data={props.finalList}

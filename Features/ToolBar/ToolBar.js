@@ -13,10 +13,6 @@ export default function ToolBar(props) {
                 props.contextMenu ?
                     <ContextMenu
                         setContextMenu={props.setContextMenu}
-                        deleteAllTabs={props.deleteAllTabs}
-                        deleteCurrTab={props.deleteCurrTab}
-                        deleteOtherTabs={props.deleteOtherTabs}
-                        buildCache={props.buildCache}
                         setClipBoardModal={props.setClipBoardModal}
                         setAboutModal={props.setAboutModal}
                     />

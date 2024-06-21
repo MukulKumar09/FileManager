@@ -6,6 +6,7 @@ import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
+import CacheHandler from "./Helpers/CacheHandler";
 
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
@@ -28,22 +29,25 @@ const Window = (props) => {
     //     }
     // }));
 
-
     useEffect(() => { //first
-        if (props.filesList == undefined)
-            props.buildCache(state.tabs[state.currentTab]["path"])
+        if (state.cache[state.tabs[props.index]["path"]] == undefined) {
+            const buildCache = async () => dispatch({
+                type: "UPDATECACHE",
+                payload: {
+                    key: state.tabs[state.currentTab]["path"],
+                    value: await CacheHandler(state.tabs[state.currentTab]["path"])
+                }
+            })
+            buildCache()
+        }
         setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
     }, [state.tabs[state.currentTab]["path"]])
 
-    // useEffect(() => {
-    //     if (state.cache[state.tabs[props.index]["path"]] !== undefined)
-    //         handleSort(state.cache[state.tabs[props.index]["path"]])
-    // }, [state.cache[state.tabs[props.index]["path"]]])
-
     useEffect(() => {
-        if (props.filesList !== undefined)
-            handleSort(props.filesList)
-    }, [props.filesList])
+        console.log("data is:", state.cache[state.tabs[props.index]["path"]])
+        if (state.cache[state.tabs[props.index]["path"]] !== undefined)
+            handleSort(state.cache[state.tabs[props.index]["path"]])
+    }, [state.cache[state.tabs[props.index]["path"]]])
 
     useEffect(() => {
         if (selectedItems.length == 0)
@@ -53,7 +57,7 @@ const Window = (props) => {
     }, [selectedItems])
 
     useEffect(() => {
-        if (props.currTab == props.index) {
+        if (state.currentTab == props.index) {
             switch (state.functionId) {
                 case 0: {//copy
                     props.StageItems(0, selectedItems)
@@ -95,7 +99,6 @@ const Window = (props) => {
                         value: item["name"]
                     }
                 })
-                props.setTabPath(item["path"])
             }
             else
                 props.fileHandler(item), setSelectedItem(item)
@@ -220,7 +223,7 @@ const Window = (props) => {
             {
                 backgroundColor: backgroundColor,
                 height: '100%',
-                display: props.currTab == props.index ? "flex" : "none"
+                display: state.currentTab == props.index ? "flex" : "none"
             }
         }>
             {sortModal ?
@@ -238,8 +241,6 @@ const Window = (props) => {
                 useMemo(() => {
                     return (
                         <FilesList
-                            buildCache={props.buildCache}
-                            tabData={props.tabData}
                             setSelectedItems={setSelectedItems}
                             setSelectedItem={setSelectedItem}
                             finalList={filesList}
@@ -263,8 +264,6 @@ const Window = (props) => {
                 setSortModal={setSortModal}
                 setSearchFlag={setSearchFlag}
                 handleSort={handleSort}
-                setTabPath={props.setTabPath}
-                tabData={props.tabData}
             />
         </View>)
 }

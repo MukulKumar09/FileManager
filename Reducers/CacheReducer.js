@@ -1,8 +1,11 @@
 export default function CacheReducer(state, action) {
-    if (action.type == "ADDTOCACHE")
-        return {
-            ...state,
-            [action.payload.key]: action.payload.value
-        }
-    return state
+    switch (action.type) {
+        case "UPDATECACHE":
+            return {
+                ...state,
+                [action.payload.key]: action.payload.value
+            }
+        default:
+            return state
+    }
 }

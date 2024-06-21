@@ -21,7 +21,6 @@ export default function Modals(props) {
                         alreadyExists={props.alreadyExists}
                         setAlreadyExists={props.setAlreadyExists}
                         nameNewItem={props.nameNewItem}
-                        cache={props.cache}
                         inputRef={props.inputRef}
                     />
                     : null
@@ -46,7 +45,6 @@ export default function Modals(props) {
                         setFavouriteItems={props.setFavouriteItems}
                         favouriteItems={props.favouriteItems}
                         setTabPath={props.setTabPath}
-                        path={props.path}
                         showToast={props.showToast}
                     />
                     : null

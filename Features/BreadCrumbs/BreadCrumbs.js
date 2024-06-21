@@ -1,7 +1,11 @@
 import { View, Image, Pressable, ScrollView, Text } from "react-native";
 import styles, { secondaryColor } from "../../styles";
+import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
+import { useContext } from "react";
 
 export default function BreadCrumbs(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <View style={[
             styles.rowLayout,
@@ -94,7 +98,7 @@ export default function BreadCrumbs(props) {
                 </View>
             </ScrollView>
 
-            {props.tabData["path"] == "Home" ? null :
+            {state.tabs[state.currentTab]["path"] == "Home" ? null :
                 <>
                     <Text style={
                         {

@@ -9,11 +9,6 @@ export default function TabsReducer(state, action) {
                     type: "filebrowser",
                 }
             }
-        case "DELETETAB": {
-            let tempState = { ...state }
-            delete tempState[action.payload]
-            return tempState
-        }
         case 'MODIFYTABNAME': {
             let tempState = { ...state }
             tempState[action.payload.tabId]["title"] = action.payload.value
@@ -33,9 +28,14 @@ export default function TabsReducer(state, action) {
                     type: action.payload.type,
                 }
             }
+        case "DELETETAB": {
+            let tempState = { ...state }
+            delete tempState[action.payload]
+            return tempState
+        }
         case 'DELETEOTHERTABS':
             return {
-                [action.payload.tabId]: state[action.payload.tabId]
+                [action.payload]: state[action.payload]
             }
         case 'RESETTABS':
             return {
