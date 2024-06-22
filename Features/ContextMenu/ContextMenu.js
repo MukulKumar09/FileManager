@@ -2,7 +2,7 @@ import { Text, Pressable, View, Image } from "react-native";
 import { useContext } from "react";
 import styles from "../../styles";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
-import CacheHandler from "../../Helpers/CacheHandler";
+import CacheHandler from "../../Handlers/CacheHandler";
 
 export default function ContextMenu(props) {
     const state = useContext(CombinedReducersContext)
@@ -126,7 +126,12 @@ export default function ContextMenu(props) {
                     styles.wide,
                     styles.padding
                 ]}
-                onPress={() => { }}
+                onPress={() => {
+                    dispatch({
+                        type: "FUNCTIONID",
+                        payload: 4
+                    })
+                }}
             >
                 <Image
                     style={[styles.imageIcon]}

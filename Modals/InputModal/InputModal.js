@@ -1,7 +1,13 @@
 import { Text, Pressable, View, Modal, TextInput } from "react-native";
+import { useContext, useState } from "react";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
 
 export default function InputModal(props) {
+    const [alreadyExists, setAlreadyExists] = useState(0)
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
+    let newName
     return (<Modal
         transparent={true}
         onShow={() => {
@@ -10,7 +16,10 @@ export default function InputModal(props) {
         }}
     >
         <Pressable
-            onPressIn={() => props.setInputModal(0)}
+            onPressIn={() => dispatch({
+                type: "INPUTMODAL",
+                payload: 0
+            })}
             style={[styles.modalBackground]}
         />
 
@@ -29,10 +38,10 @@ export default function InputModal(props) {
         ]}>
             <Text style={[styles.text,
             styles.headingText]}>
-                New {props.inputModal}
+                New Name for {state.inputModal}
             </Text>
             <View style={[styles.divider]} />
-            {props.alreadyExists ? <Text style={[styles.text,
+            {alreadyExists ? <Text style={[styles.text,
             styles.smallText]}>Already exists!</Text> : null}
             <View style={[styles.rowLayout,
             styles.pill,
@@ -43,15 +52,15 @@ export default function InputModal(props) {
                     style={[styles.text,
                     styles.wide]}
                     multiline={true}
-                    defaultValue={props.nameNewItem.current}
+                    defaultValue={state.itemInOperation}
                     onChangeText={text => {
-                        for (let i = 0; i < props.cache.length; i++) {
-                            if (props.cache[i]["name"] == text) {
-                                props.setAlreadyExists(1)
+                        for (let i = 0; i < state.cache[state.tabs[state.currentTab]["path"]].length; i++) {
+                            if (text == state.itemInOperation || state.cache[state.tabs[state.currentTab]["path"]][i]["name"] == text) {
+                                setAlreadyExists(1)
                                 break
                             } else {
-                                props.setAlreadyExists(0)
-                                props.nameNewItem.current = text
+                                setAlreadyExists(0)
+                                newName = text
                             }
                         }
                     }
@@ -62,8 +71,10 @@ export default function InputModal(props) {
             styles.bigGap]}>
                 <Pressable
                     onPressIn={() => {
-                        props.nameNewItem.current = ""
-                        props.setInputModal(0)
+                        dispatch({
+                            type: "INPUTMODAL",
+                            payload: 0
+                        })
                     }}
                     style={[
                         styles.pill,
@@ -73,9 +84,9 @@ export default function InputModal(props) {
                     <Text style={[styles.text]}>Cancel</Text>
                 </Pressable>
                 <Pressable
-                    disabled={props.alreadyExists ? true : false}
+                    disabled={alreadyExists ? true : false}
                     onPressIn={() => {
-                        props.inputRef.current.resolve(props.nameNewItem.current)
+                        state.inputPromiseResolver(newName)
                     }
                     }
                     style={[styles.pill,
@@ -85,7 +96,7 @@ export default function InputModal(props) {
                     styles.padding]}>
                     <Text style={[
                         styles.text,
-                        props.alreadyExists ? styles.textDisabled : null
+                        alreadyExists ? styles.textDisabled : null
                     ]}>Done</Text>
                 </Pressable>
             </View>

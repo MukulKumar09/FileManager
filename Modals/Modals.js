@@ -14,31 +14,6 @@ export default function Modals(props) {
             } */}
             {
                 props.
-                    inputModal ?
-                    <InputModal
-                        inputModal={props.inputModal}
-                        setInputModal={props.setInputModal}
-                        alreadyExists={props.alreadyExists}
-                        setAlreadyExists={props.setAlreadyExists}
-                        nameNewItem={props.nameNewItem}
-                        inputRef={props.inputRef}
-                    />
-                    : null
-            }
-            {
-                props.
-                    itemExistsModal ?
-                    <ItemExistsModal
-                        decisionRef={props.decisionRef}
-                        inputRef={props.inputRef}
-                        setItemExistsModal={props.setItemExistsModal}
-                        setInputModal={props.setInputModal}
-                        nameNewItem={props.nameNewItem}
-                    />
-                    : null
-            }
-            {
-                props.
                     favouritesModal ?
                     <FavouritesModal
                         setFavouritesModal={props.setFavouritesModal}

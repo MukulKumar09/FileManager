@@ -3,6 +3,7 @@ import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
 import { useContext } from "react";
+import PasteHandler from "../../Handlers/PasteHandler";
 
 export default function Tabbar(props) {
     const state = useContext(CombinedReducersContext)
@@ -45,7 +46,15 @@ export default function Tabbar(props) {
                         styles.bordered,
                         styles.padding
                         ]}
-                        onPressIn={() => { props.startShifting() }}>
+                        onPressIn={() => {
+                            dispatch({
+                                type: "OPERATIONDEST",
+                                payload: state.tabs[state.currentTab]["path"]
+                            })
+                            dispatch({
+                                type: "OPERATIONWINDOW"
+                            })
+                        }}>
                         <Image source={require('../../assets/paste.png')} />
                     </Pressable>
                     : null}

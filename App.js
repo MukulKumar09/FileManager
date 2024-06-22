@@ -21,6 +21,22 @@ import CacheReducer from "./Reducers/CacheReducer";
 import CurrentTabReducer from "./Reducers/CurrentTabReducer";
 import TabsReducer from "./Reducers/TabsReducer";
 import TabCounterReducer from "./Reducers/TabCounterReducer";
+import OperationWindow from "./Features/OperationWindow/OperationWindow";
+import OperationWindowReducer from "./Reducers/OperationWindowReducer";
+import InputModal from "./Modals/InputModal/InputModal";
+import ItemExistsModal from "./Modals/ItemExistsModal/ItemExistsModal";
+import InputModalReducer from "./Reducers/InputModalReducer";
+import InputPromiseResolveReducer from "./Reducers/InputPromiseResolveReducer";
+import ItemExistsModalReducer from "./Reducers/ItemExistsModalReducer";
+import ItemExistsDecisionReducer from "./Reducers/ItemExistsDecisionReducer";
+import ItemExistsPromiseResolverReducer from "./Reducers/ItemExistsPromiseResolverReducer";
+import UpdatedNameReducer from "./Reducers/UpdatedNameReducer";
+import ItemInOperationReducer from "./Reducers/ItemInOperationReducer";
+import DeleteModalReducer from "./Reducers/DeleteModalReducer";
+import DeletePromiseResolverReducer from "./Reducers/DeletePromiseResolverReducer";
+import DeleteModal from "./Modals/DeleteModal/DeleteModal";
+import DeleteHandler from "./Handlers/DeleteHandler";
+import SelectedItemReducer from "./Reducers/SelectedItemReducer";
 
 const showToast = (message) => {
     ToastAndroid.showWithGravity(
@@ -37,10 +53,21 @@ const App = () => {
         tabCounter: 0,
         currentTab: 0,
         clipboardItems: [],
+        selectedItem: [],
         operationType: -1,
         operationDest: "",
         operationSource: "",
-        functionId: -1
+        functionId: -1,
+        operationWindow: 0,
+        inputModal: 0,
+        inputPromiseResolver: 0,
+        deleteModal: 0,
+        deletePromiseResolver: 0,
+        itemExistsModal: 0,
+        itemExistsDecision: 0,
+        itemExistsPromiseResolver: 0,
+        updatedName: "",
+        itemInOperation: "",
     }
     const combineReducers = (state, action) => ({
         tabs: TabsReducer(state.tabs, action),
@@ -48,18 +75,58 @@ const App = () => {
         cache: CacheReducer(state.cache, action),
         currentTab: CurrentTabReducer(state.currentTab, action),
         clipboardItems: ClipBoardReducer(state.clipboardItems, action),
+        selectedItem: SelectedItemReducer(state.selectedItem, action),
         operationType: OperationTypeReducer(state.operationType, action),
         operationSource: OperationSourceReducer(state.operationSource, action),
         operationDest: OperationDestReducer(state.operationDest, action),
         functionId: FunctionIdReducer(state.functionId, action),
-        toast: ToastReducer(state.toast, action)
+        toast: ToastReducer(state.toast, action),
+        operationWindow: OperationWindowReducer(state.operationWindow, action),
+        inputModal: InputModalReducer(state.inputModal, action),
+        inputPromiseResolver: InputPromiseResolveReducer(state.inputPromiseResolver, action),
+        deleteModal: DeleteModalReducer(state.deleteModal, action),
+        deletePromiseResolver: DeletePromiseResolverReducer(state.deletePromiseResolver, action),
+        itemExistsModal: ItemExistsModalReducer(state.itemExistsModal, action),
+        itemExistsDecision: ItemExistsDecisionReducer(state.itemExistsDecision, action),
+        itemExistsPromiseResolver: ItemExistsPromiseResolverReducer(state.itemExistsPromiseResolver, action),
+        updatedName: UpdatedNameReducer(state.updatedName, action),
+        itemInOperation: ItemInOperationReducer(state.itemInOperation, action)
     })
     const [state, dispatch] = useReducer(combineReducers, initialState);
 
     const [favPaths, setFavPaths] = useState([]) //find all mounting points
-    const [forceRefresh, setForceRefresh] = useState(0)
 
-    useEffect(() => {
+    // const windowRefs = useRef([])
+
+    const currTabStatic = useRef("0") //to set tab path with latest currtab value
+
+    const [favouriteItems, setFavouriteItems] = useState([])
+
+    //modals
+    const [contextMenu, setContextMenu] = useState(0)
+    const [favouritesModal, setFavouritesModal] = useState(0)
+    const [clipBoardModal, setClipBoardModal] = useState(0)
+    const [deleteModal, setDeleteModal] = useState(0)
+    const [aboutModal, setAboutModal] = useState(0)
+
+    //copy move delete
+    const deleteRef = useRef("")
+    const [showPaste, setShowPaste] = useState(0)
+    const progressWidth = useSharedValue(0);
+    const [progress, setProgress] = useState(0)
+    const height = useSharedValue(0);
+    const animatedWidthStyle = useAnimatedStyle(() => ({
+        width: `${progressWidth.value}%`
+    })
+    )
+    const inputRef = useRef("")
+
+    const [mediaType, setMediaType] = useState(0)
+    const [mediaBox, setMediaBox] = useState(0)
+
+    let width = Dimensions.get('window').width
+
+    useEffect(() => { //first find all mounting points
         console.log("ran mount init")
         let tempFavPaths = []
         const initExtPath = async () => {
@@ -84,7 +151,11 @@ const App = () => {
         dispatch({
             type: "RESETTABS"
         })
+        dispatch({
+            type: "INCREASETABCOUNTER",
+        })
     }, [])
+
     useEffect(() => {
         dispatch({
             type: "UPDATECACHE",
@@ -94,49 +165,36 @@ const App = () => {
             }
         })
     }, [favPaths])
-    const [mainCache, setMainCache] = useState({})
 
-    // const windowRefs = useRef([])
+    useEffect(() => {
+        if (mediaBox == 0) {
+            height.value =
+                withTiming(0, {
+                    duration: 730,
+                    easing: Easing.out(Easing.exp),
+                    reduceMotion: ReduceMotion.System,
+                }
+                )
+            setMediaType(0)
+        } else {
+            height.value =
+                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
+                    duration: 730,
+                    easing: Easing.out(Easing.exp),
+                    reduceMotion: ReduceMotion.System,
+                })
+        }
+    }, [mediaBox]);
 
-    const currTabStatic = useRef("0") //to set tab path with latest currtab value
-
-    const [favouriteItems, setFavouriteItems] = useState([])
-
-    //modals
-    const [contextMenu, setContextMenu] = useState(0)
-    const [progressModal, setProgressModal] = useState(0)
-    const [inputModal, setInputModal] = useState(0)
-    const [itemExistsModal, setItemExistsModal] = useState(0)
-    const [favouritesModal, setFavouritesModal] = useState(0)
-    const [clipBoardModal, setClipBoardModal] = useState(0)
-    const [deleteModal, setDeleteModal] = useState(0)
-    const [aboutModal, setAboutModal] = useState(0)
-
-    //copy move delete
-    const deleteRef = useRef("")
-    const [breakOperation, setBreakOperation] = useState(0)
-    const [showPaste, setShowPaste] = useState(0)
-    const progressWidth = useSharedValue(0);
-    const [progress, setProgress] = useState(0)
-    const height = useSharedValue(0);
-    const animatedWidthStyle = useAnimatedStyle(() => ({
-        width: `${progressWidth.value}%`
-    })
-    )
-    const [alreadyExists, setAlreadyExists] = useState(0)
-    const inputRef = useRef("")
-
-    const failedItems = useRef([])
-    const [selectedItem, setSelectedItem] = useState([]) //for media
-    const decisionRef = useRef("")
-
-    const [mediaType, setMediaType] = useState(0)
-    const [mediaBox, setMediaBox] = useState(0)
-
-    const nameNewItem = useRef("")
-
-
-    let width = Dimensions.get('window').width
+    useEffect(() => {
+        progressWidth.value =
+            withTiming(progress, {
+                duration: 730,
+                easing: Easing.out(Easing.exp),
+                reduceMotion: ReduceMotion.System,
+            }
+            )
+    }, [progress])
 
     const buildCache = async (path) => {
         let dirListing
@@ -190,39 +248,7 @@ const App = () => {
         }
     }
 
-    useEffect(() => {
-        if (mediaBox == 0) {
-            height.value =
-                withTiming(0, {
-                    duration: 730,
-                    easing: Easing.out(Easing.exp),
-                    reduceMotion: ReduceMotion.System,
-                }
-                )
-            setMediaType(0)
-        } else {
-            height.value =
-                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
-                    duration: 730,
-                    easing: Easing.out(Easing.exp),
-                    reduceMotion: ReduceMotion.System,
-                })
-        }
-    }, [mediaBox]);
-
-    useEffect(() => {
-        progressWidth.value =
-            withTiming(progress, {
-                duration: 730,
-                easing: Easing.out(Easing.exp),
-                reduceMotion: ReduceMotion.System,
-            }
-            )
-    }, [progress])
-
-
     const fileHandler = (item) => {
-        setSelectedItem(item)
         const parts = item.name.split(".")
         const ext = parts[parts.length - 1]
         if (["jpeg", "png", "jpg", "gif"].includes(ext.toLowerCase())) {
@@ -281,23 +307,8 @@ const App = () => {
         }
     }
 
-    const selectItem = (selectedItems, item) => {
-
-        if (selectedItems.includes(item)) {//deselect
-            selectedItems = selectedItems.filter((i) => i.path !== item.path)
-            if (selectedItems.length == 0)
-                return []//indi
-        } else {
-            selectedItems.push(item)
-        }
-        return selectedItems
-    }
-
     const StageItems = (type, selectedItems) => { //from source tab
-        dispatch({
-            type: "FUNCTIONID",
-            payload: -1
-        })
+        console.log(selectedItems)
         dispatch({
             type: 'COPYTOCB',
             payload: selectedItems
@@ -308,7 +319,7 @@ const App = () => {
         })
         switch (type) {
             case 0:
-            case 1: {
+            case 1: { //copy,move
                 dispatch({
                     type: "OPERATIONTYPE",
                     payload: type,
@@ -328,33 +339,139 @@ const App = () => {
                 }
                 break
             }
-            case 2: {
+            case 2: { //delete
                 dispatch({
                     type: "OPERATIONTYPE",
                     payload: type,
                 })
                 dispatch({
-                    type: "OPERATIONDEST",
+                    type: "OPERATIONSOURCE",
                     payload: state.tabs[state.currentTab]["path"],
                 })
-                deleteHandler()
+                dispatch({
+                    type: "DELETEMODAL"
+                })
+                const deleteAsync = async () => {
+                    let deleteDecision = await new Promise((resolve) => {
+                        dispatch({
+                            type: "DELETEPROMISERESOLVER",
+                            payload: resolve
+                        })
+                    })
+                    if (deleteDecision) {
+                        for (item of state.clipboardItems) {
+                            await DeleteHandler(item["path"])
+                        }
+                        dispatch({
+                            type: "DELETEMODAL"
+                        })
+                    } else {
+                        dispatch({
+                            type: "DELETEMODAL"
+                        })
+                    }
+                }
+                deleteAsync()
                 break
             }
-            case 3: {
-                setShowPaste(0)
+            case 3: { //rename
                 dispatch({
                     type: "OPERATIONTYPE",
                     payload: 1,
                 })
                 dispatch({
-                    type: "OPERATIONDEST",
-                    payload: state.tabs[state.currentTab]["path"],
+                    type: "ITEMINOPERATION",
+                    payload: selectedItems["name"],
                 })
-                nameNewItem.current = state.clipboardItems["name"]
-                renameHandler(state.clipboardItems)
+                const renameAsync = async () => {
+                    let updatedName
+                    dispatch({
+                        type: "INPUTMODAL",
+                        payload: "Item"
+                    })
+                    updatedName = await new Promise((resolve) => {
+                        dispatch({
+                            type: "INPUTPROMISERESOLVER",
+                            payload: resolve
+                        })
+                    })
+                    await MoveHandler(item["path"], updatedName)
+                }
+                renameAsync()
                 break
             }
-            case 4: {
+            case 4: { //open selecteditem in newtab
+                console.log("is it: ", selectedItems)
+                if (selectedItems.length == 0) {
+                    dispatch({
+                        type: "TOAST",
+                        payload: "No folder selected"
+                    })
+                } else {
+                    dispatch({
+                        type: "DUPLICATETAB",
+                        payload: {
+                            tabKey: state.tabCounter,
+                            title: selectedItems["name"],
+                            path: selectedItems["path"],
+                            type: "filebrowser",
+                        }
+                    })
+                    dispatch({
+                        type: "SETCURRENTTAB",
+                        payload: state.tabCounter
+                    })
+                    dispatch({
+                        type: "INCREASETABCOUNTER",
+                    })
+                }
+                break
+            }
+            case 5: { //new folder
+                dispatch({
+                    type: "ITEMINOPERATION",
+                    payload: "",
+                })
+                const newFolderAsync = async () => {
+                    let updatedName
+                    dispatch({
+                        type: "INPUTMODAL",
+                        payload: "Folder"
+                    })
+                    updatedName = await new Promise((resolve) => {
+                        dispatch({
+                            type: "INPUTPROMISERESOLVER",
+                            payload: resolve
+                        })
+                    })
+                    // await MoveHandler(item["path"], updatedName)
+                }
+                newFolderAsync()
+                break
+            }
+            case 6: { //new folder
+                dispatch({
+                    type: "ITEMINOPERATION",
+                    payload: "",
+                })
+                const newFileAsync = async () => {
+                    let updatedName
+                    dispatch({
+                        type: "INPUTMODAL",
+                        payload: "File"
+                    })
+                    updatedName = await new Promise((resolve) => {
+                        dispatch({
+                            type: "INPUTPROMISERESOLVER",
+                            payload: resolve
+                        })
+                    })
+                    // await MoveHandler(item["path"], updatedName)
+                }
+                newFileAsync()
+                break
+            }
+            case 7: {
                 dispatch({
                     type: "OPERATIONTYPE",
                     payload: type,
@@ -367,275 +484,10 @@ const App = () => {
                 break
             }
         }
-    }
-
-
-
-    const startShifting = async () => {
-        setShowPaste(0)
         dispatch({
-            type: "OPERATIONDEST",
-            payload: state.tabs[state.currentTab]["path"],
+            type: "FUNCTIONID",
+            payload: -1
         })
-        let collectedItems = []
-        const collectFilesFromFolder = async () => {
-            for (let i = 0; i < state.clipboardItems.length; i++) {
-                let item = state.clipboardItems[i]
-                if (item.isDirectory()) {
-                    if (state.operationDest.includes(item["path"])) {
-                        dispatch({
-                            type: "TOAST",
-                            payload: "Skipping Source Folder"
-                        })
-                    } else {
-                        const collectFromDir = async (checkItem) => {
-                            let dirContents = await RNFS.readDir(checkItem["path"])
-                            for (const dirItem of dirContents) {
-                                if (dirItem.isDirectory()) {
-                                    await collectFromDir(dirItem)
-                                } else {
-                                    collectedItems.push(dirItem)
-                                }
-                            }
-                        }
-                        await collectFromDir(item)
-                    }
-                } else {
-                    collectedItems.push(item)
-                }
-            }
-        }
-        await collectFilesFromFolder()
-        const totalFiles = collectedItems.length
-        let totalSize = 0
-        collectedItems.forEach(item => {
-            totalSize = totalSize + item["size"]
-        })
-        //return (collectedItems, totalFiles, totalSize)
-
-        setProgressModal(1)
-        let transferredSize = 0
-        for (const item of collectedItems) {
-            if (breakOperation == 1) { break }
-            else {
-                setProgress((transferredSize / totalSize) * 100)
-                let dest = state.operationDest + "/" + item["name"]
-
-                if (await RNFS.exists(dest)) {
-
-                    nameNewItem.current = item["name"] //to show item name on decision,rename modal
-                    setItemExistsModal(1)
-
-                    const decision = await new Promise((resolve) => {
-                        decisionRef.current = { resolve }
-                    })
-
-                    switch (decision) {
-                        case 0: { //skip
-                            transferredSize = transferredSize + item["size"]
-                            dispatch({
-                                type: "TOAST",
-                                payload: "Skipped"
-                            })
-                            break
-                        }
-                        case 1: { //overwrite
-                            myInterval = setInterval(async () => {
-                                let size = await RNFS.stat(dest)
-                                setProgress(((transferredSize + size["size"]) / totalSize) * 100)
-                            }, 2000);
-
-                            if (state.operationType == 0)
-                                await copyHandler(item["path"], dest)
-                            else
-                                await moveHandler(item["path"], dest)
-
-                            transferredSize = transferredSize + item["size"]
-                            break
-                        }
-                        case 2: { //rename
-                            dest = state.operationDest + "/" + nameNewItem.current
-
-                            myInterval = setInterval(async () => {
-                                let size = await RNFS.stat(dest)
-                                setProgress(((transferredSize + size["size"]) / totalSize) * 100)
-                            }, 2000);
-
-                            if (state.operationType == 0)
-                                await copyHandler(item["path"], dest)
-                            else
-                                await moveHandler(item["path"], dest)
-
-                            transferredSize = transferredSize + item["size"]
-                        }
-                    }
-                } else { //if not exists
-                    myInterval = setInterval(async () => {
-                        let size = await RNFS.stat(dest)
-                        setProgress(((transferredSize + size["size"]) / totalSize) * 100)
-                    }, 2000);
-
-                    if (state.operationType == 0)
-                        await copyHandler(item["path"], dest)
-                    else
-                        await moveHandler(item["path"], dest)
-
-                    transferredSize = transferredSize + item["size"]
-
-                }
-                clearInterval(myInterval);
-            }
-        }
-        let messageType = state.operationType == 1 ? "Move" : "Copy"
-
-        if (state.operationType == 1) {//if move, reload both source and dest
-            let srcPath = state.clipboardItems[0]["path"].split("/")
-            srcPath.pop()
-            srcPath = srcPath.join("/")
-
-            let srcListing
-            try {
-                srcListing = await RNFS.readDir(srcPath)
-            } catch (e) {
-                console.log(e)
-                dispatch({
-                    type: "TOAST",
-                    payload: "Error loading folder"
-                })
-                srcListing = []
-            }
-
-            let destListing
-            try {
-                destListing = await RNFS.readDir(state.operationDest)
-            } catch (e) {
-                console.log(e)
-                dispatch({
-                    type: "TOAST",
-                    payload: "Error loading folder"
-                })
-                destListing = []
-            }
-
-            setMainCache({
-                ...mainCache,
-                [srcPath]: srcListing,
-                [state.operationDest]: destListing
-            })
-
-        } else { //else only dest
-            await buildCache(state.operationDest)
-        }
-
-        if (breakOperation == 1) {
-            dispatch({
-                type: "TOAST",
-                payload: messageType + " cancelled."
-            })
-        } else {
-            let message = messageType + " successful."
-            if (failedItems.current.length)
-                message = failedItems.current.length + "failed to " + messageType
-            dispatch({
-                type: "TOAST",
-                payload: message
-            })
-        }
-
-        //reset values
-        nameNewItem.current = ""
-        setProgress(0)
-        setProgressModal(0)
-        failedItems.current = []
-        dispatch({
-            type: "OPERATIONTYPE",
-            payload: -1,
-        })
-        setBreakOperation(0)
-    }
-
-    const copyHandler = async (item, dest) => {
-        try {
-            await RNFS.copyFile(item, dest)
-        } catch (error) {
-            console.log(error)
-            dispatch({
-                type: "TOAST",
-                payload: "Error occured. Check logs."
-            })
-            failedItems.current.push(item)
-        }
-    }
-
-    const moveHandler = async (item, dest) => {
-        try {
-            await RNFS.moveFile(item, dest)
-        } catch (error) {
-            console.log(error)
-            dispatch({
-                type: "TOAST",
-                payload: "Error occured. Check logs."
-            })
-            failedItems.current.push(item)
-        }
-    }
-
-    const deleteHandler = async () => {
-        setDeleteModal(1)
-        const decision = await new Promise((resolve) => {
-            deleteRef.current = { resolve }
-        })
-        if (decision) {
-            setProgress(0)
-            setProgressModal(1)
-            for (let i = 0; i < state.clipboardItems.length; i++) {
-                if (breakOperation == 1) {
-                    break
-                } else {
-                    let item = state.clipboardItems[i]
-                    try {
-                        await RNFS.unlink(item["path"])
-                    } catch (err) {
-                        console.log(err)
-                        failedItems.current.push(item)
-                    }
-                    setProgress(((i + 1) / state.clipboardItems.length) * 100)
-                }
-            }
-
-            setProgressModal(0)
-            setProgress(0)
-            if (breakOperation == 1) {
-                dispatch({
-                    type: "TOAST",
-                    payload: "Deletion cancelled."
-                })
-            } else {
-                let message = "Item(s) deleted."
-                if (failedItems.current.length)
-                    message = failedItems.current.length + "item(s) failed to delete"
-                dispatch({
-                    type: "TOAST",
-                    payload: message
-                })
-            }
-
-            failedItems.current = []
-            state.clipboardItems = []
-            await buildCache(state.operationDest)
-            setDeleteModal(0)
-            setBreakOperation(0)
-        }
-    }
-
-    const renameHandler = async (item) => {
-        setInputModal("Rename")
-        const value = await new Promise((resolve) => {
-            inputRef.current = { resolve }
-        })
-        setInputModal(0)
-        await moveHandler(item["path"], state.operationDest + "/" + value)
-        await buildCache(state.operationDest)
     }
 
     const zipHandler = async () => {
@@ -699,41 +551,39 @@ const App = () => {
             <CombinedDispatchContext.Provider value={dispatch}>
                 <View style={[styles.mainBody]}>
                     {/* <Pressable onPressIn={() => console.log(nameNewItem)}><Text>Show progress</Text></Pressable> */}
+                    {state.operationWindow ?
+                        <OperationWindow />
+                        : null}
+                    {state.itemExistsModal ?
+                        <ItemExistsModal />
+                        : null}
+                    {state.inputModal ?
+                        <InputModal />
+                        : null}
+                    {state.deleteModal ?
+                        <DeleteModal />
+                        : null}
+
                     {
-                        aboutModal || favouritesModal || clipBoardModal || progressModal || inputModal || deleteModal || itemExistsModal ?
+                        aboutModal || favouritesModal || clipBoardModal || deleteModal ?
                             <Modals
-                                inputRef={inputRef}
-                                decisionRef={decisionRef}
-                                inputModal={inputModal}
-                                alreadyExists={alreadyExists}
-                                deleteRef={deleteRef}
-                                nameNewItem={nameNewItem}
                                 favouriteItems={favouriteItems}
                                 clipBoardModal={clipBoardModal}
-                                itemExistsModal={itemExistsModal}
                                 aboutModal={aboutModal}
                                 deleteModal={deleteModal}
                                 favouritesModal={favouritesModal}
                                 showToast={showToast}
-                                setAlreadyExists={setAlreadyExists}
                                 setClipBoardModal={setClipBoardModal}
-                                setShowPaste={setShowPaste}
                                 Icon={Icon}
-                                setForceRefresh={setForceRefresh}
-                                setItemExistsModal={setItemExistsModal}
-                                setInputModal={setInputModal}
                                 setDeleteModal={setDeleteModal}
                                 setFavouritesModal={setFavouritesModal}
                                 setFavouriteItems={setFavouriteItems}
                                 setAboutModal={setAboutModal}
-                                setProgressModal={setProgressModal}
                             />
                             : null}
                     <MediaWindow
                         mediaType={mediaType}
                         height={height}
-                        selectedItem={selectedItem}
-                        setSelectedItem={setSelectedItem}
                         setMediaBox={setMediaBox}
                         setMediaType={setMediaType}
                     />
@@ -750,11 +600,9 @@ const App = () => {
                                 <Window
                                     key={index}
                                     index={index}
-                                    progressModal={progressModal}
                                     breadCrumbsTabName={breadCrumbsTabName}
                                     Icon={Icon}
                                     openExternally={openExternally}
-                                    selectItem={selectItem}
                                     setMediaBox={setMediaBox}
                                     setMediaType={setMediaType}
                                     fileHandler={fileHandler}
@@ -773,6 +621,7 @@ const App = () => {
                     <ToolBar
                         contextMenu={contextMenu}
                         newItem={newItem}
+                        setShowPaste={setShowPaste}
                         setContextMenu={setContextMenu}
                         setFavouritesModal={setFavouritesModal}
                         setClipBoardModal={setClipBoardModal}
@@ -782,10 +631,11 @@ const App = () => {
                         currTabStatic={currTabStatic}
                         showPaste={showPaste}
                         width={width}
-                        startShifting={startShifting}
                     />
                 </View>
-                <Pressable onPress={() => console.log(state)}><Text>SHow all</Text></Pressable>
+                <Pressable onPress={() => console.log(
+                    state.tabs
+                )}><Text>SHow all</Text></Pressable>
             </CombinedDispatchContext.Provider>
         </CombinedReducersContext.Provider>
     );

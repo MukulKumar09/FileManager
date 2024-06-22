@@ -1,15 +1,18 @@
 import { Text, Pressable, View, Modal } from "react-native";
+import { useContext } from "react";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
 
-export default function ItemExistsModal(props) {
+export default function ItemExistsModal() {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <Modal
             transparent={true}
         >
             <Pressable
                 onPressIn={() => {
-                    props.decisionRef.current.resolve(1);
-                    props.setItemExistsModal(0)
+                    state.itemExistsPromiseResolver(0)
                 }}
                 style={[styles.modalBackground]}
             />
@@ -29,7 +32,7 @@ export default function ItemExistsModal(props) {
                 <Text style={[styles.text,
                 styles.headingText]}>Item Exists!</Text>
                 <View style={[styles.divider]} />
-                <Text style={[styles.text]}>{props.nameNewItem.current} already exists in destination.</Text>
+                <Text style={[styles.text]}>{state.itemInOperation} already exists in destination.</Text>
                 <View style={[styles.mediumGap, { flexDirection: 'column', marginTop: 30, width: '100%' }]}>
                     <Pressable
                         style={[styles.pill,
@@ -37,13 +40,25 @@ export default function ItemExistsModal(props) {
                         styles.pillHighlight,
                         styles.padding]}
                         onPressIn={async () => {
-                            props.setInputModal("Rename")
-                            await new Promise((resolve) => {
-                                props.inputRef.current = { resolve }
+                            let updatedName
+                            dispatch({
+                                type: "INPUTMODAL",
+                                payload: "Existing Item"
                             })
-                            props.decisionRef.current.resolve(2);
-                            props.setItemExistsModal(0)
-                            props.setInputModal(0)
+                            updatedName = await new Promise((resolve) => {
+                                dispatch({
+                                    type: "INPUTPROMISERESOLVER",
+                                    payload: resolve
+                                })
+                            })
+                            dispatch({
+                                type: "INPUTMODAL",
+                                payload: 0
+                            })
+                            dispatch({
+                                type: "ITEMEXISTSMODAL"
+                            })
+                            state.itemExistsPromiseResolver(updatedName)
                         }
                         }
                     >
@@ -54,8 +69,7 @@ export default function ItemExistsModal(props) {
                         styles.centered,
                         styles.padding]}
                         onPressIn={() => {
-                            props.decisionRef.current.resolve(0);
-                            props.setItemExistsModal(0)
+                            state.itemExistsPromiseResolver(0)
                         }
                         }
                     >
@@ -66,8 +80,7 @@ export default function ItemExistsModal(props) {
                         styles.centered,
                         styles.padding]}
                         onPressIn={() => {
-                            props.decisionRef.current.resolve(1);
-                            props.setItemExistsModal(0)
+                            state.itemExistsPromiseResolver(1)
                         }}
                     >
                         <Text style={[styles.text]}>Overwrite</Text>

@@ -6,7 +6,7 @@ import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
-import CacheHandler from "./Helpers/CacheHandler";
+import CacheHandler from "./Handlers/CacheHandler";
 
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
@@ -57,26 +57,8 @@ const Window = (props) => {
     }, [selectedItems])
 
     useEffect(() => {
-        if (state.currentTab == props.index) {
-            switch (state.functionId) {
-                case 0: {//copy
-                    props.StageItems(0, selectedItems)
-                    break
-                }
-                case 1: {//move
-                    props.StageItems(1, selectedItems)
-                    break
-                }
-                case 2: {//delete
-                    props.StageItems(2, selectedItems)
-                    break
-                }
-                case 3: {//rename
-                    props.StageItems(3, selectedItem)
-                    break
-                }
-            }
-        }
+        if (state.currentTab == props.index && state.functionId > -1)
+            props.StageItems(state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
     }, [state.functionId])
 
     const handlePress = (item) => {
@@ -177,8 +159,6 @@ const Window = (props) => {
         props.setMediaType(0)
         props.setMediaBox(0)
         setSelectedItem(item)
-        let res = props.selectItem([...selectedItems], item)
-        setSelectedItems(res)
     }
 
     const rangeSelect = (item) => {

@@ -1,12 +1,16 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
+import { useContext } from "react";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
 
 export default function DeleteModal(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (<Modal
         transparent={true}
     >
         <Pressable
-            onPressIn={() => props.setDeleteModal(0)} style={[styles.modalBackground]}
+            onPressIn={() => state.deletePromiseResolver(0)} style={[styles.modalBackground]}
         />
 
         <View style={[
@@ -35,7 +39,7 @@ export default function DeleteModal(props) {
             <Text style={[styles.text,
             styles.textDisabled]}>Following items will be deleted:</Text>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-                {props.clipboardItems.current.map((item, i) =>
+                {state.clipboardItems.map((item, i) =>
                     <Text key={i} style={[styles.text]}>{item["name"]}</Text>
                 )}
             </View>
@@ -43,8 +47,7 @@ export default function DeleteModal(props) {
             styles.bigGap]}>
                 <Pressable
                     onPressIn={() => {
-                        props.deleteRef.current.resolve(0)
-                        props.setDeleteModal(0)
+                        state.deletePromiseResolver(0)
                     }
                     }
                     style={[styles.pill,
@@ -55,7 +58,7 @@ export default function DeleteModal(props) {
                 </Pressable>
                 <Pressable
                     onPressIn={() => {
-                        props.deleteRef.current.resolve(1)
+                        state.deletePromiseResolver(1)
                     }
                     }
                     style={[styles.pill,

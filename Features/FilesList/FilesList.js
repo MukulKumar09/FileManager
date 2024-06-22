@@ -2,7 +2,7 @@ import { VirtualizedList } from "react-native";
 import { useContext } from "react";
 import ListItem from "../../Common/ListItem/ListItem";
 import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
-import CacheHandler from "../../Helpers/CacheHandler";
+import CacheHandler from "../../Handlers/CacheHandler";
 
 const FilesList = (props) => {
     const state = useContext(CombinedReducersContext)

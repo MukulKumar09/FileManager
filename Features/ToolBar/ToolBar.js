@@ -1,9 +1,9 @@
 import { Text, View, ScrollView } from "react-native";
+import { useContext } from "react";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import CircularButton from "../../Common/CircularButton/CircularButton";
-import { useContext } from "react";
 export default function ToolBar(props) {
     const state = useContext(CombinedReducersContext)
     const dispatch = useContext(CombinedDispatchContext)
@@ -42,24 +42,35 @@ export default function ToolBar(props) {
                     ]
                     }>
                         <CircularButton
-                            functionName={() => dispatch({
-                                type: "FUNCTIONID",
-                                payload: 0
-                            })}
+                            functionName={() => {
+                                dispatch({
+                                    type: "FUNCTIONID",
+                                    payload: 0
+                                })
+                                props.setShowPaste(1)
+                            }
+                            }
                             imageUrl={require('../../assets/copy.png')}
                         />
                         <CircularButton
-                            functionName={() => dispatch({
-                                type: "FUNCTIONID",
-                                payload: 1
-                            })}
+                            functionName={() => {
+                                dispatch({
+                                    type: "FUNCTIONID",
+                                    payload: 1
+                                })
+                                props.setShowPaste(1)
+                            }
+                            }
                             imageUrl={require('../../assets/move.png')}
                         />
                         <CircularButton
-                            functionName={() => dispatch({
-                                type: "FUNCTIONID",
-                                payload: 2
-                            })}
+                            functionName={() => {
+                                dispatch({
+                                    type: "FUNCTIONID",
+                                    payload: 2
+                                })
+                            }
+                            }
                             imageUrl={require('../../assets/delete.png')}
                         />
                         <CircularButton
@@ -75,20 +86,22 @@ export default function ToolBar(props) {
                         />
                         <Text style={{ color: secondaryColor }}>  |  </Text>
                         <CircularButton
-                            functionName={() => props.newItem(1)}
+                            functionName={() => dispatch({
+                                type: "FUNCTIONID",
+                                payload: 6
+                            })}
                             imageUrl={require('../../assets/newfile.png')}
                         />
                         <CircularButton
-                            functionName={() => props.newItem(0)}
+                            functionName={() => dispatch({
+                                type: "FUNCTIONID",
+                                payload: 5
+                            })}
                             imageUrl={require('../../assets/newfolder.png')}
                         />
                         <CircularButton
                             functionName={() => props.setFavouritesModal(1)}
                             imageUrl={require('../../assets/favourite.png')}
-                        />
-                        <CircularButton
-                            functionName={() => props.newItem(1)}
-                            imageUrl={require('../../assets/newfile.png')}
                         />
                         <CircularButton
                             functionName={() => props.setContextMenu(1)}
