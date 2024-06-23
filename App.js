@@ -1,8 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { Text, View, Dimensions, Image, Pressable } from "react-native";
 import { CombinedReducersContext, CombinedDispatchContext } from "./Context/Context"
-import ClipBoardReducer from "./Reducers/ClipBoardReducer"
-import ToastReducer from "./Reducers/ToastReducer"
 import { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import FileViewer from "react-native-file-viewer";
 import Window from "./Window";
@@ -11,84 +9,18 @@ import ToolBar from "./Features/ToolBar/ToolBar";
 import Tabbar from "./Features/Tabbar/Tabbar";
 import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
-import OperationTypeReducer from "./Reducers/OperationTypeReducer";
-import OperationDestReducer from "./Reducers/OperationDestReducer";
-import OperationSourceReducer from "./Reducers/OperationSourceReducer";
-import FunctionIdReducer from "./Reducers/FunctionIDReducer";
-import CacheReducer from "./Reducers/CacheReducer";
-import CurrentTabReducer from "./Reducers/CurrentTabReducer";
-import TabsReducer from "./Reducers/TabsReducer";
-import TabCounterReducer from "./Reducers/TabCounterReducer";
-import OperationWindow from "./Features/OperationWindow/OperationWindow";
-import OperationWindowReducer from "./Reducers/OperationWindowReducer";
-import InputModal from "./Modals/InputModal/InputModal";
 import ItemExistsModal from "./Modals/ItemExistsModal/ItemExistsModal";
-import InputModalReducer from "./Reducers/InputModalReducer";
-import InputPromiseResolveReducer from "./Reducers/InputPromiseResolveReducer";
-import ItemExistsModalReducer from "./Reducers/ItemExistsModalReducer";
-import ItemExistsDecisionReducer from "./Reducers/ItemExistsDecisionReducer";
-import ItemExistsPromiseResolverReducer from "./Reducers/ItemExistsPromiseResolverReducer";
-import UpdatedNameReducer from "./Reducers/UpdatedNameReducer";
-import ItemInOperationReducer from "./Reducers/ItemInOperationReducer";
-import DeleteModalReducer from "./Reducers/DeleteModalReducer";
-import DeletePromiseResolverReducer from "./Reducers/DeletePromiseResolverReducer";
-import DeleteModal from "./Modals/DeleteModal/DeleteModal";
 import DeleteHandler from "./Handlers/DeleteHandler";
-import SelectedItemReducer from "./Reducers/SelectedItemReducer";
+import DeleteModal from "./Modals/DeleteModal/DeleteModal";
+import OperationWindow from "./Features/OperationWindow/OperationWindow";
+import InputModal from "./Modals/InputModal/InputModal";
 import useMountingPoints from "./Hooks/useMountingPoints";
-import MountingPointsReducer from "./Reducers/MountingPointsReducers";
+import useCombinedReducers from "./Hooks/useCombinedReducers";
+import useInitStates from "./Hooks/useInitStates";
 
 const App = () => {
 
-    const initialState = {
-        mountingPoints: [],
-        cache: {},
-        tabs: {},
-        tabCounter: 0,
-        currentTab: 0,
-        clipboardItems: [],
-        selectedItem: [],
-        operationType: -1,
-        operationDest: "",
-        operationSource: "",
-        functionId: -1,
-        operationWindow: 0,
-        inputModal: 0,
-        inputPromiseResolver: 0,
-        deleteModal: 0,
-        deletePromiseResolver: 0,
-        itemExistsModal: 0,
-        itemExistsDecision: 0,
-        itemExistsPromiseResolver: 0,
-        updatedName: "",
-        itemInOperation: "",
-    }
-    const combineReducers = (state, action) => ({
-        mountingPoints: MountingPointsReducer(state.mountingPoints, action),
-        cache: CacheReducer(state.cache, action),
-        tabs: TabsReducer(state.tabs, action),
-        tabCounter: TabCounterReducer(state.tabCounter, action),
-        currentTab: CurrentTabReducer(state.currentTab, action),
-        clipboardItems: ClipBoardReducer(state.clipboardItems, action),
-        selectedItem: SelectedItemReducer(state.selectedItem, action),
-        operationType: OperationTypeReducer(state.operationType, action),
-        operationSource: OperationSourceReducer(state.operationSource, action),
-        operationDest: OperationDestReducer(state.operationDest, action),
-        functionId: FunctionIdReducer(state.functionId, action),
-        toast: ToastReducer(state.toast, action),
-        operationWindow: OperationWindowReducer(state.operationWindow, action),
-        inputModal: InputModalReducer(state.inputModal, action),
-        inputPromiseResolver: InputPromiseResolveReducer(state.inputPromiseResolver, action),
-        deleteModal: DeleteModalReducer(state.deleteModal, action),
-        deletePromiseResolver: DeletePromiseResolverReducer(state.deletePromiseResolver, action),
-        itemExistsModal: ItemExistsModalReducer(state.itemExistsModal, action),
-        itemExistsDecision: ItemExistsDecisionReducer(state.itemExistsDecision, action),
-        itemExistsPromiseResolver: ItemExistsPromiseResolverReducer(state.itemExistsPromiseResolver, action),
-        updatedName: UpdatedNameReducer(state.updatedName, action),
-        itemInOperation: ItemInOperationReducer(state.itemInOperation, action)
-    })
-    const [state, dispatch] = useReducer(combineReducers, initialState);
-    const [favPaths, setFavPaths] = useState([]) //find all mounting points
+    const [state, dispatch] = useReducer(useCombinedReducers, useInitStates());
     const currTabStatic = useRef("0") //to set tab path with latest currtab value
     const [favouriteItems, setFavouriteItems] = useState([])
 
@@ -155,10 +87,10 @@ const App = () => {
             let obj = []
             let basePath
             let baseName
-            for (let i = 0; i < favPaths.length; i++) {
-                if (path.includes(favPaths[i]["path"])) {
-                    basePath = favPaths[i]["path"]
-                    baseName = favPaths[i]["name"]
+            for (let i = 0; i < state.mountingPoints.length; i++) {
+                if (path.includes(state.mountingPoints[i]["path"])) {
+                    basePath = state.mountingPoints[i]["path"]
+                    baseName = state.mountingPoints[i]["name"]
                     break
                 }
             }
