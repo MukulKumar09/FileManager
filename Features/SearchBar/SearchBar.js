@@ -1,6 +1,10 @@
 import { View, Image, Pressable, TextInput } from "react-native";
+import { useContext } from "react";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { grey } from "../../styles";
 export default function SearchBar(props) {
+    const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <View style={[
             styles.rowLayout,
@@ -27,11 +31,11 @@ export default function SearchBar(props) {
                     placeholderTextColor={grey}
                     onChangeText={text => {
                         if (text == "") {
-                            props.handleSort(props.filesList)
+                            props.handleSort(state.cache[state.tabs[props.index]["path"]])
                         }
                         else {
                             text = new RegExp(text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
-                            props.handleSort(props.filesList.filter((item) => text.test(item["name"])))
+                            props.handleSort(state.cache[state.tabs[props.index]["path"]].filter((item) => text.test(item["name"])))
                         }
                     }}
                 />
@@ -57,7 +61,7 @@ export default function SearchBar(props) {
                     style={[styles.pill,
                     styles.padding]}
                     onPressIn={() => {
-                        props.handleSort(props.filesList)
+                        props.handleSort(state.cache[state.tabs[props.index]["path"]])
                         props.setSearchFlag(0)
                     }}>
                     <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />

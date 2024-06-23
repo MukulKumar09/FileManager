@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, View, Image, } from "react-native";
+import { useContext } from "react";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles from "../../styles";
-import { useContext } from "react";
 
 const TabButton = (props) => {
     const state = useContext(CombinedReducersContext)

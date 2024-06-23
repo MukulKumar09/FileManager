@@ -25,6 +25,7 @@ export default function WindowToolBar(props) {
                 />
                 {props.searchFlag ?
                     <SearchBar
+                        index={props.index}
                         handleSort={props.handleSort}
                         filesList={props.filesList}
                         setSearchFlag={props.setSearchFlag}

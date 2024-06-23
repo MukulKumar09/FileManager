@@ -1,9 +1,6 @@
 import ClipboardModal from "./ClipboardModal/ClipboardModal";
 import AboutModal from "./AboutModal/AboutModal";
-import InputModal from "./InputModal/InputModal";
-import DeleteModal from "./DeleteModal/DeleteModal";
 import FavouritesModal from "./FavouritesModal/FavouritesModal";
-import ItemExistsModal from "./ItemExistsModal/ItemExistsModal";
 
 export default function Modals(props) {
     return (
@@ -20,7 +17,6 @@ export default function Modals(props) {
                         setFavouriteItems={props.setFavouriteItems}
                         favouriteItems={props.favouriteItems}
                         setTabPath={props.setTabPath}
-                        showToast={props.showToast}
                     />
                     : null
             }
@@ -33,16 +29,6 @@ export default function Modals(props) {
                         setForceRefresh={props.setForceRefresh}
                         clipboardItems={props.clipboardItems}
                         inputRef={props.inputRef}
-                    />
-                    : null
-            }
-            {
-                props.
-                    deleteModal ?
-                    <DeleteModal
-                        setDeleteModal={props.setDeleteModal}
-                        clipboardItems={props.clipboardItems}
-                        deleteRef={props.deleteRef}
                     />
                     : null
             }

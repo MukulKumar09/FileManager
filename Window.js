@@ -7,6 +7,7 @@ import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
 import CacheHandler from "./Handlers/CacheHandler";
+import useStageItems from "./Hooks/useStageItems";
 
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
@@ -30,21 +31,23 @@ const Window = (props) => {
     // }));
 
     useEffect(() => { //first
-        if (state.cache[state.tabs[props.index]["path"]] == undefined) {
-            const buildCache = async () => dispatch({
-                type: "UPDATECACHE",
-                payload: {
-                    key: state.tabs[state.currentTab]["path"],
-                    value: await CacheHandler(state.tabs[state.currentTab]["path"])
-                }
-            })
+        if (state.tabs[props.index]["path"] !== "Home" && state.cache[state.tabs[props.index]["path"]] == undefined) {
+            console.log("path : ", state.tabs[props.index]["path"])
+            const buildCache = async () => {
+                dispatch({
+                    type: "UPDATECACHE",
+                    payload: {
+                        key: state.tabs[state.currentTab]["path"],
+                        value: await CacheHandler(state.tabs[state.currentTab]["path"])
+                    }
+                })
+            }
             buildCache()
         }
         setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
     }, [state.tabs[state.currentTab]["path"]])
 
     useEffect(() => {
-        console.log("data is:", state.cache[state.tabs[props.index]["path"]])
         if (state.cache[state.tabs[props.index]["path"]] !== undefined)
             handleSort(state.cache[state.tabs[props.index]["path"]])
     }, [state.cache[state.tabs[props.index]["path"]]])
@@ -58,7 +61,8 @@ const Window = (props) => {
 
     useEffect(() => {
         if (state.currentTab == props.index && state.functionId > -1)
-            props.StageItems(state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
+            useStageItems(state, dispatch, state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
+        // props.StageItems(state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
     }, [state.functionId])
 
     const handlePress = (item) => {
@@ -159,6 +163,13 @@ const Window = (props) => {
         props.setMediaType(0)
         props.setMediaBox(0)
         setSelectedItem(item)
+        if (selectionFlag)
+            if (selectedItems.includes(item))
+                setSelectedItems(selectedItems.filter((i) => i.path !== item["path"]))
+            else
+                setSelectedItems([...selectedItems, item])
+        else
+            setSelectedItems([item])
     }
 
     const rangeSelect = (item) => {
@@ -234,6 +245,7 @@ const Window = (props) => {
                 }, [filesList, selectedItem, selectedItems, selectionFlag])
             }
             <WindowToolBar
+                index={props.index}
                 selectionFlag={selectionFlag}
                 selectedItems={selectedItems}
                 filesList={filesList}
