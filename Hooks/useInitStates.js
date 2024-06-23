@@ -21,6 +21,7 @@ export default function useInitStates() {
         itemExistsPromiseResolver: 0,
         updatedName: "",
         itemInOperation: "",
+        mediaType: 0,
     }
     )
 }

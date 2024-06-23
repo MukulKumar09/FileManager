@@ -13,7 +13,7 @@ export default function ListItem(props) {
                 ]
             }
             onPress={() => {
-                props.handlePress(props.item)
+                props.setSelectedItem(props.item)
             }}
             onLongPress={() => {
                 props.handleLongPress(props.item)

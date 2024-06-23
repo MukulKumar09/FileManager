@@ -20,6 +20,7 @@ import DeleteModalReducer from "../Reducers/DeleteModalReducer";
 import DeletePromiseResolverReducer from "../Reducers/DeletePromiseResolverReducer";
 import SelectedItemReducer from "../Reducers/SelectedItemReducer";
 import MountingPointsReducer from "../Reducers/MountingPointsReducers";
+import MediaTypeReducer from "../Reducers/MediaTypeReducer";
 export default function useCombinedReducers(state, action) {
     return ({
         mountingPoints: MountingPointsReducer(state.mountingPoints, action),
@@ -43,6 +44,7 @@ export default function useCombinedReducers(state, action) {
         itemExistsDecision: ItemExistsDecisionReducer(state.itemExistsDecision, action),
         itemExistsPromiseResolver: ItemExistsPromiseResolverReducer(state.itemExistsPromiseResolver, action),
         updatedName: UpdatedNameReducer(state.updatedName, action),
-        itemInOperation: ItemInOperationReducer(state.itemInOperation, action)
+        itemInOperation: ItemInOperationReducer(state.itemInOperation, action),
+        mediaType: MediaTypeReducer(state.mediaType, action)
     })
 }

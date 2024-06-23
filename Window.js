@@ -8,6 +8,8 @@ import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
 import CacheHandler from "./Handlers/CacheHandler";
 import useStageItems from "./Hooks/useStageItems";
+import useFileHandler from "./Hooks/useFileHandler";
+import useSort from "./Hooks/useSort";
 
 // const Window = forwardRef((props, ref) => {
 const Window = (props) => {
@@ -49,7 +51,7 @@ const Window = (props) => {
 
     useEffect(() => {
         if (state.cache[state.tabs[props.index]["path"]] !== undefined)
-            handleSort(state.cache[state.tabs[props.index]["path"]])
+            setFilesList(useSort(state.cache[state.tabs[props.index]["path"]], sortType, sortOrder))
     }, [state.cache[state.tabs[props.index]["path"]]])
 
     useEffect(() => {
@@ -65,31 +67,14 @@ const Window = (props) => {
         // props.StageItems(state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
     }, [state.functionId])
 
-    const handlePress = (item) => {
-        if (selectionFlag) {
-            selectItem(item)
-        }
-        else {
-            if (item.isDirectory()) {
-                dispatch({
-                    type: "MODIFYTABPATH",
-                    payload: {
-                        tabId: state.currentTab,
-                        value: item["path"]
-                    }
-                })
-                dispatch({
-                    type: "MODIFYTABNAME",
-                    payload: {
-                        tabId: state.currentTab,
-                        value: item["name"]
-                    }
-                })
-            }
+    useEffect(() => {
+        if (selectedItem.name)
+            if (selectionFlag)
+                selectItem(selectedItem)
             else
-                props.fileHandler(item), setSelectedItem(item)
-        }
-    }
+                useFileHandler(state, dispatch, selectedItem)
+    }, [selectedItem])
+
     const handleLongPress = (item) => {
         if (selectionFlag)
             rangeSelect(item)
@@ -97,66 +82,9 @@ const Window = (props) => {
             selectItem(item)
     }
 
-    const handleSort = (items) => {
+    const handleSort = () => {
         setSortModal(0)
-        if (sortType == 0) { //name
-            items.sort((a, b) => {
-                var x = a["name"];
-                var y = b["name"];
-                if (sortOrder) {
-                    return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-                } else {
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                }
-            })
-            setFilesList(items)
-        }
-        if (sortType == 1) { //type
-            let allFolders = items.filter(i => i.isDirectory())
-            allFolders.sort((a, b) => {
-                var x = a["name"];
-                var y = b["name"];
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            })
-            let allFiles = items.filter(i => i.isFile())
-            allFiles.sort((a, b) => {
-                var x = a["name"].split(".").pop();
-                var y = b["name"].split(".").pop();
-                if (x === y) {
-                    return a["name"].localeCompare(b["name"]);
-                } else {
-                    // Otherwise, sort by extension
-                    if (sortOrder) {
-                        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-                    } else {
-                        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    }
-                }
-            })
-            setFilesList([...allFolders, ...allFiles])
-        }
-        if (sortType == 2) {
-
-        }
-        if (sortType == 3) {//size
-            let allFolders = items.filter(i => i.isDirectory())
-            allFolders.sort((a, b) => {
-                var x = a["name"];
-                var y = b["name"];
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            })
-            let allFiles = items.filter(i => i.isFile())
-            allFiles.sort((a, b) => {
-                var x = a["size"];
-                var y = b["size"];
-                if (sortOrder) {
-                    return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-                } else {
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                }
-            })
-            setFilesList([...allFolders, ...allFiles])
-        }
+        setFilesList(useSort(state.cache[state.tabs[props.index]["path"]], sortType, sortOrder))
     }
 
     const selectItem = (item) => {
@@ -237,7 +165,6 @@ const Window = (props) => {
                             finalList={filesList}
                             selectedItems={selectedItems}
                             selectedItem={selectedItem}
-                            handlePress={handlePress}
                             handleLongPress={handleLongPress}
                             Icon={props.Icon}
                         />

@@ -9,11 +9,6 @@ import ToolBar from "./Features/ToolBar/ToolBar";
 import Tabbar from "./Features/Tabbar/Tabbar";
 import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
-import ItemExistsModal from "./Modals/ItemExistsModal/ItemExistsModal";
-import DeleteHandler from "./Handlers/DeleteHandler";
-import DeleteModal from "./Modals/DeleteModal/DeleteModal";
-import OperationWindow from "./Features/OperationWindow/OperationWindow";
-import InputModal from "./Modals/InputModal/InputModal";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import useCombinedReducers from "./Hooks/useCombinedReducers";
 import useInitStates from "./Hooks/useInitStates";
@@ -107,33 +102,6 @@ const App = () => {
         }
     }
 
-    const fileHandler = (item) => {
-        const parts = item.name.split(".")
-        const ext = parts[parts.length - 1]
-        if (["jpeg", "png", "jpg", "gif"].includes(ext.toLowerCase())) {
-            setMediaType(1)
-            setMediaBox(1)
-        }
-        else if (["mp4", "mp3", "avi", "mkv", "wav", "mid"].includes(ext)) {
-            setMediaType(2)
-            setMediaBox(1)
-        } else {
-            setMediaBox(0)
-            openExternally(item.path)
-        }
-    }
-
-    const openExternally = (file) => {
-        FileViewer.open(file, { showOpenWithDialog: true }) // absolute-path-to-my-local-file.
-            .then(() => {
-                // success
-            })
-            .catch((error) => {
-                console.log(error)
-                alert('No apps found')
-            });
-    }
-
     const Icon = (item) => {
         let ext = ""
         if (item.isFile()) {
@@ -163,33 +131,17 @@ const App = () => {
             <CombinedDispatchContext.Provider value={dispatch}>
                 <View style={[styles.mainBody]}>
                     {/* <Pressable onPressIn={() => console.log(nameNewItem)}><Text>Show progress</Text></Pressable> */}
-                    {state.operationWindow ?
-                        <OperationWindow />
-                        : null}
-                    {state.itemExistsModal ?
-                        <ItemExistsModal />
-                        : null}
-                    {state.inputModal ?
-                        <InputModal />
-                        : null}
-                    {state.deleteModal ?
-                        <DeleteModal />
-                        : null}
-
-                    {
-                        aboutModal || favouritesModal || clipBoardModal ?
-                            <Modals
-                                favouriteItems={favouriteItems}
-                                clipBoardModal={clipBoardModal}
-                                aboutModal={aboutModal}
-                                favouritesModal={favouritesModal}
-                                setClipBoardModal={setClipBoardModal}
-                                Icon={Icon}
-                                setFavouritesModal={setFavouritesModal}
-                                setFavouriteItems={setFavouriteItems}
-                                setAboutModal={setAboutModal}
-                            />
-                            : null}
+                    <Modals
+                        favouriteItems={favouriteItems}
+                        clipBoardModal={clipBoardModal}
+                        aboutModal={aboutModal}
+                        favouritesModal={favouritesModal}
+                        setClipBoardModal={setClipBoardModal}
+                        Icon={Icon}
+                        setFavouritesModal={setFavouritesModal}
+                        setFavouriteItems={setFavouriteItems}
+                        setAboutModal={setAboutModal}
+                    />
                     <MediaWindow
                         mediaType={mediaType}
                         height={height}
@@ -211,10 +163,8 @@ const App = () => {
                                     index={index}
                                     breadCrumbsTabName={breadCrumbsTabName}
                                     Icon={Icon}
-                                    openExternally={openExternally}
                                     setMediaBox={setMediaBox}
                                     setMediaType={setMediaType}
-                                    fileHandler={fileHandler}
                                     setClipBoardModal={setClipBoardModal}
                                     setFavouritesModal={setFavouritesModal}
                                 // ref={(ref) => {
