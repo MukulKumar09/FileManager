@@ -10,8 +10,8 @@ import CacheHandler from "./Handlers/CacheHandler";
 import useStageItems from "./Hooks/useStageItems";
 import useFileHandler from "./Hooks/useFileHandler";
 import useSort from "./Hooks/useSort";
+import useRangeSelect from "./Hooks/useRangeSelect";
 
-// const Window = forwardRef((props, ref) => {
 const Window = (props) => {
     const state = useContext(CombinedReducersContext)
     const dispatch = useContext(CombinedDispatchContext)
@@ -26,11 +26,6 @@ const Window = (props) => {
     const [searchFlag, setSearchFlag] = useState(0)
     const [breadCrumbs, setBreadCrumbs] = useState([])
 
-    // useImperativeHandle(ref, () => ({
-    //     rerender: (visibility) => {
-    //         setZIndex(visibility)
-    //     }
-    // }));
 
     useEffect(() => { //first
         if (state.tabs[props.index]["path"] !== "Home" && state.cache[state.tabs[props.index]["path"]] == undefined) {
@@ -67,19 +62,20 @@ const Window = (props) => {
         // props.StageItems(state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
     }, [state.functionId])
 
-    useEffect(() => {
-        if (selectedItem.name)
-            if (selectionFlag)
-                selectItem(selectedItem)
-            else
-                useFileHandler(state, dispatch, selectedItem)
-    }, [selectedItem])
+    const handlePress = (item) => {
+        if (selectionFlag)
+            selectItem(item)
+        else
+            useFileHandler(state, dispatch, item)
+    }
 
     const handleLongPress = (item) => {
-        if (selectionFlag)
-            rangeSelect(item)
-        else
+        if (selectionFlag) {
+            setSelectedItem(item)
+            setSelectedItems(useRangeSelect(filesList, [...selectedItems], item))
+        } else {
             selectItem(item)
+        }
     }
 
     const handleSort = () => {
@@ -88,8 +84,6 @@ const Window = (props) => {
     }
 
     const selectItem = (item) => {
-        props.setMediaType(0)
-        props.setMediaBox(0)
         setSelectedItem(item)
         if (selectionFlag)
             if (selectedItems.includes(item))
@@ -100,23 +94,6 @@ const Window = (props) => {
             setSelectedItems([item])
     }
 
-    const rangeSelect = (item) => {
-        let tempSelectedItems = [...selectedItems]
-        setSelectedItem(item)
-        const lastSelectedItem = tempSelectedItems[tempSelectedItems.length - 1]
-        const lastSelectedItemIndexInFilesList = filesList.indexOf(lastSelectedItem)
-        const newSelectedItemIndexInFilesList = filesList.indexOf(item)
-        if (newSelectedItemIndexInFilesList > lastSelectedItemIndexInFilesList) { //downwards
-            for (let i = lastSelectedItemIndexInFilesList + 1; i <= newSelectedItemIndexInFilesList; i++) {
-                !tempSelectedItems.includes(filesList[i]) && tempSelectedItems.push(filesList[i])
-            }
-        } else {
-            for (let i = newSelectedItemIndexInFilesList; i <= lastSelectedItemIndexInFilesList - 1; i++) {
-                !tempSelectedItems.includes(filesList[i]) && tempSelectedItems.push(filesList[i])
-            }
-        }
-        setSelectedItems(tempSelectedItems)
-    }
 
     const shareFiles = async () => {
         try {
@@ -163,6 +140,7 @@ const Window = (props) => {
                             setSelectedItems={setSelectedItems}
                             setSelectedItem={setSelectedItem}
                             finalList={filesList}
+                            handlePress={handlePress}
                             selectedItems={selectedItems}
                             selectedItem={selectedItem}
                             handleLongPress={handleLongPress}

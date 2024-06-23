@@ -30,10 +30,11 @@ const FilesList = (props) => {
                 <ListItem
                     key={item["path"]}
                     item={item}
+                    handlePress={props.handlePress}
+                    handleLongPress={props.handleLongPress}
                     setSelectedItem={props.setSelectedItem}
                     selectedItems={props.selectedItems}
                     selectedItem={props.selectedItem}
-                    handleLongPress={props.handleLongPress}
                     Icon={props.Icon}
                 />
             }
