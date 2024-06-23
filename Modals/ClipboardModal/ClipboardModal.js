@@ -63,9 +63,9 @@ export default function ClipboardModal(props) {
                         width: '100%',
                     }
                 ]}>
-                    {state.clipboardItems.length == 0 ?
-                        <Text style={[styles.text, styles.textDisabled]}>No items</Text>
-                        : state.clipboardItems.map(
+                    {state.clipboardItems && state.clipboardItems.length > 0 ?
+
+                        state.clipboardItems.map(
                             (item, i) =>
                                 <View
                                     key={i}
@@ -97,7 +97,8 @@ export default function ClipboardModal(props) {
                                             source={require('../../assets/close.png')} />
                                     </Pressable>
                                 </View>
-                        )}
+                        ) :
+                        <Text style={[styles.text, styles.textDisabled]}>No items</Text>}
                 </View>
                 <View style={[styles.divider]} />
                 <Pressable

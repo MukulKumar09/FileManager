@@ -2,7 +2,6 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { Text, View, Dimensions, Image, Pressable } from "react-native";
 import { CombinedReducersContext, CombinedDispatchContext } from "./Context/Context"
 import { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
-import FileViewer from "react-native-file-viewer";
 import Window from "./Window";
 import styles from "./styles";
 import ToolBar from "./Features/ToolBar/ToolBar";
@@ -167,30 +166,23 @@ const App = () => {
                                     setMediaType={setMediaType}
                                     setClipBoardModal={setClipBoardModal}
                                     setFavouritesModal={setFavouritesModal}
-                                // ref={(ref) => {
-                                //     windowRefs.current[i] = ref
-                                // }
-                                // }
                                 />
                             )
                         }
                     </View>
                     <ToolBar
                         contextMenu={contextMenu}
-                        setShowPaste={setShowPaste}
                         setContextMenu={setContextMenu}
                         setFavouritesModal={setFavouritesModal}
                         setClipBoardModal={setClipBoardModal}
                         setAboutModal={setAboutModal}
                     />
                     <Tabbar
-                        currTabStatic={currTabStatic}
-                        showPaste={showPaste}
                         width={width}
                     />
                 </View>
                 <Pressable onPress={() => console.log(
-                    state.cache
+                    state.operationType
                 )}><Text>SHow all</Text></Pressable>
             </CombinedDispatchContext.Provider>
         </CombinedReducersContext.Provider>

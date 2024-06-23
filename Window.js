@@ -59,7 +59,6 @@ const Window = (props) => {
     useEffect(() => {
         if (state.currentTab == props.index && state.functionId > -1)
             useStageItems(state, dispatch, state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
-        // props.StageItems(state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
     }, [state.functionId])
 
     const handlePress = (item) => {
@@ -137,13 +136,13 @@ const Window = (props) => {
                 useMemo(() => {
                     return (
                         <FilesList
+                            handlePress={handlePress}
+                            handleLongPress={handleLongPress}
                             setSelectedItems={setSelectedItems}
                             setSelectedItem={setSelectedItem}
                             finalList={filesList}
-                            handlePress={handlePress}
                             selectedItems={selectedItems}
                             selectedItem={selectedItem}
-                            handleLongPress={handleLongPress}
                             Icon={props.Icon}
                         />
                     )

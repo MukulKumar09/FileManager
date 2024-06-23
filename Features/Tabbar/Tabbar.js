@@ -3,7 +3,6 @@ import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
 import { useContext } from "react";
-import PasteHandler from "../../Handlers/PasteHandler";
 
 export default function Tabbar(props) {
     const state = useContext(CombinedReducersContext)
@@ -25,11 +24,6 @@ export default function Tabbar(props) {
                                 <TabButton
                                     key={index}
                                     index={index}
-                                    currTabStatic={props.currTabStatic}
-                                    // ref={ref => {
-                                    //     buttonRefs.current[i] = ref
-                                    //     console.log(i, ref)
-                                    // }}
                                     width={props.width}
                                     deleteCurrTab={props.deleteCurrTab}
                                 />
@@ -40,7 +34,7 @@ export default function Tabbar(props) {
                 </View>
             </ScrollView>
             <>
-                {props.showPaste ?
+                {state.clipboardItems && [0, 1].includes(state.operationType) ?
                     <Pressable
                         style={[styles.pill,
                         styles.bordered,

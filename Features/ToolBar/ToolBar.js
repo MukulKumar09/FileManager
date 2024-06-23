@@ -47,7 +47,6 @@ export default function ToolBar(props) {
                                     type: "FUNCTIONID",
                                     payload: 0
                                 })
-                                props.setShowPaste(1)
                             }
                             }
                             imageUrl={require('../../assets/copy.png')}
@@ -58,7 +57,6 @@ export default function ToolBar(props) {
                                     type: "FUNCTIONID",
                                     payload: 1
                                 })
-                                props.setShowPaste(1)
                             }
                             }
                             imageUrl={require('../../assets/move.png')}
