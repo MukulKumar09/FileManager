@@ -15,13 +15,11 @@ import useInitStates from "./Hooks/useInitStates";
 const App = () => {
 
     const [state, dispatch] = useReducer(useCombinedReducers, useInitStates());
-    const [favouriteItems, setFavouriteItems] = useState([])
 
     //modals
-    const [contextMenu, setContextMenu] = useState(0)
-    const [favouritesModal, setFavouritesModal] = useState(0)
-    const [clipBoardModal, setClipBoardModal] = useState(0)
-    const [aboutModal, setAboutModal] = useState(0)
+    const [favouriteItems, setFavouriteItems] = useState([])
+    const [mediaType, setMediaType] = useState(0)
+    const [mediaBox, setMediaBox] = useState(0)
 
     //copy move delete
     const progressWidth = useSharedValue(0);
@@ -31,8 +29,6 @@ const App = () => {
         width: `${progressWidth.value}%`
     })
     )
-    const [mediaType, setMediaType] = useState(0)
-    const [mediaBox, setMediaBox] = useState(0)
 
     let width = Dimensions.get('window').width
 
@@ -76,13 +72,6 @@ const App = () => {
                 <View style={[styles.mainBody]}>
                     <Modals
                         favouriteItems={favouriteItems}
-                        clipBoardModal={clipBoardModal}
-                        aboutModal={aboutModal}
-                        favouritesModal={favouritesModal}
-                        setClipBoardModal={setClipBoardModal}
-                        setFavouritesModal={setFavouritesModal}
-                        setFavouriteItems={setFavouriteItems}
-                        setAboutModal={setAboutModal}
                     />
                     <MediaWindow
                         mediaType={mediaType}
@@ -97,25 +86,16 @@ const App = () => {
                             }
                         }
                     >
-                        {
-                            Object.keys(state.tabs).map((index) =>
-                                <Window
-                                    key={index}
-                                    index={index}
-                                    setMediaBox={setMediaBox}
-                                    setMediaType={setMediaType}
-                                    setClipBoardModal={setClipBoardModal}
-                                    setFavouritesModal={setFavouritesModal}
-                                />
-                            )
-                        }
+                        {Object.keys(state.tabs).map((index) =>
+                            <Window
+                                key={index}
+                                index={index}
+                                setMediaBox={setMediaBox}
+                                setMediaType={setMediaType}
+                            />
+                        )}
                     </View>
                     <ToolBar
-                        contextMenu={contextMenu}
-                        setContextMenu={setContextMenu}
-                        setFavouritesModal={setFavouritesModal}
-                        setClipBoardModal={setClipBoardModal}
-                        setAboutModal={setAboutModal}
                     />
                     <Tabbar
                         width={width}

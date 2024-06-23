@@ -10,7 +10,7 @@ export default function ToolBar(props) {
     return (
         <>
             {
-                props.contextMenu ?
+                state.contextMenu ?
                     <ContextMenu
                         setContextMenu={props.setContextMenu}
                         setClipBoardModal={props.setClipBoardModal}
@@ -98,11 +98,17 @@ export default function ToolBar(props) {
                             imageUrl={require('../../assets/newfolder.png')}
                         />
                         <CircularButton
-                            functionName={() => props.setFavouritesModal(1)}
+                            functionName={() => dispatch({
+                                type: "FAVOURITESMODAL"
+                            })
+                            }
                             imageUrl={require('../../assets/favourite.png')}
                         />
                         <CircularButton
-                            functionName={() => props.setContextMenu(1)}
+                            functionName={() => dispatch({
+                                type: "CONTEXTMENU"
+                            })
+                            }
                             imageUrl={require('../../assets/horzmenu.png')}
                         />
                     </View>

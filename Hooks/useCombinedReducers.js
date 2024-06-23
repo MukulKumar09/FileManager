@@ -21,6 +21,11 @@ import DeletePromiseResolverReducer from "../Reducers/DeletePromiseResolverReduc
 import SelectedItemReducer from "../Reducers/SelectedItemReducer";
 import MountingPointsReducer from "../Reducers/MountingPointsReducers";
 import MediaTypeReducer from "../Reducers/MediaTypeReducer";
+import FavouriteItemsReducer from "../Reducers/FavouriteItemsReducer";
+import ContextMenuReducer from "../Reducers/ContextMenuReducer";
+import FavouritesModalReducer from "../Reducers/FavouritesModalReducer";
+import ClipBoardModalReducer from "../Reducers/ClipBoardModalReducer";
+import AboutModalReducer from "../Reducers/AboutModalReducer";
 export default function useCombinedReducers(state, action) {
     return ({
         mountingPoints: MountingPointsReducer(state.mountingPoints, action),
@@ -45,6 +50,12 @@ export default function useCombinedReducers(state, action) {
         itemExistsPromiseResolver: ItemExistsPromiseResolverReducer(state.itemExistsPromiseResolver, action),
         updatedName: UpdatedNameReducer(state.updatedName, action),
         itemInOperation: ItemInOperationReducer(state.itemInOperation, action),
-        mediaType: MediaTypeReducer(state.mediaType, action)
+        mediaType: MediaTypeReducer(state.mediaType, action),
+        favouriteItems: FavouriteItemsReducer(state.favouriteItems, action),
+        contextMenu: ContextMenuReducer(state.contextMenu, action),
+        favouritesModal: FavouritesModalReducer(state.favouritesModal, action),
+        clipBoardModal: ClipBoardModalReducer(state.clipBoardModal, action),
+        aboutModal: AboutModalReducer(state.aboutModal, action),
+        mediaType: MediaTypeReducer(state.mediaType, action),
     })
 }

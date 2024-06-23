@@ -21,7 +21,13 @@ export default function useInitStates() {
         itemExistsPromiseResolver: 0,
         updatedName: "",
         itemInOperation: "",
+        favouriteItems: [],
+        contextMenu: 0,
+        favouritesModal: 0,
+        clipBoardModal: 0,
+        aboutModal: 0,
         mediaType: 0,
+        mediaBox: 0,
     }
     )
 }

@@ -1,13 +1,18 @@
 import { Text, Pressable, View, Image, Modal, Linking } from "react-native";
+import { useContext } from "react";
+import { CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
 
-export default function AboutModal(props) {
+export default function AboutModal() {
+    const dispatch = useContext(CombinedDispatchContext)
     return (
         <Modal
             transparent={true}
         >
             <Pressable
-                onPressIn={() => props.setAboutModal(0)}
+                onPressIn={() => dispatch({
+                    type: "ABOUTMODAL"
+                })}
                 style={[styles.modalBackground]}
             />
 
@@ -77,7 +82,9 @@ export default function AboutModal(props) {
                 >
                     <Pressable
                         onPressIn={() => {
-                            props.setAboutModal(0)
+                            dispatch({
+                                type: "ABOUTMODAL"
+                            })
                         }
                         }
                         style={[
@@ -90,7 +97,9 @@ export default function AboutModal(props) {
                     </Pressable>
                     <Pressable
                         onPressIn={() => {
-                            props.setAboutModal(0)
+                            dispatch({
+                                type: "ABOUTMODAL"
+                            })
                         }
                         }
                         style={[

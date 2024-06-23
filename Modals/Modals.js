@@ -30,7 +30,7 @@ export default function Modals(props) {
                 <ProgressModal />
             } */}
             {
-                props.
+                state.
                     favouritesModal ?
                     <FavouritesModal
                         setFavouritesModal={props.setFavouritesModal}
@@ -41,7 +41,7 @@ export default function Modals(props) {
                     : null
             }
             {
-                props.clipBoardModal ?
+                state.clipBoardModal ?
                     <ClipboardModal
                         setClipBoardModal={props.setClipBoardModal}
                         setShowPaste={props.setShowPaste}
@@ -52,7 +52,7 @@ export default function Modals(props) {
                     : null
             }
             {
-                props.
+                state.
                     aboutModal ?
                     <AboutModal
                         setAboutModal={props.setAboutModal}

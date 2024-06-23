@@ -14,7 +14,10 @@ export default function ContextMenu(props) {
         width: '100%',
     }}>
         <Pressable
-            onPressIn={() => props.setContextMenu(0)}
+            onPressIn={() => dispatch({
+                type: "CONTEXTMENU"
+            })
+            }
             style={{
                 position: 'absolute',
                 top: 0,
@@ -46,7 +49,9 @@ export default function ContextMenu(props) {
                     dispatch({
                         type: "RESETTABS"
                     })
-                    props.setContextMenu(0)
+                    dispatch({
+                        type: "CONTEXTMENU"
+                    })
                 }}
             >
                 <Text style={[styles.text]}>Close all tabs</Text>
@@ -78,7 +83,9 @@ export default function ContextMenu(props) {
                             type: "RESETTABS"
                         })
                     }
-                    props.setContextMenu(0)
+                    dispatch({
+                        type: "CONTEXTMENU"
+                    })
                 }}
             >
                 <Text style={[styles.text]}>Close this tab</Text>
@@ -93,7 +100,9 @@ export default function ContextMenu(props) {
                         type: "DELETEOTHERTABS",
                         payload: state.currentTab
                     })
-                    props.setContextMenu(0)
+                    dispatch({
+                        type: "CONTEXTMENU"
+                    })
                 }}
             >
                 <Text style={[styles.text]}>Close other tabs</Text>
@@ -145,7 +154,9 @@ export default function ContextMenu(props) {
                     styles.wide,
                     styles.padding
                 ]}
-                onPress={() => { props.setClipBoardModal(1) }}
+                onPress={() => dispatch({
+                    type: "CLIPBOARDMODAL"
+                })}
             >
                 <Image
                     style={[styles.imageIcon]}
@@ -178,7 +189,10 @@ export default function ContextMenu(props) {
                     styles.wide,
                     styles.padding
                 ]}
-                onPress={() => { props.setAboutModal(1) }}
+                onPress={() => dispatch({
+                    type: "ABOUTMODAL"
+                })
+                }
             ><Image
                     style={[styles.imageIcon]}
                     source={require('../../assets/about.png')} />
@@ -191,7 +205,10 @@ export default function ContextMenu(props) {
                     styles.wide,
                     styles.padding
                 ]}
-                onPress={() => { props.setContextMenu(0) }}
+                onPress={() => dispatch({
+                    type: "CONTEXTMENU"
+                })
+                }
             ><Image
                     style={[styles.imageIcon]}
                     source={require('../../assets/close.png')} />

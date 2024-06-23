@@ -10,7 +10,9 @@ export default function FavouritesModal(props) {
     return (<Modal
         transparent={true}>
         <Pressable
-            onPressIn={() => props.setFavouritesModal(0)}
+            onPressIn={() => dispatch({
+                type: "FAVOURITESMODAL"
+            })}
             style={[styles.modalBackground]}
         />
         <View style={[

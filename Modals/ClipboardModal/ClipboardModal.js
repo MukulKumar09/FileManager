@@ -1,7 +1,7 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
+import { useContext } from "react";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
-import { useContext } from "react";
 import useIcon from "../../Hooks/useIcon";
 
 export default function ClipboardModal(props) {
@@ -12,7 +12,9 @@ export default function ClipboardModal(props) {
         <Modal
             transparent={true}>
             <Pressable
-                onPressIn={() => props.setClipBoardModal(0)}
+                onPressIn={() => dispatch({
+                    type: "CLIPBOARDMODAL"
+                })}
                 style={[styles.modalBackground]}
             />
             <View style={[
@@ -53,7 +55,6 @@ export default function ClipboardModal(props) {
                         dispatch({
                             type: 'CLEARCB'
                         })
-                        props.setShowPaste(0)
                     }}>Clear</Text>
                 </View>
                 {state.clipboardItems && state.clipboardItems.length && [0, 1].includes(state.operationType) ?
@@ -119,7 +120,9 @@ export default function ClipboardModal(props) {
                         , {
                             width: '100%'
                         }]}
-                    onPressIn={() => props.setClipBoardModal(0)}
+                    onPressIn={() => dispatch({
+                        type: "CLIPBOARDMODAL"
+                    })}
                 >
                     <Text style={[styles.text]}>Close</Text>
                 </Pressable>
