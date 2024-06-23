@@ -1,5 +1,6 @@
 import { Text, View, Pressable } from "react-native";
 import styles from "../../styles";
+import useIcon from "../../Hooks/useIcon";
 
 export default function ListItem(props) {
     return (
@@ -25,7 +26,7 @@ export default function ListItem(props) {
                 styles.bigGap,
             ]}>
                 <View style={{ width: 30, }}>
-                    {props.Icon(props.item)}
+                    {useIcon(props.item)}
                 </View>
                 <View style={[
                     styles.wide,

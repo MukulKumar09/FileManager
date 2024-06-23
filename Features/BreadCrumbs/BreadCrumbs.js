@@ -1,11 +1,16 @@
 import { View, Image, Pressable, ScrollView, Text } from "react-native";
 import styles, { secondaryColor } from "../../styles";
-import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
-import { useContext } from "react";
+import { CombinedReducersContext } from "../../Context/Context";
+import { useContext, useEffect, useState } from "react";
+import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
 
 export default function BreadCrumbs(props) {
     const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const [breadCrumbs, setBreadCrumbs] = useState([])
+    useEffect(() => {
+        setBreadCrumbs(useBreadCrumbs(state)) //set breadcrumbs, tabname
+    }, [state.tabs[state.currentTab]["path"]])
+    useEffect(() => { console.log(breadCrumbs) }, [breadCrumbs])
     return (
         <View style={[
             styles.rowLayout,
@@ -64,7 +69,7 @@ export default function BreadCrumbs(props) {
                         >Home</Text>
                     </Pressable>
                     {//convert this to ref control
-                        props.breadCrumbs.length > 0 && Object.values(props.breadCrumbs).map((folder, i) => {
+                        breadCrumbs && Object.values(breadCrumbs).map((folder, i) => {
                             return (
                                 <View key={i} style={[
                                     styles.rowLayout,

@@ -45,7 +45,6 @@ export default function Modals(props) {
                     <ClipboardModal
                         setClipBoardModal={props.setClipBoardModal}
                         setShowPaste={props.setShowPaste}
-                        Icon={props.Icon}
                         setForceRefresh={props.setForceRefresh}
                         clipboardItems={props.clipboardItems}
                         inputRef={props.inputRef}

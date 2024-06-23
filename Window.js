@@ -17,7 +17,6 @@ const Window = (props) => {
     const dispatch = useContext(CombinedDispatchContext)
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
-    const [breadCrumbs, setBreadCrumbs] = useState([])
     //selection
     const [selectedItem, setSelectedItem] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
@@ -32,7 +31,6 @@ const Window = (props) => {
         if (state.tabs[props.index]["path"] !== "Home" && state.cache[state.tabs[props.index]["path"]] == undefined) {
             useCache(dispatch, state.tabs[state.currentTab]["path"])
         }
-        setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
     }, [state.tabs[state.currentTab]["path"]])
 
     useEffect(() => {
@@ -134,7 +132,6 @@ const Window = (props) => {
                             finalList={filesList}
                             selectedItems={selectedItems}
                             selectedItem={selectedItem}
-                            Icon={props.Icon}
                         />
                     )
                 }, [filesList, selectedItem, selectedItems, selectionFlag])
@@ -144,7 +141,6 @@ const Window = (props) => {
                 selectionFlag={selectionFlag}
                 selectedItems={selectedItems}
                 filesList={filesList}
-                breadCrumbs={breadCrumbs}
                 searchModal={searchModal}
                 setSelectedItems={setSelectedItems}
                 setSelectedItem={setSelectedItem}

@@ -2,6 +2,7 @@ import { Text, Pressable, View, Image, Modal } from "react-native";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import styles, { backgroundColor } from "../../styles";
 import { useContext } from "react";
+import useIcon from "../../Hooks/useIcon";
 
 export default function ClipboardModal(props) {
 
@@ -55,6 +56,15 @@ export default function ClipboardModal(props) {
                         props.setShowPaste(0)
                     }}>Clear</Text>
                 </View>
+                {state.clipboardItems && state.clipboardItems.length && [0, 1].includes(state.operationType) ?
+                    <View style={[styles.rowLayout]}>
+                        <Text style={[styles.textDisabled]}>Below Items are ready to {state.operationType ? "Move" : "Copy"}. </Text>
+                        <Text style={{ textDecorationLine: 'underline' }} onPress={() => dispatch({
+                            type: "OPERATIONTYPE",
+                            payload: state.operationType == 1 ? 0 : 1
+                        })}>{state.operationType ? "Copy" : "Move"} instead</Text>
+                    </View>
+                    : null}
                 <View style={[styles.divider]} />
 
                 <View style={[
@@ -81,7 +91,7 @@ export default function ClipboardModal(props) {
                                                 paddingVertical: 10
                                             }]}
                                     >
-                                        {props.Icon(item)}
+                                        {useIcon(item)}
                                         <Text style={[styles.text]}>{item["name"]}</Text>
                                     </Pressable>
                                     <Pressable

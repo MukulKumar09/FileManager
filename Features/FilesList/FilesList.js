@@ -35,7 +35,6 @@ const FilesList = (props) => {
                     setSelectedItem={props.setSelectedItem}
                     selectedItems={props.selectedItems}
                     selectedItem={props.selectedItem}
-                    Icon={props.Icon}
                 />
             }
         />
