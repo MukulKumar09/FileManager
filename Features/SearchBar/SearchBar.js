@@ -43,26 +43,12 @@ export default function SearchBar(props) {
 
             <View style={[styles.rowLayout,
             styles.smallGap]}>
-                {/* <Pressable
-                                style={[styles.rowLayout,
-                                styles.pill, deepSearch ? styles.pillHighlight : null,
-                                styles.padding]}
-                                onPressIn={() => { setDeepSearch(!deepSearch) }}>
-                                <Text style={[styles.text]}>Deep</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[styles.pill,
-                                styles.pillHighlight,
-                                styles.padding]}
-                                onPressIn={() => { }}>
-                                <Image source={require('./assets/search.png')} />
-                            </Pressable> */}
                 <Pressable
                     style={[styles.pill,
                     styles.padding]}
                     onPressIn={() => {
                         props.handleSort(state.cache[state.tabs[props.index]["path"]])
-                        props.setSearchFlag(0)
+                        props.setSearchModal(0)
                     }}>
                     <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />
                 </Pressable>

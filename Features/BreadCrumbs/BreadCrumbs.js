@@ -30,7 +30,7 @@ export default function BreadCrumbs(props) {
                 </Pressable>
                 <Pressable
                     onPressIn={() => {
-                        props.setSearchFlag(1)
+                        props.setSearchModal(1)
                     }}
                     style={[
                         styles.smallPill,

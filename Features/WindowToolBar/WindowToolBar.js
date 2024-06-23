@@ -18,17 +18,17 @@ export default function WindowToolBar(props) {
                 }
                 <BreadCrumbs
                     setSortModal={props.setSortModal}
-                    setSearchFlag={props.setSearchFlag}
+                    setSearchModal={props.setSearchModal}
                     setTabPath={props.setTabPath}
                     breadCrumbs={props.breadCrumbs}
                     tabData={props.tabData}
                 />
-                {props.searchFlag ?
+                {props.searchModal ?
                     <SearchBar
                         index={props.index}
                         handleSort={props.handleSort}
                         filesList={props.filesList}
-                        setSearchFlag={props.setSearchFlag}
+                        setSearchModal={props.setSearchModal}
                     />
                     : null}
             </View>

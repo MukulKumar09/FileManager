@@ -15,7 +15,6 @@ import useInitStates from "./Hooks/useInitStates";
 const App = () => {
 
     const [state, dispatch] = useReducer(useCombinedReducers, useInitStates());
-    const currTabStatic = useRef("0") //to set tab path with latest currtab value
     const [favouriteItems, setFavouriteItems] = useState([])
 
     //modals
@@ -25,7 +24,6 @@ const App = () => {
     const [aboutModal, setAboutModal] = useState(0)
 
     //copy move delete
-    const [showPaste, setShowPaste] = useState(0)
     const progressWidth = useSharedValue(0);
     const [progress, setProgress] = useState(0)
     const height = useSharedValue(0);

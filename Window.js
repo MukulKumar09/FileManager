@@ -6,46 +6,37 @@ import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
-import CacheHandler from "./Handlers/CacheHandler";
 import useStageItems from "./Hooks/useStageItems";
 import useFileHandler from "./Hooks/useFileHandler";
 import useSort from "./Hooks/useSort";
 import useRangeSelect from "./Hooks/useRangeSelect";
+import useCache from "./Hooks/useCache";
 
 const Window = (props) => {
     const state = useContext(CombinedReducersContext)
     const dispatch = useContext(CombinedDispatchContext)
     const [filesList, setFilesList] = useState([])
+    const [searchModal, setSearchModal] = useState(0)
+    const [breadCrumbs, setBreadCrumbs] = useState([])
+    //selection
     const [selectedItem, setSelectedItem] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
     const [selectionFlag, setSelectionFlag] = useState(0)
-
+    //sorting
     const [sortModal, setSortModal] = useState(0)
     const [sortType, setSortType] = useState(1)
     const [sortOrder, setSortOrder] = useState(0)
-    const [searchFlag, setSearchFlag] = useState(0)
-    const [breadCrumbs, setBreadCrumbs] = useState([])
 
 
     useEffect(() => { //first
         if (state.tabs[props.index]["path"] !== "Home" && state.cache[state.tabs[props.index]["path"]] == undefined) {
-            console.log("path : ", state.tabs[props.index]["path"])
-            const buildCache = async () => {
-                dispatch({
-                    type: "UPDATECACHE",
-                    payload: {
-                        key: state.tabs[state.currentTab]["path"],
-                        value: await CacheHandler(state.tabs[state.currentTab]["path"])
-                    }
-                })
-            }
-            buildCache()
+            useCache(dispatch, state.tabs[state.currentTab]["path"])
         }
         setBreadCrumbs(props.breadCrumbsTabName()) //set breadcrumbs, tabname
     }, [state.tabs[state.currentTab]["path"]])
 
     useEffect(() => {
-        if (state.cache[state.tabs[props.index]["path"]] !== undefined)
+        if (state.cache[state.tabs[props.index]["path"]])
             setFilesList(useSort(state.cache[state.tabs[props.index]["path"]], sortType, sortOrder))
     }, [state.cache[state.tabs[props.index]["path"]]])
 
@@ -154,11 +145,11 @@ const Window = (props) => {
                 selectedItems={selectedItems}
                 filesList={filesList}
                 breadCrumbs={breadCrumbs}
-                searchFlag={searchFlag}
+                searchModal={searchModal}
                 setSelectedItems={setSelectedItems}
                 setSelectedItem={setSelectedItem}
                 setSortModal={setSortModal}
-                setSearchFlag={setSearchFlag}
+                setSearchModal={setSearchModal}
                 handleSort={handleSort}
             />
         </View>)
