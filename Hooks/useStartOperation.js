@@ -1,6 +1,5 @@
 import useCollectAllItems from "./useCollectAllItems";
-import useCopyItem from "./useCopyItem";
-import useMoveItem from "./useMoveItem";
+import useCopyMoveItem from "./useCopyMoveItem";
 import RNFS from 'react-native-fs';
 export default async function useStartOperation(state, dispatch) {
     let collectedItems = await useCollectAllItems(state.clipboardItems, state.operationDest)
@@ -44,18 +43,11 @@ export default async function useStartOperation(state, dispatch) {
                     dispatch({
                         type: "ITEMEXISTSMODAL"
                     })
-                    if (state.operationType)
-                        await useMoveItem(item["path"], state.operationDest)
-                    else
-                        await useCopyItem(item["path"], state.operationDest)
+                    await useCopyMoveItem(state.operationType, item["path"], state.operationDest)
                     break
                 }
                 default: { //rename
-                    if (state.operationType)
-                        await useMoveItem(item["path"], decision)
-                    else
-                        await useCopyItem(item["path"], decision)
-                    break
+                    await useCopyMoveItem(1, item["path"], decision)
                 }
             }
         } else {
@@ -66,49 +58,46 @@ export default async function useStartOperation(state, dispatch) {
                     payload: (((completedSize + currentItem["size"]) / totalSize) * 100).toFixed(0)
                 })
             }, 2000);
-            if (state.operationType)
-                await useMoveItem(item["path"], state.operationDest + "/" + item["name"])
-            else
-                await useCopyItem(item["path"], state.operationDest + "/" + item["name"])
+            await useCopyMoveItem(state.operationType, item["path"], state.operationDest + "/" + item["name"])
+            completedSize = completedSize + item["size"]
+            clearInterval(checkProgress);
         }
-        completedSize = completedSize + item["size"]
-        clearInterval(checkProgress);
+        dispatch({
+            type: "OPERATIONWINDOW"
+        })
+        dispatch({
+            type: "ITEMINOPERATION",
+            payload: ""
+        })
+        dispatch({
+            type: "OPERATIONTYPE",
+            payload: -1,
+        })
+        dispatch({
+            type: "SETPROGRESS",
+            payload: ((completedSize / totalSize) * 100).toFixed(0)
+        })
+        let toastMessage
+        switch (state.operationType) {
+            case -2: {
+                toastMessage = "Operation Cancelled"
+                break
+            }
+            case 0: {
+                toastMessage = "Copy successful."
+                break
+            }
+            case 1: {
+                toastMessage = "Move successful."
+                break
+            }
+        }
+        dispatch({
+            type: "TOAST",
+            payload: toastMessage
+        })
+        dispatch({
+            type: "CLEARCB"
+        })
     }
-    dispatch({
-        type: "OPERATIONWINDOW"
-    })
-    dispatch({
-        type: "ITEMINOPERATION",
-        payload: ""
-    })
-    dispatch({
-        type: "OPERATIONTYPE",
-        payload: -1,
-    })
-    dispatch({
-        type: "SETPROGRESS",
-        payload: ((completedSize / totalSize) * 100).toFixed(0)
-    })
-    let toastMessage
-    switch (state.operationType) {
-        case -2: {
-            toastMessage = "Operation Cancelled"
-            break
-        }
-        case 0: {
-            toastMessage = "Copy successful."
-            break
-        }
-        case 1: {
-            toastMessage = "Move successful."
-            break
-        }
-    }
-    dispatch({
-        type: "TOAST",
-        payload: toastMessage
-    })
-    dispatch({
-        type: "CLEARCB"
-    })
 }

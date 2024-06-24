@@ -1,5 +1,5 @@
 import useDeleteItem from "./useDeleteItem";
-import useMoveItem from "./useMoveItem";
+import useMoveItem from "./useCopyMoveItem";
 import useNewItem from "./useNewItem";
 export default function useStageItems(state, dispatch, type, selectedItems) {
     if (![5, 6].includes(type) && selectedItems.length == 0) {
