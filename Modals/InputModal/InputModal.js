@@ -45,12 +45,15 @@ export default function InputModal(props) {
             styles.smallText]}>Already exists!</Text> : null}
             <View style={[styles.rowLayout,
             styles.pill,
-            styles.input]}>
+            styles.input,
+            styles.bordered]}>
                 <TextInput
                     ref={input => { this.textInput = input; }}
                     autoFocus={true}
-                    style={[styles.text,
-                    styles.wide]}
+                    style={[
+                        styles.text,
+                        styles.wide
+                    ]}
                     multiline={true}
                     defaultValue={state.itemInOperation}
                     onChangeText={text => {

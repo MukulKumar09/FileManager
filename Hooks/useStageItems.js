@@ -1,7 +1,8 @@
-import DeleteHandler from "../Handlers/DeleteHandler";
-import MoveHandler from "../Handlers/MoveHandler";
+import useDeleteItem from "./useDeleteItem";
+import useMoveItem from "./useMoveItem";
+import useNewItem from "./useNewItem";
 export default function useStageItems(state, dispatch, type, selectedItems) {
-    if (selectedItems.length == 0) {
+    if (![5, 6].includes(type) && selectedItems.length == 0) {
         dispatch({
             type: "TOAST",
             payload:
@@ -51,7 +52,7 @@ export default function useStageItems(state, dispatch, type, selectedItems) {
                     })
                     if (deleteDecision) {
                         for (item of state.clipboardItems) {
-                            await DeleteHandler(item["path"])
+                            await useDeleteItem(item["path"])
                         }
                         dispatch({
                             type: "DELETEMODAL"
@@ -86,7 +87,7 @@ export default function useStageItems(state, dispatch, type, selectedItems) {
                             payload: resolve
                         })
                     })
-                    await MoveHandler(item["path"], updatedName)
+                    await useMoveItem(item["path"], updatedName)
                 }
                 renameAsync()
                 break
@@ -135,12 +136,12 @@ export default function useStageItems(state, dispatch, type, selectedItems) {
                             payload: resolve
                         })
                     })
-                    // await MoveHandler(item["path"], updatedName)
+                    await useNewItem(state.tabs[state.currentTab]["path"], 0, updatedName)
                 }
                 newFolderAsync()
                 break
             }
-            case 6: { //new folder
+            case 6: { //new file
                 dispatch({
                     type: "ITEMINOPERATION",
                     payload: "",
@@ -157,7 +158,7 @@ export default function useStageItems(state, dispatch, type, selectedItems) {
                             payload: resolve
                         })
                     })
-                    // await MoveHandler(item["path"], updatedName)
+                    await useNewItem(state.tabs[state.currentTab]["path"], 1, updatedName)
                 }
                 newFileAsync()
                 break

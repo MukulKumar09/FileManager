@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs';
-export default async function CollectAllItemsHandler(clipboardItems, operationDest) {
+export default async function useCollectAllItem(clipboardItems, operationDest) {
     let collectedItems = []
     const deepCollect = async (item) => {
         if (item.isDirectory()) {

@@ -20,15 +20,8 @@ const App = () => {
     const [favouriteItems, setFavouriteItems] = useState([])
     const [mediaType, setMediaType] = useState(0)
     const [mediaBox, setMediaBox] = useState(0)
-
-    //copy move delete
-    const progressWidth = useSharedValue(0);
-    const [progress, setProgress] = useState(0)
     const height = useSharedValue(0);
-    const animatedWidthStyle = useAnimatedStyle(() => ({
-        width: `${progressWidth.value}%`
-    })
-    )
+    //copy move delete
 
     let width = Dimensions.get('window').width
 
@@ -56,15 +49,6 @@ const App = () => {
         }
     }, [mediaBox]);
 
-    useEffect(() => {
-        progressWidth.value =
-            withTiming(progress, {
-                duration: 730,
-                easing: Easing.out(Easing.exp),
-                reduceMotion: ReduceMotion.System,
-            }
-            )
-    }, [progress])
 
     return (
         <CombinedReducersContext.Provider value={state}>
@@ -95,15 +79,13 @@ const App = () => {
                             />
                         )}
                     </View>
-                    <ToolBar
-                    />
-                    <Tabbar
-                        width={width}
+                    <ToolBar />
+                    <Tabbar width={width}
                     />
                 </View>
-                <Pressable onPress={() => console.log(
+                {/* <Pressable onPress={() => console.log(
                     state.operationType
-                )}><Text>SHow all</Text></Pressable>
+                )}><Text>SHow all</Text></Pressable> */}
             </CombinedDispatchContext.Provider>
         </CombinedReducersContext.Provider>
     );

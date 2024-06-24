@@ -1,11 +1,12 @@
 import { View, Image, Pressable, ScrollView, Text } from "react-native";
 import styles, { secondaryColor } from "../../styles";
-import { CombinedReducersContext } from "../../Context/Context";
+import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context";
 import { useContext, useEffect, useState } from "react";
 import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
 
 export default function BreadCrumbs(props) {
     const state = useContext(CombinedReducersContext)
+    const dispatch = useContext(CombinedDispatchContext)
     const [breadCrumbs, setBreadCrumbs] = useState([])
     useEffect(() => {
         setBreadCrumbs(useBreadCrumbs(state)) //set breadcrumbs, tabname
@@ -59,7 +60,13 @@ export default function BreadCrumbs(props) {
                     }
                 ]}>
                     <Pressable
-                        onPress={() => props.setTabPath("Home")}
+                        onPress={() => dispatch({
+                            type: "MODIFYTABPATH",
+                            payload: {
+                                tabId: state.currentTab,
+                                value: "Home"
+                            }
+                        })}
                     >
                         <Text
                             style={[styles.smallPill,
@@ -83,7 +90,13 @@ export default function BreadCrumbs(props) {
                                             styles.smallText
                                         ]}>></Text>
                                     <Pressable
-                                        onPress={() => props.setTabPath(folder["path"])}
+                                        onPress={() => dispatch({
+                                            type: "MODIFYTABPATH",
+                                            payload: {
+                                                tabId: state.currentTab,
+                                                value: folder["path"]
+                                            }
+                                        })}
                                     >
                                         <Text
                                             numberOfLines={1}
@@ -112,13 +125,37 @@ export default function BreadCrumbs(props) {
                     }>  |  </Text>
                     <Pressable
                         onPressIn={() => {
-                            props.setTabPath(null)
+                            let path = state.tabs[state.currentTab]["path"]
+                            for (let i = 0; i < state.cache["Home"].length; i++) {
+                                if (path == state.cache["Home"][i]["path"]) {
+                                    dispatch({
+                                        type: "MODIFYTABPATH",
+                                        payload: {
+                                            tabId: state.currentTab,
+                                            value: "Home"
+                                        }
+                                    })
+                                    return 0
+                                }
+                            }
+                            path = path.split("/")
+                            path.pop()
+                            path = path.join("/")
+                            dispatch({
+                                type: "MODIFYTABPATH",
+                                payload: {
+                                    tabId: state.currentTab,
+                                    value: path
+                                }
+                            })
                         }}
+                        style={[
+                            styles.smallPill,
+                            styles.bordered,
+                        ]}
                     >
                         <Text
                             style={[
-                                styles.smallPill,
-                                styles.bordered,
                                 styles.smallText,
                                 styles.text,
                                 styles.textDisabled,

@@ -2,7 +2,8 @@ import { Text, Pressable, View, Image } from "react-native";
 import { useContext } from "react";
 import styles from "../../styles";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
-import CacheHandler from "../../Handlers/CacheHandler";
+import useCache from "../../Hooks/useCache";
+
 
 export default function ContextMenu(props) {
     const state = useContext(CombinedReducersContext)
@@ -115,13 +116,7 @@ export default function ContextMenu(props) {
                     styles.padding
                 ]}
                 onPress={
-                    async () => dispatch({
-                        type: "UPDATECACHE",
-                        payload: {
-                            key: state.tabs[state.currentTab]["path"],
-                            value: await CacheHandler(state.tabs[state.currentTab]["path"])
-                        }
-                    })
+                    () => useCache(dispatch, state.tabs[state.currentTab]["path"])
                 }
             ><Image
                     style={[styles.imageIcon]}
