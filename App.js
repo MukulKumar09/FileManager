@@ -11,6 +11,8 @@ import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import useCombinedReducers from "./Hooks/useCombinedReducers";
 import useInitStates from "./Hooks/useInitStates";
+import OperationWindow from "./Features/OperationWindow/OperationWindow";
+
 
 const App = () => {
 
@@ -79,21 +81,17 @@ const App = () => {
                             />
                         )}
                     </View>
+                    {state.operationWindow ?
+                        <OperationWindow />
+                        : null}
                     <ToolBar />
-                    <Tabbar width={width}
-                    />
+                    <Tabbar width={width} />
                 </View>
-                <Pressable onPress={() => dispatch({
-                    type: "OPERATIONWINDOW"
-                })}><Text>SHow all</Text></Pressable>
-                <Text>
 
-
-                </Text>
-                <Pressable onPress={() => dispatch({
+                {/* <Pressable onPress={() => dispatch({
                     type: "SETPROGRESS",
                     payload: 60
-                })}><Text>SHow all</Text></Pressable>
+                })}><Text>SHow all</Text></Pressable> */}
             </CombinedDispatchContext.Provider>
         </CombinedReducersContext.Provider>
     );

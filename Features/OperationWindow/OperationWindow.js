@@ -1,5 +1,5 @@
 import { Text, View, ActivityIndicator } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import styles from "../../styles";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
@@ -29,11 +29,11 @@ export default function OperationWindow() {
         styles.pill,
         styles.paddingCloseBottom,
         {
-            position: 'absolute',
-            zIndex: 2,
-            top: 0,
-            left: 0,
-            right: 0,
+            // position: 'absolute',
+            // zIndex: 2,
+            // top: 0,
+            // left: 0,
+            // right: 0,
             alignItems: 'flex-start',
             overflow: 'hidden'
         }
@@ -67,11 +67,11 @@ export default function OperationWindow() {
                         styles.text,
                         styles.smallText
                     ]}>
-                    {state.operationType == 0 && "Copy"}
+                    ({state.progress}%) {state.operationType == 0 && "Copy"}
                     {state.operationType == 1 && "Move"}
                     {state.operationType == 2 && "Delete"}
                     {state.operationType == 3 && "Zipp"}
-                    ing {state.itemInOperation}   ({state.progress}%)
+                    ing {state.itemInOperation}
                 </Text>
             </View>
             <Text

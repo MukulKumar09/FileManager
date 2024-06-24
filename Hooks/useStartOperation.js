@@ -43,24 +43,39 @@ export default async function useStartOperation(state, dispatch) {
                     dispatch({
                         type: "ITEMEXISTSMODAL"
                     })
-                    await useCopyMoveItem(state.operationType, item["path"], state.operationDest)
+                    await useCopyMoveItem(
+                        dispatch,
+                        state.operationType,
+                        completedSize,
+                        totalSize,
+                        item["path"],
+                        state.operationDest
+                    )
+                    completedSize = completedSize + item["size"]
                     break
                 }
                 default: { //rename
-                    await useCopyMoveItem(1, item["path"], decision)
+                    await useCopyMoveItem(
+                        dispatch,
+                        state.operationType,
+                        completedSize,
+                        totalSize,
+                        item["path"],
+                        decision
+                    )
+                    completedSize = completedSize + item["size"]
                 }
             }
         } else {
-            checkProgress = setInterval(async () => {
-                let currentItem = await RNFS.stat(state.operationDest + "/" + item["name"])
-                dispatch({
-                    type: "SETPROGRESS",
-                    payload: (((completedSize + currentItem["size"]) / totalSize) * 100).toFixed(0)
-                })
-            }, 2000);
-            await useCopyMoveItem(state.operationType, item["path"], state.operationDest + "/" + item["name"])
+            await useCopyMoveItem(
+                dispatch,
+                state.operationType,
+                completedSize,
+                totalSize,
+                item["path"],
+                state.operationDest + "/" + item["name"]
+            )
             completedSize = completedSize + item["size"]
-            clearInterval(checkProgress);
         }
         dispatch({
             type: "OPERATIONWINDOW"
