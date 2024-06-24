@@ -26,6 +26,7 @@ import ContextMenuReducer from "../Reducers/ContextMenuReducer";
 import FavouritesModalReducer from "../Reducers/FavouritesModalReducer";
 import ClipBoardModalReducer from "../Reducers/ClipBoardModalReducer";
 import AboutModalReducer from "../Reducers/AboutModalReducer";
+import ProgressReducer from "../Reducers/ProgressReducer";
 export default function useCombinedReducers(state, action) {
     return ({
         mountingPoints: MountingPointsReducer(state.mountingPoints, action),
@@ -57,5 +58,6 @@ export default function useCombinedReducers(state, action) {
         clipBoardModal: ClipBoardModalReducer(state.clipBoardModal, action),
         aboutModal: AboutModalReducer(state.aboutModal, action),
         mediaType: MediaTypeReducer(state.mediaType, action),
+        progress: ProgressReducer(state.progress, action)
     })
 }

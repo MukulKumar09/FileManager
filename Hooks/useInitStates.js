@@ -28,6 +28,7 @@ export default function useInitStates() {
         aboutModal: 0,
         mediaType: 0,
         mediaBox: 0,
+        progress: 0,
     }
     )
 }

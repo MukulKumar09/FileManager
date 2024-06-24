@@ -4,12 +4,10 @@ import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimated
 import styles from "../../styles";
 import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
 import useStartOperation from "../../Hooks/useStartOperation";
-
 export default function OperationWindow() {
     const state = useContext(CombinedReducersContext)
     const dispatch = useContext(CombinedDispatchContext)
     const progressWidth = useSharedValue(0);
-    const [progress, setProgress] = useState(0)
     const animatedWidthStyle = useAnimatedStyle(() => ({
         width: `${progressWidth.value}%`
     })
@@ -20,13 +18,13 @@ export default function OperationWindow() {
 
     useEffect(() => {
         progressWidth.value =
-            withTiming(progress, {
+            withTiming(state.progress, {
                 duration: 730,
                 easing: Easing.out(Easing.exp),
                 reduceMotion: ReduceMotion.System,
             }
             )
-    }, [progress])
+    }, [state.progress])
     return (<View style={[
         styles.pill,
         styles.paddingCloseBottom,
@@ -65,25 +63,31 @@ export default function OperationWindow() {
             ]}>
                 <ActivityIndicator />
                 <Text
-
                     style={[
                         styles.text,
                         styles.smallText
                     ]}>
-                    {state.operationType.current == 0 && "Copy"}
-                    {state.operationType.current == 1 && "Move"}
-                    {state.operationType.current == 2 && "Delete"}
-                    {state.operationType.current == 3 && "Zipp"}
-                    ing {state.itemInOperation}   (90%)
+                    {state.operationType == 0 && "Copy"}
+                    {state.operationType == 1 && "Move"}
+                    {state.operationType == 2 && "Delete"}
+                    {state.operationType == 3 && "Zipp"}
+                    ing {state.itemInOperation}   ({state.progress}%)
                 </Text>
             </View>
-            <Text style={[
-                styles.text,
-                styles.smallText,
-                {
-                    textDecorationLine: 'underline'
+            <Text
+                onPress={() => dispatch({
+                    type: "OPERATIONTYPE",
+                    payload: -2,
+                })
                 }
-            ]} onPress={() => deselectAll()}>Cancel</Text>
+                style={[
+                    styles.text,
+                    styles.smallText,
+                    {
+                        textDecorationLine: 'underline'
+                    }
+                ]}
+            >Cancel</Text>
         </View>
     </View>
     )

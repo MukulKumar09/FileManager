@@ -83,9 +83,17 @@ const App = () => {
                     <Tabbar width={width}
                     />
                 </View>
-                {/* <Pressable onPress={() => console.log(
-                    state.operationType
-                )}><Text>SHow all</Text></Pressable> */}
+                <Pressable onPress={() => dispatch({
+                    type: "OPERATIONWINDOW"
+                })}><Text>SHow all</Text></Pressable>
+                <Text>
+
+
+                </Text>
+                <Pressable onPress={() => dispatch({
+                    type: "SETPROGRESS",
+                    payload: 60
+                })}><Text>SHow all</Text></Pressable>
             </CombinedDispatchContext.Provider>
         </CombinedReducersContext.Provider>
     );
