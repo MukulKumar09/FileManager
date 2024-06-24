@@ -29,11 +29,6 @@ export default function OperationWindow() {
         styles.pill,
         styles.paddingCloseBottom,
         {
-            // position: 'absolute',
-            // zIndex: 2,
-            // top: 0,
-            // left: 0,
-            // right: 0,
             alignItems: 'flex-start',
             overflow: 'hidden'
         }

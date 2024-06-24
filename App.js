@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
-import { Text, View, Dimensions, Pressable } from "react-native";
+import { View, Dimensions } from "react-native";
 import { CombinedReducersContext, CombinedDispatchContext } from "./Context/Context"
-import { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
+import { Easing, ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import Window from "./Window";
 import styles from "./styles";
 import ToolBar from "./Features/ToolBar/ToolBar";

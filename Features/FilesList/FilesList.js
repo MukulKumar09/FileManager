@@ -1,5 +1,5 @@
 import { VirtualizedList } from "react-native";
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
 import useCache from "../../Hooks/useCache";
 import ListItem from "../../Common/ListItem/ListItem";
@@ -24,8 +24,17 @@ const FilesList = (props) => {
             refreshing={false}
             data={props.finalList}
             keyExtractor={item => item.path}
+            getItemLayout={(data, index) => ({
+                length: 70,
+                offset: 70 * index,
+                index
+            })
+            }
             getItemCount={(data) => data.length}
             getItem={(data, index) => data[index]}
+            maxToRenderPerBatch={5}
+            windowSize={3}
+            updateCellsBatchingPeriod={100}
             renderItem={renderItem}
         />
     )
