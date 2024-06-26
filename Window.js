@@ -121,6 +121,7 @@ const Window = (props) => {
         }>
             {sortModal ?
                 <SortModal
+                    sortModal={sortModal}
                     sortType={sortType}
                     sortOrder={sortOrder}
                     setSortModal={setSortModal}

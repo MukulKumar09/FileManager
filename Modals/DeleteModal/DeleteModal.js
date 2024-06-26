@@ -5,11 +5,14 @@ import styles, { backgroundColor } from "../../styles";
 export default function DeleteModal(props) {
     const dispatch = useDispatch()
     const state = {
+        deleteModal: useSelector(state => state.deleteModal),
         deletePromiseResolver: useSelector(state => state.deletePromiseResolver),
         clipboardItems: useSelector(state => state.clipboardItems),
         deletePromiseResolver: useSelector(state => state.deletePromiseResolver),
     }
     return (<Modal
+        onRequestClose={() => state.deletePromiseResolver(0)}
+        visible={state.deleteModal}
         transparent={true}
     >
         <Pressable

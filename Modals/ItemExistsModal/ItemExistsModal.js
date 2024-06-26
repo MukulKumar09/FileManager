@@ -3,13 +3,17 @@ import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
 export default function ItemExistsModal() {
+
     const dispatch = useDispatch()
     const state = {
+        itemExistsModal: useSelector(state => state.itemExistsModal),
         itemExistsPromiseResolver: useSelector(state => state.itemExistsPromiseResolver),
         itemInOperation: useSelector(state => state.itemInOperation),
     }
     return (
         <Modal
+            onRequestClose={() => state.itemExistsPromiseResolver(0)}
+            visible={state.itemExistsModal}
             transparent={true}
         >
             <Pressable

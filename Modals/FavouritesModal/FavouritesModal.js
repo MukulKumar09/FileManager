@@ -4,9 +4,16 @@ import { useSelector, useDispatch } from "react-redux"
 
 export default function FavouritesModal(props) {
     const dispatch = useDispatch()
-
+    const state = {
+        favouritesModal: useSelector(state => state.favouritesModal)
+    }
     return (<Modal
-        transparent={true}>
+        onRequestClose={() => dispatch({
+            type: "FAVOURITESMODAL"
+        })}
+        visible={state.favouritesModal}
+        transparent={true}
+    >
         <Pressable
             onPressIn={() => dispatch({
                 type: "FAVOURITESMODAL"

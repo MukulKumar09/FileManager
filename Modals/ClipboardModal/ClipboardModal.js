@@ -7,11 +7,16 @@ export default function ClipboardModal(props) {
 
     const dispatch = useDispatch()
     const state = {
+        clipBoardModal: useSelector(state => state.clipBoardModal),
         clipboardItems: useSelector(state => state.clipboardItems),
         operationType: useSelector(state => state.operationType),
     }
     return (
         <Modal
+            onRequestClose={() => dispatch({
+                type: "CLIPBOARDMODAL"
+            })}
+            visible={state.clipBoardModal}
             transparent={true}>
             <Pressable
                 onPressIn={() => dispatch({

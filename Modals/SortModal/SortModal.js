@@ -4,6 +4,8 @@ import styles, { backgroundColor } from "../../styles";
 export default function SortModal(props) {
     return (
         <Modal
+            onRequestClose={() => props.setSortModal(0)}
+            visible={props.sortModal ? true : false}
             transparent={true}
         >
             <Pressable
@@ -31,7 +33,7 @@ export default function SortModal(props) {
                 [
                     styles.pill,
                     styles.modal,
-                    styles.bigGap,
+                    styles.mediumGap,
                     styles.padding,
                     {
                         backgroundColor: backgroundColor,

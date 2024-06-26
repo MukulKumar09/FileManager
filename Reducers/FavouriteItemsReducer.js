@@ -1,5 +1,5 @@
 export default function favouriteItems(state = [], action) {
-    if (action.type == "FAVOURITESMODAL")
+    if (action.type == "FAVOURITEITEMS")
         return !state
     return state
 }

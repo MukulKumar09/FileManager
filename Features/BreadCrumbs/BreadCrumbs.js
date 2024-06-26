@@ -15,7 +15,6 @@ export default function BreadCrumbs(props) {
     useEffect(() => {
         setBreadCrumbs(useBreadCrumbs(state)) //set breadcrumbs, tabname
     }, [state.tabs[state.currentTab]["path"]])
-    useEffect(() => { console.log(breadCrumbs) }, [breadCrumbs])
     return (
         <View style={[
             styles.rowLayout,

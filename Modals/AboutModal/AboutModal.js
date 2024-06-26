@@ -4,8 +4,15 @@ import styles, { backgroundColor } from "../../styles";
 
 export default function AboutModal() {
     const dispatch = useDispatch()
+    const state = {
+        aboutModal: useSelector(state => state.aboutModal),
+    }
     return (
         <Modal
+            onRequestClose={() => dispatch({
+                type: "ABOUTMODAL"
+            })}
+            visible={state.aboutModal}
             transparent={true}
         >
             <Pressable
@@ -41,9 +48,9 @@ export default function AboutModal() {
                 <View style={[styles.rowLayout, styles.bigGap, { alignItems: 'flex-start' }]}>
                     <Image source={{ uri: 'https://github.com/MukulKumar09.png' }}
                         style={{
-                            height: 100,
-                            width: 100,
-                            borderRadius: 30
+                            height: 80,
+                            width: 80,
+                            borderRadius: 20
                         }} />
                     <View style={[styles.wide]}>
                         <Text style={[styles.text]}>Author: Mukul Kumar{"\n"}</Text>

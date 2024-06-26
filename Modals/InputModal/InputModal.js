@@ -7,6 +7,7 @@ export default function InputModal(props) {
     const [alreadyExists, setAlreadyExists] = useState(0)
     const dispatch = useDispatch()
     const state = {
+        inputModal: useSelector(state => state.inputModal),
         tabs: useSelector(state => state.tabs),
         cache: useSelector(state => state.cache),
         inputModal: useSelector(state => state.inputModal),
@@ -16,6 +17,10 @@ export default function InputModal(props) {
     }
     let newName
     return (<Modal
+        onRequestClose={() => dispatch({
+            type: "INPUTMODAL"
+        })}
+        visible={state.inputModal}
         transparent={true}
         onShow={() => {
             this.textInput.blur();

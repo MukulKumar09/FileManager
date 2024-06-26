@@ -1,6 +1,5 @@
 export default function useBreadCrumbs(state) {
     let path = state.tabs[state.currentTab]["path"]
-    console.log(state)
     if (path == "Home") {
         return []
     } else {
@@ -23,7 +22,6 @@ export default function useBreadCrumbs(state) {
             })
             basePath = basePath + "/" + path[j + 1]
         })
-        console.log(obj)
         return obj
     }
 }
