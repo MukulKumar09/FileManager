@@ -93,13 +93,15 @@ export default function useStageItems(state, dispatch, selectedItems) {
                 break
             }
             case 4: { //open selecteditem in newtab
-                console.log("is it: ", selectedItems)
                 if (selectedItems.length == 0 || selectedItems.isFile()) {
                     dispatch({
                         type: "TOAST",
                         payload: "No folder selected"
                     })
                 } else {
+                    console.log(state.tabCounter,
+                        selectedItems["name"],
+                        selectedItems["path"],)
                     dispatch({
                         type: "DUPLICATETAB",
                         payload: {

@@ -48,7 +48,7 @@ export default function FavouritesModal(props) {
                         textDecorationLine: 'underline'
                     }
                 ]} onPress={() =>
-                    props.setprops.favouriteItems([])
+                    props.setFavouriteItems([])
                 }>Clear</Text>
             </View>
             <View style={[styles.divider]} />

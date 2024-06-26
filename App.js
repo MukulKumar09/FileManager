@@ -11,7 +11,6 @@ import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
 
-
 const App = () => {
 
     const dispatch = useDispatch()
@@ -47,7 +46,6 @@ const App = () => {
                 })
         }
     }, [mediaBox]);
-
 
     return (
         <View style={[styles.mainBody]}>

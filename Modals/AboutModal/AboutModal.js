@@ -1,10 +1,9 @@
 import { Text, Pressable, View, Image, Modal, Linking } from "react-native";
-import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
 export default function AboutModal() {
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
     return (
         <Modal
             transparent={true}

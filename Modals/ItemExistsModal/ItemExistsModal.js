@@ -4,6 +4,10 @@ import styles, { backgroundColor } from "../../styles";
 
 export default function ItemExistsModal() {
     const dispatch = useDispatch()
+    const state = {
+        itemExistsPromiseResolver: useSelector(state => state.itemExistsPromiseResolver),
+        itemInOperation: useSelector(state => state.itemInOperation),
+    }
     return (
         <Modal
             transparent={true}

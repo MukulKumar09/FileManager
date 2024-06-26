@@ -6,6 +6,10 @@ import useIcon from "../../Hooks/useIcon";
 export default function ClipboardModal(props) {
 
     const dispatch = useDispatch()
+    const state = {
+        clipboardItems: useSelector(state => state.clipboardItems),
+        operationType: useSelector(state => state.operationType),
+    }
     return (
         <Modal
             transparent={true}>

@@ -6,6 +6,14 @@ import styles, { backgroundColor } from "../../styles";
 export default function InputModal(props) {
     const [alreadyExists, setAlreadyExists] = useState(0)
     const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        cache: useSelector(state => state.cache),
+        inputModal: useSelector(state => state.inputModal),
+        itemInOperation: useSelector(state => state.itemInOperation),
+        currentTab: useSelector(state => state.currentTab),
+        inputPromiseResolver: useSelector(state => state.inputPromiseResolver),
+    }
     let newName
     return (<Modal
         transparent={true}
