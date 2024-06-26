@@ -1,8 +1,8 @@
 import useDeleteItem from "./useDeleteItem";
 import useMoveItem from "./useCopyMoveItem";
 import useNewItem from "./useNewItem";
-export default function useStageItems(state, dispatch, type, selectedItems) {
-    if (![5, 6].includes(type) && selectedItems.length == 0) {
+export default function useStageItems(state, dispatch, selectedItems) {
+    if (![5, 6].includes(state.functionId) && selectedItems.length == 0) {
         dispatch({
             type: "TOAST",
             payload:
@@ -17,24 +17,24 @@ export default function useStageItems(state, dispatch, type, selectedItems) {
             type: "OPERATIONSOURCE",
             payload: state.tabs[state.currentTab]["path"],
         })
-        switch (type) {
+        switch (state.functionId) {
             case 0:
             case 1: { //copy,move
                 dispatch({
                     type: "OPERATIONTYPE",
-                    payload: type,
+                    payload: state.functionId,
                 })
                 dispatch({
                     type: "TOAST",
                     payload:
-                        selectedItems.length + " items " + (type ? "ready to move" : "copied"),
+                        selectedItems.length + " items " + (state.functionId ? "ready to move" : "copied"),
                 })
                 break
             }
             case 2: { //delete
                 dispatch({
                     type: "OPERATIONTYPE",
-                    payload: type,
+                    payload: state.functionId,
                 })
                 dispatch({
                     type: "OPERATIONSOURCE",
@@ -166,7 +166,7 @@ export default function useStageItems(state, dispatch, type, selectedItems) {
             case 7: {
                 dispatch({
                     type: "OPERATIONTYPE",
-                    payload: type,
+                    payload: state.functionId,
                 })
                 dispatch({
                     type: "OPERATIONDEST",

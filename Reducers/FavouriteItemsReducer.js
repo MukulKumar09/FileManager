@@ -1,4 +1,4 @@
-export default function FavouriteItemsReducer(state, action) {
+export default function favouriteItems(state = [], action) {
     if (action.type == "FAVOURITESMODAL")
         return !state
     return state

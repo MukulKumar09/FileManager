@@ -1,11 +1,9 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
-import { useContext } from "react";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 
 export default function FavouritesModal(props) {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
 
     return (<Modal
         transparent={true}>

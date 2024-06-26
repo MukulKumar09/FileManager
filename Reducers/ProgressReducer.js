@@ -1,4 +1,4 @@
-export default function ProgressReducer(state, action) {
+export default function progress(state = 0, action) {
     if (action.type == "SETPROGRESS") {
         return action.payload
     }

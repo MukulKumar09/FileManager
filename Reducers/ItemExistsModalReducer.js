@@ -1,4 +1,4 @@
-export default function ItemExistsModalReducer(state, action) {
+export default function itemExistsModal(state = 0, action) {
     if (action.type == "ITEMEXISTSMODAL") {
         return !state
     }

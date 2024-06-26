@@ -1,15 +1,16 @@
 export default function useBreadCrumbs(state) {
     let path = state.tabs[state.currentTab]["path"]
+    console.log(state)
     if (path == "Home") {
         return []
     } else {
         let obj = []
         let basePath
         let baseName
-        for (let i = 0; i < state.cache["Home"].length; i++) {
-            if (path.includes(state.cache["Home"][i]["path"])) {
-                basePath = state.cache["Home"][i]["path"]
-                baseName = state.cache["Home"][i]["name"]
+        for (let i = 0; i < state.cache.length; i++) {
+            if (path.includes(state.cache[i]["path"])) {
+                basePath = state.cache[i]["path"]
+                baseName = state.cache[i]["name"]
                 break
             }
         }

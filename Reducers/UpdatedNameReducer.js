@@ -1,4 +1,4 @@
-export default function UpdatedNameReducer(state, action) {
+export default function updatedName(state = "", action) {
     if (action.type == "UPDATEDNAME") {
         return action.payload
     }

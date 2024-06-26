@@ -1,10 +1,10 @@
 import ToastReducer from "../Reducers/ToastReducer"
-import ClipBoardReducer from "../Reducers/ClipBoardReducer"
+import ClipBoardReducer from "../Reducers/clipboardItems"
 import OperationTypeReducer from "../Reducers/OperationTypeReducer";
 import OperationDestReducer from "../Reducers/OperationDestReducer";
 import OperationSourceReducer from "../Reducers/OperationSourceReducer";
 import FunctionIdReducer from "../Reducers/FunctionIDReducer";
-import CacheReducer from "../Reducers/CacheReducer";
+import CacheReducer from "../Reducers/cache";
 import CurrentTabReducer from "../Reducers/CurrentTabReducer";
 import TabsReducer from "../Reducers/TabsReducer";
 import TabCounterReducer from "../Reducers/TabCounterReducer";
@@ -22,9 +22,9 @@ import SelectedItemReducer from "../Reducers/SelectedItemReducer";
 import MountingPointsReducer from "../Reducers/MountingPointsReducers";
 import MediaTypeReducer from "../Reducers/MediaTypeReducer";
 import FavouriteItemsReducer from "../Reducers/FavouriteItemsReducer";
-import ContextMenuReducer from "../Reducers/ContextMenuReducer";
+import ContextMenuReducer from "../Reducers/contextMenu";
 import FavouritesModalReducer from "../Reducers/FavouritesModalReducer";
-import ClipBoardModalReducer from "../Reducers/ClipBoardModalReducer";
+import ClipBoardModalReducer from "../Reducers/clipBoardModal";
 import AboutModalReducer from "../Reducers/AboutModalReducer";
 import ProgressReducer from "../Reducers/ProgressReducer";
 export default function useCombinedReducers(state, action) {

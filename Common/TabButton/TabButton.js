@@ -1,11 +1,13 @@
 import { Text, TouchableOpacity, View, Image, } from "react-native";
-import { useContext } from "react";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import styles from "../../styles";
 
 const TabButton = (props) => {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        currentTab: useSelector(state => state.currentTab),
+    }
     return (<View style={[
         styles.rowLayout,
         styles.pill,

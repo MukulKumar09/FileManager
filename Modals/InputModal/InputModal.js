@@ -1,12 +1,11 @@
 import { Text, Pressable, View, Modal, TextInput } from "react-native";
 import { useContext, useState } from "react";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
 export default function InputModal(props) {
     const [alreadyExists, setAlreadyExists] = useState(0)
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
     let newName
     return (<Modal
         transparent={true}

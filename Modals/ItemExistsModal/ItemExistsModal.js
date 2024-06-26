@@ -1,11 +1,9 @@
 import { Text, Pressable, View, Modal } from "react-native";
-import { useContext } from "react";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
 export default function ItemExistsModal() {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
     return (
         <Modal
             transparent={true}

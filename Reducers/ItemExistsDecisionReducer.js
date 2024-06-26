@@ -1,4 +1,4 @@
-export default function ItemExistsDecisionReducer(state, action) {
+export default function itemExistsDecision(state = 0, action) {
     if (action.type == "ITEMEXISTSDECISION") {
         return action.payload
     }

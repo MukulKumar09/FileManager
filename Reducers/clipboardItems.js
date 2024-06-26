@@ -1,4 +1,4 @@
-export default function ClipBoardReducer(state, action) {
+export default function clipboardItems(state = [], action) {
     switch (action.type) {
         case 'COPYTOCB':
             return action.payload

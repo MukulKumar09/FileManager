@@ -1,4 +1,4 @@
-export default function CacheReducer(state, action) {
+export default function cache(state = {}, action) {
     switch (action.type) {
         case "UPDATECACHE":
             return {

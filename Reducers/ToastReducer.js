@@ -1,5 +1,5 @@
 import { ToastAndroid } from "react-native";
-export default function ToastReducer(state, action) {
+export default function ToastReducer(state = "", action) {
     if (action.type == "TOAST") {
         ToastAndroid.showWithGravity(
             action.payload,
@@ -7,4 +7,5 @@ export default function ToastReducer(state, action) {
             ToastAndroid.CENTER,
         )
     }
+    return state
 }

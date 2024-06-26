@@ -1,4 +1,4 @@
-export default function ItemExistsPromiseResolverReducer(state, action) {
+export default function itemExistsPromiseResolver(state = 0, action) {
     if (action.type == "ITEMEXISTSPROMISERESOLVER") {
         return action.payload
     }

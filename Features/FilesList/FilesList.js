@@ -1,12 +1,14 @@
 import { VirtualizedList } from "react-native";
-import { useContext } from "react";
-import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
+import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 import ListItem from "../../Common/ListItem/ListItem";
 
 const FilesList = (props) => {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        currentTab: useSelector(state => state.currentTab),
+    }
     const renderItem =
         ({ item }) =>
             <ListItem

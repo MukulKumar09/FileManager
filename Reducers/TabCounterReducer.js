@@ -1,4 +1,4 @@
-export default function TabCounterReducer(state, action) {
+export default function tabCounter(state = 0, action) {
     if (action.type == "INCREASETABCOUNTER")
         return state + 1
     if (action.type == "SETTABCOUNTER")

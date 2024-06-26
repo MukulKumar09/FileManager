@@ -1,13 +1,12 @@
 import { Text, Pressable, View, Image } from "react-native";
 import { useContext } from "react";
 import styles from "../../styles";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 
 
 export default function ContextMenu(props) {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
     return (<View style={{
         position: 'absolute',
         zIndex: 1,

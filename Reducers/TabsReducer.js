@@ -1,4 +1,4 @@
-export default function TabsReducer(state, action) {
+export default function tabs(state = {}, action) {
     switch (action.type) {
         case 'ADDTAB':
             return {

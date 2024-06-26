@@ -2,11 +2,10 @@ import { Text, View, ActivityIndicator } from "react-native";
 import { useContext, useEffect } from "react";
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import styles from "../../styles";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import useStartOperation from "../../Hooks/useStartOperation";
 export default function OperationWindow() {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
     const progressWidth = useSharedValue(0);
     const animatedWidthStyle = useAnimatedStyle(() => ({
         width: `${progressWidth.value}%`

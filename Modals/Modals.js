@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CombinedReducersContext, CombinedDispatchContext } from "../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import ClipboardModal from "./ClipboardModal/ClipboardModal";
 import AboutModal from "./AboutModal/AboutModal";
 import FavouritesModal from "./FavouritesModal/FavouritesModal";
@@ -8,19 +8,32 @@ import DeleteModal from "./DeleteModal/DeleteModal";
 import InputModal from "./InputModal/InputModal";
 
 export default function Modals(props) {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        itemExistsModal: useSelector(state => state.itemExistsModal),
+        inputModal: useSelector(state => state.inputModal),
+        deleteModal: useSelector(state => state.deleteModal),
+        clipBoardModal: useSelector(state => state.clipBoardModal),
+        aboutModal: useSelector(state => state.aboutModal),
+        favouritesModal: useSelector(state => state.favouritesModal)
+    }
     return (
         <>
-            {state.itemExistsModal ?
-                <ItemExistsModal />
-                : null}
-            {state.inputModal ?
-                <InputModal />
-                : null}
-            {state.deleteModal ?
-                <DeleteModal />
-                : null}
+            {
+                state.itemExistsModal ?
+                    <ItemExistsModal />
+                    : null
+            }
+            {
+                state.inputModal ?
+                    <InputModal />
+                    : null
+            }
+            {
+                state.deleteModal ?
+                    <DeleteModal />
+                    : null
+            }
             {/* {
                 progressModal == 1 &&
                 <ProgressModal />

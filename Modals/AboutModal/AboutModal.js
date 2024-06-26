@@ -1,6 +1,6 @@
 import { Text, Pressable, View, Image, Modal, Linking } from "react-native";
 import { useContext } from "react";
-import { CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
 export default function AboutModal() {

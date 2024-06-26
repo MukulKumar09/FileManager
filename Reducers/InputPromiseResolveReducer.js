@@ -1,4 +1,4 @@
-export default function InputPromiseResolveReducer(state, action) {
+export default function inputPromiseResolver(state = 0, action) {
     if (action.type == "INPUTPROMISERESOLVER") {
         return action.payload
     }

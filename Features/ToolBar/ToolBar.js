@@ -1,12 +1,13 @@
 import { Text, View, ScrollView } from "react-native";
-import { useContext } from "react";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import styles, { secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import CircularButton from "../../Common/CircularButton/CircularButton";
 export default function ToolBar(props) {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        contextMenu: useSelector(state => state.contextMenu),
+    }
     return (
         <>
             {
@@ -20,10 +21,10 @@ export default function ToolBar(props) {
             }
             <View
                 style={[
+                    styles.rowLayout,
                     styles.paddingCloseBottom,
                     styles.pill,
                     {
-                        alignItems: 'flex-end',
                         overflow: 'hidden'
                     }]}
             >
@@ -104,15 +105,15 @@ export default function ToolBar(props) {
                             }
                             imageUrl={require('../../assets/favourite.png')}
                         />
-                        <CircularButton
-                            functionName={() => dispatch({
-                                type: "CONTEXTMENU"
-                            })
-                            }
-                            imageUrl={require('../../assets/horzmenu.png')}
-                        />
                     </View>
                 </ScrollView>
+                <CircularButton
+                    functionName={() => dispatch({
+                        type: "CONTEXTMENU"
+                    })
+                    }
+                    imageUrl={require('../../assets/horzmenu.png')}
+                />
             </View>
         </>
     )

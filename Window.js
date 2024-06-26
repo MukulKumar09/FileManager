@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
-import { CombinedReducersContext, CombinedDispatchContext } from "./Context/Context"
+import { useSelector, useDispatch } from "react-redux"
 import Share from 'react-native-share';
 import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
@@ -13,8 +13,14 @@ import useRangeSelect from "./Hooks/useRangeSelect";
 import useCache from "./Hooks/useCache";
 
 const Window = (props) => {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        clipboardItems: useSelector(state => state.clipboardItems),
+        currentTab: useSelector(state => state.currentTab),
+        tabCounter: useSelector(state => state.tabCounter),
+        functionId: useSelector(state => state.functionId)
+    }
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
     //selection
@@ -26,17 +32,19 @@ const Window = (props) => {
     const [sortType, setSortType] = useState(1)
     const [sortOrder, setSortOrder] = useState(0)
 
+    const tabPath = useSelector(state => state.tabs[props.index]["path"])
+    const cache = useSelector(state => state.cache[tabPath])
 
     useEffect(() => { //first
-        if (state.tabs[props.index]["path"] !== "Home" && state.cache[state.tabs[props.index]["path"]] == undefined) {
-            useCache(dispatch, state.tabs[state.currentTab]["path"])
+        if (tabPath !== "Home" && cache == undefined) {
+            useCache(dispatch, tabPath)
         }
-    }, [state.tabs[state.currentTab]["path"]])
+    }, [tabPath])
 
     useEffect(() => {
-        if (state.cache[state.tabs[props.index]["path"]])
-            setFilesList(useSort(state.cache[state.tabs[props.index]["path"]], sortType, sortOrder))
-    }, [state.cache[state.tabs[props.index]["path"]]])
+        if (cache)
+            setFilesList(useSort(cache, sortType, sortOrder))
+    }, [cache])
 
     useEffect(() => {
         if (selectedItems.length == 0)
@@ -46,8 +54,9 @@ const Window = (props) => {
     }, [selectedItems])
 
     useEffect(() => {
+        console.log(state.functionId)
         if (state.currentTab == props.index && state.functionId > -1)
-            useStageItems(state, dispatch, state.functionId, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
+            useStageItems(state, dispatch, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
     }, [state.functionId])
 
     const handlePress = (item) => {
@@ -68,7 +77,7 @@ const Window = (props) => {
 
     const handleSort = () => {
         setSortModal(0)
-        setFilesList(useSort(state.cache[state.tabs[props.index]["path"]], sortType, sortOrder))
+        setFilesList(useSort(cache, sortType, sortOrder))
     }
 
     const selectItem = (item) => {

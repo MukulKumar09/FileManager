@@ -1,12 +1,16 @@
 import { View, Image, Pressable, ScrollView, Text } from "react-native";
 import styles, { secondaryColor } from "../../styles";
-import { CombinedReducersContext, CombinedDispatchContext } from "../../Context/Context";
+import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
 
 export default function BreadCrumbs(props) {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        cache: useSelector(state => state.cache["Home"]),
+        currentTab: useSelector(state => state.currentTab),
+    }
     const [breadCrumbs, setBreadCrumbs] = useState([])
     useEffect(() => {
         setBreadCrumbs(useBreadCrumbs(state)) //set breadcrumbs, tabname
@@ -126,8 +130,8 @@ export default function BreadCrumbs(props) {
                     <Pressable
                         onPressIn={() => {
                             let path = state.tabs[state.currentTab]["path"]
-                            for (let i = 0; i < state.cache["Home"].length; i++) {
-                                if (path == state.cache["Home"][i]["path"]) {
+                            for (let i = 0; i < state.cache.length; i++) {
+                                if (path == state.cache[i]["path"]) {
                                     dispatch({
                                         type: "MODIFYTABPATH",
                                         payload: {

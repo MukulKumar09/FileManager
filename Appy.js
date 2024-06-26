@@ -1,6 +1,5 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
 import { Easing, ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import Window from "./Window";
 import styles from "./styles";
@@ -10,11 +9,14 @@ import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
+import { Provider, } from "react-redux"
+import { createStore } from "redux"
+import rootReducer from "./Reducers"
 
 
 const App = () => {
+    const store = createStore(rootReducer)
 
-    const dispatch = useDispatch()
     //modals
     const [favouriteItems, setFavouriteItems] = useState([])
     const [mediaType, setMediaType] = useState(0)
@@ -50,44 +52,45 @@ const App = () => {
 
 
     return (
-        <View style={[styles.mainBody]}>
-            <Modals
-                favouriteItems={favouriteItems}
-            />
-            <MediaWindow
-                mediaType={mediaType}
-                height={height}
-                setMediaBox={setMediaBox}
-                setMediaType={setMediaType}
-            />
-            <View
-                style={
-                    {
-                        flex: 1
+        <Provider store={store}>
+            <View style={[styles.mainBody]}>
+                <Modals
+                    favouriteItems={favouriteItems}
+                />
+                <MediaWindow
+                    mediaType={mediaType}
+                    height={height}
+                    setMediaBox={setMediaBox}
+                    setMediaType={setMediaType}
+                />
+                <View
+                    style={
+                        {
+                            flex: 1
+                        }
                     }
-                }
-            >
-                {Object.keys(useSelector(state => state.tabs)).map((index) =>
-                    <Window
-                        key={index}
-                        index={index}
-                        setMediaBox={setMediaBox}
-                        setMediaType={setMediaType}
-                    />
-                )}
+                >
+                    {Object.keys(useSelector(state => state.tabs)).map((index) =>
+                        <Window
+                            key={index}
+                            index={index}
+                            setMediaBox={setMediaBox}
+                            setMediaType={setMediaType}
+                        />
+                    )}
+                </View>
+                {useSelector(state => state.operationWindow) ?
+                    <OperationWindow />
+                    : null}
+                <ToolBar />
+                <Tabbar width={width} />
             </View>
-            {useSelector(state => state.operationWindow) ?
-                <OperationWindow />
-                : null}
-            <ToolBar />
-            <Tabbar width={width} />
 
             {/* <Pressable onPress={() => dispatch({
                     type: "SETPROGRESS",
                     payload: 60
                 })}><Text>SHow all</Text></Pressable> */}
-        </View>
-
+        </Provider>
     );
 };
 export default App

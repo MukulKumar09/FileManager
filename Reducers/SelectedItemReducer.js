@@ -1,4 +1,4 @@
-export default function SelectedItemReducer(state, action) {
+export default function selectedItem(state = [], action) {
     if (action.type == "SELECTEDITEM") {
         return action.payload
     }

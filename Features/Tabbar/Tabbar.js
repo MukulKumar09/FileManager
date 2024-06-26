@@ -1,12 +1,17 @@
 import { Text, Pressable, View, ScrollView, Image } from "react-native";
 import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
-import { CombinedDispatchContext, CombinedReducersContext } from "../../Context/Context";
-import { useContext } from "react";
+import { useSelector, useDispatch } from "react-redux"
 
 export default function Tabbar(props) {
-    const state = useContext(CombinedReducersContext)
-    const dispatch = useContext(CombinedDispatchContext)
+    const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        clipboardItems: useSelector(state => state.clipboardItems),
+        operationType: useSelector(state => state.operationType),
+        currentTab: useSelector(state => state.currentTab),
+        tabCounter: useSelector(state => state.tabCounter),
+    }
     return (
         <View style={[styles.rowLayout,
         styles.mediumGap, { paddingTop: 10, justifyContent: 'space-between' }]}>
