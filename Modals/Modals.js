@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import ClipboardModal from "./ClipboardModal/ClipboardModal";
 import AboutModal from "./AboutModal/AboutModal";
@@ -17,13 +17,9 @@ export default function Modals(props) {
         aboutModal: useSelector(state => state.aboutModal),
         favouritesModal: useSelector(state => state.favouritesModal)
     }
+    useEffect(() => console.log(state.inputModal), [state.inputModal])
     return (
         <>
-            {
-                state.itemExistsModal ?
-                    <ItemExistsModal />
-                    : null
-            }
             {
                 state.inputModal ?
                     <InputModal />
@@ -32,6 +28,11 @@ export default function Modals(props) {
             {
                 state.deleteModal ?
                     <DeleteModal />
+                    : null
+            }
+            {
+                state.itemExistsModal ?
+                    <ItemExistsModal />
                     : null
             }
             {/* {

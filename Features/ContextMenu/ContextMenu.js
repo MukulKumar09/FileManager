@@ -6,6 +6,10 @@ import useCache from "../../Hooks/useCache";
 
 
 export default function ContextMenu(props) {
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        currentTab: useSelector(state => state.currentTab),
+    }
     const dispatch = useDispatch()
     return (<View style={{
         position: 'absolute',

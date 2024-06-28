@@ -1,11 +1,13 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
+import useFileHandler from "../../Hooks/useFileHandler";
 
 export default function FavouritesModal(props) {
     const dispatch = useDispatch()
     const state = {
-        favouritesModal: useSelector(state => state.favouritesModal)
+        favouritesModal: useSelector(state => state.favouritesModal),
+        currentTab: useSelector(state => state.currentTab),
     }
     return (<Modal
         onRequestClose={() => dispatch({
@@ -84,8 +86,10 @@ export default function FavouritesModal(props) {
                                         }
                                     ]}
                                     onPressIn={() => {
-                                        props.setTabPath(item["path"])
-                                        props.setFavouritesModal(0)
+                                        useFileHandler(state.currentTab, dispatch, item)
+                                        dispatch({
+                                            type: "FAVOURITESMODAL"
+                                        })
                                     }}
                                 >
                                     <Image

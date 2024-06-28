@@ -2,7 +2,7 @@ import { Text, Pressable, View, Image, Modal } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
-export default function DeleteModal(props) {
+export default function DeleteModal() {
     const dispatch = useDispatch()
     const state = {
         deleteModal: useSelector(state => state.deleteModal),

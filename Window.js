@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import Share from 'react-native-share';
 import { backgroundColor } from "./styles";
@@ -54,16 +54,61 @@ const Window = (props) => {
     }, [selectedItems])
 
     useEffect(() => {
-        console.log(state.functionId)
-        if (state.currentTab == props.index && state.functionId > -1)
-            useStageItems(state, dispatch, [3, 4].includes(state.functionId) ? selectedItem : selectedItems)
+        if (state.currentTab == props.index && state.functionId > -1) {
+            switch (state.functionId) {
+                case 0:
+                case 1:
+                case 2: {
+                    if (selectedItems.length == 0) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    } else {
+                        dispatch({
+                            type: 'COPYTOCB',
+                            payload: selectedItems
+                        })
+                        dispatch({
+                            type: "OPERATIONTYPE",
+                            payload: state.functionId,
+                        })
+                        dispatch({
+                            type: "OPERATIONSOURCE",
+                            payload: state.tabs[state.currentTab]["path"],
+                        })
+                        if (state.functionId == 0 || state.functionId == 1) {
+                            dispatch({ //reset to copy more/less items
+                                type: "FUNCTIONID",
+                                payload: -1
+                            })
+                            dispatch({
+                                type: "TOAST",
+                                payload:
+                                    selectedItems.length + " items " + (state.functionId ? "ready to move" : "copied"),
+                            })
+                        }
+                    }
+                    break
+                }
+                default: {
+                    useStageItems(state, dispatch, selectedItem)
+                }
+            }
+        }
     }, [state.functionId])
+
+    useEffect(() => {
+        if (state.currentTab == props.index)
+            useStageItems(state, dispatch, selectedItems)
+    }, [state.clipboardItems])
 
     const handlePress = (item) => {
         if (selectionFlag)
             selectItem(item)
         else
-            useFileHandler(state, dispatch, item)
+            useFileHandler(state.currentTab, dispatch, item)
     }
 
     const handleLongPress = (item) => {
@@ -75,9 +120,9 @@ const Window = (props) => {
         }
     }
 
-    const handleSort = () => {
+    const handleSort = (items) => {
         setSortModal(0)
-        setFilesList(useSort(cache, sortType, sortOrder))
+        setFilesList(useSort(items, sortType, sortOrder))
     }
 
     const selectItem = (item) => {

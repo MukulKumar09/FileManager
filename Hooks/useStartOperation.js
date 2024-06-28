@@ -1,3 +1,4 @@
+import useCache from "./useCache";
 import useCollectAllItems from "./useCollectAllItems";
 import useCopyMoveItem from "./useCopyMoveItem";
 import RNFS from 'react-native-fs';
@@ -18,7 +19,7 @@ export default async function useStartOperation(state, dispatch) {
             type: "ITEMINOPERATION",
             payload: item["name"]
         })
-        if (await RNFS.exists(state.operationDest + "/" + item["name"])) {
+        if (await RNFS.exists(item["itemDest"] + "/" + item["name"])) {
             dispatch({
                 type: "ITEMEXISTSMODAL"
             })
@@ -31,11 +32,11 @@ export default async function useStartOperation(state, dispatch) {
             switch (decision) {
                 case 0: { //skip
                     dispatch({
-                        type: "TOAST",
-                        payload: "Item skipped"
+                        type: "ITEMEXISTSMODAL"
                     })
                     dispatch({
-                        type: "ITEMEXISTSMODAL"
+                        type: "TOAST",
+                        payload: "Item skipped"
                     })
                     break
                 }
@@ -48,20 +49,22 @@ export default async function useStartOperation(state, dispatch) {
                         state.operationType,
                         completedSize,
                         totalSize,
-                        item["path"],
-                        state.operationDest
+                        item
                     )
                     completedSize = completedSize + item["size"]
                     break
                 }
                 default: { //rename
+                    dispatch({
+                        type: "ITEMEXISTSMODAL"
+                    })
+                    item["name"] = decision
                     await useCopyMoveItem(
                         dispatch,
                         state.operationType,
                         completedSize,
                         totalSize,
-                        item["path"],
-                        decision
+                        item
                     )
                     completedSize = completedSize + item["size"]
                 }
@@ -72,47 +75,50 @@ export default async function useStartOperation(state, dispatch) {
                 state.operationType,
                 completedSize,
                 totalSize,
-                item["path"],
-                state.operationDest + "/" + item["name"]
+                item
             )
             completedSize = completedSize + item["size"]
         }
-        dispatch({
-            type: "OPERATIONWINDOW"
-        })
-        dispatch({
-            type: "ITEMINOPERATION",
-            payload: ""
-        })
-        dispatch({
-            type: "OPERATIONTYPE",
-            payload: -1,
-        })
-        dispatch({
-            type: "SETPROGRESS",
-            payload: ((completedSize / totalSize) * 100).toFixed(0)
-        })
-        let toastMessage
-        switch (state.operationType) {
-            case -2: {
-                toastMessage = "Operation Cancelled"
-                break
-            }
-            case 0: {
-                toastMessage = "Copy successful."
-                break
-            }
-            case 1: {
-                toastMessage = "Move successful."
-                break
-            }
-        }
-        dispatch({
-            type: "TOAST",
-            payload: toastMessage
-        })
-        dispatch({
-            type: "CLEARCB"
-        })
     }
+    dispatch({
+        type: "SETPROGRESS",
+        payload: ((completedSize / totalSize) * 100).toFixed(0)
+    })
+    let toastMessage
+    switch (state.operationType) {
+        case -2: {
+            toastMessage = "Operation Cancelled"
+            break
+        }
+        case 0: {
+            toastMessage = "Copy successful."
+            break
+        }
+        case 1: {
+            toastMessage = "Move successful."
+            break
+        }
+    }
+    useCache(dispatch, state.operationDest)
+    state.operationType &&
+        useCache(dispatch, state.operationSource)
+    dispatch({
+        type: "TOAST",
+        payload: toastMessage
+    })
+    dispatch({
+        type: "ITEMINOPERATION",
+        payload: ""
+    })
+    dispatch({
+        type: "OPERATIONTYPE",
+        payload: -1,
+    })
+    dispatch({
+        type: "OPERATIONWINDOW"
+    })
+    dispatch({
+        type: "CLEARCB"
+    })
+
 }

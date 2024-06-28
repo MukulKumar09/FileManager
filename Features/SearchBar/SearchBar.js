@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from "react-redux"
 import styles, { grey } from "../../styles";
 export default function SearchBar(props) {
     const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        cache: useSelector(state => state.cache),
+    }
     return (
         <View style={[
             styles.rowLayout,
@@ -32,8 +36,10 @@ export default function SearchBar(props) {
                             props.handleSort(state.cache[state.tabs[props.index]["path"]])
                         }
                         else {
-                            text = new RegExp(text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
-                            props.handleSort(state.cache[state.tabs[props.index]["path"]].filter((item) => text.test(item["name"])))
+
+                            props.handleSort(state.cache[state.tabs[props.index]["path"]].filter((item) =>
+                                item["name"].toLowerCase().includes(text = text.toLowerCase())
+                            ))
                         }
                     }}
                 />

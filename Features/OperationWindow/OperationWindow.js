@@ -6,14 +6,31 @@ import { useSelector, useDispatch } from "react-redux"
 import useStartOperation from "../../Hooks/useStartOperation";
 export default function OperationWindow() {
     const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        currentTab: useSelector(state => state.currentTab),
+        progress: useSelector(state => state.progress),
+        operationType: useSelector(state => state.operationType),
+        itemInOperation: useSelector(state => state.itemInOperation),
+        clipboardItems: useSelector(state => state.clipboardItems),
+        operationDest: useSelector(state => state.operationDest),
+        operationSource: useSelector(state => state.operationSource),
+    }
     const progressWidth = useSharedValue(0);
     const animatedWidthStyle = useAnimatedStyle(() => ({
         width: `${progressWidth.value}%`
     })
     )
     useEffect(() => {
-        useStartOperation(state, dispatch)
+        dispatch({
+            type: "OPERATIONDEST",
+            payload: state.tabs[state.currentTab]["path"]
+        })
     }, [])
+
+    useEffect(() => {
+        useStartOperation(state, dispatch)
+    }, [state.operationDest])
 
     useEffect(() => {
         progressWidth.value =

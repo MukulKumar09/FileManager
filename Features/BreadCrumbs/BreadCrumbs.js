@@ -25,7 +25,7 @@ export default function BreadCrumbs(props) {
                 styles.rowLayout,
                 styles.smallGap
             ]}>
-                <Pressable
+                {/* <Pressable
                     onPressIn={() => {
                         props.setSortModal(1)
                     }}
@@ -36,7 +36,7 @@ export default function BreadCrumbs(props) {
                         style={[styles.smallImageIcon]}
                         source={require('../../assets/sort.png')} />
 
-                </Pressable>
+                </Pressable>*/}
                 <Pressable
                     onPressIn={() => {
                         props.setSearchModal(1)

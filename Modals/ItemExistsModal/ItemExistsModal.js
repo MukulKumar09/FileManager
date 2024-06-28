@@ -12,8 +12,8 @@ export default function ItemExistsModal() {
     }
     return (
         <Modal
-            onRequestClose={() => state.itemExistsPromiseResolver(0)}
             visible={state.itemExistsModal}
+            onRequestClose={() => state.itemExistsPromiseResolver(0)}
             transparent={true}
         >
             <Pressable
@@ -60,9 +60,6 @@ export default function ItemExistsModal() {
                             dispatch({
                                 type: "INPUTMODAL",
                                 payload: 0
-                            })
-                            dispatch({
-                                type: "ITEMEXISTSMODAL"
                             })
                             state.itemExistsPromiseResolver(updatedName)
                         }

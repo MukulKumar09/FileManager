@@ -1,13 +1,17 @@
 export default function clipboardItems(state = [], action) {
     switch (action.type) {
-        case 'COPYTOCB':
+        case 'COPYTOCB': {
+            console.log("COPYTOCB called")
             return action.payload
-        case 'DELETECB':
+        }
+        case 'DELETECB': {
+            console.log("DELETECB called")
             return [...state].filter((item) => item.path !== action.payload)
-        case 'CLEARCB':
+        }
+        case 'CLEARCB': {
+            console.log("CLEARCB called")
             return []
-        default:
-            return state;
-
+        }
     }
+    return state
 }

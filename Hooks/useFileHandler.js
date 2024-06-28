@@ -1,17 +1,17 @@
 import useOpenExternally from "./useOpenExternally"
-export default function useFileHandler(state, dispatch, item) {
+export default function useFileHandler(currentTab, dispatch, item) {
     if (item.isDirectory()) {
         dispatch({
             type: "MODIFYTABPATH",
             payload: {
-                tabId: state.currentTab,
+                tabId: currentTab,
                 value: item["path"]
             }
         })
         dispatch({
             type: "MODIFYTABNAME",
             payload: {
-                tabId: state.currentTab,
+                tabId: currentTab,
                 value: item["name"]
             }
         })

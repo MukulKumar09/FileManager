@@ -1,187 +1,197 @@
 import useDeleteItem from "./useDeleteItem";
-import useMoveItem from "./useCopyMoveItem";
+import useCopyMoveItem from "./useCopyMoveItem";
 import useNewItem from "./useNewItem";
+import useCache from "./useCache";
 export default function useStageItems(state, dispatch, selectedItems) {
-    if (![5, 6].includes(state.functionId) && selectedItems.length == 0) {
-        dispatch({
-            type: "TOAST",
-            payload:
-                "No items selected",
-        })
-    } else {
-        dispatch({
-            type: 'COPYTOCB',
-            payload: selectedItems
-        })
-        dispatch({
-            type: "OPERATIONSOURCE",
-            payload: state.tabs[state.currentTab]["path"],
-        })
-        switch (state.functionId) {
-            case 0:
-            case 1: { //copy,move
-                dispatch({
-                    type: "OPERATIONTYPE",
-                    payload: state.functionId,
-                })
-                dispatch({
-                    type: "TOAST",
-                    payload:
-                        selectedItems.length + " items " + (state.functionId ? "ready to move" : "copied"),
-                })
-                break
-            }
-            case 2: { //delete
-                dispatch({
-                    type: "OPERATIONTYPE",
-                    payload: state.functionId,
-                })
-                dispatch({
-                    type: "OPERATIONSOURCE",
-                    payload: state.tabs[state.currentTab]["path"],
-                })
-                dispatch({
-                    type: "DELETEMODAL"
-                })
-                const deleteAsync = async () => {
-                    let deleteDecision = await new Promise((resolve) => {
-                        dispatch({
-                            type: "DELETEPROMISERESOLVER",
-                            payload: resolve
-                        })
-                    })
-                    if (deleteDecision) {
-                        for (item of state.clipboardItems) {
-                            await useDeleteItem(item["path"])
-                        }
-                        dispatch({
-                            type: "DELETEMODAL"
-                        })
-                    } else {
-                        dispatch({
-                            type: "DELETEMODAL"
-                        })
-                    }
-                }
-                deleteAsync()
-                break
-            }
-            case 3: { //rename
-                dispatch({
-                    type: "OPERATIONTYPE",
-                    payload: 1,
-                })
-                dispatch({
-                    type: "ITEMINOPERATION",
-                    payload: selectedItems["name"],
-                })
-                const renameAsync = async () => {
-                    let updatedName
+    console.log("got", state.functionId)
+    switch (state.functionId) {
+        case 2: { //delete   
+            dispatch({
+                type: "DELETEMODAL"
+            })
+            const deleteAsync = async () => {
+                let deleteDecision = await new Promise((resolve) => {
                     dispatch({
-                        type: "INPUTMODAL",
-                        payload: "Item"
+                        type: "DELETEPROMISERESOLVER",
+                        payload: resolve
                     })
-                    updatedName = await new Promise((resolve) => {
-                        dispatch({
-                            type: "INPUTPROMISERESOLVER",
-                            payload: resolve
-                        })
+                })
+                if (deleteDecision) {
+                    dispatch({
+                        type: "DELETEMODAL"
                     })
-                    await useMoveItem(item["path"], updatedName)
-                }
-                renameAsync()
-                break
-            }
-            case 4: { //open selecteditem in newtab
-                if (selectedItems.length == 0 || selectedItems.isFile()) {
+                    for (item of state.clipboardItems) {
+                        await useDeleteItem(item["path"])
+                    }
+                    dispatch({
+                        type: "CLEARCB"
+                    })
+                    await useCache(dispatch, state.tabs[state.currentTab]["path"])
                     dispatch({
                         type: "TOAST",
-                        payload: "No folder selected"
+                        payload: 'Item(s) deleted.'
                     })
                 } else {
-                    console.log(state.tabCounter,
-                        selectedItems["name"],
-                        selectedItems["path"],)
                     dispatch({
-                        type: "DUPLICATETAB",
-                        payload: {
-                            tabKey: state.tabCounter,
-                            title: selectedItems["name"],
-                            path: selectedItems["path"],
-                            type: "filebrowser",
-                        }
+                        type: "DELETEMODAL"
                     })
+                    await useCache(dispatch, state.tabs[state.currentTab]["path"])
                     dispatch({
-                        type: "SETCURRENTTAB",
-                        payload: state.tabCounter
-                    })
-                    dispatch({
-                        type: "INCREASETABCOUNTER",
+                        type: "TOAST",
+                        payload: 'Item(s) deleted.'
                     })
                 }
-                break
             }
-            case 5: { //new folder
+            deleteAsync()
+            break
+        }
+        case 3: { //rename
+            dispatch({
+                type: "OPERATIONTYPE",
+                payload: 1,
+            })
+            dispatch({
+                type: "ITEMINOPERATION",
+                payload: selectedItems["name"],
+            })
+            const renameAsync = async () => {
+                let completedSize = 0
+                let totalSize = 0
                 dispatch({
-                    type: "ITEMINOPERATION",
-                    payload: "",
+                    type: "INPUTMODAL",
+                    payload: "Item"
                 })
-                const newFolderAsync = async () => {
-                    let updatedName
+                selectedItems["itemDest"] = state.tabs[state.currentTab]["path"]
+                selectedItems["name"] = await new Promise((resolve) => {
                     dispatch({
-                        type: "INPUTMODAL",
-                        payload: "Folder"
+                        type: "INPUTPROMISERESOLVER",
+                        payload: resolve
                     })
-                    updatedName = await new Promise((resolve) => {
-                        dispatch({
-                            type: "INPUTPROMISERESOLVER",
-                            payload: resolve
-                        })
-                    })
-                    await useNewItem(state.tabs[state.currentTab]["path"], 0, updatedName)
-                }
-                newFolderAsync()
-                break
-            }
-            case 6: { //new file
+                })
+                await useCopyMoveItem(
+                    dispatch,
+                    1,
+                    completedSize,
+                    totalSize,
+                    selectedItems
+                )
                 dispatch({
-                    type: "ITEMINOPERATION",
-                    payload: "",
+                    type: "INPUTMODAL",
+                    payload: 0
                 })
-                const newFileAsync = async () => {
-                    let updatedName
-                    dispatch({
-                        type: "INPUTMODAL",
-                        payload: "File"
-                    })
-                    updatedName = await new Promise((resolve) => {
-                        dispatch({
-                            type: "INPUTPROMISERESOLVER",
-                            payload: resolve
-                        })
-                    })
-                    await useNewItem(state.tabs[state.currentTab]["path"], 1, updatedName)
-                }
-                newFileAsync()
-                break
-            }
-            case 7: {
                 dispatch({
                     type: "OPERATIONTYPE",
-                    payload: state.functionId,
+                    payload: -1,
+                })
+                useCache(dispatch, state.tabs[state.currentTab]["path"])
+            }
+            renameAsync()
+            break
+        }
+        case 4: { //open selecteditem in newtab
+            if (selectedItems.length == 0 || selectedItems.isFile()) {
+                dispatch({
+                    type: "TOAST",
+                    payload: "No folder selected"
+                })
+            } else {
+                dispatch({
+                    type: "DUPLICATETAB",
+                    payload: {
+                        tabKey: state.tabCounter,
+                        title: selectedItems["name"],
+                        path: selectedItems["path"],
+                        type: "filebrowser",
+                    }
                 })
                 dispatch({
-                    type: "OPERATIONDEST",
-                    payload: state.tabs[state.currentTab]["path"],
+                    type: "SETCURRENTTAB",
+                    payload: state.tabCounter
                 })
-                zipHandler()
-                break
+                dispatch({
+                    type: "INCREASETABCOUNTER",
+                })
             }
+            break
         }
-        dispatch({
-            type: "FUNCTIONID",
-            payload: -1
-        })
+        case 5: { //new folder
+            dispatch({
+                type: "ITEMINOPERATION",
+                payload: "",
+            })
+            const newFolderAsync = async () => {
+                let updatedName
+                dispatch({
+                    type: "INPUTMODAL",
+                    payload: "Folder"
+                })
+                updatedName = await new Promise((resolve) => {
+                    dispatch({
+                        type: "INPUTPROMISERESOLVER",
+                        payload: resolve
+                    })
+                })
+                await useNewItem(state.tabs[state.currentTab]["path"], 0, updatedName)
+                dispatch({
+                    type: "INPUTMODAL",
+                    payload: 0
+                })
+                dispatch({
+                    type: "OPERATIONTYPE",
+                    payload: -1,
+                })
+                useCache(dispatch, state.tabs[state.currentTab]["path"])
+            }
+            newFolderAsync()
+            break
+        }
+        case 6: { //new file
+            dispatch({
+                type: "ITEMINOPERATION",
+                payload: "",
+            })
+            const newFileAsync = async () => {
+                let updatedName
+                dispatch({
+                    type: "INPUTMODAL",
+                    payload: "File"
+                })
+                updatedName = await new Promise((resolve) => {
+                    dispatch({
+                        type: "INPUTPROMISERESOLVER",
+                        payload: resolve
+                    })
+                })
+                await useNewItem(state.tabs[state.currentTab]["path"], 1, updatedName)
+                dispatch({
+                    type: "INPUTMODAL",
+                    payload: 0
+                })
+                dispatch({
+                    type: "OPERATIONTYPE",
+                    payload: -1,
+                })
+                useCache(dispatch, state.tabs[state.currentTab]["path"])
+            }
+            newFileAsync()
+            break
+        }
+        case 7: {
+            dispatch({
+                type: "OPERATIONTYPE",
+                payload: state.functionId,
+            })
+            dispatch({
+                type: "OPERATIONDEST",
+                payload: state.tabs[state.currentTab]["path"],
+            })
+            zipHandler()
+            break
+        }
     }
+    dispatch({
+        type: "FUNCTIONID",
+        payload: -1
+    })
     return [1]
 }

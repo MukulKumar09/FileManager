@@ -15,7 +15,13 @@ const App = () => {
 
     const dispatch = useDispatch()
     //modals
-    const [favouriteItems, setFavouriteItems] = useState([])
+    const [favouriteItems, setFavouriteItems] = useState([
+        {
+            title: "Test",
+            path: "/storage/emulated/0/bbs (1)",
+            isDirectory: () => 1
+        }
+    ])
     const [mediaType, setMediaType] = useState(0)
     const [mediaBox, setMediaBox] = useState(0)
     const height = useSharedValue(0);
