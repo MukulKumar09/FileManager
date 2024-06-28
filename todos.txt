@@ -1,10 +1,10 @@
+ deselect after deletion, move, rename
+save maincache, favourites localstorage
+
+bootsrtap icons
 sorting
     modified
     case insensetive
-
-bootsrtap icons
+ fix share
 scroll to beginning on tab delete
  minimize media player
-
- deselect after deletion, move, rename
- fix share

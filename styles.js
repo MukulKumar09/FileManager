@@ -94,7 +94,6 @@ export default StyleSheet.create({
         backgroundColor: primaryColor,
         borderRadius: 20,
         alignItems: 'center',
-        justifyContent: 'space-between'
     },
     input: {
         justifyContent: 'flex-start',

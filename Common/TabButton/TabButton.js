@@ -1,11 +1,17 @@
 import { Text, TouchableOpacity, View, Image, } from "react-native";
-import styles from "./styles";
+import { useSelector, useDispatch } from "react-redux"
+import styles from "../../styles";
 
 const TabButton = (props) => {
+    const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        currentTab: useSelector(state => state.currentTab),
+    }
     return (<View style={[
         styles.rowLayout,
         styles.pill,
-        props.index == props.currTab && styles.pillHighlight,
+        props.index == state.currentTab && styles.pillHighlight,
         {
             maxWidth: 200
         }
@@ -14,21 +20,23 @@ const TabButton = (props) => {
         <TouchableOpacity
             style={[styles.rowLayout, styles.mediumGap, styles.padding]}
             onPress={() => {
-                props.setCurrTab(props.index)
-                props.currTabStatic.current = props.index
+                dispatch({
+                    type: "SETCURRENTTAB",
+                    payload: props.index
+                })
             }
             }
         >
-            <Image style={{ height: 15, width: 15 }} source={require('./assets/folder.png')} />
+            <Image style={{ height: 15, width: 15 }} source={require('../../assets/folder.png')} />
             <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}
-            >{props.tabData["title"]}</Text>
+            >{state.tabs[props.index]["title"]}</Text>
         </TouchableOpacity>
         {
-            props.index == props.currTab ?
+            props.index == state.currentTab ?
                 <TouchableOpacity
                     style={[styles.paddingCloseLeft]}
                     onPress={() => { props.deleteCurrTab() }}>
-                    <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                    <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />
                 </TouchableOpacity>
                 : null
         }

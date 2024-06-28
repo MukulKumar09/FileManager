@@ -1,6 +1,6 @@
 import { Dimensions, Image, Text, TouchableOpacity, View, Animated } from "react-native";
 import Video from "react-native-video";
-import styles from "./styles"
+import styles from "../../styles"
 
 function MediaViewer(props) {
 
@@ -27,7 +27,7 @@ function MediaViewer(props) {
                     onPress={() => {
                         props.setMediaBox(0)
                     }}>
-                    <Image style={{ height: 8, width: 8 }} source={require('./assets/close.png')} />
+                    <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />
                 </TouchableOpacity>
             </View>
 
