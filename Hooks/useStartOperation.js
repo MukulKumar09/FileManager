@@ -9,6 +9,7 @@ export default async function useStartOperation(state, dispatch) {
         totalSize = totalSize + item["size"]
     })
     let completedSize = 0
+    asdas
     const itemExistsModal = () => dispatch({
         type: "ITEMEXISTSMODAL"
     })
