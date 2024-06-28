@@ -79,10 +79,10 @@ export default function ToolBar(props) {
                             })}
                             imageUrl={require('../../assets/rename.png')}
                         />
-                        <CircularButton
+                        {/* <CircularButton
                             functionName={() => props.shareFiles()}
                             imageUrl={require('../../assets/share.png')}
-                        />
+                        /> */}
                         <Text style={{ color: secondaryColor }}>  |  </Text>
                         <CircularButton
                             functionName={() => dispatch({

@@ -9,20 +9,23 @@ export default async function useStartOperation(state, dispatch) {
         totalSize = totalSize + item["size"]
     })
     let completedSize = 0
+    const itemExistsModal = () => dispatch({
+        type: "ITEMEXISTSMODAL"
+    })
+    const itemInOperation = (payload) => dispatch({
+        type: "ITEMINOPERATION",
+        payload: payload,
+    })
+
     for (item of collectedItems) {
         if (state.operationType == -2) { break }
         dispatch({
             type: "SETPROGRESS",
             payload: ((completedSize / totalSize) * 100).toFixed(0)
         })
-        dispatch({
-            type: "ITEMINOPERATION",
-            payload: item["name"]
-        })
+        itemInOperation(item["name"])
         if (await RNFS.exists(item["itemDest"] + "/" + item["name"])) {
-            dispatch({
-                type: "ITEMEXISTSMODAL"
-            })
+            itemExistsModal()
             let decision = await new Promise((resolve) => {
                 dispatch({
                     type: "ITEMEXISTSPROMISERESOLVER",
@@ -31,9 +34,7 @@ export default async function useStartOperation(state, dispatch) {
             })
             switch (decision) {
                 case 0: { //skip
-                    dispatch({
-                        type: "ITEMEXISTSMODAL"
-                    })
+                    itemExistsModal()
                     dispatch({
                         type: "TOAST",
                         payload: "Item skipped"
@@ -41,9 +42,7 @@ export default async function useStartOperation(state, dispatch) {
                     break
                 }
                 case 1: { //overwrite
-                    dispatch({
-                        type: "ITEMEXISTSMODAL"
-                    })
+                    itemExistsModal()
                     await useCopyMoveItem(
                         dispatch,
                         state.operationType,
@@ -55,9 +54,7 @@ export default async function useStartOperation(state, dispatch) {
                     break
                 }
                 default: { //rename
-                    dispatch({
-                        type: "ITEMEXISTSMODAL"
-                    })
+                    itemExistsModal()
                     item["name"] = decision
                     await useCopyMoveItem(
                         dispatch,
@@ -99,6 +96,10 @@ export default async function useStartOperation(state, dispatch) {
             break
         }
     }
+    dispatch({
+        type: "OPERATIONWINDOW"
+    })
+    itemInOperation("")
     useCache(dispatch, state.operationDest)
     state.operationType &&
         useCache(dispatch, state.operationSource)
@@ -107,15 +108,8 @@ export default async function useStartOperation(state, dispatch) {
         payload: toastMessage
     })
     dispatch({
-        type: "ITEMINOPERATION",
-        payload: ""
-    })
-    dispatch({
         type: "OPERATIONTYPE",
         payload: -1,
-    })
-    dispatch({
-        type: "OPERATIONWINDOW"
     })
     dispatch({
         type: "CLEARCB"

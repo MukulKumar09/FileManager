@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
 export default function InputModal() {
-    console.log("imvis")
     const [alreadyExists, setAlreadyExists] = useState(0)
     const dispatch = useDispatch()
     const state = {
@@ -17,12 +16,13 @@ export default function InputModal() {
         inputPromiseResolver: useSelector(state => state.inputPromiseResolver),
     }
     let newName;
+    const inputModal = (payload) => dispatch({
+        type: "INPUTMODAL",
+        payload: payload
+    })
     return (
         <Modal
-            onRequestClose={() => dispatch({
-                type: "INPUTMODAL",
-                payload: 0
-            })}
+            onRequestClose={() => inputModal(0)}
             visible={state.inputModal ? true : false}
             transparent={true}
             onShow={() => {
@@ -31,10 +31,7 @@ export default function InputModal() {
             }}
         >
             <Pressable
-                onPressIn={() => dispatch({
-                    type: "INPUTMODAL",
-                    payload: 0
-                })}
+                onPressIn={() => inputModal(0)}
                 style={[styles.modalBackground]}
             />
 
@@ -88,12 +85,7 @@ export default function InputModal() {
                 <View style={[styles.rowLayout,
                 styles.bigGap]}>
                     <Pressable
-                        onPressIn={() => {
-                            dispatch({
-                                type: "INPUTMODAL",
-                                payload: 0
-                            })
-                        }}
+                        onPressIn={() => inputModal(0)}
                         style={[
                             styles.pill,
                             styles.wide,

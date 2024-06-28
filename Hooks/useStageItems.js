@@ -4,6 +4,22 @@ import useNewItem from "./useNewItem";
 import useCache from "./useCache";
 export default function useStageItems(state, dispatch, selectedItems) {
     console.log("got", state.functionId)
+    const inputModal = (payload) => dispatch({
+        type: "INPUTMODAL",
+        payload: payload
+    })
+    const operationType = (payload) => dispatch({
+        type: "OPERATIONTYPE",
+        payload: payload,
+    })
+    const itemInOperation = (payload) => dispatch({
+        type: "ITEMINOPERATION",
+        payload: payload,
+    })
+    const inputPromiseResolver = (payload) => dispatch({
+        type: "INPUTPROMISERESOLVER",
+        payload: payload,
+    })
     switch (state.functionId) {
         case 2: { //delete   
             dispatch({
@@ -35,38 +51,22 @@ export default function useStageItems(state, dispatch, selectedItems) {
                     dispatch({
                         type: "DELETEMODAL"
                     })
-                    await useCache(dispatch, state.tabs[state.currentTab]["path"])
-                    dispatch({
-                        type: "TOAST",
-                        payload: 'Item(s) deleted.'
-                    })
                 }
             }
             deleteAsync()
             break
         }
         case 3: { //rename
-            dispatch({
-                type: "OPERATIONTYPE",
-                payload: 1,
-            })
-            dispatch({
-                type: "ITEMINOPERATION",
-                payload: selectedItems["name"],
-            })
+            operationType(1)
+            console.log(selectedItems["name"])
+            itemInOperation(selectedItems["name"])
             const renameAsync = async () => {
                 let completedSize = 0
                 let totalSize = 0
-                dispatch({
-                    type: "INPUTMODAL",
-                    payload: "Item"
-                })
                 selectedItems["itemDest"] = state.tabs[state.currentTab]["path"]
+                inputModal("Item")
                 selectedItems["name"] = await new Promise((resolve) => {
-                    dispatch({
-                        type: "INPUTPROMISERESOLVER",
-                        payload: resolve
-                    })
+                    inputPromiseResolver(resolve)
                 })
                 await useCopyMoveItem(
                     dispatch,
@@ -75,14 +75,8 @@ export default function useStageItems(state, dispatch, selectedItems) {
                     totalSize,
                     selectedItems
                 )
-                dispatch({
-                    type: "INPUTMODAL",
-                    payload: 0
-                })
-                dispatch({
-                    type: "OPERATIONTYPE",
-                    payload: -1,
-                })
+                inputModal(0)
+                operationType(-1)
                 useCache(dispatch, state.tabs[state.currentTab]["path"])
             }
             renameAsync()
@@ -115,72 +109,39 @@ export default function useStageItems(state, dispatch, selectedItems) {
             break
         }
         case 5: { //new folder
-            dispatch({
-                type: "ITEMINOPERATION",
-                payload: "",
-            })
+            itemInOperation("")
             const newFolderAsync = async () => {
                 let updatedName
-                dispatch({
-                    type: "INPUTMODAL",
-                    payload: "Folder"
-                })
+                inputModal("Folder")
                 updatedName = await new Promise((resolve) => {
-                    dispatch({
-                        type: "INPUTPROMISERESOLVER",
-                        payload: resolve
-                    })
+                    inputPromiseResolver(resolve)
                 })
                 await useNewItem(state.tabs[state.currentTab]["path"], 0, updatedName)
-                dispatch({
-                    type: "INPUTMODAL",
-                    payload: 0
-                })
-                dispatch({
-                    type: "OPERATIONTYPE",
-                    payload: -1,
-                })
+                inputModal(0)
+                operationType(-1)
                 useCache(dispatch, state.tabs[state.currentTab]["path"])
             }
             newFolderAsync()
             break
         }
         case 6: { //new file
-            dispatch({
-                type: "ITEMINOPERATION",
-                payload: "",
-            })
+            itemInOperation("")
             const newFileAsync = async () => {
                 let updatedName
-                dispatch({
-                    type: "INPUTMODAL",
-                    payload: "File"
-                })
+                inputModal("File")
                 updatedName = await new Promise((resolve) => {
-                    dispatch({
-                        type: "INPUTPROMISERESOLVER",
-                        payload: resolve
-                    })
+                    inputPromiseResolver(resolve)
                 })
                 await useNewItem(state.tabs[state.currentTab]["path"], 1, updatedName)
-                dispatch({
-                    type: "INPUTMODAL",
-                    payload: 0
-                })
-                dispatch({
-                    type: "OPERATIONTYPE",
-                    payload: -1,
-                })
+                inputModal(0)
+                operationType(-1)
                 useCache(dispatch, state.tabs[state.currentTab]["path"])
             }
             newFileAsync()
             break
         }
         case 7: {
-            dispatch({
-                type: "OPERATIONTYPE",
-                payload: state.functionId,
-            })
+            operationType(state.functionId)
             dispatch({
                 type: "OPERATIONDEST",
                 payload: state.tabs[state.currentTab]["path"],
