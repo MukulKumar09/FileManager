@@ -1,6 +1,7 @@
 import { Text, View, Pressable } from "react-native";
 import styles from "../../styles";
 import useIcon from "../../Hooks/useIcon";
+import MaterialIcon from "../MaterialIcon/MaterialIcon";
 
 export default function ListItem(props) {
     return (
@@ -9,7 +10,7 @@ export default function ListItem(props) {
                 [
                     styles.rowLayout,
                     styles.padding,
-                    props.selectedItems.includes(props.item) && styles.listItemHighlight,
+                    props.selectedItems.some(item => item["path"] === props.item["path"]) && styles.listItemHighlight,
                     props.selectedItem == props.item && styles.listItemSelected
                 ]
             }
@@ -26,7 +27,7 @@ export default function ListItem(props) {
                 styles.bigGap,
             ]}>
                 <View style={{ width: 30, }}>
-                    {useIcon(props.item)}
+                    <MaterialIcon iconName="folder" />
                 </View>
                 <View style={[
                     styles.wide,

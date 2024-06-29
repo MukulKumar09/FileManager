@@ -1,6 +1,7 @@
 import { View, Image, Pressable, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { grey } from "../../styles";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 export default function SearchBar(props) {
     const dispatch = useDispatch()
     const state = {
@@ -54,7 +55,7 @@ export default function SearchBar(props) {
                         props.handleSort(state.cache[state.tabs[props.index]["path"]])
                         props.setSearchModal(0)
                     }}>
-                    <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />
+                    <MaterialIcon iconName="close" />
                 </Pressable>
             </View>
         </View>

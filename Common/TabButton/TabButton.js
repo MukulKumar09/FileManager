@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity, View, Image, } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles from "../../styles";
+import MaterialIcon from "../MaterialIcon/MaterialIcon";
 
 const TabButton = (props) => {
     const dispatch = useDispatch()
@@ -27,7 +28,7 @@ const TabButton = (props) => {
             }
             }
         >
-            <Image style={{ height: 15, width: 15 }} source={require('../../assets/folder.png')} />
+            <MaterialIcon iconName="folder" />
             <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}
             >{state.tabs[props.index]["title"]}</Text>
         </TouchableOpacity>
@@ -36,7 +37,7 @@ const TabButton = (props) => {
                 <TouchableOpacity
                     style={[styles.paddingCloseLeft]}
                     onPress={() => { props.deleteCurrTab() }}>
-                    <Image style={{ height: 8, width: 8 }} source={require('../../assets/close.png')} />
+                    <MaterialIcon iconName="close" />
                 </TouchableOpacity>
                 : null
         }

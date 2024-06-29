@@ -1,8 +1,8 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import Share from 'react-native-share';
-import { backgroundColor } from "./styles";
+import styles, { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
@@ -42,8 +42,14 @@ const Window = (props) => {
     }, [tabPath])
 
     useEffect(() => {
-        if (cache)
+        if (cache) {
             setFilesList(useSort(cache, sortType, sortOrder))
+            let tempSelectedItems = [...selectedItems].filter(item => {
+                return cache.some(cacheItem => cacheItem.path === item.path)
+            })
+            console.log("cache: ", cache, "\ntempSelc: ", tempSelectedItems)
+            setSelectedItems(tempSelectedItems)
+        }
     }, [cache])
 
     useEffect(() => {
@@ -127,13 +133,16 @@ const Window = (props) => {
 
     const selectItem = (item) => {
         setSelectedItem(item)
-        if (selectionFlag)
-            if (selectedItems.includes(item))
-                setSelectedItems(selectedItems.filter((i) => i.path !== item["path"]))
+        if (selectionFlag) {
+            console.log(selectedItems, item, selectedItems.includes(item))
+            if (selectedItems.some(selectedItem => selectedItem["path"] === item["path"]))
+                setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.path !== item["path"]))
+
             else
                 setSelectedItems([...selectedItems, item])
-        else
+        } else {
             setSelectedItems([item])
+        }
     }
 
 

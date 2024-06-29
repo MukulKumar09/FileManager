@@ -2,6 +2,7 @@ import { Text, Pressable, View, ScrollView, Image } from "react-native";
 import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function Tabbar(props) {
     const dispatch = useDispatch()
@@ -54,7 +55,7 @@ export default function Tabbar(props) {
                                 type: "OPERATIONWINDOW"
                             })
                         }}>
-                        <Image source={require('../../assets/paste.png')} />
+                        <MaterialIcon iconName="content-paste" />
                     </Pressable>
                     : null}
 
@@ -82,7 +83,7 @@ export default function Tabbar(props) {
                         })
 
                     }}>
-                    <Text style={styles.text}>+</Text>
+                    <MaterialIcon iconName="plus" />
                 </Pressable>
             </>
         </View>

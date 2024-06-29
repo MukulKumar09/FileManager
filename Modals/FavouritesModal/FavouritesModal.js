@@ -2,6 +2,7 @@ import { Text, Pressable, View, Image, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import useFileHandler from "../../Hooks/useFileHandler";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function FavouritesModal(props) {
     const dispatch = useDispatch()
@@ -42,9 +43,7 @@ export default function FavouritesModal(props) {
                     justifyContent: 'space-between'
                 }]}>
                 <View style={[styles.rowLayout, styles.bigGap]}>
-                    <Image
-                        style={[styles.imageIcon]}
-                        source={require('../../assets/favourite.png')} />
+                    <MaterialIcon iconName="heart-outline" />
                     <Text style={[
                         styles.text,
                         styles.headingText
@@ -92,9 +91,7 @@ export default function FavouritesModal(props) {
                                         })
                                     }}
                                 >
-                                    <Image
-                                        style={[styles.imageIcon]}
-                                        source={require('../../assets/folder.png')} />
+                                    <MaterialIcon iconName="folder" />
                                     <Text style={[styles.text]}>{item["title"]}</Text>
                                 </Pressable>
                                 <Pressable
@@ -104,9 +101,7 @@ export default function FavouritesModal(props) {
                                         props.setprops.favouriteItems(tempFavItems)
                                     }}
                                 >
-                                    <Image
-                                        style={[styles.imageIcon]}
-                                        source={require('../../assets/close.png')} />
+                                    <MaterialIcon iconName="close" />
                                 </Pressable>
                             </View>
                     )}
@@ -135,8 +130,7 @@ export default function FavouritesModal(props) {
                         props.showToast("Item already exists")
                     }
                 }}
-            ><Image style={[styles.imageIcon]}
-                source={require('../../assets/newfolder.png')} />
+            ><MaterialIcon iconName="folder-plus-outline" />
                 <Text style={[styles.text]}>Add Current Folder</Text>
             </Pressable>
         </View>

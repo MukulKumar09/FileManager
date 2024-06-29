@@ -1,4 +1,3 @@
- deselect after deletion, move, rename
 save maincache, favourites localstorage
 
 bootsrtap icons

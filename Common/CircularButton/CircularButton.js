@@ -1,5 +1,6 @@
-import { Pressable, Image } from "react-native";
+import { Pressable } from "react-native";
 import styles from "../../styles";
+import MaterialIcon from "../MaterialIcon/MaterialIcon";
 
 export default function CircularButton(props) {
     return (
@@ -10,9 +11,8 @@ export default function CircularButton(props) {
                 styles.padding
             ]}
             onPress={() => { props.functionName() }}>
-            <Image
-                style={[styles.imageIcon]}
-                source={props.imageUrl}
+            <MaterialIcon
+                iconName={props.iconName}
             />
         </Pressable>
     )
