@@ -39,7 +39,7 @@ export default function Tabbar(props) {
                 </View>
             </ScrollView>
             <>
-                {state.clipboardItems && [0, 1].includes(state.operationType) ?
+                {state.clipboardItems.length > 0 && [0, 1].includes(state.operationType) ?
                     <Pressable
                         style={[styles.pill,
                         styles.bordered,
