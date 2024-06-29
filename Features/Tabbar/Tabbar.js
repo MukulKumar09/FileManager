@@ -2,7 +2,7 @@ import { Text, Pressable, View, ScrollView, Image } from "react-native";
 import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
-import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
+import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 
 export default function Tabbar(props) {
     const dispatch = useDispatch()
@@ -31,7 +31,6 @@ export default function Tabbar(props) {
                                     key={index}
                                     index={index}
                                     width={props.width}
-                                    deleteCurrTab={props.deleteCurrTab}
                                 />
                             )
                         }
@@ -55,7 +54,7 @@ export default function Tabbar(props) {
                                 type: "OPERATIONWINDOW"
                             })
                         }}>
-                        <MaterialIcon iconName="content-paste" />
+                        <SmallMaterialIcon name="content-paste" />
                     </Pressable>
                     : null}
 
@@ -83,7 +82,7 @@ export default function Tabbar(props) {
                         })
 
                     }}>
-                    <MaterialIcon iconName="plus" />
+                    <SmallMaterialIcon name="plus" />
                 </Pressable>
             </>
         </View>

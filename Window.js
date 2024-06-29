@@ -19,7 +19,8 @@ const Window = (props) => {
         clipboardItems: useSelector(state => state.clipboardItems),
         currentTab: useSelector(state => state.currentTab),
         tabCounter: useSelector(state => state.tabCounter),
-        functionId: useSelector(state => state.functionId)
+        functionId: useSelector(state => state.functionId),
+        mediaBox: useSelector(state => state.mediaBox)
     }
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
@@ -47,7 +48,6 @@ const Window = (props) => {
             let tempSelectedItems = [...selectedItems].filter(item => {
                 return cache.some(cacheItem => cacheItem.path === item.path)
             })
-            console.log("cache: ", cache, "\ntempSelc: ", tempSelectedItems)
             setSelectedItems(tempSelectedItems)
         }
     }, [cache])
@@ -114,7 +114,7 @@ const Window = (props) => {
         if (selectionFlag)
             selectItem(item)
         else
-            useFileHandler(state.currentTab, dispatch, item)
+            useFileHandler(state, dispatch, item)
     }
 
     const handleLongPress = (item) => {

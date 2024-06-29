@@ -34,7 +34,7 @@ export default function DeleteModal() {
             }
         ]}>
             <View style={[styles.rowLayout, styles.bigGap]}>
-                <MaterialIcon iconName="delete-outline" />
+                <MaterialIcon name="delete-outline" />
                 <Text style={[
                     styles.text,
                     styles.headingText

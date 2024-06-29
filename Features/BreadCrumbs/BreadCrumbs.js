@@ -3,7 +3,7 @@ import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
-import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
+import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 
 export default function BreadCrumbs(props) {
     const dispatch = useDispatch()
@@ -45,7 +45,7 @@ export default function BreadCrumbs(props) {
                     style={[
                         styles.smallPill,
                     ]}>
-                    <MaterialIcon iconName="magnify" />
+                    <SmallMaterialIcon name="magnify" />
 
                 </Pressable>
             </View>

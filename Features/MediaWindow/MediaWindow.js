@@ -1,20 +1,43 @@
+import { useSelector, useDispatch } from "react-redux"
 import Animated from 'react-native-reanimated';
+import { Easing, ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import MediaViewer from "../MediaViewer/MediaViewer";
-export default function MediaWindow(props) {
+import { useEffect } from "react";
+import { Dimensions } from "react-native";
+export default function MediaWindow() {
+
+    const dispatch = useDispatch()
+    const height = useSharedValue(0)
+    const state = {
+        mediaBox: useSelector(state => state.mediaBox)
+    }
+    useEffect(() => {
+        if (state.mediaBox) {
+            height.value =
+                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
+                    duration: 730,
+                    easing: Easing.out(Easing.exp),
+                    reduceMotion: ReduceMotion.System,
+                })
+        } else {
+            height.value =
+                withTiming(0, {
+                    duration: 730,
+                    easing: Easing.out(Easing.exp),
+                    reduceMotion: ReduceMotion.System,
+                })
+        }
+    }, [state.mediaBox]);
+
     return (
         <Animated.View
             style={{
-                height: props.height,
+                height: height,
                 overflow: 'hidden'
             }}
         >
-            {props.mediaType == 0 ? null :
-                <MediaViewer
-                    selectedItem={props.selectedItem}
-                    setSelectedItem={props.setSelectedItem}
-                    mediaType={props.mediaType}
-                    setMediaBox={props.setMediaBox}
-                    setMediaType={props.setMediaType} />
+            {state.mediaBox == 0 ?
+                null : <MediaViewer />
             }
         </Animated.View>
     )

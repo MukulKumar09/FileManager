@@ -1,5 +1,5 @@
 import { Text, Pressable, View, Image } from "react-native";
-import styles from "../../styles";
+import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
@@ -62,7 +62,7 @@ export default function ContextMenu(props) {
                 }}
             >
                 <MaterialIcon
-                    iconName="tab-unselected" />
+                    name="tab-unselected" />
                 <Text style={[styles.text]}>Close all tabs</Text>
             </Pressable>
             <Pressable
@@ -100,7 +100,7 @@ export default function ContextMenu(props) {
                 }}
             >
                 <MaterialIcon
-                    iconName="tab-minus" />
+                    name="tab-minus" />
                 <Text style={[styles.text]}>Close this tab</Text>
             </Pressable>
             <Pressable
@@ -121,7 +121,7 @@ export default function ContextMenu(props) {
                 }}
             >
                 <MaterialIcon
-                    iconName="tab-remove" />
+                    name="tab-remove" />
                 <Text style={[styles.text]}>Close other tabs</Text>
             </Pressable>
             <Pressable
@@ -136,7 +136,7 @@ export default function ContextMenu(props) {
                 }
             >
                 <MaterialIcon
-                    iconName="refresh" />
+                    name="refresh" />
                 <Text style={[styles.text]}>Refresh</Text>
             </Pressable>
             <Pressable
@@ -154,7 +154,7 @@ export default function ContextMenu(props) {
                 }}
             >
                 <MaterialIcon
-                    iconName="tab-plus" />
+                    name="tab-plus" />
                 <Text style={[styles.text]}>Open in new tab</Text>
             </Pressable>
             <Pressable
@@ -169,7 +169,7 @@ export default function ContextMenu(props) {
                 })}
             >
                 <MaterialIcon
-                    iconName="clipboard-outline" />
+                    name="clipboard-outline" />
                 <Text style={[styles.text]}>Clipboard</Text>
             </Pressable>
 
@@ -204,7 +204,7 @@ export default function ContextMenu(props) {
                 }
             >
                 <MaterialIcon
-                    iconName="coffee-outline" />
+                    name="coffee-outline" />
                 <Text style={[styles.text]}>About</Text>
             </Pressable>
             <Pressable
@@ -220,7 +220,7 @@ export default function ContextMenu(props) {
                 }
             >
                 <MaterialIcon
-                    iconName="close" />
+                    name="close" />
                 <Text style={[styles.text]}>Close</Text>
             </Pressable>
         </View>

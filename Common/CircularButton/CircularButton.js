@@ -12,7 +12,8 @@ export default function CircularButton(props) {
             ]}
             onPress={() => { props.functionName() }}>
             <MaterialIcon
-                iconName={props.iconName}
+                name={props.name}
+                color={props.color}
             />
         </Pressable>
     )

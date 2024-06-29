@@ -1,9 +1,8 @@
 save maincache, favourites localstorage
+ media player
 
-bootsrtap icons
 sorting
     modified
     case insensetive
  fix share
 scroll to beginning on tab delete
- minimize media player

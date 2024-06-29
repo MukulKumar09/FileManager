@@ -1,40 +1,76 @@
 import useOpenExternally from "./useOpenExternally"
-export default function useFileHandler(currentTab, dispatch, item) {
+export default function useFileHandler(state, dispatch, item) {
     if (item.isDirectory()) {
         dispatch({
             type: "MODIFYTABPATH",
             payload: {
-                tabId: currentTab,
+                tabId: state.currentTab,
                 value: item["path"]
             }
         })
         dispatch({
             type: "MODIFYTABNAME",
             payload: {
-                tabId: currentTab,
+                tabId: state.currentTab,
                 value: item["name"]
             }
         })
     } else {
         const parts = item.name.split(".")
         const ext = parts.pop()
-        if (["jpeg", "png", "jpg", "gif"].includes(ext.toLowerCase())) {
-            dispatch({
-                type: "SETMEDIATYPE",
-                payload: 1
-            })
-        }
-        else if (["mp4", "mp3", "avi", "mkv", "wav", "mid"].includes(ext)) {
-            dispatch({
-                type: "SETMEDIATYPE",
-                payload: 2
-            })
-        } else {
-            dispatch({
-                type: "SETMEDIATYPE",
-                payload: 0
-            })
-            useOpenExternally(item)
+        switch (ext.toLowerCase()) {
+            case "jpeg":
+            case "png":
+            case "jpg":
+            case "gif": {
+                console.log(!state.mediaBox)
+                state.mediaBox == 0 && dispatch({
+                    type: "SETMEDIABOX"
+                })
+                dispatch({
+                    type: "SETSELECTEDITEM",
+                    payload: item
+                })
+                dispatch({
+                    type: "SETMEDIATYPE",
+                    payload: 1
+                })
+                break
+            }
+            case "mp4":
+            case "mp3":
+            case "avi":
+            case "mkv":
+            case "wav":
+            case "midi": {
+                console.log(!state.mediaBox)
+                state.mediaBox == 0 && dispatch({
+                    type: "SETMEDIABOX"
+                })
+                dispatch({
+                    type: "SETSELECTEDITEM",
+                    payload: item
+                })
+                dispatch({
+                    type: "SETMEDIATYPE",
+                    payload: 2
+                })
+                break
+            }
+            default: {
+                state.mediaBox == 1 && dispatch({
+                    type: "SETMEDIABOX"
+                })
+                dispatch({
+                    type: "SETSELECTEDITEM",
+                    payload: []
+                })
+                dispatch({
+                    type: "SETMEDIATYPE",
+                    payload: 0
+                })
+                useOpenExternally(item)
+            }
         }
     }
 }

@@ -47,7 +47,7 @@ export default function ToolBar(props) {
                                 })
                             }
                             }
-                            iconName="content-copy"
+                            name="content-copy"
                         />
                         <CircularButton
                             functionName={() => {
@@ -56,7 +56,7 @@ export default function ToolBar(props) {
                                     payload: 1
                                 })
                             }}
-                            iconName="content-cut"
+                            name="content-cut"
                         />
                         <CircularButton
                             functionName={() => {
@@ -65,14 +65,14 @@ export default function ToolBar(props) {
                                     payload: 2
                                 })
                             }}
-                            iconName="delete-outline"
+                            name="delete-outline"
                         />
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FUNCTIONID",
                                 payload: 3
                             })}
-                            iconName="square-edit-outline"
+                            name="square-edit-outline"
                         />
                         {/* <CircularButton
                             functionName={() => props.shareFiles()}
@@ -84,21 +84,21 @@ export default function ToolBar(props) {
                                 type: "FUNCTIONID",
                                 payload: 6
                             })}
-                            iconName="file-plus-outline"
+                            name="file-plus-outline"
                         />
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FUNCTIONID",
                                 payload: 5
                             })}
-                            iconName="folder-plus-outline"
+                            name="folder-plus-outline"
                         />
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FAVOURITESMODAL"
                             })
                             }
-                            iconName="heart-outline"
+                            name="heart-outline" color="#FF5252"
                         />
                     </View>
                 </ScrollView>
@@ -107,7 +107,7 @@ export default function ToolBar(props) {
                         type: "CONTEXTMENU"
                     })
                     }
-                    iconName="menu"
+                    name="menu"
                 />
             </View>
         </>

@@ -1,14 +1,13 @@
 import { Image, Text } from 'react-native'
 import styles from '../styles'
+import MaterialIcon from '../Common/MaterialIcon/MaterialIcon'
 
 export default function useIcon(item) {
     let ext = ""
     if (item.isFile()) {
         ext = item.name.split(".").pop()
     } else {
-        return <Image
-            style={[styles.imageIcon]}
-            source={require('../assets/folder.png')} />
+        return <MaterialIcon name="folder" color="#FFC107" />
     }
     switch (ext) {
         case "mp3":

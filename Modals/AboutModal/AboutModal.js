@@ -38,7 +38,7 @@ export default function AboutModal() {
             ]}>
                 <View style={[styles.rowLayout, styles.bigGap]}>
 
-                    <MaterialIcon iconName="coffee-outline" />
+                    <MaterialIcon name="coffee-outline" />
                     <Text style={[
                         styles.text,
                         styles.headingText

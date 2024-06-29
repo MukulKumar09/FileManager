@@ -1,7 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import { View, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
-import { Easing, ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import Window from "./Window";
 import styles from "./styles";
 import ToolBar from "./Features/ToolBar/ToolBar";
@@ -22,10 +21,6 @@ const App = () => {
             isDirectory: () => 1
         }
     ])
-    const [mediaType, setMediaType] = useState(0)
-    const [mediaBox, setMediaBox] = useState(0)
-    const height = useSharedValue(0);
-    //copy move delete
 
     let width = Dimensions.get('window').width
 
@@ -33,37 +28,13 @@ const App = () => {
         useMountingPoints(dispatch)
     }, [])
 
-    useEffect(() => {
-        if (mediaBox == 0) {
-            height.value =
-                withTiming(0, {
-                    duration: 730,
-                    easing: Easing.out(Easing.exp),
-                    reduceMotion: ReduceMotion.System,
-                }
-                )
-            setMediaType(0)
-        } else {
-            height.value =
-                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
-                    duration: 730,
-                    easing: Easing.out(Easing.exp),
-                    reduceMotion: ReduceMotion.System,
-                })
-        }
-    }, [mediaBox]);
-
     return (
         <View style={[styles.mainBody]}>
             <Modals
                 favouriteItems={favouriteItems}
             />
-            <MediaWindow
-                mediaType={mediaType}
-                height={height}
-                setMediaBox={setMediaBox}
-                setMediaType={setMediaType}
-            />
+
+            <MediaWindow />
             <View
                 style={
                     {
@@ -75,8 +46,6 @@ const App = () => {
                     <Window
                         key={index}
                         index={index}
-                        setMediaBox={setMediaBox}
-                        setMediaType={setMediaType}
                     />
                 )}
             </View>

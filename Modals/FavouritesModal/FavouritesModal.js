@@ -1,20 +1,22 @@
-import { Text, Pressable, View, Image, Modal } from "react-native";
+import { Text, Pressable, View, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import useFileHandler from "../../Hooks/useFileHandler";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
-export default function FavouritesModal(props) {
+export default function FavouritesModal() {
     const dispatch = useDispatch()
     const state = {
+        favouriteItems: useSelector(state => state.favouriteItems),
         favouritesModal: useSelector(state => state.favouritesModal),
+        tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
     }
     return (<Modal
         onRequestClose={() => dispatch({
             type: "FAVOURITESMODAL"
         })}
-        visible={state.favouritesModal}
+        visible={state.favouritesModal ? true : false}
         transparent={true}
     >
         <Pressable
@@ -43,7 +45,7 @@ export default function FavouritesModal(props) {
                     justifyContent: 'space-between'
                 }]}>
                 <View style={[styles.rowLayout, styles.bigGap]}>
-                    <MaterialIcon iconName="heart-outline" />
+                    <MaterialIcon name="heart-outline" color="#FF5252" />
                     <Text style={[
                         styles.text,
                         styles.headingText
@@ -56,7 +58,9 @@ export default function FavouritesModal(props) {
                         textDecorationLine: 'underline'
                     }
                 ]} onPress={() =>
-                    props.setFavouriteItems([])
+                    dispatch({
+                        type: "CLEARFAVOURITES"
+                    })
                 }>Clear</Text>
             </View>
             <View style={[styles.divider]} />
@@ -66,9 +70,9 @@ export default function FavouritesModal(props) {
                     width: '100%',
                 }
             ]}>
-                {Object.keys(props.favouriteItems).length == 0 ?
+                {state.favouriteItems.length == 0 ?
                     <Text style={[styles.text, styles.textDisabled]}>No items</Text>
-                    : props.favouriteItems.map(
+                    : state.favouriteItems.map(
                         (item, i) =>
                             <View
                                 key={i}
@@ -85,23 +89,22 @@ export default function FavouritesModal(props) {
                                         }
                                     ]}
                                     onPressIn={() => {
-                                        useFileHandler(state.currentTab, dispatch, item)
+                                        useFileHandler(state, dispatch, item)
                                         dispatch({
                                             type: "FAVOURITESMODAL"
                                         })
                                     }}
                                 >
-                                    <MaterialIcon iconName="folder" />
+                                    <MaterialIcon name="folder" color="#FFC107" />
                                     <Text style={[styles.text]}>{item["title"]}</Text>
                                 </Pressable>
                                 <Pressable
-                                    onPressIn={() => {
-                                        let tempFavItems = [...props.favouriteItems]
-                                        tempFavItems.splice(i, 1)
-                                        props.setprops.favouriteItems(tempFavItems)
-                                    }}
+                                    onPressIn={() => dispatch({
+                                        type: "REMOVEFAVOURITEITEM",
+                                        payload: item["path"]
+                                    })}
                                 >
-                                    <MaterialIcon iconName="close" />
+                                    <MaterialIcon name="close" />
                                 </Pressable>
                             </View>
                     )}
@@ -118,19 +121,23 @@ export default function FavouritesModal(props) {
                         width: '100%'
                     }]}
                 onPressIn={() => {
-                    let favPath = props.path
-                    let favTitle = favPath.split("/").pop()
-                    let newFavItem = {
-                        'title': favTitle,
-                        "path": favPath
-                    }
-                    if (props.favouriteItems.find((item) => item.path == favPath) == undefined) {
-                        props.setFavouriteItems([...props.favouriteItems, newFavItem])
+                    if (state.favouriteItems.find((item) => item.path == state.tabs[state.currentTab]["path"]) == undefined) {
+                        dispatch({
+                            type: "ADDFAVOURITEITEM",
+                            payload: {
+                                title: state.tabs[state.currentTab]["path"].split("/").pop(),
+                                path: state.tabs[state.currentTab]["path"],
+                                isDirectory: () => 1
+                            }
+                        })
                     } else {
-                        props.showToast("Item already exists")
+                        dispatch({
+                            type: "TOAST",
+                            payload: "Item exists in favorite."
+                        })
                     }
                 }}
-            ><MaterialIcon iconName="folder-plus-outline" />
+            ><MaterialIcon name="folder-plus-outline" />
                 <Text style={[styles.text]}>Add Current Folder</Text>
             </Pressable>
         </View>

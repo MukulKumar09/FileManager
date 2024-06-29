@@ -45,7 +45,7 @@ export default function ClipboardModal(props) {
                         justifyContent: 'space-between'
                     }]}>
                     <View style={[styles.rowLayout, styles.bigGap]}>
-                        <MaterialIcon iconName="clipboard-outline" />
+                        <MaterialIcon name="clipboard-outline" />
                         <Text style={[
                             styles.text,
                             styles.headingText
@@ -98,7 +98,7 @@ export default function ClipboardModal(props) {
                                                 paddingVertical: 10
                                             }]}
                                     >
-                                        <MaterialIcon iconName="folder" />
+                                        {useIcon(item)}
                                         <Text style={[styles.text]}>{item["name"]}</Text>
                                     </Pressable>
                                     <Pressable
@@ -109,7 +109,7 @@ export default function ClipboardModal(props) {
                                             })
                                         }}
                                     >
-                                        <MaterialIcon iconName="close" />
+                                        <MaterialIcon name="close" />
                                     </Pressable>
                                 </View>
                         ) :
