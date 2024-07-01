@@ -11,7 +11,7 @@ export default function useIcon(item) {
     }
     switch (ext) {
         case "txt":
-            return <MaterialIcon name="text-box-outline" color={grey} />
+            return <MaterialIcon name="text-box-outline" />
         case "mp3":
         case "ogg":
         case "wav":
@@ -22,7 +22,7 @@ export default function useIcon(item) {
         case "avi":
         case "3gp":
         case "wmv":
-            return <MaterialIcon name="video-outline" color={grey} />
+            return <MaterialIcon name="video-outline" />
         case "apk":
             return <MaterialIcon name="android" color="#A4C639" />
         case "pdf":

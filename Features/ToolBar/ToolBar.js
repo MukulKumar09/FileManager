@@ -1,6 +1,6 @@
 import { Text, View, ScrollView } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
-import styles, { secondaryColor } from "../../styles";
+import styles, { backgroundColor, secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import CircularButton from "../../Common/CircularButton/CircularButton";
 
