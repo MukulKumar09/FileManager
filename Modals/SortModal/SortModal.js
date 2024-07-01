@@ -1,11 +1,12 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function SortModal(props) {
     return (
         <Modal
             onRequestClose={() => props.setSortModal(0)}
-            visible={props.sortModal ? true : false}
+            visible={props.sortModal}
             transparent={true}
         >
             <Pressable
@@ -44,9 +45,9 @@ export default function SortModal(props) {
                     }
                 ]} >
                 <View style={[styles.rowLayout, styles.bigGap]}>
-                    <Image
-                        style={[styles.imageIcon]}
-                        source={require('../../assets/sort.png')} />
+                    <MaterialIcon
+                        name="sort"
+                    />
                     <Text style={
                         [
                             styles.text,

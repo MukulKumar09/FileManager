@@ -17,6 +17,7 @@ import itemExistsModal from "./ItemExistsModalReducer";
 import itemExistsPromiseResolver from "./ItemExistsPromiseResolverReducer";
 import itemInOperation from "./ItemInOperationReducer";
 import mediaType from "./MediaTypeReducer";
+import mediaBox from "./mediaBox";
 import mountingPoints from "./MountingPointsReducers";
 import operationDest from "./OperationDestReducer";
 import operationSource from "./OperationSourceReducer";
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
     clipboardItems,
     contextMenu,
     currentTab,
+    selectedItem,
     deleteModal,
     deletePromiseResolver,
     favouriteItems,
@@ -46,6 +48,7 @@ const rootReducer = combineReducers({
     itemExistsModal,
     itemExistsPromiseResolver,
     itemInOperation,
+    mediaBox,
     mediaType,
     mountingPoints,
     operationDest,

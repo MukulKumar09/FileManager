@@ -17,7 +17,7 @@ export default function ItemExistsModal() {
             transparent={true}
         >
             <Pressable
-                onPressIn={() => {
+                onPress={() => {
                     state.itemExistsPromiseResolver(0)
                 }}
                 style={[styles.modalBackground]}

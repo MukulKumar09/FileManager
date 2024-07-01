@@ -1,6 +1,7 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function DeleteModal() {
     const dispatch = useDispatch()
@@ -16,7 +17,7 @@ export default function DeleteModal() {
         transparent={true}
     >
         <Pressable
-            onPressIn={() => state.deletePromiseResolver(0)} style={[styles.modalBackground]}
+            onPress={() => state.deletePromiseResolver(0)} style={[styles.modalBackground]}
         />
 
         <View style={[
@@ -33,9 +34,7 @@ export default function DeleteModal() {
             }
         ]}>
             <View style={[styles.rowLayout, styles.bigGap]}>
-                <Image
-                    style={[styles.imageIcon]}
-                    source={require('../../assets/delete.png')} />
+                <MaterialIcon name="delete-outline" />
                 <Text style={[
                     styles.text,
                     styles.headingText

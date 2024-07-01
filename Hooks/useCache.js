@@ -1,11 +1,12 @@
 import RNFS from 'react-native-fs';
 export default async function useCache(dispatch, path) {
-    console.log("built cache")
+    let dirData = await RNFS.readDir(path)
+
     dispatch({
         type: "UPDATECACHE",
         payload: {
             key: path,
-            value: await RNFS.readDir(path)
+            value: dirData
         }
     })
 }

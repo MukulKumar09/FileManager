@@ -1,5 +1,9 @@
+
 export default function cache(state = {}, action) {
     switch (action.type) {
+        case "SETCACHE": {
+            return action.payload
+        }
         case "UPDATECACHE":
             return {
                 ...state,

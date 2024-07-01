@@ -2,6 +2,7 @@ import { Text, Pressable, View, Image, Modal } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 import useIcon from "../../Hooks/useIcon";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function ClipboardModal(props) {
 
@@ -19,7 +20,7 @@ export default function ClipboardModal(props) {
             visible={state.clipBoardModal}
             transparent={true}>
             <Pressable
-                onPressIn={() => dispatch({
+                onPress={() => dispatch({
                     type: "CLIPBOARDMODAL"
                 })}
                 style={[styles.modalBackground]}
@@ -44,9 +45,7 @@ export default function ClipboardModal(props) {
                         justifyContent: 'space-between'
                     }]}>
                     <View style={[styles.rowLayout, styles.bigGap]}>
-                        <Image
-                            style={[styles.imageIcon]}
-                            source={require('../../assets/archive.png')} />
+                        <MaterialIcon name="clipboard-outline" />
                         <Text style={[
                             styles.text,
                             styles.headingText
@@ -110,9 +109,7 @@ export default function ClipboardModal(props) {
                                             })
                                         }}
                                     >
-                                        <Image
-                                            style={[styles.imageIcon]}
-                                            source={require('../../assets/close.png')} />
+                                        <MaterialIcon name="close" />
                                     </Pressable>
                                 </View>
                         ) :

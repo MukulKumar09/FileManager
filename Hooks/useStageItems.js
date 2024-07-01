@@ -59,7 +59,7 @@ export default function useStageItems(state, dispatch, selectedItems) {
         case 3: { //rename
             operationType(1)
             console.log(selectedItems["name"])
-            itemInOperation(selectedItems["name"])
+            itemInOperation(selectedItems)
             const renameAsync = async () => {
                 let completedSize = 0
                 let totalSize = 0
@@ -78,6 +78,11 @@ export default function useStageItems(state, dispatch, selectedItems) {
                 inputModal(0)
                 operationType(-1)
                 useCache(dispatch, state.tabs[state.currentTab]["path"])
+                itemInOperation("")
+                dispatch({
+                    type: "TOAST",
+                    payload: "Item renamed."
+                })
             }
             renameAsync()
             break

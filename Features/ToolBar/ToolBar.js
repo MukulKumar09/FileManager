@@ -1,8 +1,10 @@
 import { Text, View, ScrollView } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
-import styles, { secondaryColor } from "../../styles";
+import styles, { backgroundColor, secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import CircularButton from "../../Common/CircularButton/CircularButton";
+
+
 export default function ToolBar(props) {
     const dispatch = useDispatch()
     const state = {
@@ -31,17 +33,12 @@ export default function ToolBar(props) {
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    style={{
-                        transform: [{ scaleX: -1 }]
-                    }}
                 >
                     <View style={[
-                        styles.rowLayout,
-                        {
-                            transform: [{ scaleX: -1 }]
-                        }
-                    ]
-                    }>
+                        styles.rowLayout
+                    ]}>
+
+
                         <CircularButton
                             functionName={() => {
                                 dispatch({
@@ -50,7 +47,7 @@ export default function ToolBar(props) {
                                 })
                             }
                             }
-                            imageUrl={require('../../assets/copy.png')}
+                            name="content-copy"
                         />
                         <CircularButton
                             functionName={() => {
@@ -58,9 +55,8 @@ export default function ToolBar(props) {
                                     type: "FUNCTIONID",
                                     payload: 1
                                 })
-                            }
-                            }
-                            imageUrl={require('../../assets/move.png')}
+                            }}
+                            name="content-cut"
                         />
                         <CircularButton
                             functionName={() => {
@@ -68,16 +64,15 @@ export default function ToolBar(props) {
                                     type: "FUNCTIONID",
                                     payload: 2
                                 })
-                            }
-                            }
-                            imageUrl={require('../../assets/delete.png')}
+                            }}
+                            name="delete-outline"
                         />
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FUNCTIONID",
                                 payload: 3
                             })}
-                            imageUrl={require('../../assets/rename.png')}
+                            name="square-edit-outline"
                         />
                         {/* <CircularButton
                             functionName={() => props.shareFiles()}
@@ -89,21 +84,21 @@ export default function ToolBar(props) {
                                 type: "FUNCTIONID",
                                 payload: 6
                             })}
-                            imageUrl={require('../../assets/newfile.png')}
+                            name="file-plus-outline"
                         />
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FUNCTIONID",
                                 payload: 5
                             })}
-                            imageUrl={require('../../assets/newfolder.png')}
+                            name="folder-plus-outline"
                         />
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FAVOURITESMODAL"
                             })
                             }
-                            imageUrl={require('../../assets/favourite.png')}
+                            name="heart-outline" color="#FF5252"
                         />
                     </View>
                 </ScrollView>
@@ -112,7 +107,7 @@ export default function ToolBar(props) {
                         type: "CONTEXTMENU"
                     })
                     }
-                    imageUrl={require('../../assets/horzmenu.png')}
+                    name="menu"
                 />
             </View>
         </>

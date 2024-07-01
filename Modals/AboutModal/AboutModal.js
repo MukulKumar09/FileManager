@@ -1,6 +1,7 @@
 import { Text, Pressable, View, Image, Modal, Linking } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function AboutModal() {
     const dispatch = useDispatch()
@@ -16,7 +17,7 @@ export default function AboutModal() {
             transparent={true}
         >
             <Pressable
-                onPressIn={() => dispatch({
+                onPress={() => dispatch({
                     type: "ABOUTMODAL"
                 })}
                 style={[styles.modalBackground]}
@@ -36,9 +37,8 @@ export default function AboutModal() {
                 }
             ]}>
                 <View style={[styles.rowLayout, styles.bigGap]}>
-                    <Image
-                        style={[styles.imageIcon]}
-                        source={require('../../assets/about.png')} />
+
+                    <MaterialIcon name="coffee-outline" />
                     <Text style={[
                         styles.text,
                         styles.headingText
@@ -52,10 +52,10 @@ export default function AboutModal() {
                             width: 80,
                             borderRadius: 20
                         }} />
-                    <View style={[styles.wide]}>
+                    <View>
                         <Text style={[styles.text]}>Author: Mukul Kumar{"\n"}</Text>
                         <Pressable
-                            onPressIn={() => Linking.openURL('https://github.com/MukulKumar09')}
+                            onPressIn={() => Linking.openURL('https://www.linkedin.com/in/mukul-kumar-488b1119b/')}
                             style={[
                                 styles.smallPill
                             ]}
@@ -66,7 +66,7 @@ export default function AboutModal() {
                                     styles.text,
                                     styles.textDisabled
                                 ]}>
-                                https://github.com/MukulKumar09
+                                LinkedIn
                             </Text>
                         </Pressable>
                     </View>

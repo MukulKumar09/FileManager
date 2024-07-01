@@ -1,8 +1,8 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import Share from 'react-native-share';
-import { backgroundColor } from "./styles";
+import styles, { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
@@ -19,7 +19,8 @@ const Window = (props) => {
         clipboardItems: useSelector(state => state.clipboardItems),
         currentTab: useSelector(state => state.currentTab),
         tabCounter: useSelector(state => state.tabCounter),
-        functionId: useSelector(state => state.functionId)
+        functionId: useSelector(state => state.functionId),
+        mediaBox: useSelector(state => state.mediaBox)
     }
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
@@ -42,8 +43,13 @@ const Window = (props) => {
     }, [tabPath])
 
     useEffect(() => {
-        if (cache)
+        if (cache) {
             setFilesList(useSort(cache, sortType, sortOrder))
+            let tempSelectedItems = [...selectedItems].filter(item => {
+                return cache.some(cacheItem => cacheItem.path === item.path)
+            })
+            setSelectedItems(tempSelectedItems)
+        }
     }, [cache])
 
     useEffect(() => {
@@ -65,7 +71,8 @@ const Window = (props) => {
                             payload:
                                 "No items selected",
                         })
-                    } else {
+                    }
+                    else {
                         dispatch({
                             type: 'COPYTOCB',
                             payload: selectedItems
@@ -78,17 +85,29 @@ const Window = (props) => {
                             type: "OPERATIONSOURCE",
                             payload: state.tabs[state.currentTab]["path"],
                         })
-                        if (state.functionId == 0 || state.functionId == 1) {
-                            dispatch({ //reset to copy more/less items
-                                type: "FUNCTIONID",
-                                payload: -1
-                            })
+                        let message = null
+                        if (state.functionId == 1)
+                            message = selectedItems.length + " items ready to move"
+                        if (state.functionId == 2)
+                            message = selectedItems.length + " items copied"
+                        if (message)
                             dispatch({
                                 type: "TOAST",
-                                payload:
-                                    selectedItems.length + " items " + (state.functionId ? "ready to move" : "copied"),
+                                payload: message,
                             })
-                        }
+                    }
+                    break
+                }
+                case 3: {
+                    if (selectedItem.length == 0) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    }
+                    else {
+                        useStageItems(state, dispatch, selectedItem)
                     }
                     break
                 }
@@ -96,6 +115,10 @@ const Window = (props) => {
                     useStageItems(state, dispatch, selectedItem)
                 }
             }
+            dispatch({
+                type: "FUNCTIONID",
+                payload: -1
+            })
         }
     }, [state.functionId])
 
@@ -105,10 +128,11 @@ const Window = (props) => {
     }, [state.clipboardItems])
 
     const handlePress = (item) => {
+        setSelectedItem(item)
         if (selectionFlag)
             selectItem(item)
         else
-            useFileHandler(state.currentTab, dispatch, item)
+            useFileHandler(state, dispatch, item)
     }
 
     const handleLongPress = (item) => {
@@ -127,13 +151,16 @@ const Window = (props) => {
 
     const selectItem = (item) => {
         setSelectedItem(item)
-        if (selectionFlag)
-            if (selectedItems.includes(item))
-                setSelectedItems(selectedItems.filter((i) => i.path !== item["path"]))
+        if (selectionFlag) {
+            console.log(selectedItems, item, selectedItems.includes(item))
+            if (selectedItems.some(selectedItem => selectedItem["path"] === item["path"]))
+                setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.path !== item["path"]))
+
             else
                 setSelectedItems([...selectedItems, item])
-        else
+        } else {
             setSelectedItems([item])
+        }
     }
 
 

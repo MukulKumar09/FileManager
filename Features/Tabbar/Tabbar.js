@@ -2,6 +2,7 @@ import { Text, Pressable, View, ScrollView, Image } from "react-native";
 import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
+import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 
 export default function Tabbar(props) {
     const dispatch = useDispatch()
@@ -30,7 +31,6 @@ export default function Tabbar(props) {
                                     key={index}
                                     index={index}
                                     width={props.width}
-                                    deleteCurrTab={props.deleteCurrTab}
                                 />
                             )
                         }
@@ -39,7 +39,7 @@ export default function Tabbar(props) {
                 </View>
             </ScrollView>
             <>
-                {state.clipboardItems && [0, 1].includes(state.operationType) ?
+                {state.clipboardItems.length > 0 && [0, 1].includes(state.operationType) ?
                     <Pressable
                         style={[styles.pill,
                         styles.bordered,
@@ -54,7 +54,7 @@ export default function Tabbar(props) {
                                 type: "OPERATIONWINDOW"
                             })
                         }}>
-                        <Image source={require('../../assets/paste.png')} />
+                        <SmallMaterialIcon name="content-paste" />
                     </Pressable>
                     : null}
 
@@ -82,7 +82,7 @@ export default function Tabbar(props) {
                         })
 
                     }}>
-                    <Text style={styles.text}>+</Text>
+                    <SmallMaterialIcon name="plus" />
                 </Pressable>
             </>
         </View>

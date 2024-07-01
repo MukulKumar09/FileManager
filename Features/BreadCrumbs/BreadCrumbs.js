@@ -1,8 +1,9 @@
-import { View, Image, Pressable, ScrollView, Text } from "react-native";
+import { View, Pressable, ScrollView, Text } from "react-native";
 import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
+import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 
 export default function BreadCrumbs(props) {
     const dispatch = useDispatch()
@@ -44,9 +45,7 @@ export default function BreadCrumbs(props) {
                     style={[
                         styles.smallPill,
                     ]}>
-                    <Image
-                        style={[styles.smallImageIcon]}
-                        source={require('../../assets/search.png')} />
+                    <SmallMaterialIcon name="magnify" />
 
                 </Pressable>
             </View>

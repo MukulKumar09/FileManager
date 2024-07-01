@@ -1,7 +1,6 @@
-import { useEffect, useReducer, useState } from "react";
-import { View, Dimensions } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
-import { Easing, ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated';
+import { useEffect } from "react";
+import { View, Dimensions, Pressable, Text } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import Window from "./Window";
 import styles from "./styles";
 import ToolBar from "./Features/ToolBar/ToolBar";
@@ -10,22 +9,13 @@ import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
+import { cacheDbConnect } from "./getDbConnection/cacheDbConnect";
 
 const App = () => {
-
     const dispatch = useDispatch()
-    //modals
-    const [favouriteItems, setFavouriteItems] = useState([
-        {
-            title: "Test",
-            path: "/storage/emulated/0/bbs (1)",
-            isDirectory: () => 1
-        }
-    ])
-    const [mediaType, setMediaType] = useState(0)
-    const [mediaBox, setMediaBox] = useState(0)
-    const height = useSharedValue(0);
-    //copy move delete
+    // let db
+    // const initDb = async () => db = await cacheDbConnect()
+    // initDb()
 
     let width = Dimensions.get('window').width
 
@@ -33,37 +23,11 @@ const App = () => {
         useMountingPoints(dispatch)
     }, [])
 
-    useEffect(() => {
-        if (mediaBox == 0) {
-            height.value =
-                withTiming(0, {
-                    duration: 730,
-                    easing: Easing.out(Easing.exp),
-                    reduceMotion: ReduceMotion.System,
-                }
-                )
-            setMediaType(0)
-        } else {
-            height.value =
-                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
-                    duration: 730,
-                    easing: Easing.out(Easing.exp),
-                    reduceMotion: ReduceMotion.System,
-                })
-        }
-    }, [mediaBox]);
-
     return (
         <View style={[styles.mainBody]}>
-            <Modals
-                favouriteItems={favouriteItems}
-            />
-            <MediaWindow
-                mediaType={mediaType}
-                height={height}
-                setMediaBox={setMediaBox}
-                setMediaType={setMediaType}
-            />
+            <Modals />
+
+            <MediaWindow />
             <View
                 style={
                     {
@@ -75,8 +39,6 @@ const App = () => {
                     <Window
                         key={index}
                         index={index}
-                        setMediaBox={setMediaBox}
-                        setMediaType={setMediaType}
                     />
                 )}
             </View>
@@ -86,10 +48,26 @@ const App = () => {
             <ToolBar />
             <Tabbar width={width} />
 
-            {/* <Pressable onPress={() => dispatch({
-                    type: "SETPROGRESS",
-                    payload: 60
-                })}><Text>SHow all</Text></Pressable> */}
+            {/* <Pressable onPress={async () =>
+                db.transaction((tx) => {
+                    tx.executeSql('SELECT * FROM Directories', [], (tx, result) =>
+                        console.log(result.rows.raw())
+                    )
+                })}><Text>Directories</Text></Pressable>
+            <Pressable onPress={async () =>
+                db.transaction((tx) => {
+                    tx.executeSql('SELECT * FROM FilesList', [], (tx, result) =>
+                        console.log(result.rows.raw())
+                    )
+                })}><Text>FilesList</Text></Pressable>
+            <Pressable onPress={async () => {
+                const createTable = async () => {
+                    await db.executeSql('DROP TABLE Directories');
+                    await db.executeSql('DROP TABLE FilesList');
+                }
+                createTable()
+            }
+            }><Text>Delte</Text></Pressable> */}
         </View>
 
     );

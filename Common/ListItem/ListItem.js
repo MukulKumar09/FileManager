@@ -9,7 +9,7 @@ export default function ListItem(props) {
                 [
                     styles.rowLayout,
                     styles.padding,
-                    props.selectedItems.includes(props.item) && styles.listItemHighlight,
+                    props.selectedItems.some(item => item["path"] === props.item["path"]) && styles.listItemHighlight,
                     props.selectedItem == props.item && styles.listItemSelected
                 ]
             }

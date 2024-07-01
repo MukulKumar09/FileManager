@@ -23,7 +23,6 @@ export default function InputModal() {
     return (
         <Modal
             onRequestClose={() => inputModal(0)}
-            visible={state.inputModal ? true : false}
             transparent={true}
             onShow={() => {
                 this.textInput.blur();
@@ -31,7 +30,7 @@ export default function InputModal() {
             }}
         >
             <Pressable
-                onPressIn={() => inputModal(0)}
+                onPress={() => inputModal(0)}
                 style={[styles.modalBackground]}
             />
 
@@ -67,7 +66,7 @@ export default function InputModal() {
                             styles.wide
                         ]}
                         multiline={true}
-                        defaultValue={state.itemInOperation}
+                        defaultValue={state.itemInOperation["name"]}
                         onChangeText={text => {
                             for (let i = 0; i < state.cache[state.tabs[state.currentTab]["path"]].length; i++) {
                                 if (text == state.itemInOperation || state.cache[state.tabs[state.currentTab]["path"]][i]["name"] == text) {
