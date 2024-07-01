@@ -65,7 +65,14 @@ const Window = (props) => {
                 case 0:
                 case 1:
                 case 2: {
-                    if (selectedItems.length == 0) {
+                    if (state.functionId == 2 && selectedItem.length == 0) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    }
+                    else if (selectedItems.length == 0) {
                         dispatch({
                             type: "TOAST",
                             payload:
@@ -84,18 +91,22 @@ const Window = (props) => {
                             type: "OPERATIONSOURCE",
                             payload: state.tabs[state.currentTab]["path"],
                         })
-                        if (state.functionId == 0 || state.functionId == 1) {
-                            dispatch({ //reset to copy more/less items
-                                type: "FUNCTIONID",
-                                payload: -1
-                            })
+                        let message = null
+                        if (state.functionId == 1)
+                            message = "ready to move"
+                        if (state.functionId == 2)
+                            message = "copied"
+                        if (message)
                             dispatch({
                                 type: "TOAST",
                                 payload:
-                                    selectedItems.length + " items " + (state.functionId ? "ready to move" : "copied"),
+                                    selectedItems.length + " items " + (state.functionId == 1 ?  : "copied"),
                             })
-                        }
                     }
+                    dispatch({
+                        type: "FUNCTIONID",
+                        payload: -1
+                    })
                     break
                 }
                 default: {

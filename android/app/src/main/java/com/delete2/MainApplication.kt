@@ -1,4 +1,4 @@
-package com.delete2
+package com.tabber
 
 import android.app.Application
 import com.facebook.react.PackageList

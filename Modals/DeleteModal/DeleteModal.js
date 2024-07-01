@@ -17,7 +17,7 @@ export default function DeleteModal() {
         transparent={true}
     >
         <Pressable
-            onPressIn={() => state.deletePromiseResolver(0)} style={[styles.modalBackground]}
+            onPress={() => state.deletePromiseResolver(0)} style={[styles.modalBackground]}
         />
 
         <View style={[

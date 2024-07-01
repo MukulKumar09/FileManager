@@ -35,19 +35,10 @@ export default function Modals(props) {
                     <ItemExistsModal />
                     : null
             }
-            {/* {
-                progressModal == 1 &&
-                <ProgressModal />
-            } */}
             {
                 state.
                     favouritesModal ?
-                    <FavouritesModal
-                        setFavouritesModal={props.setFavouritesModal}
-                        setFavouriteItems={props.setFavouriteItems}
-                        favouriteItems={props.favouriteItems}
-                        setTabPath={props.setTabPath}
-                    />
+                    <FavouritesModal />
                     : null
             }
             {

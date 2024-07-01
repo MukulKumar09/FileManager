@@ -59,7 +59,7 @@ export default function useStageItems(state, dispatch, selectedItems) {
         case 3: { //rename
             operationType(1)
             console.log(selectedItems["name"])
-            itemInOperation(selectedItems["name"])
+            itemInOperation(selectedItems)
             const renameAsync = async () => {
                 let completedSize = 0
                 let totalSize = 0

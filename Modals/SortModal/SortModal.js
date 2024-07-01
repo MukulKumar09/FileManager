@@ -5,7 +5,7 @@ export default function SortModal(props) {
     return (
         <Modal
             onRequestClose={() => props.setSortModal(0)}
-            visible={props.sortModal ? true : false}
+            visible={props.sortModal}
             transparent={true}
         >
             <Pressable

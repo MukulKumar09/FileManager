@@ -16,11 +16,10 @@ export default function FavouritesModal() {
         onRequestClose={() => dispatch({
             type: "FAVOURITESMODAL"
         })}
-        visible={state.favouritesModal ? true : false}
         transparent={true}
     >
         <Pressable
-            onPressIn={() => dispatch({
+            onPress={() => dispatch({
                 type: "FAVOURITESMODAL"
             })}
             style={[styles.modalBackground]}

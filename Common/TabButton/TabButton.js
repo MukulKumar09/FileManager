@@ -19,17 +19,28 @@ const TabButton = (props) => {
     ]}>
 
         <TouchableOpacity
-            style={[styles.rowLayout, styles.mediumGap, styles.padding]}
             onPress={() => {
                 dispatch({
                     type: "SETCURRENTTAB",
                     payload: props.index
                 })
             }}
+            style={[
+                styles.rowLayout,
+                styles.padding,
+                styles.mediumGap,
+            ]}
         >
             <SmallMaterialIcon name="folder" color="#FFC107" />
-            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}
-            >{state.tabs[props.index]["title"]}</Text>
+            <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={[
+                    styles.text
+                ]}
+            >
+                {state.tabs[props.index]["title"]}
+            </Text>
         </TouchableOpacity>
         {
             props.index == state.currentTab ?

@@ -20,7 +20,7 @@ export default function ClipboardModal(props) {
             visible={state.clipBoardModal}
             transparent={true}>
             <Pressable
-                onPressIn={() => dispatch({
+                onPress={() => dispatch({
                     type: "CLIPBOARDMODAL"
                 })}
                 style={[styles.modalBackground]}
