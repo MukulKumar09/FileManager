@@ -65,20 +65,14 @@ const Window = (props) => {
                 case 0:
                 case 1:
                 case 2: {
-                    if (state.functionId == 2 && selectedItem.length == 0) {
+                    if (selectedItems.length == 0) {
                         dispatch({
                             type: "TOAST",
                             payload:
                                 "No items selected",
                         })
                     }
-                    else if (selectedItems.length == 0) {
-                        dispatch({
-                            type: "TOAST",
-                            payload:
-                                "No items selected",
-                        })
-                    } else {
+                    else {
                         dispatch({
                             type: 'COPYTOCB',
                             payload: selectedItems
@@ -93,26 +87,38 @@ const Window = (props) => {
                         })
                         let message = null
                         if (state.functionId == 1)
-                            message = "ready to move"
+                            message = selectedItems.length + " items ready to move"
                         if (state.functionId == 2)
-                            message = "copied"
+                            message = selectedItems.length + " items copied"
                         if (message)
                             dispatch({
                                 type: "TOAST",
-                                payload:
-                                    selectedItems.length + " items " + (state.functionId == 1 ?  : "copied"),
+                                payload: message,
                             })
                     }
-                    dispatch({
-                        type: "FUNCTIONID",
-                        payload: -1
-                    })
+                    break
+                }
+                case 3: {
+                    if (selectedItem.length == 0) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    }
+                    else {
+                        useStageItems(state, dispatch, selectedItem)
+                    }
                     break
                 }
                 default: {
                     useStageItems(state, dispatch, selectedItem)
                 }
             }
+            dispatch({
+                type: "FUNCTIONID",
+                payload: -1
+            })
         }
     }, [state.functionId])
 
@@ -122,6 +128,7 @@ const Window = (props) => {
     }, [state.clipboardItems])
 
     const handlePress = (item) => {
+        setSelectedItem(item)
         if (selectionFlag)
             selectItem(item)
         else

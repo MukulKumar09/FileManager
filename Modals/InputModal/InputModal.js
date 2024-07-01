@@ -66,7 +66,7 @@ export default function InputModal() {
                             styles.wide
                         ]}
                         multiline={true}
-                        defaultValue={state.itemInOperation}
+                        defaultValue={state.itemInOperation["name"]}
                         onChangeText={text => {
                             for (let i = 0; i < state.cache[state.tabs[state.currentTab]["path"]].length; i++) {
                                 if (text == state.itemInOperation || state.cache[state.tabs[state.currentTab]["path"]][i]["name"] == text) {

@@ -78,6 +78,11 @@ export default function useStageItems(state, dispatch, selectedItems) {
                 inputModal(0)
                 operationType(-1)
                 useCache(dispatch, state.tabs[state.currentTab]["path"])
+                itemInOperation("")
+                dispatch({
+                    type: "TOAST",
+                    payload: "Item renamed."
+                })
             }
             renameAsync()
             break
