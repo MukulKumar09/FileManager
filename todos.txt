@@ -1,6 +1,7 @@
 save maincache, favourites localstorage
  media player
  show all tabs
+ open with another app
 
 sorting
     modified

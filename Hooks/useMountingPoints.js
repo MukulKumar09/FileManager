@@ -1,5 +1,4 @@
 import RNFS from 'react-native-fs';
-import { cacheDbConnect } from '../getDbConnection/cacheDbConnect';
 
 export default async function useMountingPoints(dispatch) {
 
@@ -23,46 +22,18 @@ export default async function useMountingPoints(dispatch) {
         return mntPnts
     }
 
-    // let db = await cacheDbConnect()
-    // let directories = await new Promise((resolve, reject) => {
-    //     db.transaction((tx) => {
-    //         tx.executeSql(
-    //             'SELECT * FROM Directories',
-    //             [],
-    //             (tx, result) => {
-    //                 resolve(result.rows.raw())
-    //             },
-    //             (tx, reject) => {
-    //                 resolve(undefined)
-    //             }
-    //         )
-    //     }
-    //     )
-    // })
-    // // let filesList = await new Promise((resolve, reject) => {
-    // //     db.transaction((tx) => {
-    // //         tx.executeSql('SELECT * FROM FilesList', [], (tx, result) =>
-    // //             resolve(result.rows.raw())
-    // //         )
-    // //     })
-    // // })
-    // if (directories == undefined) {
-    //     const sqlAsync = async () => {
-    //         await db.executeSql('CREATE TABLE Directories (path TEXT, modifiedDate DATE)');
-    //         await db.executeSql('CREATE TABLE FilesList (path TEXT,name TEXT,isDirectory() TEXT,isFile() TEXT)');
-    //         await db.executeSql('INSERT INTO Directories (path) VALUES ("Home")');
-    //         await db.executeSql('INSERT INTO FilesList (path) VALUES ("path")');
-    //     }
-    //     sqlAsync()
-    // }
-    // else if (directories.find(directory => directory.path == "Home") == undefined) {
-    //     const sqlAsync = async () => {
-    //         await db.executeSql('INSERT INTO Directories (path) VALUES ("Home")');
-    //         await db.executeSql('INSERT INTO FilesList (path) VALUES ("path")');
-    //     }
-    //     sqlAsync()
+    // if (await RNFS.exists(RNFS.ExternalCachesDirectoryPath + "/favorites.json")) {
+    //     let favorites = await RNFS.readFile(RNFS.ExternalCachesDirectoryPath + "/favorites.json");
+    //     dispatch({
+    //         type: "SETFAVOURITEITEM",
+    //         payload: favorites
+    //     })
     // } else {
-    //     console.log("all fine")
+    //     let d = {
+    //         name: 'mukul',
+    //         a: () => 1
+    //     }
+    //     await RNFS.writeFile(RNFS.ExternalCachesDirectoryPath + "/favorites.json", JSON.stringify(d))
     // }
 
     dispatch({

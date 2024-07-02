@@ -1,5 +1,8 @@
 export default function favouriteItems(state = [], action) {
     switch (action.type) {
+        case "SETFAVOURITEITEM": {
+            return action.payload
+        }
         case "ADDFAVOURITEITEM": {
             return [
                 ...state,
