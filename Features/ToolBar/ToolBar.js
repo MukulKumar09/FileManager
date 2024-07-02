@@ -1,8 +1,9 @@
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, Pressable } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { secondaryColor } from "../../styles";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import CircularButton from "../../Common/CircularButton/CircularButton";
+import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 
 export default function ToolBar(props) {
@@ -107,13 +108,19 @@ export default function ToolBar(props) {
                         />
                     </View>
                 </ScrollView>
-                <CircularButton
-                    functionName={() => dispatch({
+                <Pressable
+                    style={[
+                        styles.pill,
+                        styles.text,
+                        styles.padding
+                    ]}
+                    onPress={() => dispatch({
                         type: "CONTEXTMENU"
-                    })
-                    }
-                    name="menu"
-                />
+                    })}>
+                    <MaterialIcon
+                        name="menu"
+                    />
+                </Pressable>
             </View>
         </>
     )

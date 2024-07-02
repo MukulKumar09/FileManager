@@ -23,12 +23,8 @@ export default function useFileHandler(state, dispatch, item) {
             case "png":
             case "jpg":
             case "gif": {
-                console.log(!state.mediaBox)
-                state.mediaBox == 0 && dispatch({
-                    type: "SETMEDIABOX"
-                })
                 dispatch({
-                    type: "SETSELECTEDITEM",
+                    type: "SETMEDIABOX",
                     payload: item
                 })
                 dispatch({
@@ -43,12 +39,8 @@ export default function useFileHandler(state, dispatch, item) {
             case "mkv":
             case "wav":
             case "midi": {
-                console.log(!state.mediaBox)
-                state.mediaBox == 0 && dispatch({
-                    type: "SETMEDIABOX"
-                })
                 dispatch({
-                    type: "SETSELECTEDITEM",
+                    type: "SETMEDIABOX",
                     payload: item
                 })
                 dispatch({
@@ -58,12 +50,9 @@ export default function useFileHandler(state, dispatch, item) {
                 break
             }
             default: {
-                state.mediaBox == 1 && dispatch({
-                    type: "SETMEDIABOX"
-                })
                 dispatch({
-                    type: "SETSELECTEDITEM",
-                    payload: []
+                    type: "SETMEDIABOX",
+                    payload: 0
                 })
                 dispatch({
                     type: "SETMEDIATYPE",

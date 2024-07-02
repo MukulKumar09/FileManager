@@ -149,8 +149,8 @@ const Window = (props) => {
     }
 
     const handleLongPress = (item) => {
+        setSelectedItem(item)
         if (selectionFlag) {
-            setSelectedItem(item)
             setSelectedItems(useRangeSelect(filesList, [...selectedItems], item))
         } else {
             selectItem(item)

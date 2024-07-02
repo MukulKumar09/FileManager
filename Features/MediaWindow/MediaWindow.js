@@ -12,14 +12,15 @@ export default function MediaWindow() {
         mediaBox: useSelector(state => state.mediaBox)
     }
     useEffect(() => {
-        if (state.mediaBox) {
+        if (state.mediaBox && height.value == 0) {
             height.value =
                 withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
                     duration: 730,
                     easing: Easing.out(Easing.exp),
                     reduceMotion: ReduceMotion.System,
                 })
-        } else {
+        }
+        if (state.mediaBox == 0 && height.value > 0) {
             height.value =
                 withTiming(0, {
                     duration: 730,
@@ -27,7 +28,24 @@ export default function MediaWindow() {
                     reduceMotion: ReduceMotion.System,
                 })
         }
-    }, [state.mediaBox]);
+    }, [state.mediaBox])
+    // useEffect(() => {
+    //     if (state.mediaBox) {
+    //         height.value =
+    //             withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
+    //                 duration: 730,
+    //                 easing: Easing.out(Easing.exp),
+    //                 reduceMotion: ReduceMotion.System,
+    //             })
+    //     } else {
+    //         height.value =
+    //             withTiming(0, {
+    //                 duration: 730,
+    //                 easing: Easing.out(Easing.exp),
+    //                 reduceMotion: ReduceMotion.System,
+    //             })
+    //     }
+    // }, [state.mediaBox]);
 
     return (
         <Animated.View
