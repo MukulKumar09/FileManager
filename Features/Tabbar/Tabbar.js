@@ -41,10 +41,13 @@ export default function Tabbar(props) {
             <>
                 {state.clipboardItems.length > 0 && [0, 1].includes(state.operationType) ?
                     <Pressable
-                        style={[styles.pill,
-                        styles.bordered,
-                        styles.padding
-                        ]}
+                        style={
+                            [
+                                styles.pill,
+                                styles.bordered,
+                                styles.padding
+                            ]
+                        }
                         onPressIn={() => {
                             dispatch({
                                 type: "OPERATIONDEST",

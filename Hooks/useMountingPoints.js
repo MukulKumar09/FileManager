@@ -75,6 +75,10 @@ export default async function useMountingPoints(dispatch) {
         type: "RESETTABS"
     })
     dispatch({
+        type: "SETCURRENTTAB",
+        payload: "0"
+    })
+    dispatch({
         type: "INCREASETABCOUNTER",
     })
 }

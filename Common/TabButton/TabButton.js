@@ -9,73 +9,86 @@ const TabButton = (props) => {
         tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
     }
-    return (<View style={[
-        styles.rowLayout,
-        styles.pill,
-        props.index == state.currentTab && styles.pillHighlight,
-        {
-            maxWidth: 200
-        }
-    ]}>
+    return (
+        <View style={[
+            styles.rowLayout,
+            styles.pill,
+            styles.padding,
+            styles.mediumGap,
+            props.index == state.currentTab && styles.pillHighlight
+        ]}>
 
-        <TouchableOpacity
-            onPress={() => {
-                dispatch({
-                    type: "SETCURRENTTAB",
-                    payload: props.index
-                })
-            }}
-            style={[
-                styles.rowLayout,
-                styles.padding,
-                styles.mediumGap,
-            ]}
-        >
-            <SmallMaterialIcon name="folder" color="#FFC107" />
-            <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={[
-                    styles.text
-                ]}
+            <TouchableOpacity
+                onPress={() => {
+                    dispatch({
+                        type: "SETCURRENTTAB",
+                        payload: props.index
+                    })
+                }}
+                style={
+                    [
+                        styles.rowLayout,
+                        styles.mediumGap,
+                        {
+                            maxWidth: 150
+                        }
+                    ]
+                }
             >
-                {state.tabs[props.index]["title"]}
-            </Text>
-        </TouchableOpacity>
-        {
-            props.index == state.currentTab ?
-                <TouchableOpacity
-                    style={[styles.paddingCloseLeft]}
-                    onPress={() => {
-                        let tempTabs = Object.keys(state.tabs)
-                        let tabKey = tempTabs.indexOf(state.currentTab.toString())
-                        let currentTab
-                        if (tempTabs[tabKey + 1]) {
-                            currentTab = tempTabs[tabKey + 1]
-                        } else {
-                            currentTab = tempTabs[tabKey - 1]
-                        }
-                        if (currentTab) {
-                            dispatch({
-                                type: "SETCURRENTTAB",
-                                payload: currentTab
-                            })
-                            dispatch({
-                                type: "DELETETAB",
-                                payload: state.currentTab
-                            })
-                        } else {
-                            dispatch({
-                                type: "RESETTABS"
-                            })
-                        }
-                    }}
+                <SmallMaterialIcon
+                    name="folder"
+                    color="#FFC107"
+                />
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={[
+                        styles.text
+                    ]}
                 >
-                    <SmallMaterialIcon name="close" color="#ffffff" />
-                </TouchableOpacity>
-                : null
-        }
+                    {state.tabs[props.index]["title"]}
+                </Text>
+            </TouchableOpacity>
+            {
+                props.index == state.currentTab ?
+                    <TouchableOpacity
+                        onPress={() => {
+                            let tempTabs = Object.keys(state.tabs)
+                            let tabKey = tempTabs.indexOf(state.currentTab.toString())
+                            let currentTab = state.currentTab
+                            if (tempTabs[tabKey + 1]) {
+                                currentTab = tempTabs[tabKey + 1]
+                            } else if (tempTabs[tabKey - 1]) {
+                                currentTab = tempTabs[tabKey - 1]
+                            }
+                            if (tempTabs.length > 1) {
+                                dispatch({
+                                    type: "SETCURRENTTAB",
+                                    payload: currentTab
+                                })
+                                dispatch({
+                                    type: "DELETETAB",
+                                    payload: state.currentTab
+                                })
+                            } else {
+                                dispatch({
+                                    type: "SETCURRENTTAB",
+                                    payload: "0"
+                                })
+                                dispatch({
+                                    type: "RESETTABS"
+                                })
+                            }
+                        }}
+                    >
+                        <SmallMaterialIcon
+                            name="close"
+                            color="#ffffff"
+                        />
+                    </TouchableOpacity>
+                    : null
+            }
 
-    </View >)
+        </View >)
 }
 export default TabButton

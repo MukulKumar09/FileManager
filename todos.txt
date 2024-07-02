@@ -1,5 +1,6 @@
 save maincache, favourites localstorage
  media player
+ show all tabs
 
 sorting
     modified

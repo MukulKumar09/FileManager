@@ -13,6 +13,10 @@ import { cacheDbConnect } from "./getDbConnection/cacheDbConnect";
 
 const App = () => {
     const dispatch = useDispatch()
+    const state = {
+        tabs: useSelector(state => state.tabs),
+        operationWindow: useSelector(state => state.operationWindow),
+    }
     // let db
     // const initDb = async () => db = await cacheDbConnect()
     // initDb()
@@ -35,25 +39,20 @@ const App = () => {
                     }
                 }
             >
-                {Object.keys(useSelector(state => state.tabs)).map((index) =>
+                {Object.keys(state.tabs).map((index) =>
                     <Window
                         key={index}
                         index={index}
                     />
                 )}
             </View>
-            {useSelector(state => state.operationWindow) ?
+            {state.operationWindow ?
                 <OperationWindow />
                 : null}
             <ToolBar />
             <Tabbar width={width} />
 
-            {/* <Pressable onPress={async () =>
-                db.transaction((tx) => {
-                    tx.executeSql('SELECT * FROM Directories', [], (tx, result) =>
-                        console.log(result.rows.raw())
-                    )
-                })}><Text>Directories</Text></Pressable>
+            {/*
             <Pressable onPress={async () =>
                 db.transaction((tx) => {
                     tx.executeSql('SELECT * FROM FilesList', [], (tx, result) =>

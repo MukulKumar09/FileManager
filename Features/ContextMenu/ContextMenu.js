@@ -56,6 +56,11 @@ export default function ContextMenu(props) {
                     dispatch({
                         type: "RESETTABS"
                     })
+
+                    dispatch({
+                        type: "SETCURRENTTAB",
+                        payload: "0"
+                    })
                     dispatch({
                         type: "CONTEXTMENU"
                     })
@@ -92,6 +97,10 @@ export default function ContextMenu(props) {
                     } else {
                         dispatch({
                             type: "RESETTABS"
+                        })
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: "0"
                         })
                     }
                     dispatch({

@@ -1,8 +1,8 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
+import { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import Share from 'react-native-share';
-import styles, { backgroundColor } from "./styles";
+import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
