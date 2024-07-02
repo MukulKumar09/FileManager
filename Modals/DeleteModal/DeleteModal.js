@@ -4,7 +4,6 @@ import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function DeleteModal() {
-    const dispatch = useDispatch()
     const state = {
         deleteModal: useSelector(state => state.deleteModal),
         deletePromiseResolver: useSelector(state => state.deletePromiseResolver),
@@ -13,7 +12,7 @@ export default function DeleteModal() {
     }
     return (<Modal
         onRequestClose={() => state.deletePromiseResolver(0)}
-        visible={state.deleteModal}
+        visible={state.deleteModal ? true : false}
         transparent={true}
     >
         <Pressable
@@ -44,7 +43,7 @@ export default function DeleteModal() {
             <Text style={[styles.text,
             styles.textDisabled]}>Following items will be deleted:</Text>
             <View style={{ flexDirection: 'column', marginBottom: 20 }}>
-                {state.clipboardItems.map((item, i) =>
+                {state.deleteModal.map((item, i) =>
                     <Text key={i} style={[styles.text]}>{item["name"]}</Text>
                 )}
             </View>

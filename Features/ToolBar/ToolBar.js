@@ -40,7 +40,7 @@ export default function ToolBar(props) {
                         styles.rowLayout
                     ]}>
 
-                        {state.tabs[state.currentTab]["path"] == "Home" ? null :
+                        {state.currentTab && state.tabs[state.currentTab]["path"] == "Home" ? null :
                             <>
                                 <CircularButton
                                     functionName={() => {

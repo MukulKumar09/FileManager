@@ -8,7 +8,6 @@ import DeleteModal from "./DeleteModal/DeleteModal";
 import InputModal from "./InputModal/InputModal";
 
 export default function Modals(props) {
-    const dispatch = useDispatch()
     const state = {
         itemExistsModal: useSelector(state => state.itemExistsModal),
         inputModal: useSelector(state => state.inputModal),
@@ -17,7 +16,7 @@ export default function Modals(props) {
         aboutModal: useSelector(state => state.aboutModal),
         favouritesModal: useSelector(state => state.favouritesModal)
     }
-    useEffect(() => console.log(state.inputModal), [state.inputModal])
+    useEffect(() => console.log(state.deleteModal), [state.deleteModal])
     return (
         <>
             {

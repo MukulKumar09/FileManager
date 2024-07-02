@@ -3,6 +3,7 @@ import aboutModal from "./aboutModal";
 import cache from "./cache";
 import clipBoardModal from "./clipBoardModal";
 import clipboardItems from "./clipboardItems";
+import selectedItem from "./SelectedItemReducer";
 import contextMenu from "./contextMenu";
 import currentTab from "./CurrentTabReducer";
 import deleteModal from "./DeleteModalReducer";
@@ -18,17 +19,14 @@ import itemExistsPromiseResolver from "./ItemExistsPromiseResolverReducer";
 import itemInOperation from "./ItemInOperationReducer";
 import mediaType from "./MediaTypeReducer";
 import mediaBox from "./mediaBox";
-import mountingPoints from "./MountingPointsReducers";
 import operationDest from "./OperationDestReducer";
 import operationSource from "./OperationSourceReducer";
 import operationType from "./OperationTypeReducer";
 import operationWindow from "./OperationWindowReducer";
 import progress from "./ProgressReducer";
-import selectedItem from "./SelectedItemReducer";
 import tabCounter from "./TabCounterReducer";
 import tabs from "./TabsReducer";
 import ToastReducer from "./ToastReducer";
-import updatedName from "./UpdatedNameReducer";
 const rootReducer = combineReducers({
     aboutModal,
     cache,
@@ -50,7 +48,6 @@ const rootReducer = combineReducers({
     itemInOperation,
     mediaBox,
     mediaType,
-    mountingPoints,
     operationDest,
     operationSource,
     operationType,
@@ -60,6 +57,5 @@ const rootReducer = combineReducers({
     tabCounter,
     tabs,
     ToastReducer,
-    updatedName,
 })
 export default rootReducer

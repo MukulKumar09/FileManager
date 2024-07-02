@@ -36,6 +36,13 @@ const Window = (props) => {
     const tabPath = useSelector(state => state.tabs[props.index]["path"])
     const cache = useSelector(state => state.cache[tabPath])
 
+    const functionId = (payload) => {
+        dispatch({
+            type: "FUNCTIONID",
+            payload: payload
+        })
+    }
+
     useEffect(() => { //first
         if (tabPath !== "Home" && cache == undefined) {
             useCache(dispatch, tabPath)
@@ -59,18 +66,19 @@ const Window = (props) => {
             setSelectionFlag(1)
     }, [selectedItems])
 
+
     useEffect(() => {
         if (state.currentTab == props.index && state.functionId > -1) {
             switch (state.functionId) {
                 case 0:
-                case 1:
-                case 2: {
+                case 1: { //copy, move
                     if (selectedItems.length == 0) {
                         dispatch({
                             type: "TOAST",
                             payload:
                                 "No items selected",
                         })
+                        functionId(-1)
                     }
                     else {
                         dispatch({
@@ -85,40 +93,45 @@ const Window = (props) => {
                             type: "OPERATIONSOURCE",
                             payload: state.tabs[state.currentTab]["path"],
                         })
-                        let message = null
-                        if (state.functionId == 1)
-                            message = selectedItems.length + " items ready to move"
-                        if (state.functionId == 2)
-                            message = selectedItems.length + " items copied"
-                        if (message)
-                            dispatch({
-                                type: "TOAST",
-                                payload: message,
-                            })
+                        functionId(-1)
                     }
                     break
                 }
-                case 3: {
+                case 2: { //delete
+                    if (selectedItems.length == 0) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                        functionId(-1)
+                    }
+                    else {
+                        useStageItems(state, dispatch, selectedItems)
+                        functionId(-1)
+                    }
+                    break
+                }
+                case 3: { //rename
                     if (selectedItem.length == 0) {
                         dispatch({
                             type: "TOAST",
                             payload:
                                 "No items selected",
                         })
+                        functionId(-1)
                     }
                     else {
                         useStageItems(state, dispatch, selectedItem)
+                        functionId(-1)
                     }
                     break
                 }
                 default: {
                     useStageItems(state, dispatch, selectedItem)
+                    functionId(-1)
                 }
             }
-            dispatch({
-                type: "FUNCTIONID",
-                payload: -1
-            })
         }
     }, [state.functionId])
 
@@ -152,7 +165,6 @@ const Window = (props) => {
     const selectItem = (item) => {
         setSelectedItem(item)
         if (selectionFlag) {
-            console.log(selectedItems, item, selectedItems.includes(item))
             if (selectedItems.some(selectedItem => selectedItem["path"] === item["path"]))
                 setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.path !== item["path"]))
 

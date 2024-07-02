@@ -3,7 +3,7 @@ import useCopyMoveItem from "./useCopyMoveItem";
 import useNewItem from "./useNewItem";
 import useCache from "./useCache";
 export default function useStageItems(state, dispatch, selectedItems) {
-    console.log("got", state.functionId)
+
     const inputModal = (payload) => dispatch({
         type: "INPUTMODAL",
         payload: payload
@@ -21,9 +21,10 @@ export default function useStageItems(state, dispatch, selectedItems) {
         payload: payload,
     })
     switch (state.functionId) {
-        case 2: { //delete   
+        case 2: { //delete
             dispatch({
-                type: "DELETEMODAL"
+                type: "DELETEMODAL",
+                payload: selectedItems
             })
             const deleteAsync = async () => {
                 let deleteDecision = await new Promise((resolve) => {
@@ -34,14 +35,12 @@ export default function useStageItems(state, dispatch, selectedItems) {
                 })
                 if (deleteDecision) {
                     dispatch({
-                        type: "DELETEMODAL"
+                        type: "DELETEMODAL",
+                        payload: 0
                     })
-                    for (item of state.clipboardItems) {
+                    for (item of selectedItems) {
                         await useDeleteItem(item["path"])
                     }
-                    dispatch({
-                        type: "CLEARCB"
-                    })
                     await useCache(dispatch, state.tabs[state.currentTab]["path"])
                     dispatch({
                         type: "TOAST",
@@ -49,8 +48,10 @@ export default function useStageItems(state, dispatch, selectedItems) {
                     })
                 } else {
                     dispatch({
-                        type: "DELETEMODAL"
+                        type: "DELETEMODAL",
+                        payload: 0
                     })
+
                 }
             }
             deleteAsync()
@@ -155,9 +156,5 @@ export default function useStageItems(state, dispatch, selectedItems) {
             break
         }
     }
-    dispatch({
-        type: "FUNCTIONID",
-        payload: -1
-    })
     return [1]
 }

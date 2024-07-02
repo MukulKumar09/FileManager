@@ -24,6 +24,7 @@ export default async function useStartOperation(state, dispatch) {
             payload: ((completedSize / totalSize) * 100).toFixed(0)
         })
         itemInOperation(item["name"])
+        // if (await RNFS.exists(item["path"]))
         if (await RNFS.exists(item["itemDest"] + "/" + item["name"])) {
             itemExistsModal()
             let decision = await new Promise((resolve) => {
