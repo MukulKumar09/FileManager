@@ -44,7 +44,7 @@ export default function FavouritesModal() {
                     justifyContent: 'space-between'
                 }]}>
                 <View style={[styles.rowLayout, styles.bigGap]}>
-                    <MaterialIcon name="heart-outline" color="#FF5252" />
+                    <MaterialIcon name="heart" color="#FF5252" />
                     <Text style={[
                         styles.text,
                         styles.headingText

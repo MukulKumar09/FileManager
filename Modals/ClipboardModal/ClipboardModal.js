@@ -124,7 +124,7 @@ export default function ClipboardModal(props) {
                         , {
                             width: '100%'
                         }]}
-                    onPressIn={() => dispatch({
+                    onPress={() => dispatch({
                         type: "CLIPBOARDMODAL"
                     })}
                 >

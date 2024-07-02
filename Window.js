@@ -93,6 +93,10 @@ const Window = (props) => {
                             type: "OPERATIONSOURCE",
                             payload: state.tabs[state.currentTab]["path"],
                         })
+                        dispatch({
+                            type: "TOAST",
+                            payload: selectedItems.length + " item(s) " + (state.functionId ? "moving" : "copied"),
+                        })
                         functionId(-1)
                     }
                     break

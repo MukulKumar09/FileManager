@@ -104,7 +104,7 @@ export default function ToolBar(props) {
                                 type: "FAVOURITESMODAL"
                             })
                             }
-                            name="heart-outline" color="#FF5252"
+                            name="heart" color="#FF5252"
                         />
                     </View>
                 </ScrollView>

@@ -72,11 +72,15 @@ export default function AboutModal() {
                     </View>
                 </View>
 
-                <Text style={[styles.text, styles.smallText]}>
+                <Text style={[styles.text]}>
                     {"\n"}
                     Thanks for downloading my app!
                     {"\n"}
-                    You can support this independent project by rating and leaving a feedback on Play Store.
+                    I'm an independent developer. My goal is to keep all of my products free to use.
+                    {"\n"}
+                    However to this won't be possible without your support!
+                    {"\n"}
+                    All you need to do is rate 5 start and leave a feedback on Play Store.
                     {"\n"}
                 </Text>
                 <View
@@ -87,7 +91,7 @@ export default function AboutModal() {
                     ]}
                 >
                     <Pressable
-                        onPressIn={() => {
+                        onPress={() => {
                             dispatch({
                                 type: "ABOUTMODAL"
                             })
