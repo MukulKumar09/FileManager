@@ -40,7 +40,7 @@ export default function StatusBar(props) {
                         textDecorationLine: 'underline'
                     }
                 ]}
-                    onPress={() => setSelectedItems(props.filesList)}>Select All</Text>
+                    onPress={() => props.setSelectedItems(props.filesList)}>Select All</Text>
             </View>
         </View>
     )
