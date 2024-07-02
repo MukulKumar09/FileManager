@@ -9,6 +9,8 @@ export default function ToolBar(props) {
     const dispatch = useDispatch()
     const state = {
         contextMenu: useSelector(state => state.contextMenu),
+        tabs: useSelector(state => state.tabs),
+        currentTab: useSelector(state => state.currentTab),
     }
     return (
         <>
@@ -38,61 +40,64 @@ export default function ToolBar(props) {
                         styles.rowLayout
                     ]}>
 
-
-                        <CircularButton
-                            functionName={() => {
-                                dispatch({
-                                    type: "FUNCTIONID",
-                                    payload: 0
-                                })
-                            }
-                            }
-                            name="content-copy"
-                        />
-                        <CircularButton
-                            functionName={() => {
-                                dispatch({
-                                    type: "FUNCTIONID",
-                                    payload: 1
-                                })
-                            }}
-                            name="content-cut"
-                        />
-                        <CircularButton
-                            functionName={() => {
-                                dispatch({
-                                    type: "FUNCTIONID",
-                                    payload: 2
-                                })
-                            }}
-                            name="delete-outline"
-                        />
-                        <CircularButton
-                            functionName={() => dispatch({
-                                type: "FUNCTIONID",
-                                payload: 3
-                            })}
-                            name="square-edit-outline"
-                        />
-                        {/* <CircularButton
+                        {state.tabs[state.currentTab]["path"] == "Home" ? null :
+                            <>
+                                <CircularButton
+                                    functionName={() => {
+                                        dispatch({
+                                            type: "FUNCTIONID",
+                                            payload: 0
+                                        })
+                                    }
+                                    }
+                                    name="content-copy"
+                                />
+                                <CircularButton
+                                    functionName={() => {
+                                        dispatch({
+                                            type: "FUNCTIONID",
+                                            payload: 1
+                                        })
+                                    }}
+                                    name="content-cut"
+                                />
+                                <CircularButton
+                                    functionName={() => {
+                                        dispatch({
+                                            type: "FUNCTIONID",
+                                            payload: 2
+                                        })
+                                    }}
+                                    name="delete-outline"
+                                />
+                                <CircularButton
+                                    functionName={() => dispatch({
+                                        type: "FUNCTIONID",
+                                        payload: 3
+                                    })}
+                                    name="square-edit-outline"
+                                />
+                                {/* <CircularButton
                             functionName={() => props.shareFiles()}
                             imageUrl={require('../../assets/share.png')}
                         /> */}
-                        <Text style={{ color: secondaryColor }}>  |  </Text>
-                        <CircularButton
-                            functionName={() => dispatch({
-                                type: "FUNCTIONID",
-                                payload: 6
-                            })}
-                            name="file-plus-outline"
-                        />
-                        <CircularButton
-                            functionName={() => dispatch({
-                                type: "FUNCTIONID",
-                                payload: 5
-                            })}
-                            name="folder-plus-outline"
-                        />
+                                <Text style={{ color: secondaryColor }}>  |  </Text>
+                                <CircularButton
+                                    functionName={() => dispatch({
+                                        type: "FUNCTIONID",
+                                        payload: 6
+                                    })}
+                                    name="file-plus-outline"
+                                />
+                                <CircularButton
+                                    functionName={() => dispatch({
+                                        type: "FUNCTIONID",
+                                        payload: 5
+                                    })}
+                                    name="folder-plus-outline"
+                                />
+                            </>
+                        }
                         <CircularButton
                             functionName={() => dispatch({
                                 type: "FAVOURITESMODAL"
