@@ -13,8 +13,8 @@ export default async function useMountingPoints(dispatch) {
             let pathFull = temp.join("/")
             mntPnts.push({
                 path: pathFull,
-                isDirectory: () => 1,
-                isFile: () => 0,
+                isDirectory: true,
+                isFile: false,
                 name: pathFull == RNFS.ExternalStorageDirectoryPath ? "Internal Storage" : "External Storage " + count,
             })
             count++

@@ -1,7 +1,10 @@
 import RNFS from 'react-native-fs';
 export default async function useCache(dispatch, path) {
     let dirData = await RNFS.readDir(path)
-
+    dirData.map(item => {
+        item["isDirectory"] = item.isDirectory()
+        item["isFile"] = item.isFile()
+    })
     dispatch({
         type: "UPDATECACHE",
         payload: {

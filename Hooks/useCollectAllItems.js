@@ -3,7 +3,7 @@ export default async function useCollectAllItem(clipboardItems, operationDest) {
     let collectedItems = []
     let itemDest
     const deepCollect = async (item) => {
-        if (item.isDirectory()) {
+        if (item.isDirectory) {
             if (operationDest.includes(item["path"])) { //check id dest inside source
             } else {
                 itemDest = itemDest + "/" + item["name"]

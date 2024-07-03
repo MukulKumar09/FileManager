@@ -184,7 +184,7 @@ const Window = (props) => {
         try {
             let filesToShare = [];
             for (let i = 0; i < selectedItems.length; i++) {
-                if (selectedItems[i].isFile()) {
+                if (selectedItems[i].isFile) {
                     console.log('file://' + selectedItems[i]["path"])
                     filesToShare.push('file://' + selectedItems[i]["path"])
                 }

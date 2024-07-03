@@ -1,6 +1,6 @@
 import useOpenExternally from "./useOpenExternally"
 export default function useFileHandler(state, dispatch, item) {
-    if (item.isDirectory()) {
+    if (item.isDirectory) {
         dispatch({
             type: "MODIFYTABPATH",
             payload: {

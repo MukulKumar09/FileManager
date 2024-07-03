@@ -89,7 +89,7 @@ export default function useStageItems(state, dispatch, selectedItems) {
             break
         }
         case 4: { //open selecteditem in newtab
-            if (selectedItems.length == 0 || selectedItems.isFile()) {
+            if (selectedItems.length == 0 || selectedItems.isFile) {
                 dispatch({
                     type: "TOAST",
                     payload: "No folder selected"

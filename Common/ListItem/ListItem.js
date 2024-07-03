@@ -34,7 +34,7 @@ export default function ListItem(props) {
                     <Text style={[styles.text]}>{props.item["name"]}</Text>
                 </View>
             </View>
-            {props.item.isFile() ?
+            {props.item.isFile ?
                 <View style={{ width: 30, alignItems: 'flex-end' }}>
                     <Text style={[styles.text,
                     styles.smallDarkText]}>

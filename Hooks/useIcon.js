@@ -4,7 +4,7 @@ import MaterialIcon from '../Common/MaterialIcon/MaterialIcon'
 
 export default function useIcon(item) {
     let ext = ""
-    if (item.isFile()) {
+    if (item.isFile) {
         ext = item.name.split(".").pop()
     } else {
         return <MaterialIcon name="folder" color="#FFC107" />
