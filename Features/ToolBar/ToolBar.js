@@ -99,15 +99,16 @@ export default function ToolBar(props) {
                                 />
                             </>
                         }
-                        <CircularButton
-                            functionName={() => dispatch({
-                                type: "FAVOURITESMODAL"
-                            })
-                            }
-                            name="heart" color="#FF5252"
-                        />
                     </View>
                 </ScrollView>
+
+                <CircularButton
+                    functionName={() => dispatch({
+                        type: "FAVOURITESMODAL"
+                    })
+                    }
+                    name="heart" color="#FF5252"
+                />
                 <Pressable
                     style={[
                         styles.pill,

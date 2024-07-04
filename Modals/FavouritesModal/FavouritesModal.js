@@ -88,7 +88,20 @@ export default function FavouritesModal() {
                                         }
                                     ]}
                                     onPressIn={() => {
-                                        useFileHandler(state, dispatch, item)
+                                        dispatch({
+                                            type: "MODIFYTABPATH",
+                                            payload: {
+                                                tabId: state.currentTab,
+                                                value: item["path"]
+                                            }
+                                        })
+                                        dispatch({
+                                            type: "MODIFYTABNAME",
+                                            payload: {
+                                                tabId: state.currentTab,
+                                                value: item["name"]
+                                            }
+                                        })
                                         dispatch({
                                             type: "FAVOURITESMODAL"
                                         })

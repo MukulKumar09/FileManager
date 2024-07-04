@@ -78,9 +78,9 @@ export default function AboutModal() {
                     {"\n"}
                     I'm an independent developer. My goal is to keep all of my products free to use.
                     {"\n"}
-                    However to this won't be possible without your support!
+                    However this won't be possible without your support!
                     {"\n"}
-                    All you need to do is rate 5 start and leave a feedback on Play Store.
+                    All you need to do is rate 5 stars and leave a feedback on Play Store.
                     {"\n"}
                 </Text>
                 <View
