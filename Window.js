@@ -59,6 +59,7 @@ const Window = (props) => {
         }
     }, [cache])
 
+
     useEffect(() => {
         if (selectedItems.length == 0)
             setSelectionFlag(0)
@@ -178,7 +179,6 @@ const Window = (props) => {
             setSelectedItems([item])
         }
     }
-
 
     const shareFiles = async () => {
         try {

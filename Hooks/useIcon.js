@@ -1,4 +1,5 @@
 import { Image, Text } from 'react-native'
+import { Image as Img } from 'react-native-compressor';
 import styles, { grey } from '../styles'
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon'
 
@@ -9,6 +10,7 @@ export default function useIcon(item) {
     } else {
         return <MaterialIcon name="folder" color="#FFC107" />
     }
+
     switch (ext) {
         case "txt":
             return <MaterialIcon name="text-box-outline" />
@@ -17,6 +19,11 @@ export default function useIcon(item) {
         case "wav":
         case "aac": {
             return <MaterialIcon name="music" color="#42A5F5" />
+        }
+        case "jpeg":
+        case "jpg":
+        case "png": {
+            return <MaterialIcon name="image" />
         }
         case "mp4":
         case "avi":
@@ -31,7 +38,9 @@ export default function useIcon(item) {
         case "rar":
             return <MaterialIcon name="folder-zip" color="#FFC107" />
         default:
-            return (<Text style={[styles.text,
-            styles.smallDarkText]}>{ext}</Text>)
+            return (
+                <Text style={[styles.text,
+                styles.smallDarkText]}>{ext}</Text>
+            )
     }
 }
