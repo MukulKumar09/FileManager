@@ -95,7 +95,7 @@ export default function FavouritesModal() {
                                     }}
                                 >
                                     <MaterialIcon name="folder" color="#FFC107" />
-                                    <Text style={[styles.text]}>{item["title"]}</Text>
+                                    <Text style={[styles.text]}>{item["name"]}</Text>
                                 </Pressable>
                                 <Pressable
                                     onPressIn={() => dispatch({
@@ -124,7 +124,7 @@ export default function FavouritesModal() {
                         dispatch({
                             type: "ADDFAVOURITEITEM",
                             payload: {
-                                title: state.tabs[state.currentTab]["path"].split("/").pop(),
+                                name: state.tabs[state.currentTab]["path"].split("/").pop(),
                                 path: state.tabs[state.currentTab]["path"],
                                 isDirectory: () => 1
                             }
