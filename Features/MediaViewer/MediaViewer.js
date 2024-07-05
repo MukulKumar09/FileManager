@@ -1,7 +1,7 @@
 import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 import Video from "react-native-video";
-import styles from "../../styles"
+import styles, { backgroundColor, secondaryColor } from "../../styles";
 import MaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 
 function MediaViewer() {
@@ -12,20 +12,58 @@ function MediaViewer() {
     }
     return (
         <View style={{ flexDirection: 'column' }}>
-            {state.mediaType === 1 && <Image style={{ backgroundColor: '#152024', width: Dimensions.get('window').width, height: Math.round(Dimensions.get('window').width * 9 / 16), resizeMode: 'contain' }}
+            {state.mediaType === 1 && <Image style={
+                {
+                    backgroundColor: backgroundColor,
+                    width: Dimensions.get('window').width,
+                    height: Math.round(Dimensions.get('window').width * 9 / 16),
+                    resizeMode: 'contain'
+                }
+            }
                 source={{ uri: 'file://' + state.mediaBox["path"] }} />}
             {state.mediaType === 2 && <Video
                 // Can be a URL or a local file.
-                style={{ backgroundColor: '#152024', width: Dimensions.get('window').width, height: Math.round(Dimensions.get('window').width * 9 / 16), resizeMode: 'contain' }}
+                style={
+                    {
+                        backgroundColor: backgroundColor,
+                        width: Dimensions.get('window').width,
+                        height: Math.round(Dimensions.get('window').width * 9 / 16),
+                        resizeMode: 'contain'
+                    }
+                }
                 source={{ uri: 'file://' + state.mediaBox["path"] }}
                 controls={true}
                 repeat={true}
                 autoPlay={true}
             />}
-            <View style={{ backgroundColor: '#435860', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20 }}>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text, { width: 350, color: 'white' }]}>{state.mediaBox["name"]}</Text>
+            <View style={
+                {
+                    backgroundColor: secondaryColor,
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }
+            }>
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={
+                        [
+                            styles.text,
+                            styles.wide,
+                            {
+                                padding: 15,
+                                color: 'white'
+                            }
+
+                        ]
+                    }>{state.mediaBox["name"]}</Text>
                 <TouchableOpacity
-                    style={{ paddingVertical: 20 }}
+                    style={
+                        {
+                            padding: 15
+                        }
+                    }
                     onPress={() => dispatch({
                         type: "SETMEDIABOX",
                         payload: 0

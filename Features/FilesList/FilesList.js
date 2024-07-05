@@ -1,7 +1,8 @@
-import { VirtualizedList } from "react-native";
+import { Text, View, VirtualizedList } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 import ListItem from "../../Common/ListItem/ListItem";
+import styles from "../../styles";
 
 const FilesList = (props) => {
     const dispatch = useDispatch()
@@ -23,6 +24,7 @@ const FilesList = (props) => {
     return (
         <VirtualizedList
             onRefresh={() => useCache(dispatch, state.tabs[state.currentTab]["path"])}
+            ListEmptyComponent={<Text style={[styles.text, styles.textDisabled, styles.padding]}>No items</Text>}
             refreshing={false}
             data={props.finalList}
             keyExtractor={item => item.path}

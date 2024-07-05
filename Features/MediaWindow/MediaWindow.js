@@ -29,23 +29,6 @@ export default function MediaWindow() {
                 })
         }
     }, [state.mediaBox])
-    // useEffect(() => {
-    //     if (state.mediaBox) {
-    //         height.value =
-    //             withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
-    //                 duration: 730,
-    //                 easing: Easing.out(Easing.exp),
-    //                 reduceMotion: ReduceMotion.System,
-    //             })
-    //     } else {
-    //         height.value =
-    //             withTiming(0, {
-    //                 duration: 730,
-    //                 easing: Easing.out(Easing.exp),
-    //                 reduceMotion: ReduceMotion.System,
-    //             })
-    //     }
-    // }, [state.mediaBox]);
 
     return (
         <Animated.View

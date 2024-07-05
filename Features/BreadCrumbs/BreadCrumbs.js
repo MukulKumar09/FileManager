@@ -1,5 +1,5 @@
 import { View, Pressable, ScrollView, Text } from "react-native";
-import styles, { secondaryColor } from "../../styles";
+import styles, { grey, secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
@@ -45,7 +45,7 @@ export default function BreadCrumbs(props) {
                     style={[
                         styles.smallPill,
                     ]}>
-                    <SmallMaterialIcon name="magnify" />
+                    <SmallMaterialIcon name="magnify" color={grey} />
 
                 </Pressable>
             </View>
@@ -89,7 +89,8 @@ export default function BreadCrumbs(props) {
                                     <Text
                                         style={[
                                             styles.text,
-                                            styles.smallText
+                                            styles.smallText,
+                                            styles.textDisabled
                                         ]}>></Text>
                                     <Pressable
                                         onPress={() => dispatch({

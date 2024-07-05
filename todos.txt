@@ -1,5 +1,4 @@
-save maincache, favourites localstorage
- media player
+save maincache
  show all tabs
  open with another app
 
@@ -7,4 +6,4 @@ sorting
     modified
     case insensetive
  fix share
-scroll to beginning on tab delete
+scroll to active: navigate, tab delete 

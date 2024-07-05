@@ -101,7 +101,7 @@ export default function ToolBar(props) {
                         }
                     </View>
                 </ScrollView>
-
+                <Text style={{ color: secondaryColor }}>  |  </Text>
                 <CircularButton
                     functionName={() => dispatch({
                         type: "FAVOURITESMODAL"
