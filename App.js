@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, Dimensions, Pressable, Text } from "react-native";
+import { View, Dimensions, Pressable, Text, BackHandler } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Window from "./Window";
 import styles from "./styles";
@@ -9,6 +9,7 @@ import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
+import useNavigateParent from "./Hooks/useNavigateParent";
 
 const App = () => {
     const dispatch = useDispatch()
@@ -17,6 +18,7 @@ const App = () => {
         operationWindow: useSelector(state => state.operationWindow),
         currentTab: useSelector(state => state.currentTab),
         cache: useSelector(state => state.cache["Home"]),
+        mediaBox: useSelector(state => state.mediaBox)
     }
 
     let width = Dimensions.get('window').width
@@ -24,18 +26,27 @@ const App = () => {
 
     useEffect(() => { //first find all mounting points
         useMountingPoints(dispatch)
-
-        // const backAction = () => {
-        // useNavigateParent(state, dispatch)
-        //     return true;
-        // };
-        // const backHandler = BackHandler.addEventListener(
-        //     'hardwareBackPress',
-        //     backAction,
-        // );
-        // return () => backHandler.remove();
-
     }, [])
+
+    useEffect(() => {
+        const backAction = () => {
+            if (state.tabs[state.currentTab]["path"] == "Home")
+                return false
+            else if (state.mediaBox)
+                dispatch({
+                    type: "SETMEDIABOX",
+                    payload: 0
+                })
+            else
+                useNavigateParent(state, dispatch)
+            return true;
+        };
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+        return () => backHandler.remove();
+    }, [state.tabs, state.currentTab, state.cache, state.mediaBox])
 
     return (
         <View style={[styles.mainBody]}>
