@@ -159,7 +159,6 @@ const Window = (props) => {
     }, [state.clipboardItems])
 
     const handlePress = (item) => {
-        setSelectedItem(item)
         if (selectionFlag)
             selectItem(item)
         else
@@ -167,7 +166,6 @@ const Window = (props) => {
     }
 
     const handleLongPress = (item) => {
-        setSelectedItem(item)
         if (selectionFlag) {
             setSelectedItems(useRangeSelect(filesList, [...selectedItems], item))
         } else {

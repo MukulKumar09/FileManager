@@ -39,7 +39,7 @@ export default function ContextMenu() {
                     position: 'absolute',
                     bottom: 100,
                     right: 10,
-                    width: '50%',
+                    width: '60%',
                     elevation: 10,
                     shadowColor: 'black',
                 }

@@ -13,6 +13,7 @@ export default function ListItem(props) {
                     props.selectedItem == props.item && styles.listItemSelected
                 ]
             }
+            onPressIn={() => props.setSelectedItem(props.item)}
             onPress={() => {
                 props.handlePress(props.item)
             }}
