@@ -1,7 +1,7 @@
 import RNFS from 'react-native-fs';
 
 export default async function useMountingPoints(dispatch) {
-
+    console.log("mounting points")
     async function MntPnts() {
         let mntPnts = []
         let allMounts = await RNFS.getAllExternalFilesDirs()

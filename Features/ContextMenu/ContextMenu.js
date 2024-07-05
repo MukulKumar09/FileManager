@@ -1,11 +1,11 @@
-import { Text, Pressable, View, Image } from "react-native";
-import styles, { secondaryColor } from "../../styles";
+import { Text, Pressable, View } from "react-native";
+import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
+import useOpenExternally from "../../Hooks/useOpenExternally";
 
-
-export default function ContextMenu(props) {
+export default function ContextMenu() {
     const state = {
         tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
@@ -68,7 +68,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="tab-unselected" />
-                <Text style={[styles.text]}>Close all tabs</Text>
+                <Text style={[styles.text, styles.wide]}>Close all tabs</Text>
             </Pressable>
             <Pressable
                 style={[
@@ -110,7 +110,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="tab-minus" />
-                <Text style={[styles.text]}>Close this tab</Text>
+                <Text style={[styles.text, styles.wide]}>Close this tab</Text>
             </Pressable>
             <Pressable
                 style={[
@@ -131,7 +131,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="tab-remove" />
-                <Text style={[styles.text]}>Close other tabs</Text>
+                <Text style={[styles.text, styles.wide]}>Close other tabs</Text>
             </Pressable>
             <Pressable
                 style={[
@@ -146,7 +146,25 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="refresh" />
-                <Text style={[styles.text]}>Refresh</Text>
+                <Text style={[styles.text, styles.wide]}>Refresh</Text>
+            </Pressable>
+            <Pressable
+                style={[
+                    styles.rowLayout,
+                    styles.bigGap,
+                    styles.wide,
+                    styles.padding
+                ]}
+                onPress={() => {
+                    dispatch({
+                        type: "FUNCTIONID",
+                        payload: 8
+                    })
+                }}
+            >
+                <MaterialIcon
+                    name="file-move-outline" />
+                <Text style={[styles.text, styles.wide]}>Open in another app</Text>
             </Pressable>
             <Pressable
                 style={[
@@ -164,7 +182,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="tab-plus" />
-                <Text style={[styles.text]}>Open in new tab</Text>
+                <Text style={[styles.text, styles.wide]}>Open in new tab</Text>
             </Pressable>
             <Pressable
                 style={[
@@ -179,7 +197,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="clipboard-outline" />
-                <Text style={[styles.text]}>Clipboard</Text>
+                <Text style={[styles.text, styles.wide]}>Clipboard</Text>
             </Pressable>
 
             {/* 
@@ -196,7 +214,7 @@ export default function ContextMenu(props) {
                                     ]}
                                     onPressIn={() => { readySet(4, selectedItems) }}
                                ><Image source={require('../../assets/archive.png')} />
-                                    <Text style={[styles.text]}>Archive</Text>
+                                    <Text style={[styles.text,styles.wide]}>Archive</Text>
                                 </Pressable>
                             </View>
                              */}
@@ -214,7 +232,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="coffee-outline" />
-                <Text style={[styles.text]}>About</Text>
+                <Text style={[styles.text, styles.wide]}>About</Text>
             </Pressable>
             <Pressable
                 style={[
@@ -230,7 +248,7 @@ export default function ContextMenu(props) {
             >
                 <MaterialIcon
                     name="close" />
-                <Text style={[styles.text]}>Close</Text>
+                <Text style={[styles.text, styles.wide]}>Close</Text>
             </Pressable>
         </View>
     </View>)

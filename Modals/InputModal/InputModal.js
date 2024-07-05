@@ -1,5 +1,5 @@
 import { Text, Pressable, View, Modal, TextInput } from "react-native";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 

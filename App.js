@@ -15,12 +15,26 @@ const App = () => {
     const state = {
         tabs: useSelector(state => state.tabs),
         operationWindow: useSelector(state => state.operationWindow),
+        currentTab: useSelector(state => state.currentTab),
+        cache: useSelector(state => state.cache["Home"]),
     }
 
     let width = Dimensions.get('window').width
 
+
     useEffect(() => { //first find all mounting points
         useMountingPoints(dispatch)
+
+        // const backAction = () => {
+        // useNavigateParent(state, dispatch)
+        //     return true;
+        // };
+        // const backHandler = BackHandler.addEventListener(
+        //     'hardwareBackPress',
+        //     backAction,
+        // );
+        // return () => backHandler.remove();
+
     }, [])
 
     return (

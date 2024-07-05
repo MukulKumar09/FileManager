@@ -91,8 +91,21 @@ export default function useStageItems(state, dispatch, selectedItems) {
         case 4: { //open selecteditem in newtab
             if (selectedItems.length == 0 || selectedItems.isFile) {
                 dispatch({
-                    type: "TOAST",
-                    payload: "No folder selected"
+                    type: "DUPLICATETAB",
+                    payload: {
+                        tabKey: state.tabCounter,
+
+                        title: state.tabs[state.currentTab]["name"],
+                        path: state.tabs[state.currentTab]["path"],
+                        type: "filebrowser",
+                    }
+                })
+                dispatch({
+                    type: "SETCURRENTTAB",
+                    payload: state.tabCounter
+                })
+                dispatch({
+                    type: "INCREASETABCOUNTER",
                 })
             } else {
                 dispatch({

@@ -11,6 +11,7 @@ import useFileHandler from "./Hooks/useFileHandler";
 import useSort from "./Hooks/useSort";
 import useRangeSelect from "./Hooks/useRangeSelect";
 import useCache from "./Hooks/useCache";
+import useOpenExternally from "./Hooks/useOpenExternally";
 
 const Window = (props) => {
     const dispatch = useDispatch()
@@ -124,12 +125,24 @@ const Window = (props) => {
                             payload:
                                 "No items selected",
                         })
-                        functionId(-1)
                     }
                     else {
                         useStageItems(state, dispatch, selectedItem)
-                        functionId(-1)
                     }
+                    functionId(-1)
+                    break
+                }
+                case 8: {
+                    if (selectedItem.length == 0 || selectedItem["isDirectory"]) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    } else {
+                        useOpenExternally(selectedItem)
+                    }
+                    functionId(-1)
                     break
                 }
                 default: {

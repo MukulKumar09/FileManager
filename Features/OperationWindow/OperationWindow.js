@@ -1,5 +1,5 @@
 import { Text, View, ActivityIndicator } from "react-native";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"

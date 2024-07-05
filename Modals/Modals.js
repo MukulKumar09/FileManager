@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import ClipboardModal from "./ClipboardModal/ClipboardModal";
 import AboutModal from "./AboutModal/AboutModal";

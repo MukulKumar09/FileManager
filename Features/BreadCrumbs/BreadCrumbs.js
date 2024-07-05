@@ -1,9 +1,10 @@
 import { View, Pressable, ScrollView, Text } from "react-native";
 import styles, { grey, secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useBreadCrumbs from "../../Hooks/useBreadCrumbs";
 import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
+import useNavigateParent from "../../Hooks/useNavigateParent";
 
 export default function BreadCrumbs(props) {
     const dispatch = useDispatch()
@@ -128,29 +129,7 @@ export default function BreadCrumbs(props) {
                     }>  |  </Text>
                     <Pressable
                         onPressIn={() => {
-                            let path = state.tabs[state.currentTab]["path"]
-                            for (let i = 0; i < state.cache.length; i++) {
-                                if (path == state.cache[i]["path"]) {
-                                    dispatch({
-                                        type: "MODIFYTABPATH",
-                                        payload: {
-                                            tabId: state.currentTab,
-                                            value: "Home"
-                                        }
-                                    })
-                                    return 0
-                                }
-                            }
-                            path = path.split("/")
-                            path.pop()
-                            path = path.join("/")
-                            dispatch({
-                                type: "MODIFYTABPATH",
-                                payload: {
-                                    tabId: state.currentTab,
-                                    value: path
-                                }
-                            })
+                            useNavigateParent(state, dispatch)
                         }}
                         style={[
                             styles.smallPill,
