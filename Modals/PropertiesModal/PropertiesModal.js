@@ -160,7 +160,9 @@ export default function PropertiesModal() {
                 <Pressable
                     onPress={() => {
                         dispatch({
-                            type: "ABOUTMODAL"
+                            type: "PROPERTIESMODAL",
+                            payload:
+                                0,
                         })
                     }
                     }
