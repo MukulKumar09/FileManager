@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
+import { BackHandler, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Share from 'react-native-share';
 import { backgroundColor } from "./styles";
@@ -12,6 +12,7 @@ import useSort from "./Hooks/useSort";
 import useRangeSelect from "./Hooks/useRangeSelect";
 import useCache from "./Hooks/useCache";
 import useOpenExternally from "./Hooks/useOpenExternally";
+import useNavigateParent from "./Hooks/useNavigateParent";
 
 const Window = (props) => {
     const dispatch = useDispatch()
@@ -20,6 +21,7 @@ const Window = (props) => {
         clipboardItems: useSelector(state => state.clipboardItems),
         currentTab: useSelector(state => state.currentTab),
         tabCounter: useSelector(state => state.tabCounter),
+        cache: useSelector(state => state.cache["Home"]),
         functionId: useSelector(state => state.functionId),
         mediaBox: useSelector(state => state.mediaBox)
     }
@@ -43,6 +45,21 @@ const Window = (props) => {
             payload: payload
         })
     }
+
+    useEffect(() => {
+        const backAction = () => {
+            if (state.tabs[state.currentTab]["path"] == "Home")
+                return false
+            else
+                useNavigateParent(state, dispatch)
+            return true;
+        };
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+        return () => backHandler.remove();
+    }, [state.tabs, state.currentTab, state.cache])
 
     useEffect(() => { //first
         if (tabPath !== "Home" && cache == undefined) {
@@ -226,13 +243,7 @@ const Window = (props) => {
     }
 
     return (
-        <View style={
-            {
-                backgroundColor: backgroundColor,
-                height: '100%',
-                display: state.currentTab == props.index ? "flex" : "none"
-            }
-        }>
+        <View style={{ flex: 1 }}>
             {sortModal ?
                 <SortModal
                     sortModal={sortModal}

@@ -66,7 +66,7 @@ export default function Tabbar(props) {
                         styles.pill,
                         styles.padding
                     ]}
-                    onPressIn={() => {
+                    onPress={() => {
                         dispatch({
                             type: "DUPLICATETAB",
                             payload: {

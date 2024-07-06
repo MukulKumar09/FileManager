@@ -3,13 +3,13 @@ import { View, Dimensions, Pressable, Text, BackHandler } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Window from "./Window";
 import styles from "./styles";
-import ToolBar from "./Features/ToolBar/ToolBar";
+import FileBrowserToolBar from "./Features/FileBrowserToolBar/FileBrowserToolBar";
 import Tabbar from "./Features/Tabbar/Tabbar";
 import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
-import useNavigateParent from "./Hooks/useNavigateParent";
+import Webbrowser from "./Features/Webbrowser/Webbrowser";
 
 const App = () => {
     const dispatch = useDispatch()
@@ -30,15 +30,11 @@ const App = () => {
 
     useEffect(() => {
         const backAction = () => {
-            if (state.tabs[state.currentTab]["path"] == "Home")
-                return false
-            else if (state.mediaBox)
+            if (state.mediaBox)
                 dispatch({
                     type: "SETMEDIABOX",
                     payload: 0
                 })
-            else
-                useNavigateParent(state, dispatch)
             return true;
         };
         const backHandler = BackHandler.addEventListener(
@@ -46,8 +42,7 @@ const App = () => {
             backAction,
         );
         return () => backHandler.remove();
-    }, [state.tabs, state.currentTab, state.cache, state.mediaBox])
-
+    }, [state.mediaBox])
     return (
         <View style={[styles.mainBody]}>
             <Modals />
@@ -59,17 +54,45 @@ const App = () => {
                     }
                 }
             >
-                {Object.keys(state.tabs).map((index) =>
-                    <Window
-                        key={index}
-                        index={index}
-                    />
+                {Object.keys(state.tabs).map((index) => {
+                    switch (state.tabs[index]["type"]) {
+                        case "filebrowser": {
+                            return (
+                                <View
+                                    key={index}
+                                    style={{
+                                        flex: 1,
+                                        display: state.currentTab == index ? "flex" : "none"
+                                    }}
+                                >
+                                    <Window
+                                        index={index}
+                                    />
+                                </View>
+                            )
+                        }
+                        case "webbrowser": {
+                            return (
+                                <View
+                                    key={index}
+                                    style={{
+                                        flex: 1,
+                                        display: state.currentTab == index ? "flex" : "none"
+                                    }}
+                                >
+                                    <Webbrowser />
+                                </View>
+                            )
+                        }
+                    }
+                }
                 )}
             </View>
             {state.operationWindow ?
                 <OperationWindow />
                 : null}
-            <ToolBar />
+            {state.tabs[state.currentTab] && state.tabs[state.currentTab]["type"] == "filebrowser" ? <FileBrowserToolBar />
+                : null}
             <Tabbar width={width} />
         </View>
 

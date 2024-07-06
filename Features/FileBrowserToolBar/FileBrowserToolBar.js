@@ -6,7 +6,7 @@ import CircularButton from "../../Common/CircularButton/CircularButton";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 
-export default function ToolBar(props) {
+export default function FileBrowserToolBar(props) {
     const dispatch = useDispatch()
     const state = {
         contextMenu: useSelector(state => state.contextMenu),

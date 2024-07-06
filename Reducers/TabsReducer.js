@@ -4,9 +4,9 @@ export default function tabs(state = {}, action) {
             return {
                 ...state,
                 [action.payload.tabKey]: {
-                    title: "Home",
-                    path: "Home",
-                    type: "filebrowser",
+                    title: action.payload.title,
+                    path: action.payload.path,
+                    type: action.payload.type,
                 }
             }
         case 'MODIFYTABNAME': {

@@ -8,6 +8,7 @@ export default function ContextMenu() {
     const state = {
         tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
+        tabCounter: useSelector(state => state.tabCounter)
     }
     const dispatch = useDispatch()
     return (
@@ -44,6 +45,28 @@ export default function ContextMenu() {
                     }
                 ]}
             >
+                <MenuItem
+                    functionName={() => {
+                        dispatch({
+                            type: "ADDTAB",
+                            payload: {
+                                tabKey: state.tabCounter,
+                                title: "Browser",
+                                path: "https://google.com",
+                                type: "webbrowser",
+                            }
+                        })
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: state.tabCounter
+                        })
+                        dispatch({
+                            type: "INCREASETABCOUNTER",
+                        })
+                        dispatch({
+                            type: "CONTEXTMENU"
+                        })
+                    }} icon="web" name="New Browser Tab" />
                 <MenuItem
                     functionName={() => {
                         dispatch({
