@@ -6,6 +6,7 @@ import FavouritesModal from "./FavouritesModal/FavouritesModal";
 import ItemExistsModal from "./ItemExistsModal/ItemExistsModal";
 import DeleteModal from "./DeleteModal/DeleteModal";
 import InputModal from "./InputModal/InputModal";
+import PropertiesModal from "./PropertiesModal/PropertiesModal";
 
 export default function Modals(props) {
     const state = {
@@ -14,7 +15,8 @@ export default function Modals(props) {
         deleteModal: useSelector(state => state.deleteModal),
         clipBoardModal: useSelector(state => state.clipBoardModal),
         aboutModal: useSelector(state => state.aboutModal),
-        favouritesModal: useSelector(state => state.favouritesModal)
+        favouritesModal: useSelector(state => state.favouritesModal),
+        propertiesModal: useSelector(state => state.propertiesModal)
     }
     useEffect(() => console.log(state.deleteModal), [state.deleteModal])
     return (
@@ -59,6 +61,9 @@ export default function Modals(props) {
                     />
                     : null
             }
+            {state.propertiesModal ?
+                <PropertiesModal />
+                : null}
         </>
     )
 }

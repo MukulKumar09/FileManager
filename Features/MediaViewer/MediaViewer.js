@@ -23,6 +23,10 @@ function MediaViewer() {
                 source={{ uri: 'file://' + state.mediaBox["path"] }} />}
             {state.mediaType === 2 && <Video
                 // Can be a URL or a local file.
+                source={{ uri: 'file://' + state.mediaBox["path"] }}
+                controls={true}
+                repeat={true}
+                autoPlay={true}
                 style={
                     {
                         backgroundColor: backgroundColor,
@@ -31,10 +35,6 @@ function MediaViewer() {
                         resizeMode: 'contain'
                     }
                 }
-                source={{ uri: 'file://' + state.mediaBox["path"] }}
-                controls={true}
-                repeat={true}
-                autoPlay={true}
             />}
             <View style={
                 {
@@ -55,7 +55,6 @@ function MediaViewer() {
                                 padding: 15,
                                 color: 'white'
                             }
-
                         ]
                     }>{state.mediaBox["name"]}</Text>
                 <TouchableOpacity

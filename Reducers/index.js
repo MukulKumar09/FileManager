@@ -27,6 +27,7 @@ import progress from "./ProgressReducer";
 import tabCounter from "./TabCounterReducer";
 import tabs from "./TabsReducer";
 import ToastReducer from "./ToastReducer";
+import propertiesModal from "./propertiesModal";
 const rootReducer = combineReducers({
     aboutModal,
     cache,
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
     deletePromiseResolver,
     favouriteItems,
     favouritesModal,
+    propertiesModal,
     functionId,
     inputModal,
     inputPromiseResolver,

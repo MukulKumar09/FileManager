@@ -145,6 +145,21 @@ const Window = (props) => {
                     functionId(-1)
                     break
                 }
+                case 9: {
+                    if (selectedItems.length == 0) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    } else {
+                        dispatch({
+                            type: "PROPERTIESMODAL",
+                            payload:
+                                selectedItems,
+                        })
+                    }
+                }
                 default: {
                     useStageItems(state, dispatch, selectedItem)
                     functionId(-1)

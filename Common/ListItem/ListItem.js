@@ -27,7 +27,7 @@ export default function ListItem(props) {
                 styles.bigGap,
             ]}>
                 <View style={{ width: 30, }}>
-                    {useIcon(props.item)}
+                    {useIcon(props.item["fileType"])}
                 </View>
                 <View style={[
                     styles.wide,

@@ -1,9 +1,8 @@
 save maincache
- show all tabs
- open with another app
+show all tabs
+open with another app
 
 sorting
     modified
-    case insensetive
- fix share
+fix share
 scroll to active: navigate, tab delete 

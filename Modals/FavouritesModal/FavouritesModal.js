@@ -1,7 +1,6 @@
 import { Text, Pressable, View, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
-import useFileHandler from "../../Hooks/useFileHandler";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
 export default function FavouritesModal() {
@@ -149,7 +148,8 @@ export default function FavouritesModal() {
                         })
                     }
                 }}
-            ><MaterialIcon name="folder-plus-outline" />
+            >
+                <MaterialIcon name="folder-plus-outline" />
                 <Text style={[styles.text]}>Add Current Folder</Text>
             </Pressable>
         </View>

@@ -225,6 +225,24 @@ export default function ContextMenu() {
                     styles.wide,
                     styles.padding
                 ]}
+                onPress={() =>
+                    dispatch({
+                        type: "FUNCTIONID",
+                        payload: 9
+                    })
+                }
+            >
+                <MaterialIcon
+                    name="details" />
+                <Text style={[styles.text, styles.wide]}>Properties</Text>
+            </Pressable>
+            <Pressable
+                style={[
+                    styles.rowLayout,
+                    styles.bigGap,
+                    styles.wide,
+                    styles.padding
+                ]}
                 onPress={() => dispatch({
                     type: "ABOUTMODAL"
                 })

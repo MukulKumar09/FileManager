@@ -10,6 +10,8 @@ export default async function useCache(dispatch, path) {
         item["isDirectory"] = item.isDirectory()
         item["isFile"] = item.isFile()
         item["size"] = useNiceBytes(item["size"])
+        if (item["isFile"])
+            item["fileType"] = item["name"].split(".").pop()
     })
 
 
