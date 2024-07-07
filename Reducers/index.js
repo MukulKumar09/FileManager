@@ -28,6 +28,9 @@ import tabCounter from "./TabCounterReducer";
 import tabs from "./TabsReducer";
 import ToastReducer from "./ToastReducer";
 import propertiesModal from "./propertiesModal";
+import webBrowserModal from "./webBrowserModal";
+import tabsContextMenu from "./tabsContextMenu";
+
 const rootReducer = combineReducers({
     aboutModal,
     cache,
@@ -59,5 +62,7 @@ const rootReducer = combineReducers({
     tabCounter,
     tabs,
     ToastReducer,
+    webBrowserModal,
+    tabsContextMenu
 })
 export default rootReducer

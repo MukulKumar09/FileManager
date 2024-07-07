@@ -3,6 +3,7 @@ import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
+import TabsContextMenu from "../TabsContextMenu/TabsContextMenu";
 
 export default function Tabbar(props) {
     const dispatch = useDispatch()
@@ -60,7 +61,6 @@ export default function Tabbar(props) {
                         <SmallMaterialIcon name="content-paste" />
                     </Pressable>
                     : null}
-
                 <Pressable
                     style={[
                         styles.pill,
@@ -84,7 +84,11 @@ export default function Tabbar(props) {
                             type: "INCREASETABCOUNTER",
                         })
 
-                    }}>
+                    }}
+                    onLongPress={() => dispatch({
+                        type: "TABSCONTEXTMENU"
+                    })}
+                >
                     <SmallMaterialIcon name="plus" />
                 </Pressable>
             </>

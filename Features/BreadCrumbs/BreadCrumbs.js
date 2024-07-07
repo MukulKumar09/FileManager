@@ -39,16 +39,6 @@ export default function BreadCrumbs(props) {
                         source={require('../../assets/sort.png')} />
 
                 </Pressable>*/}
-                <Pressable
-                    onPressIn={() => {
-                        props.setSearchModal(1)
-                    }}
-                    style={[
-                        styles.smallPill,
-                    ]}>
-                    <SmallMaterialIcon name="magnify" color={grey} />
-
-                </Pressable>
             </View>
             <ScrollView
                 horizontal
@@ -127,6 +117,24 @@ export default function BreadCrumbs(props) {
                             color: secondaryColor
                         }
                     }>  |  </Text>
+                    <Pressable
+                        onPressIn={() => {
+                            props.setSearchModal(1)
+                        }}
+                        style={[
+                            styles.smallPill,
+                        ]}>
+                        <SmallMaterialIcon name="pencil-outline" color={grey} />
+                    </Pressable>
+                    <Pressable
+                        onPressIn={() => {
+                            props.setSearchModal(1)
+                        }}
+                        style={[
+                            styles.smallPill,
+                        ]}>
+                        <SmallMaterialIcon name="magnify" color={grey} />
+                    </Pressable>
                     <Pressable
                         onPressIn={() => {
                             useNavigateParent(state, dispatch)

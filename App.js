@@ -80,7 +80,9 @@ const App = () => {
                                         display: state.currentTab == index ? "flex" : "none"
                                     }}
                                 >
-                                    <Webbrowser />
+                                    <Webbrowser
+                                        index={index}
+                                    />
                                 </View>
                             )
                         }

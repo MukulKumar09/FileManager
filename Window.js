@@ -47,18 +47,20 @@ const Window = (props) => {
     }
 
     useEffect(() => {
-        const backAction = () => {
-            if (state.tabs[state.currentTab]["path"] == "Home")
-                return false
-            else
-                useNavigateParent(state, dispatch)
-            return true;
-        };
-        const backHandler = BackHandler.addEventListener(
-            'hardwareBackPress',
-            backAction,
-        );
-        return () => backHandler.remove();
+        if (state.currentTab == props.index) {
+            const backAction = () => {
+                if (state.tabs[state.currentTab]["path"] == "Home")
+                    return false
+                else
+                    useNavigateParent(state, dispatch)
+                return true;
+            };
+            const backHandler = BackHandler.addEventListener(
+                'hardwareBackPress',
+                backAction,
+            );
+            return () => backHandler.remove();
+        }
     }, [state.tabs, state.currentTab, state.cache])
 
     useEffect(() => { //first
