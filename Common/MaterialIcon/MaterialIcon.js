@@ -5,7 +5,7 @@ export default function MaterialIcon(props) {
     return (
         <MaterialCommunityIcons
             {...props}
-            size={23}
+            size={20}
             color={props.color ? props.color : grey}
         />
     )

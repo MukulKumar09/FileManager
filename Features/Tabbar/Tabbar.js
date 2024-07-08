@@ -3,7 +3,6 @@ import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
-import TabsContextMenu from "../TabsContextMenu/TabsContextMenu";
 
 export default function Tabbar(props) {
     const dispatch = useDispatch()
@@ -31,6 +30,7 @@ export default function Tabbar(props) {
                                 <TabButton
                                     key={index}
                                     index={index}
+                                    ext={state.tabs[index]["type"]}
                                     width={props.width}
                                 />
                             )
@@ -66,28 +66,10 @@ export default function Tabbar(props) {
                         styles.pill,
                         styles.padding
                     ]}
-                    onPress={() => {
-                        dispatch({
-                            type: "DUPLICATETAB",
-                            payload: {
-                                tabKey: state.tabCounter,
-                                title: state.tabs[state.currentTab]["title"],
-                                path: state.tabs[state.currentTab]["path"],
-                                type: "filebrowser",
-                            }
-                        })
-                        dispatch({
-                            type: "SETCURRENTTAB",
-                            payload: state.tabCounter
-                        })
-                        dispatch({
-                            type: "INCREASETABCOUNTER",
-                        })
-
-                    }}
-                    onLongPress={() => dispatch({
+                    onPress={() => dispatch({
                         type: "TABSCONTEXTMENU"
-                    })}
+                    })
+                    }
                 >
                     <SmallMaterialIcon name="plus" />
                 </Pressable>

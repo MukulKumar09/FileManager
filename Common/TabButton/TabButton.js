@@ -9,13 +9,24 @@ const TabButton = (props) => {
         tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
     }
+    let icon
+    switch (props.ext) {
+        case "filebrowser": {
+            icon = <SmallMaterialIcon name="folder" color="orange" />
+            break
+        }
+        case "webbrowser": {
+            icon = <SmallMaterialIcon name="web" color="#4FC3F7" />
+            break
+        }
+    }
     return (
         <View style={[
             styles.rowLayout,
             styles.pill,
             styles.padding,
             styles.mediumGap,
-            props.index == state.currentTab && styles.pillHighlight
+            props.index == state.currentTab && styles.pillHighlight,
         ]}>
 
             <TouchableOpacity
@@ -28,26 +39,26 @@ const TabButton = (props) => {
                 style={
                     [
                         styles.rowLayout,
-                        styles.mediumGap,
-                        {
-                            maxWidth: 150
-                        }
+                        styles.mediumGap
                     ]
                 }
             >
-                <SmallMaterialIcon
-                    name="folder"
-                    color="#FFC107"
-                />
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={[
-                        styles.text
-                    ]}
+                {icon}
+                <View
+                    style={{
+                        maxWidth: 130
+                    }}
                 >
-                    {state.tabs[props.index]["title"]}
-                </Text>
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={[
+                            styles.text
+                        ]}
+                    >
+                        {state.tabs[props.index]["title"]}
+                    </Text>
+                </View>
             </TouchableOpacity>
             {
                 props.index == state.currentTab ?

@@ -7,7 +7,6 @@ export default function CircularButton(props) {
         <Pressable
             style={[
                 styles.pill,
-                styles.text,
                 styles.padding
             ]}
             onPress={() => { props.functionName() }}>

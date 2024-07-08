@@ -114,7 +114,27 @@ export default function TabsContextMenu() {
                 <MenuItem
                     icon="tab-plus"
                     name="New File Browser"
-                    functionName={() => useCache(dispatch, state.tabs[state.currentTab]["path"])
+                    functionName={() => {
+                        dispatch({
+                            type: "ADDTAB",
+                            payload: {
+                                tabKey: state.tabCounter,
+                                title: "Home",
+                                path: "Home",
+                                type: "filebrowser",
+                            }
+                        })
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: state.tabCounter
+                        })
+                        dispatch({
+                            type: "INCREASETABCOUNTER",
+                        })
+                        dispatch({
+                            type: "TABSCONTEXTMENU"
+                        })
+                    }
                     }
                 />
                 <MenuItem
@@ -126,7 +146,7 @@ export default function TabsContextMenu() {
                             payload: {
                                 tabKey: state.tabCounter,
                                 title: "Browser",
-                                path: "https://jsonplaceholder.typicode.com/",
+                                path: "https://tabberfm.000webhostapp.com/home.html",
                                 type: "webbrowser",
                             }
                         })
@@ -145,7 +165,27 @@ export default function TabsContextMenu() {
                 <MenuItem
                     icon="tab"
                     name="Duplicate Tab"
-                    functionName={() => useCache(dispatch, state.tabs[state.currentTab]["path"])
+                    functionName={() => {
+                        dispatch({
+                            type: "DUPLICATETAB",
+                            payload: {
+                                tabKey: state.tabCounter,
+                                title: state.tabs[state.currentTab]["title"],
+                                path: state.tabs[state.currentTab]["path"],
+                                type: state.tabs[state.currentTab]["type"],
+                            }
+                        })
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: state.tabCounter
+                        })
+                        dispatch({
+                            type: "INCREASETABCOUNTER",
+                        })
+                        dispatch({
+                            type: "TABSCONTEXTMENU"
+                        })
+                    }
                     }
                 />
             </View>

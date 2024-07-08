@@ -10,6 +10,7 @@ export default function Webbrowser(props) {
     const state = {
         tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
+        tabCounter: useSelector(state => state.tabCounter),
         webBrowserModal: useSelector(state => state.webBrowserModal)
     }
     const [urlVal, setUrlVal] = useState(state.tabs[state.currentTab]["path"])
@@ -21,7 +22,6 @@ export default function Webbrowser(props) {
     useEffect(() => {
         if (state.currentTab == props.index) {
             const backAction = () => {
-                console.log(webViewRef.current)
                 webViewRef.current.goBack()
                 return true;
             };
@@ -48,41 +48,84 @@ export default function Webbrowser(props) {
                 ref={webViewRef}
                 incognito={true}
                 onLoadStart={() => setIsLoading(1)}
-                onLoadEnd={() => setIsLoading(0)}
+                onLoadEnd={(synthenticEvent) => {
+                    dispatch({
+                        type: "MODIFYTABPATH",
+                        payload: {
+                            tabId: state.currentTab,
+                            value: synthenticEvent["nativeEvent"]["url"]
+                        }
+                    })
+                    dispatch({
+                        type: "MODIFYTABNAME",
+                        payload: {
+                            tabId: state.currentTab,
+                            value: synthenticEvent["nativeEvent"]["title"]
+                        }
+                    })
+                    setIsLoading(0)
+                }}
+                saveFormDataDisabled={true}
+                onNavigationStateChange={linkClick}
+                mixedContentMode='never'
+                thirdPartyCookiesEnabled={false}
+                onOpenWindow={(synthenticEvent) => {
+                    synthenticEvent.preventDefault()
+                    dispatch({
+                        type: "ADDTAB",
+                        payload: {
+                            tabKey: state.tabCounter,
+                            title: "Browser",
+                            path: synthenticEvent["nativeEvent"]["targetUrl"],
+                            type: "webbrowser",
+                        }
+                    })
+                    dispatch({
+                        type: "SETCURRENTTAB",
+                        payload: state.tabCounter
+                    })
+                    dispatch({
+                        type: "INCREASETABCOUNTER",
+                    })
+                }}
+                onMessage={(event) => {
+                    event = JSON.parse(event["nativeEvent"]["data"])
+                    if (event["type"] == "modal")
+                        dispatch({
+                            type: "WEBBROWSERMODAL",
+                            payload: {
+                                path: event["url"]
+                            }
+                        })
+                    if (event["type"] == "target_blank")
+                        console.log("abcd")
+                }}
                 injectedJavaScript={`
                 let pressTimer;
-                    window.addEventListener("touchstart", function(event) {
-                    if (event.target.tagName.toLowerCase() === 'a' || event.target.getAttribute('role')==='link') {
-                        event.preventDefault();
-                        pressTimer = window.setTimeout(function() {
-                            window.ReactNativeWebView.postMessage(event.target.toString());
-                        }, 500);
-                    }
                     function clearPressTimer(event) {
                         window.clearTimeout(pressTimer);
                         pressTimer = null;
-                        
-                        // Remove event listeners after execution
                         window.removeEventListener("touchstart", clearPressTimer);
                         window.removeEventListener("touchcancel", clearPressTimer);
                         window.removeEventListener("touchmove", clearPressTimer);
                         window.removeEventListener("touchend", clearPressTimer);
-                    }
-                    window.addEventListener("touchcancel", clearPressTimer);
-                    window.addEventListener("touchmove", clearPressTimer);
-                    window.addEventListener("touchend", clearPressTimer);
-                });
-                `}
-                onMessage={(event) => {
-                    dispatch({
-                        type: "WEBBROWSERMODAL",
-                        payload: {
-                            path: event.nativeEvent.data
+                    };
+                    window.addEventListener(
+                        "touchstart", 
+                        function(event) {
+                            if (event.target.tagName.toLowerCase() === 'a' || event.target.getAttribute('role')==='link') {
+                                let link={type:"modal",url:event.target.toString()};
+                                pressTimer = window.setTimeout(function() {
+                                        window.ReactNativeWebView.postMessage(JSON.stringify(link));
+                                    }
+                                , 500);
+                                };
+                            window.addEventListener("touchcancel", clearPressTimer);
+                            window.addEventListener("touchmove", clearPressTimer);
+                            window.addEventListener("touchend", clearPressTimer);
                         }
-                    })
-                }}
-                saveFormDataDisabled={true}
-                onNavigationStateChange={linkClick}
+                    );
+                `}
             />
             {/* <CircularButton
                     functionName={() => { [webViewRef+state.currentTab].current.goBack(); }
@@ -111,15 +154,27 @@ export default function Webbrowser(props) {
                     </>
                     : <Pressable
                         style={[styles.smallPill]}
-                        onPress={() => webViewRef.current.reload()}
+                        onPress={() => {
+                            webViewRef.current.reload()
+                            setIsLoading(1)
+                        }}
                     ><SmallMaterialIcon name="reload" color={grey} />
                     </Pressable>
                 }
                 <TextInput
                     ref={input => { this.textInput = input; }}
                     value={urlVal}
+                    returnKeyType="search"
                     selectTextOnFocus={true}
                     onChangeText={(url) => setUrlVal(url)}
+                    onSubmitEditing={() => {
+                        this.textInput.blur();
+                        if (urlVal.includes("://")) {
+                            setUrl(urlVal)
+                        } else {
+                            setUrl("https://google.com/search?q=" + urlVal)
+                        }
+                    }}
                     // onBlur={() => Keyboard.dismiss()}
                     style={[
                         styles.text,
