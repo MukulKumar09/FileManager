@@ -26,8 +26,6 @@ export default function FavouritesModal() {
         <View style={[
             styles.pill,
             styles.modal,
-            styles.bigGap,
-            styles.padding,
             {
                 backgroundColor: backgroundColor,
                 position: 'absolute',
@@ -39,6 +37,7 @@ export default function FavouritesModal() {
             <View style={
                 [
                     styles.rowLayout,
+                    styles.padding,
                 ]
             }>
                 <View style={
@@ -68,8 +67,12 @@ export default function FavouritesModal() {
                     })
                 }>Clear</Text>
             </View>
-            <View style={{ width: '100%' }}>
-                <View style={[styles.divider]} />
+            <View style={[styles.divider]} />
+            <View style={
+                [
+                    { width: '100%' }
+                ]
+            }>
                 {state.favouriteItems.length == 0 ?
                     <Text style={
                         [
@@ -85,7 +88,6 @@ export default function FavouritesModal() {
                                 style={
                                     [
                                         styles.rowLayout,
-                                        { paddingVertical: 20 }
                                     ]
                                 }>
                                 <Pressable
@@ -113,6 +115,7 @@ export default function FavouritesModal() {
                                             styles.rowLayout,
                                             styles.wide,
                                             styles.bigGap,
+                                            styles.padding,
                                         ]
                                     }
                                 >
@@ -124,42 +127,56 @@ export default function FavouritesModal() {
                                         type: "REMOVEFAVOURITEITEM",
                                         payload: item["path"]
                                     })}
+                                    style={
+                                        [
+                                            styles.padding
+                                        ]
+                                    }
                                 >
                                     <MaterialIcon name="close" />
                                 </Pressable>
                             </View>
                     )}
-                <View style={[styles.divider]} />
             </View>
-            <Pressable
-                style={[
-                    styles.rowLayout,
-                    styles.pill,
-                    styles.bigGap,
+            <View style={[styles.divider]} />
+            <View style={
+                [
+                    styles.wide,
                     styles.padding,
-                    , { width: '100%' }
-                ]}
-                onPressIn={() => {
-                    if (state.favouriteItems.find((item) => item.path == state.tabs[state.currentTab]["path"]) == undefined) {
-                        dispatch({
-                            type: "ADDFAVOURITEITEM",
-                            payload: {
-                                name: state.tabs[state.currentTab]["path"].split("/").pop(),
-                                path: state.tabs[state.currentTab]["path"],
-                                isDirectory: () => 1
-                            }
-                        })
-                    } else {
-                        dispatch({
-                            type: "TOAST",
-                            payload: "Item exists in favorite."
-                        })
+                    {
+                        width: '100%'
                     }
-                }}
-            >
-                <MaterialIcon name="folder-plus-outline" />
-                <Text style={[styles.text]}>Add Current Folder</Text>
-            </Pressable>
+                ]
+            }>
+                <Pressable
+                    style={[
+                        styles.rowLayout,
+                        styles.pill,
+                        styles.bigGap,
+                        styles.padding,
+                    ]}
+                    onPressIn={() => {
+                        if (state.favouriteItems.find((item) => item.path == state.tabs[state.currentTab]["path"]) == undefined) {
+                            dispatch({
+                                type: "ADDFAVOURITEITEM",
+                                payload: {
+                                    name: state.tabs[state.currentTab]["path"].split("/").pop(),
+                                    path: state.tabs[state.currentTab]["path"],
+                                    isDirectory: () => 1
+                                }
+                            })
+                        } else {
+                            dispatch({
+                                type: "TOAST",
+                                payload: "Item exists in favorite."
+                            })
+                        }
+                    }}
+                >
+                    <MaterialIcon name="folder-plus-outline" />
+                    <Text style={[styles.text]}>Add Current Folder</Text>
+                </Pressable>
+            </View>
         </View>
     </Modal>
     )

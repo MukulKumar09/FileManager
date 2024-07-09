@@ -7,6 +7,7 @@ export default function MenuItem(props) {
         <Pressable
             style={[
                 styles.rowLayout,
+                styles.wide,
                 styles.bigGap,
                 styles.padding,
             ]}

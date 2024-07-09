@@ -28,8 +28,6 @@ export default function ClipboardModal(props) {
             <View style={[
                 styles.pill,
                 styles.modal,
-                styles.bigGap,
-                styles.padding,
                 {
                     backgroundColor: backgroundColor,
                     position: 'absolute',
@@ -40,11 +38,17 @@ export default function ClipboardModal(props) {
             ]}>
                 <View style={[
                     styles.rowLayout,
+                    styles.padding,
                     , {
                         width: '100%',
                         justifyContent: 'space-between'
                     }]}>
-                    <View style={[styles.rowLayout, styles.bigGap]}>
+                    <View style={
+                        [
+                            styles.rowLayout,
+                            styles.bigGap,
+                        ]
+                    }>
                         <MaterialIcon name="clipboard-outline" />
                         <Text style={[
                             styles.text,
@@ -64,7 +68,13 @@ export default function ClipboardModal(props) {
                     }}>Clear</Text>
                 </View>
                 {state.clipboardItems && state.clipboardItems.length && [0, 1].includes(state.operationType) ?
-                    <View style={[styles.rowLayout]}>
+                    <View style={
+                        [
+                            styles.rowLayout,
+                            styles.padding,
+                            { paddingTop: 0 }
+                        ]
+                    }>
                         <Text style={[styles.textDisabled]}>Below Items are ready to {state.operationType ? "Move" : "Copy"}. </Text>
                         <Text style={{ textDecorationLine: 'underline' }} onPress={() => dispatch({
                             type: "OPERATIONTYPE",
@@ -73,7 +83,6 @@ export default function ClipboardModal(props) {
                     </View>
                     : null}
                 <View style={[styles.divider]} />
-
                 <View style={[
                     {
                         flexDirection: 'column',
@@ -81,7 +90,6 @@ export default function ClipboardModal(props) {
                     }
                 ]}>
                     {state.clipboardItems && state.clipboardItems.length > 0 ?
-
                         state.clipboardItems.map(
                             (item, i) =>
                                 <View
@@ -90,15 +98,15 @@ export default function ClipboardModal(props) {
                                         styles.rowLayout,
                                     ]}>
                                     <Pressable
-                                        style={[
-                                            styles.rowLayout,
-                                            styles.bigGap,
-                                            styles.wide,
-                                            {
-                                                paddingVertical: 10
-                                            }]}
+                                        style={
+                                            [
+                                                styles.rowLayout,
+                                                styles.bigGap, styles.padding,
+                                                styles.wide
+                                            ]
+                                        }
                                     >
-                                        {useIcon(item)}
+                                        {useIcon(item["fileType"])}
                                         <Text style={[styles.text]}>{item["name"]}</Text>
                                     </Pressable>
                                     <Pressable
@@ -108,28 +116,50 @@ export default function ClipboardModal(props) {
                                                 payload: item["path"]
                                             })
                                         }}
+                                        style={
+                                            [
+                                                styles.padding
+                                            ]
+                                        }
                                     >
                                         <MaterialIcon name="close" />
                                     </Pressable>
                                 </View>
                         ) :
-                        <Text style={[styles.text, styles.textDisabled]}>No items</Text>}
+                        <Text style={
+                            [
+                                styles.text,
+                                styles.textDisabled,
+                                styles.padding
+                            ]
+                        }>No items</Text>
+                    }
                 </View>
                 <View style={[styles.divider]} />
-                <Pressable
-                    style={[
-                        styles.pill,
-                        styles.centered,
-                        styles.padding
-                        , {
+                <View style={
+                    [
+                        styles.wide,
+                        styles.padding,
+                        {
                             width: '100%'
-                        }]}
-                    onPress={() => dispatch({
-                        type: "CLIPBOARDMODAL"
-                    })}
-                >
-                    <Text style={[styles.text]}>Close</Text>
-                </Pressable>
+                        }
+                    ]
+                }>
+                    <Pressable
+                        style={[
+                            styles.pill,
+                            styles.centered,
+                            styles.padding
+                            , {
+                                width: '100%'
+                            }]}
+                        onPress={() => dispatch({
+                            type: "CLIPBOARDMODAL"
+                        })}
+                    >
+                        <Text style={[styles.text]}>Close</Text>
+                    </Pressable>
+                </View>
             </View>
         </Modal>
     )
