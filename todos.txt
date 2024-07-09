@@ -5,4 +5,4 @@ open with another app
 sorting
     modified
 fix share
-scroll to active: navigate, tab delete 
+scroll to active: navigate, tab delete d

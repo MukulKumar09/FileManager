@@ -1,5 +1,5 @@
-import { Text, Pressable, View, Image, Modal } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
+import { Text, Pressable, View, Modal } from "react-native";
+import { useSelector } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
@@ -22,8 +22,6 @@ export default function DeleteModal() {
         <View style={[
             styles.pill,
             styles.modal,
-            styles.bigGap,
-            styles.padding,
             {
                 backgroundColor: backgroundColor,
                 position: 'absolute',
@@ -32,7 +30,13 @@ export default function DeleteModal() {
                 bottom: 10,
             }
         ]}>
-            <View style={[styles.rowLayout, styles.bigGap]}>
+            <View style={
+                [
+                    styles.rowLayout,
+                    styles.padding,
+                    styles.bigGap
+                ]
+            }>
                 <MaterialIcon name="delete-outline" />
                 <Text style={[
                     styles.text,
@@ -40,15 +44,26 @@ export default function DeleteModal() {
                 ]}>Delete Item(s)?</Text>
             </View>
             <View style={[styles.divider]} />
-            <Text style={[styles.text,
-            styles.textDisabled]}>Following items will be deleted:</Text>
-            <View style={{ flexDirection: 'column', marginBottom: 20 }}>
+            <View style={
+                [
+                    styles.padding,
+                    styles.bigGap
+                ]
+            }>
+                <Text style={[styles.text,
+                styles.textDisabled]}>Following items will be deleted:</Text>
                 {state.deleteModal.map((item, i) =>
                     <Text key={i} style={[styles.text]}>{item["name"]}</Text>
                 )}
             </View>
-            <View style={[styles.rowLayout,
-            styles.bigGap]}>
+            <View style={[styles.divider]} />
+            <View style={
+                [
+                    styles.rowLayout,
+                    styles.padding,
+                    styles.bigGap
+                ]
+            }>
                 <Pressable
                     onPressIn={() => {
                         state.deletePromiseResolver(0)

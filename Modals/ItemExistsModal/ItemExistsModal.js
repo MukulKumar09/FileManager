@@ -25,8 +25,6 @@ export default function ItemExistsModal() {
             <View style={[
                 styles.pill,
                 styles.modal,
-                styles.bigGap,
-                styles.padding,
                 {
                     backgroundColor: backgroundColor,
                     position: 'absolute',
@@ -35,16 +33,63 @@ export default function ItemExistsModal() {
                     bottom: 10,
                 }
             ]}>
-                <Text style={[styles.text,
-                styles.headingText]}>Item Exists!</Text>
+                <View style={[styles.padding]}>
+                    <Text style={[styles.text,
+                    styles.headingText]}>Item Already Exists!</Text>
+                </View>
                 <View style={[styles.divider]} />
-                <Text style={[styles.text]}>{state.itemInOperation} already exists in destination.</Text>
-                <View style={[styles.mediumGap, { flexDirection: 'column', marginTop: 30, width: '100%' }]}>
+                <View style={[styles.padding]}>
+                    <Text style={[styles.text]}>{state.itemInOperation} already exists in destination.</Text>
+                </View>
+                <View style={[styles.divider]} />
+                <View style={
+                    [
+                        styles.rowLayout,
+                        styles.mediumGap,
+                        styles.padding
+                    ]
+                }>
                     <Pressable
-                        style={[styles.pill,
-                        styles.centered,
-                        styles.pillHighlight,
-                        styles.padding]}
+                        style={
+                            [
+                                styles.pill,
+                                styles.wide,
+                                styles.centered,
+                                styles.padding
+                            ]
+                        }
+                        onPressIn={() => {
+                            state.itemExistsPromiseResolver(1)
+                        }}
+                    >
+                        <Text style={[styles.text]}>Force</Text>
+                    </Pressable>
+                    <Pressable
+                        style={
+                            [
+                                styles.pill,
+                                styles.wide,
+                                styles.centered,
+                                styles.padding
+                            ]
+                        }
+                        onPressIn={() => {
+                            state.itemExistsPromiseResolver(0)
+                        }
+                        }
+                    >
+                        <Text style={[styles.text]}>Skip</Text>
+                    </Pressable>
+                    <Pressable
+                        style={
+                            [
+                                styles.pill,
+                                styles.pillHighlight,
+                                styles.wide,
+                                styles.padding,
+                                styles.centered,
+                            ]
+                        }
                         onPressIn={async () => {
                             let updatedName
                             dispatch({
@@ -66,27 +111,6 @@ export default function ItemExistsModal() {
                         }
                     >
                         <Text style={[styles.text]}>Rename</Text>
-                    </Pressable>
-                    <Pressable
-                        style={[styles.pill,
-                        styles.centered,
-                        styles.padding]}
-                        onPressIn={() => {
-                            state.itemExistsPromiseResolver(0)
-                        }
-                        }
-                    >
-                        <Text style={[styles.text]}>Skip</Text>
-                    </Pressable>
-                    <Pressable
-                        style={[styles.pill,
-                        styles.centered,
-                        styles.padding]}
-                        onPressIn={() => {
-                            state.itemExistsPromiseResolver(1)
-                        }}
-                    >
-                        <Text style={[styles.text]}>Overwrite</Text>
                     </Pressable>
                 </View>
             </View>

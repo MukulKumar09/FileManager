@@ -45,7 +45,7 @@ const TabButton = (props) => {
             >
                 {icon}
                 <View style={
-                    { maxWidth: 130 }}
+                    { maxWidth: 100 }}
                 >
                     <Text
                         numberOfLines={1}
