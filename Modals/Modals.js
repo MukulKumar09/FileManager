@@ -9,6 +9,7 @@ import InputModal from "./InputModal/InputModal";
 import PropertiesModal from "./PropertiesModal/PropertiesModal";
 import WebBrowserModal from "./WebBrowserModal/WebBrowserModal";
 import TabsContextMenu from "../Features/TabsContextMenu/TabsContextMenu";
+import AllTabsModal from "./AllTabsModal/AllTabsModal";
 
 export default function Modals(props) {
     const state = {
@@ -20,7 +21,8 @@ export default function Modals(props) {
         favouritesModal: useSelector(state => state.favouritesModal),
         propertiesModal: useSelector(state => state.propertiesModal),
         webBrowserModal: useSelector(state => state.webBrowserModal),
-        tabsContextMenu: useSelector(state => state.tabsContextMenu)
+        tabsContextMenu: useSelector(state => state.tabsContextMenu),
+        allTabsModal: useSelector(state => state.allTabsModal)
     }
     useEffect(() => console.log(state.deleteModal), [state.deleteModal])
     return (
@@ -73,6 +75,8 @@ export default function Modals(props) {
                 : null}
             {state.tabsContextMenu ?
                 <TabsContextMenu />
+                : null}
+            {state.allTabsModal ? <AllTabsModal />
                 : null}
         </>
     )

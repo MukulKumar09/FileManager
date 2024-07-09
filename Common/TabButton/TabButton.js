@@ -93,7 +93,6 @@ const TabButton = (props) => {
                             [
                                 styles.padding,
                                 { paddingStart: 0 }
-                                // { backgroundColor: 'black' }
                             ]
                         }
                     >

@@ -1,7 +1,6 @@
 import { Pressable, View } from "react-native";
 import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
-import useCache from "../../Hooks/useCache";
 import MenuItem from "../../Common/MenuItem/MenuItem";
 
 export default function TabsContextMenu() {
@@ -63,6 +62,19 @@ export default function TabsContextMenu() {
                     }}
                 />
                 <MenuItem
+                    icon="tab-remove"
+                    name="Close other tabs"
+                    functionName={() => {
+                        dispatch({
+                            type: "DELETEOTHERTABS",
+                            payload: state.currentTab
+                        })
+                        dispatch({
+                            type: "TABSCONTEXTMENU"
+                        })
+                    }}
+                />
+                <MenuItem
                     icon="tab-minus"
                     name="Close this tab"
                     functionName={() => {
@@ -98,17 +110,11 @@ export default function TabsContextMenu() {
                     }}
                 />
                 <MenuItem
-                    icon="tab-remove"
-                    name="Close other tabs"
-                    functionName={() => {
-                        dispatch({
-                            type: "DELETEOTHERTABS",
-                            payload: state.currentTab
-                        })
-                        dispatch({
-                            type: "TABSCONTEXTMENU"
-                        })
-                    }}
+                    icon="select-all"
+                    name="All tabs"
+                    functionName={() => dispatch({
+                        type: "ALLTABSMODAL",
+                    })}
                 />
                 <View style={[styles.divider, { backgroundColor: secondaryColor }]} />
                 <MenuItem
