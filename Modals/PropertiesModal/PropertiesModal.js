@@ -95,8 +95,6 @@ export default function PropertiesModal() {
             <View style={[
                 styles.pill,
                 styles.modal,
-                styles.bigGap,
-                styles.padding,
                 {
                     backgroundColor: backgroundColor,
                     position: 'absolute',
@@ -105,8 +103,13 @@ export default function PropertiesModal() {
                     bottom: 10,
                 }
             ]}>
-                <View style={[styles.rowLayout, styles.bigGap]}>
-
+                <View style={
+                    [
+                        styles.rowLayout,
+                        styles.bigGap,
+                        styles.padding
+                    ]
+                }>
                     <MaterialIcon name="details" />
                     <Text style={[
                         styles.text,
@@ -114,69 +117,82 @@ export default function PropertiesModal() {
                     ]}>Properties</Text>
                 </View>
                 <View style={[styles.divider]} />
-                {state.propertiesModal.length > 1 ?
-                    <Text
-                        style={
-                            [
-                                styles.text,
-                                styles.textDisabled,
-                                styles.wide
-                            ]
-                        }>
-                        {state.propertiesModal.length} items selected
-                    </Text>
-                    :
-                    <>
-                    </>
-                }
-                <View style={[styles.rowLayout]}>
-                    <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Name: </Text>
-                    {itemsCount > 1 ?
-                        <Text style={[styles.text, styles.wide]}>[Multiple items...]</Text>
+                <View style={[
+                    styles.padding,
+                    styles.bigGap,
+                    { width: '100%' }
+                ]
+                }>
+                    {state.propertiesModal.length > 1 ?
+                        <Text
+                            style={
+                                [
+                                    styles.text,
+                                    styles.textDisabled,
+                                ]
+                            }>
+                            {state.propertiesModal.length} items selected
+                        </Text>
                         :
-                        <Text style={[styles.text, styles.wide]}>{name}</Text>
+                        <>
+                        </>
                     }
-                </View>
-                <View style={[styles.rowLayout]}>
-                    <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Type: </Text><Text style={[styles.text, styles.wide]}>{type}</Text>
-                </View>
-                <View style={[styles.rowLayout]}>
-                    <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Size: </Text><Text style={[styles.text, styles.wide]}>{useNiceBytes(size)}</Text>
-                </View>
-                <View style={[styles.rowLayout]}>
-                    <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Path: </Text><Text style={[styles.text, styles.wide]}>{path}</Text>
-                </View>
-                {itemsCount > 1 ?
-                    null :
-                    <>
-                        <View style={[styles.rowLayout]}>
-                            <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Created Date: </Text><Text style={[styles.text, styles.wide]}>{created}</Text>
-                        </View>
-                        <View style={[styles.rowLayout]}>
-                            <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Modified Date: </Text><Text style={[styles.text, styles.wide]}>{modified}</Text>
-                        </View>
-                    </>
-                }
-                <Pressable
-                    onPress={() => {
-                        dispatch({
-                            type: "PROPERTIESMODAL",
-                            payload:
-                                0,
-                        })
-                    }
-                    }
-                    style={[
-                        styles.pill,
-                        styles.centered,
-                        styles.wide,
-                        styles.padding,
-                        {
-                            width: '100%'
+                    <View style={[styles.rowLayout]}>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Name: </Text>
+                        {itemsCount > 1 ?
+                            <Text style={[styles.text, styles.wide]}>[Multiple items...]</Text>
+                            :
+                            <Text style={[styles.text, styles.wide]}>{name}</Text>
                         }
-                    ]}>
-                    <Text style={[styles.text]}>Close</Text>
-                </Pressable>
+                    </View>
+                    <View style={[styles.rowLayout]}>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Type: </Text><Text style={[styles.text, styles.wide]}>{type}</Text>
+                    </View>
+                    <View style={[styles.rowLayout]}>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Size: </Text><Text style={[styles.text, styles.wide]}>{useNiceBytes(size)}</Text>
+                    </View>
+                    <View style={[styles.rowLayout]}>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Path: </Text><Text style={[styles.text, styles.wide]}>{path}</Text>
+                    </View>
+                    {itemsCount > 1 ?
+                        null :
+                        <>
+                            <View style={[styles.rowLayout]}>
+                                <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Created Date: </Text><Text style={[styles.text, styles.wide]}>{created}</Text>
+                            </View>
+                            <View style={[styles.rowLayout]}>
+                                <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Modified Date: </Text><Text style={[styles.text, styles.wide]}>{modified}</Text>
+                            </View>
+                        </>
+                    }
+                </View>
+                <View style={[
+                    styles.padding,
+                    styles.mediumGap,
+                    { width: '100%' }
+                ]
+                }>
+                    <Pressable
+                        onPress={() => {
+                            dispatch({
+                                type: "PROPERTIESMODAL",
+                                payload:
+                                    0,
+                            })
+                        }
+                        }
+                        style={[
+                            styles.pill,
+                            styles.centered,
+                            styles.wide,
+                            styles.padding,
+                            {
+                                width: '100%'
+                            }
+                        ]}>
+                        <Text style={[styles.text]}>Close</Text>
+                    </Pressable>
+                </View>
             </View>
         </Modal>
     )

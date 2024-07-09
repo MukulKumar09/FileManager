@@ -74,7 +74,7 @@ export default function AllTabsModal() {
                                 styles.rowLayout,
                                 styles.wide,
                                 styles.padding,
-                                styles.bigGap,
+                                styles.bigGap
                             ]
                         }
                         onPress={() => {
@@ -100,7 +100,7 @@ export default function AllTabsModal() {
                                 styles.rowLayout,
                                 styles.wide,
                                 styles.padding,
-                                styles.bigGap,
+                                styles.bigGap
                             ]
                         }
                         onPress={() => {
@@ -117,6 +117,7 @@ export default function AllTabsModal() {
                         <Text style={[styles.text]}>Close others</Text>
                     </Pressable>
                 </View>
+                <View style={[styles.divider]} />
                 {
                     Object.keys(state.tabs).map((index) => {
                         return (

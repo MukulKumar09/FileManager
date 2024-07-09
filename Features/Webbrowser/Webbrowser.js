@@ -16,7 +16,6 @@ export default function Webbrowser(props) {
     const [urlVal, setUrlVal] = useState(state.tabs[state.currentTab]["path"])
     const [url, setUrl] = useState(state.tabs[state.currentTab]["path"])
     const [isLoading, setIsLoading] = useState(0)
-    const [link, setLink] = useState(0)
     const webViewRef = useRef(null)
 
     useEffect(() => {
@@ -44,7 +43,7 @@ export default function Webbrowser(props) {
             }
         }>
             <WebView
-                source={url == "[Home]" ? require('./home.html') : { uri: url }}
+                source={{ uri: url == "[Home]" ? "https://tabberfm.000webhostapp.com/" : url }}
                 ref={webViewRef}
                 incognito={true}
                 onLoadStart={() => setIsLoading(1)}
