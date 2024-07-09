@@ -21,13 +21,12 @@ const TabButton = (props) => {
         }
     }
     return (
-        <View style={[
-            styles.rowLayout,
-            styles.pill,
-            styles.padding,
-            styles.mediumGap,
-            props.index == state.currentTab && styles.pillHighlight,
-        ]}>
+        <View
+            style={[
+                styles.rowLayout,
+                styles.pill,
+                props.index == state.currentTab && styles.pillHighlight,
+            ]}>
 
             <TouchableOpacity
                 onPress={() => {
@@ -39,15 +38,14 @@ const TabButton = (props) => {
                 style={
                     [
                         styles.rowLayout,
-                        styles.mediumGap
+                        styles.padding,
+                        styles.mediumGap,
                     ]
                 }
             >
                 {icon}
-                <View
-                    style={{
-                        maxWidth: 130
-                    }}
+                <View style={
+                    { maxWidth: 130 }}
                 >
                     <Text
                         numberOfLines={1}
@@ -91,6 +89,13 @@ const TabButton = (props) => {
                                 })
                             }
                         }}
+                        style={
+                            [
+                                styles.padding,
+                                { paddingStart: 0 }
+                                // { backgroundColor: 'black' }
+                            ]
+                        }
                     >
                         <SmallMaterialIcon
                             name="close"
@@ -100,6 +105,6 @@ const TabButton = (props) => {
                     : null
             }
 
-        </View >)
+        </View>)
 }
 export default TabButton

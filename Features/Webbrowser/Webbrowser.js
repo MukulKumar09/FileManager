@@ -44,7 +44,7 @@ export default function Webbrowser(props) {
             }
         }>
             <WebView
-                source={{ uri: url }}
+                source={url == "[Home]" ? require('./home.html') : { uri: url }}
                 ref={webViewRef}
                 incognito={true}
                 onLoadStart={() => setIsLoading(1)}

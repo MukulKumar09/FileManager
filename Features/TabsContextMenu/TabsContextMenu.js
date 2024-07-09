@@ -146,7 +146,7 @@ export default function TabsContextMenu() {
                             payload: {
                                 tabKey: state.tabCounter,
                                 title: "Browser",
-                                path: "https://tabberfm.000webhostapp.com/home.html",
+                                path: "[Home]",
                                 type: "webbrowser",
                             }
                         })
