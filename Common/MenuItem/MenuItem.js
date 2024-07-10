@@ -16,7 +16,8 @@ export default function MenuItem(props) {
             }
         >
             <MaterialIcon
-                name={props.icon} />
+                name={props.icon}
+            />
             <Text
                 style={
                     [

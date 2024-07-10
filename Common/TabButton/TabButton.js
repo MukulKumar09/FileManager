@@ -22,6 +22,15 @@ const TabButton = (props) => {
     }
     return (
         <View
+            onLayout={(event) => {
+                props.setPosition(
+                    {
+                        ...props.position,
+                        [props.index]: event.nativeEvent.layout.x
+                    }
+                )
+                props.position[props.index] = event.nativeEvent.layout["x"]
+            }}
             style={[
                 styles.rowLayout,
                 styles.pill,
@@ -30,6 +39,7 @@ const TabButton = (props) => {
 
             <TouchableOpacity
                 onPress={() => {
+                    console.log(props.position)
                     dispatch({
                         type: "SETCURRENTTAB",
                         payload: props.index
