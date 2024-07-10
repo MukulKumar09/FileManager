@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import ClipboardModal from "./ClipboardModal/ClipboardModal";
 import AboutModal from "./AboutModal/AboutModal";
@@ -10,6 +9,7 @@ import PropertiesModal from "./PropertiesModal/PropertiesModal";
 import WebBrowserModal from "./WebBrowserModal/WebBrowserModal";
 import TabsContextMenu from "../Features/TabsContextMenu/TabsContextMenu";
 import AllTabsModal from "./AllTabsModal/AllTabsModal";
+import TextEditor from "../Features/TextEditor/TextEditor";
 
 export default function Modals(props) {
     const state = {
@@ -22,9 +22,9 @@ export default function Modals(props) {
         propertiesModal: useSelector(state => state.propertiesModal),
         webBrowserModal: useSelector(state => state.webBrowserModal),
         tabsContextMenu: useSelector(state => state.tabsContextMenu),
-        allTabsModal: useSelector(state => state.allTabsModal)
+        allTabsModal: useSelector(state => state.allTabsModal),
+        textEditorModal: useSelector(state => state.textEditorModal),
     }
-    useEffect(() => console.log(state.deleteModal), [state.deleteModal])
     return (
         <>
             {
@@ -77,6 +77,8 @@ export default function Modals(props) {
                 <TabsContextMenu />
                 : null}
             {state.allTabsModal ? <AllTabsModal />
+                : null}
+            {state.textEditorModal ? <TextEditor />
                 : null}
         </>
     )

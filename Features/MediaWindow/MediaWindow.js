@@ -14,7 +14,7 @@ export default function MediaWindow() {
     useEffect(() => {
         if (state.mediaBox && height.value == 0) {
             height.value =
-                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 60)), {
+                withTiming((height.value + Math.round(Dimensions.get('window').width * 9 / 16 + 50)), {
                     duration: 730,
                     easing: Easing.out(Easing.exp),
                     reduceMotion: ReduceMotion.System,

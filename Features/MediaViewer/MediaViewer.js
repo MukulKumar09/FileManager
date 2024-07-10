@@ -11,7 +11,7 @@ function MediaViewer() {
         mediaType: useSelector(state => state.mediaType),
     }
     return (
-        <View style={{ flexDirection: 'column' }}>
+        <View>
             {state.mediaType === 1 && <Image style={
                 {
                     backgroundColor: backgroundColor,

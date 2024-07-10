@@ -17,7 +17,6 @@ export default function Tabbar(props) {
     const scrollViewRef = useRef(0);
     const [position, setPosition] = useState({})
     useEffect(() => {
-        console.log(position)
         scrollViewRef.current.scrollTo({ x: position[state.currentTab] })
     }, [state.currentTab, position])
     return (

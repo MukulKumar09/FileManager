@@ -49,6 +49,14 @@ export default function useFileHandler(state, dispatch, item) {
                 })
                 break
             }
+            case "txt": {
+                console.log(item)
+                dispatch({
+                    type: "TEXTEDITORMODAL",
+                    payload: item
+                })
+                break
+            }
             default: {
                 dispatch({
                     type: "SETMEDIABOX",

@@ -39,7 +39,6 @@ const TabButton = (props) => {
 
             <TouchableOpacity
                 onPress={() => {
-                    console.log(props.position)
                     dispatch({
                         type: "SETCURRENTTAB",
                         payload: props.index

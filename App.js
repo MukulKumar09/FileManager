@@ -10,6 +10,7 @@ import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
 import Webbrowser from "./Features/Webbrowser/Webbrowser";
+import TextEditor from "./Features/TextEditor/TextEditor";
 
 const App = () => {
     const dispatch = useDispatch()

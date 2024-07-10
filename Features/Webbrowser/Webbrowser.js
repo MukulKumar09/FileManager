@@ -43,7 +43,7 @@ export default function Webbrowser(props) {
             }
         }>
             <WebView
-                source={{ uri: url == "[Home]" ? "https://tabberfm.000webhostapp.com/home.html" : url }}
+                source={{ uri: url == "[Home]" ? "https://google.com" : url }}
                 ref={webViewRef}
                 incognito={true}
                 onLoadStart={() => setIsLoading(1)}
