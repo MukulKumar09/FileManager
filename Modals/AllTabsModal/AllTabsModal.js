@@ -44,83 +44,53 @@ export default function AllTabsModal() {
                 bottom: 10,
             }
         ]}>
-            <View style={
-                [
-                    styles.rowLayout,
-                    styles.padding,
-                    styles.bigGap
-                ]
-            }>
-                <MaterialIcon name="select-all" />
-                <Text style={
+            <View style={[
+                styles.rowLayout,
+                styles.padding,
+                , {
+                    width: '100%',
+                    justifyContent: 'space-between'
+                }]}>
+                <View style={
                     [
+                        styles.rowLayout,
+                        styles.bigGap,
+                    ]
+                }>
+                    <MaterialIcon name="select-all" />
+                    <Text style={[
                         styles.text,
                         styles.headingText
-                    ]
-                }>All Tabs</Text>
+                    ]}>All Tabs</Text>
+                </View>
+                <Text
+                    onPress={() => {
+                        dispatch({
+                            type: "RESETTABS"
+                        })
+
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: "0"
+                        })
+                        dispatch({
+                            type: "TABSCONTEXTMENU"
+                        })
+                    }}
+                    style={[
+                        styles.text,
+                        styles.textDisabled,
+                        {
+                            textDecorationLine: 'underline'
+                        }
+                    ]}>Close All</Text>
             </View>
             <View style={{ width: '100%' }}>
-                <View style={[styles.divider]} />
-                <View
-                    style={
-                        [
-                            styles.rowLayout,
-                        ]
-                    }>
-                    <Pressable
-                        style={
-                            [
-                                styles.rowLayout,
-                                styles.wide,
-                                styles.padding,
-                                styles.bigGap
-                            ]
-                        }
-                        onPress={() => {
-                            dispatch({
-                                type: "RESETTABS"
-                            })
-
-                            dispatch({
-                                type: "SETCURRENTTAB",
-                                payload: "0"
-                            })
-                            dispatch({
-                                type: "TABSCONTEXTMENU"
-                            })
-                        }}
-                    >
-                        <MaterialIcon name="tab-unselected" />
-                        <Text style={[styles.text]}>Close all</Text>
-                    </Pressable>
-                    <Pressable
-                        style={
-                            [
-                                styles.rowLayout,
-                                styles.wide,
-                                styles.padding,
-                                styles.bigGap
-                            ]
-                        }
-                        onPress={() => {
-                            dispatch({
-                                type: "DELETEOTHERTABS",
-                                payload: state.currentTab
-                            })
-                            dispatch({
-                                type: "TABSCONTEXTMENU"
-                            })
-                        }}
-                    >
-                        <MaterialIcon name="tab-remove" />
-                        <Text style={[styles.text]}>Close others</Text>
-                    </Pressable>
-                </View>
                 <View style={[styles.divider]} />
                 <View style={
                     [
                         styles.padding,
-                        styles.bigGap
+                        styles.mediumGap
                     ]
                 }>
                     {
@@ -201,7 +171,8 @@ export default function AllTabsModal() {
             </View>
             <View style={
                 [
-                    styles.wide,
+                    styles.rowLayout,
+                    styles.mediumGap,
                     styles.padding,
                     {
                         width: '100%'
@@ -209,14 +180,35 @@ export default function AllTabsModal() {
                 ]
             }>
                 <Pressable
+                    onPress={() => {
+                        dispatch({
+                            type: "DELETEOTHERTABS",
+                            payload: state.currentTab
+                        })
+                        dispatch({
+                            type: "TABSCONTEXTMENU"
+                        })
+                    }}
                     style={[
                         styles.pill,
+                        styles.wide,
                         styles.centered,
                         styles.padding
                     ]}
+                >
+                    <Text style={[styles.text]}>Close Others</Text>
+                </Pressable>
+                <Pressable
                     onPress={() => dispatch({
                         type: "ALLTABSMODAL",
                     })}
+                    style={[
+                        styles.pill,
+                        styles.bordered,
+                        styles.wide,
+                        styles.centered,
+                        styles.padding
+                    ]}
                 >
                     <Text style={[styles.text]}>Close</Text>
                 </Pressable>
