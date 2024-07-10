@@ -10,6 +10,8 @@ import WebBrowserModal from "./WebBrowserModal/WebBrowserModal";
 import TabsContextMenu from "../Features/TabsContextMenu/TabsContextMenu";
 import AllTabsModal from "./AllTabsModal/AllTabsModal";
 import TextEditor from "../Features/TextEditor/TextEditor";
+import textEditorUnsavedModal from "../Reducers/textEditorUnsavedModal";
+import TextEditorUnsavedModal from "./TextEditorUnsavedModal/TextEditorUnsavedModal";
 
 export default function Modals(props) {
     const state = {
@@ -24,6 +26,7 @@ export default function Modals(props) {
         tabsContextMenu: useSelector(state => state.tabsContextMenu),
         allTabsModal: useSelector(state => state.allTabsModal),
         textEditorModal: useSelector(state => state.textEditorModal),
+        textEditorUnsavedModal: useSelector(state => state.textEditorUnsavedModal),
     }
     return (
         <>
@@ -77,6 +80,8 @@ export default function Modals(props) {
                 <TabsContextMenu />
                 : null}
             {state.allTabsModal ? <AllTabsModal />
+                : null}
+            {state.textEditorUnsavedModal ? <TextEditorUnsavedModal />
                 : null}
             {state.textEditorModal ? <TextEditor />
                 : null}

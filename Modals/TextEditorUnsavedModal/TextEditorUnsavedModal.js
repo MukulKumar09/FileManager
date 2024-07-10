@@ -3,19 +3,18 @@ import { useSelector } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
-export default function DeleteModal() {
+export default function TextEditorUnsavedModal() {
     const state = {
-        deleteModal: useSelector(state => state.deleteModal),
-        deletePromiseResolver: useSelector(state => state.deletePromiseResolver),
-        clipboardItems: useSelector(state => state.clipboardItems),
+        textEditorUnsavedModal: useSelector(state => state.textEditorUnsavedModal),
+        textEditorUnsavedPromiseResolver: useSelector(state => state.textEditorUnsavedPromiseResolver),
     }
     return (<Modal
-        onRequestClose={() => state.deletePromiseResolver(0)}
-        visible={state.deleteModal ? true : false}
+        onRequestClose={() => state.textEditorUnsavedPromiseResolver(0)}
+        visible={state.textEditorUnsavedModal ? true : false}
         transparent={true}
     >
         <Pressable
-            onPress={() => state.deletePromiseResolver(0)} style={[styles.modalBackground]}
+            onPress={() => state.textEditorUnsavedPromiseResolver(0)} style={[styles.modalBackground]}
         />
 
         <View style={[
@@ -36,11 +35,11 @@ export default function DeleteModal() {
                     styles.bigGap
                 ]
             }>
-                <MaterialIcon name="delete-outline" />
+                <MaterialIcon name="alert-circle-outline" />
                 <Text style={[
                     styles.text,
                     styles.headingText
-                ]}>Delete Item(s)?</Text>
+                ]}>Changes Unsaved!</Text>
             </View>
             <View style={[styles.divider]} />
             <View style={
@@ -50,22 +49,19 @@ export default function DeleteModal() {
                 ]
             }>
                 <Text style={[styles.text,
-                styles.textDisabled]}>Following items will be deleted:</Text>
-                {state.deleteModal.map((item, i) =>
-                    <Text key={i} style={[styles.text]}>{item["name"]}</Text>
-                )}
+                styles.textDisabled]}>Changes made are not saved</Text>
             </View>
             <View style={[styles.divider]} />
             <View style={
                 [
                     styles.rowLayout,
                     styles.padding,
-                    styles.bigGap
+                    styles.mediumGap
                 ]
             }>
                 <Pressable
                     onPressIn={() => {
-                        state.deletePromiseResolver(0)
+                        state.textEditorUnsavedPromiseResolver(0)
                     }
                     }
                     style={[styles.pill,
@@ -76,7 +72,18 @@ export default function DeleteModal() {
                 </Pressable>
                 <Pressable
                     onPressIn={() => {
-                        state.deletePromiseResolver(1)
+                        state.textEditorUnsavedPromiseResolver(1)
+                    }
+                    }
+                    style={[styles.pill,
+                    styles.centered,
+                    styles.wide,
+                    styles.padding]}>
+                    <Text style={[styles.text]}>Ignore</Text>
+                </Pressable>
+                <Pressable
+                    onPressIn={() => {
+                        state.textEditorUnsavedPromiseResolver(2)
                     }
                     }
                     style={[styles.pill,
@@ -84,7 +91,7 @@ export default function DeleteModal() {
                     styles.pillHighlight,
                     styles.wide,
                     styles.padding]}>
-                    <Text style={[styles.text]}>Delete</Text>
+                    <Text style={[styles.text]}>Save</Text>
                 </Pressable>
             </View>
         </View>

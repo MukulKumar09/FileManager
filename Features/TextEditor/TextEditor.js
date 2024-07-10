@@ -1,4 +1,4 @@
-import styles, { backgroundColor, secondaryColor } from "../../styles";
+import styles, { backgroundColor, grey, secondaryColor } from "../../styles";
 import { useEffect, useRef, useState } from "react";
 import RNFS, { write } from 'react-native-fs';
 import { useSelector, useDispatch } from "react-redux";
@@ -11,7 +11,8 @@ export default function TextEditor() {
         textEditorModal: useSelector(state => state.textEditorModal),
     }
     const [text, setText] = useState("")
-    const [editable, setEditable] = useState(0)
+    const [isEdited, setIsEdited] = useState(0)
+    const [keyboard, setKeyboard] = useState(0)
     const textEditorRef = useRef("")
 
     useEffect(() => {
@@ -24,11 +25,57 @@ export default function TextEditor() {
     const saveFile = async () => {
         // textEditorRef.current.blur()
         await RNFS.writeFile(state.textEditorModal["path"], text)
+        setIsEdited(0)
         dispatch({
             type: "TOAST",
             payload:
                 "File Saved.",
         })
+    }
+
+    const closeEditor = async () => {
+        textEditorRef.current.blur()
+        if (isEdited) {
+            dispatch({
+                type: "TEXTEDITORUNSAVEDMODAL"
+            })
+            let decision = await new Promise((resolve) => {
+                dispatch({
+                    type: "TEXTEDITORUNSAVEDPROMISE",
+                    payload: resolve
+                })
+            })
+            switch (decision) {
+                case 1: {
+                    dispatch({
+                        type: "TOAST",
+                        payload:
+                            "Changes not saved.",
+                    })
+                    dispatch({
+                        type: "TEXTEDITORMODAL",
+                        payload: 0
+                    })
+                    break
+                }
+                case 2: {
+                    await saveFile()
+                    dispatch({
+                        type: "TEXTEDITORMODAL",
+                        payload: 0
+                    })
+                    break
+                }
+            }
+            dispatch({
+                type: "TEXTEDITORUNSAVEDMODAL"
+            })
+        } else {
+            dispatch({
+                type: "TEXTEDITORMODAL",
+                payload: 0
+            })
+        }
     }
 
     return (
@@ -45,9 +92,12 @@ export default function TextEditor() {
             <TextInput
                 value={text}
                 ref={textEditorRef}
-                onChangeText={(text) => setText(text)}
+                onChangeText={(text) => {
+                    setIsEdited(1)
+                    setText(text)
+                }}
                 multiline={true}
-                editable={editable ? true : false}
+                showSoftInputOnFocus={keyboard ? true : false}
                 style={
                     [
                         styles.wide,
@@ -71,7 +121,7 @@ export default function TextEditor() {
                         styles.text,
                         styles.padding
                     ]
-                }>{state.textEditorModal["name"]}</Text>
+                }>{isEdited == 1 && "*"}{state.textEditorModal["name"]}</Text>
                 <View style={
                     [
                         styles.rowLayout
@@ -79,14 +129,19 @@ export default function TextEditor() {
                 }>
                     <Pressable
                         onPress={() => {
-                            setEditable(!editable)
+                            keyboard == 1 && Keyboard.dismiss()
+                            setKeyboard(!keyboard)
+                            dispatch({
+                                type: "TOAST",
+                                payload: "Virtual Keyboard " + (keyboard ? "Disabled" : "Enabled")
+                            })
                         }}
                         style={
                             [
                                 styles.padding
                             ]
                         }>
-                        <MaterialIcon name="pencil-outline" color="white" />
+                        <MaterialIcon name="keyboard-outline" color={keyboard ? "white" : grey} />
                     </Pressable>
                     <Pressable
                         onPress={() => {
@@ -99,10 +154,7 @@ export default function TextEditor() {
                         }>
                         <MaterialIcon name="content-save-outline" color="white" />
                     </Pressable>
-                    <Pressable onPress={() => dispatch({
-                        type: "TEXTEDITORMODAL",
-                        payload: 0
-                    })}
+                    <Pressable onPress={() => closeEditor()}
 
                         style={
                             [
