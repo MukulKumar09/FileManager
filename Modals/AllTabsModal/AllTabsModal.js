@@ -2,7 +2,6 @@ import { Text, Pressable, View, Modal } from "react-native";
 import styles, { backgroundColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
-import MenuItem from "../../Common/MenuItem/MenuItem";
 import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 
 export default function AllTabsModal() {
@@ -118,78 +117,86 @@ export default function AllTabsModal() {
                     </Pressable>
                 </View>
                 <View style={[styles.divider]} />
-                {
-                    Object.keys(state.tabs).map((index) => {
-                        return (
-                            <View
-                                key={index}
-                                style={
-                                    [
-                                        styles.rowLayout,
-                                        index == state.currentTab && styles.pillHighlight,
-                                    ]
-                                }>
-                                <Pressable
-                                    onPress={() => {
-                                        dispatch({
-                                            type: "SETCURRENTTAB",
-                                            payload: index
-                                        })
-                                    }}
+                <View style={
+                    [
+                        styles.padding,
+                        styles.bigGap
+                    ]
+                }>
+                    {
+                        Object.keys(state.tabs).map((index) => {
+                            return (
+                                <View
+                                    key={index}
                                     style={
                                         [
                                             styles.rowLayout,
-                                            styles.padding,
-                                            styles.wide,
-                                            styles.bigGap,
+                                            styles.pill,
+                                            index == state.currentTab && styles.pillHighlight,
                                         ]
-                                    }
-                                >
-                                    {icon(state.tabs[index]["type"])}
-                                    <Text style={[styles.text]}>{state.tabs[index]["title"]}</Text>
-                                </Pressable>
-                                <Pressable
-                                    onPress={() => {
-                                        let tempTabs = Object.keys(state.tabs)
-                                        let tabKey = tempTabs.indexOf(state.currentTab.toString())
-                                        let currentTab = state.currentTab
-                                        if (tempTabs[tabKey + 1]) {
-                                            currentTab = tempTabs[tabKey + 1]
-                                        } else if (tempTabs[tabKey - 1]) {
-                                            currentTab = tempTabs[tabKey - 1]
-                                        }
-                                        if (tempTabs.length > 1) {
+                                    }>
+                                    <Pressable
+                                        onPress={() => {
                                             dispatch({
                                                 type: "SETCURRENTTAB",
-                                                payload: currentTab
+                                                payload: index
                                             })
-                                            dispatch({
-                                                type: "DELETETAB",
-                                                payload: state.currentTab
-                                            })
-                                        } else {
-                                            dispatch({
-                                                type: "SETCURRENTTAB",
-                                                payload: "0"
-                                            })
-                                            dispatch({
-                                                type: "RESETTABS"
-                                            })
+                                        }}
+                                        style={
+                                            [
+                                                styles.rowLayout,
+                                                styles.padding,
+                                                styles.wide,
+                                                styles.bigGap,
+                                            ]
                                         }
-                                    }}
-                                    style={
-                                        [
-                                            styles.padding
-                                        ]
-                                    }
-                                >
-                                    <MaterialIcon name="close" />
-                                </Pressable>
-                            </View>
+                                    >
+                                        {icon(state.tabs[index]["type"])}
+                                        <Text style={[styles.text]}>{state.tabs[index]["title"]}</Text>
+                                    </Pressable>
+                                    <Pressable
+                                        onPress={() => {
+                                            let tempTabs = Object.keys(state.tabs)
+                                            let tabKey = tempTabs.indexOf(state.currentTab.toString())
+                                            let currentTab = state.currentTab
+                                            if (tempTabs[tabKey + 1]) {
+                                                currentTab = tempTabs[tabKey + 1]
+                                            } else if (tempTabs[tabKey - 1]) {
+                                                currentTab = tempTabs[tabKey - 1]
+                                            }
+                                            if (tempTabs.length > 1) {
+                                                dispatch({
+                                                    type: "SETCURRENTTAB",
+                                                    payload: currentTab
+                                                })
+                                                dispatch({
+                                                    type: "DELETETAB",
+                                                    payload: state.currentTab
+                                                })
+                                            } else {
+                                                dispatch({
+                                                    type: "SETCURRENTTAB",
+                                                    payload: "0"
+                                                })
+                                                dispatch({
+                                                    type: "RESETTABS"
+                                                })
+                                            }
+                                        }}
+                                        style={
+                                            [
+                                                styles.padding
+                                            ]
+                                        }
+                                    >
+                                        <MaterialIcon name="close" />
+                                    </Pressable>
+                                </View>
+                            )
+                        }
                         )
                     }
-                    )
-                }
+                </View>
                 <View style={[styles.divider]} />
             </View>
             <View style={

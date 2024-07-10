@@ -6,6 +6,7 @@ export default async function useStartOperation(state, dispatch) {
     let collectedItems = await useCollectAllItems(state.clipboardItems, state.operationDest)
     let totalSize = 0
     collectedItems.forEach(item => {
+        console.log(item)
         totalSize = totalSize + item["size"]
     })
     let completedSize = 0

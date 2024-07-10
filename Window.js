@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { BackHandler, View } from "react-native";
+import RNFS from 'react-native-fs';
 import { useSelector, useDispatch } from "react-redux";
 import Share from 'react-native-share';
-import { backgroundColor } from "./styles";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
@@ -102,22 +102,32 @@ const Window = (props) => {
                         functionId(-1)
                     }
                     else {
-                        dispatch({
-                            type: 'COPYTOCB',
-                            payload: selectedItems
-                        })
-                        dispatch({
-                            type: "OPERATIONTYPE",
-                            payload: state.functionId,
-                        })
-                        dispatch({
-                            type: "OPERATIONSOURCE",
-                            payload: state.tabs[state.currentTab]["path"],
-                        })
-                        dispatch({
-                            type: "TOAST",
-                            payload: selectedItems.length + " item(s) " + (state.functionId ? "moving" : "copied"),
-                        })
+                        const checkExists = async () => {
+                            let tempSelectedItems = [...selectedItems]
+                            for (let i = 0; i < tempSelectedItems.length; i++) {
+                                if (await RNFS.exists(tempSelectedItems[i]["path"])) {
+                                    let itemStat = await RNFS.stat(tempSelectedItems[i]["path"])
+                                    tempSelectedItems[i]["size"] = itemStat["size"]
+                                }
+                            }
+                            dispatch({
+                                type: 'COPYTOCB',
+                                payload: tempSelectedItems
+                            })
+                            dispatch({
+                                type: "OPERATIONTYPE",
+                                payload: state.functionId,
+                            })
+                            dispatch({
+                                type: "OPERATIONSOURCE",
+                                payload: state.tabs[state.currentTab]["path"],
+                            })
+                            dispatch({
+                                type: "TOAST",
+                                payload: tempSelectedItems.length + " item(s) " + (state.functionId ? "moving" : "copied"),
+                            })
+                        }
+                        checkExists()
                         functionId(-1)
                     }
                     break

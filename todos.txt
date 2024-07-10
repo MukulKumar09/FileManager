@@ -1,6 +1,5 @@
 save maincache
-show all tabs
-open with another app
+useCollectAllItem check exists
 
 sorting
     modified

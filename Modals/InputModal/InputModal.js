@@ -10,7 +10,6 @@ export default function InputModal() {
         inputModal: useSelector(state => state.inputModal),
         tabs: useSelector(state => state.tabs),
         cache: useSelector(state => state.cache),
-        inputModal: useSelector(state => state.inputModal),
         itemInOperation: useSelector(state => state.itemInOperation),
         currentTab: useSelector(state => state.currentTab),
         inputPromiseResolver: useSelector(state => state.inputPromiseResolver),
@@ -78,7 +77,7 @@ export default function InputModal() {
                                 styles.wide
                             ]}
                             multiline={true}
-                            defaultValue={state.itemInOperation["name"]}
+                            defaultValue={state.itemInOperation}
                             onChangeText={text => {
                                 for (let i = 0; i < state.cache[state.tabs[state.currentTab]["path"]].length; i++) {
                                     if (text == state.itemInOperation || state.cache[state.tabs[state.currentTab]["path"]][i]["name"] == text) {
