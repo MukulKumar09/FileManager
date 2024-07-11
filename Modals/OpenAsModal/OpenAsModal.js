@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 import useIcon from "../../Hooks/useIcon";
+import { useState } from "react";
+import useOpenExternally from "../../Hooks/useOpenExternally";
+import MenuItem from "../../Common/MenuItem/MenuItem";
 
 export default function OpenAsModal() {
     const dispatch = useDispatch()
@@ -10,6 +13,7 @@ export default function OpenAsModal() {
         openAsModal: useSelector(state => state.openAsModal),
         tabCounter: useSelector(state => state.tabCounter),
     }
+    const [isExternal, setIsExternal] = useState(0)
     return (
         <Modal
             onRequestClose={() => dispatch({
@@ -42,20 +46,48 @@ export default function OpenAsModal() {
                     [
                         styles.rowLayout,
                         styles.padding,
-                        styles.bigGap
+                        {
+                            width: '100%',
+                            justifyContent: 'space-between'
+                        }
                     ]
                 }>
-                    <MaterialIcon name="file-question-outline" />
-                    <View>
-                        <Text style={[
-                            styles.text,
-                            styles.headingText
-                        ]}>Open as...</Text>
-                        <Text style={[
-                            styles.text,
-                            styles.textDisabled
-                        ]}>{state.openAsModal["name"]}</Text>
+                    <View style={
+                        [
+                            styles.rowLayout,
+                            styles.bigGap
+                        ]
+                    }>
+                        <MaterialIcon name="file-question-outline" />
+                        <View>
+                            <Text style={[
+                                styles.text,
+                                styles.headingText
+                            ]}>Open as...</Text>
+                            <Text style={[
+                                styles.text,
+                                styles.textDisabled
+                            ]}>{state.openAsModal["name"]}</Text>
+                        </View>
                     </View>
+                    {/* <Pressable
+                        onPress={() => setIsExternal(!isExternal)}
+                        style={
+                            [
+                                styles.smallPill,
+                                isExternal == 1 && styles.pillHighlight,
+                            ]
+                        }
+                    >
+                        <Text
+                            style={
+                                [
+                                    styles.text
+                                ]
+                            }>
+                            {isExternal ? "Externally" : "Internally"}
+                        </Text>
+                    </Pressable> */}
                 </View>
                 <View style={[styles.divider]} />
                 <View style=
@@ -184,14 +216,14 @@ export default function OpenAsModal() {
                             Audio
                         </Text>
                     </Pressable>
-                    {/* <MenuItem
+                    <MenuItem
                         functionName={() => {
                             dispatch({
                                 type: "ADDTAB",
                                 payload: {
                                     tabKey: state.tabCounter,
                                     title: "Browser",
-                                    path: state.openAsModal["path"],
+                                    path: "file://" + state.openAsModal["path"],
                                     type: "webbrowser",
                                 }
                             })
@@ -208,7 +240,7 @@ export default function OpenAsModal() {
                             })
                         }}
                         icon="web"
-                        name="Web" /> */}
+                        name="Web" />
                 </View>
             </View>
         </Modal>)

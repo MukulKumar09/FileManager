@@ -87,7 +87,7 @@ export default function TabsContextMenu() {
                             payload: {
                                 tabKey: state.tabCounter,
                                 title: "Browser",
-                                path: "[Home]",
+                                path: "",
                                 type: "webbrowser",
                             }
                         })

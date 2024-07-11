@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import { useEffect, useRef, useState } from "react";
 import styles, { grey } from "../../styles";
 import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
+import RNFS from 'react-native-fs';
 
 export default function Webbrowser(props) {
     const dispatch = useDispatch()
@@ -14,9 +15,13 @@ export default function Webbrowser(props) {
         webBrowserModal: useSelector(state => state.webBrowserModal)
     }
     const [urlVal, setUrlVal] = useState(state.tabs[state.currentTab]["path"])
-    const [url, setUrl] = useState(state.tabs[state.currentTab]["path"])
+    const [url, setUrl] = useState()
     const [isLoading, setIsLoading] = useState(0)
     const webViewRef = useRef(null)
+
+    useEffect(() => {
+        evaluateUrl()
+    }, [])
 
     useEffect(() => {
         if (state.currentTab == props.index) {
@@ -32,10 +37,35 @@ export default function Webbrowser(props) {
         }
     }, [state.tabs, state.currentTab])
 
-    const linkClick = (page) => {
-        setUrlVal(page.url)
-        setUrl(page.url)
+    const readLocal = async () => {
+        setUrl({
+            html: await RNFS.readFile(urlVal)
+        })
     }
+
+    const evaluateUrl = () => {
+        if (urlVal.includes("://")) {
+            if (urlVal.includes("file://")) {
+                readLocal()
+            } else {
+                setUrl({
+                    uri: urlVal
+                })
+            }
+        }
+        else {
+            if (urlVal == "") {
+                setUrl({
+                    uri: "https://google.com"
+                })
+            } else {
+                setUrl({
+                    uri: "https://google.com/search?q=" + urlVal
+                })
+            }
+        }
+    }
+
     return (
         <View style={
             {
@@ -43,10 +73,17 @@ export default function Webbrowser(props) {
             }
         }>
             <WebView
-                source={{ uri: url == "[Home]" ? "https://google.com" : url }}
                 ref={webViewRef}
+                // source={{ html: "file:///storage/emulated/0/bbs (1)/Demo.txt" }}
+                source={url}
+                scalesPageToFit={true}
                 incognito={true}
+                saveFormDataDisabled={true}
+                thirdPartyCookiesEnabled={false}
                 onLoadStart={() => setIsLoading(1)}
+                onNavigationStateChange={(page) => setUrlVal(page.url)}
+                originWhitelist={["*"]}
+                mixedContentMode='never'
                 onLoadEnd={(synthenticEvent) => {
                     dispatch({
                         type: "MODIFYTABPATH",
@@ -64,10 +101,6 @@ export default function Webbrowser(props) {
                     })
                     setIsLoading(0)
                 }}
-                saveFormDataDisabled={true}
-                onNavigationStateChange={linkClick}
-                mixedContentMode='never'
-                thirdPartyCookiesEnabled={false}
                 onOpenWindow={(synthenticEvent) => {
                     synthenticEvent.preventDefault()
                     dispatch({
@@ -168,11 +201,7 @@ export default function Webbrowser(props) {
                     onChangeText={(url) => setUrlVal(url)}
                     onSubmitEditing={() => {
                         this.textInput.blur();
-                        if (urlVal.includes("://")) {
-                            setUrl(urlVal)
-                        } else {
-                            setUrl("https://google.com/search?q=" + urlVal)
-                        }
+                        evaluateUrl()
                     }}
                     // onBlur={() => Keyboard.dismiss()}
                     style={[
@@ -185,11 +214,7 @@ export default function Webbrowser(props) {
                     style={[styles.smallPill]}
                     onPress={() => {
                         this.textInput.blur();
-                        if (urlVal.includes("://")) {
-                            setUrl(urlVal)
-                        } else {
-                            setUrl("https://google.com/search?q=" + urlVal)
-                        }
+                        evaluateUrl
                     }}
                 ><SmallMaterialIcon name="arrow-right-bottom" color={grey} />
                 </Pressable>
@@ -198,11 +223,6 @@ export default function Webbrowser(props) {
                     onPress={() => webViewRef.current.goForward()}
                 ><SmallMaterialIcon name="arrow-right" color={grey} />
                 </Pressable>
-                {/* <Pressable
-                    style={[styles.smallPill]}
-                    onPress={() => [webViewRef+state.currentTab].current.goForward()}
-                ><SmallMaterialIcon name="menu" color={grey} />
-                </Pressable> */}
             </View>
         </View>
     )

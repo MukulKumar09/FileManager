@@ -8,6 +8,8 @@ export default function useIcon(fileType) {
         switch (fileType) {
             case "txt":
                 return <MaterialIcon name="text-box-outline" color="#ffffff" />
+            case "html":
+                return <MaterialIcon name="web" />
             case "mp3":
             case "ogg":
             case "wav":
