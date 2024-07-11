@@ -7,7 +7,7 @@ export default function useOpenExternally(dispatch, item) {
         })
         .catch((error) => {
             dispatch({
-                type: "UNKNOWNFILETYPEMODAL",
+                type: "OPENASMODAL",
                 payload: item
             })
         });

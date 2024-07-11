@@ -198,7 +198,7 @@ const Window = (props) => {
                         })
                     } else {
                         dispatch({
-                            type: "UNKNOWNFILETYPEMODAL",
+                            type: "OPENASMODAL",
                             payload: selectedItem
                         })
                     }

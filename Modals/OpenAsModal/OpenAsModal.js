@@ -4,24 +4,24 @@ import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 import useIcon from "../../Hooks/useIcon";
 
-export default function UnknownFiletypeModal() {
+export default function OpenAsModal() {
     const dispatch = useDispatch()
     const state = {
-        unknownFiletypeModal: useSelector(state => state.unknownFiletypeModal),
+        openAsModal: useSelector(state => state.openAsModal),
         tabCounter: useSelector(state => state.tabCounter),
     }
     return (
         <Modal
             onRequestClose={() => dispatch({
-                type: "UNKNOWNFILETYPEMODAL",
+                type: "OPENASMODAL",
                 payload: 0
             })}
-            visible={state.unknownFiletypeModal ? true : false}
+            visible={state.openAsModal ? true : false}
             transparent={true}
         >
             <Pressable
                 onPress={() => dispatch({
-                    type: "UNKNOWNFILETYPEMODAL",
+                    type: "OPENASMODAL",
                     payload: 0
                 })}
                 style={[styles.modalBackground]}
@@ -46,10 +46,16 @@ export default function UnknownFiletypeModal() {
                     ]
                 }>
                     <MaterialIcon name="file-question-outline" />
-                    <Text style={[
-                        styles.text,
-                        styles.headingText
-                    ]}>Open as...</Text>
+                    <View>
+                        <Text style={[
+                            styles.text,
+                            styles.headingText
+                        ]}>Open as...</Text>
+                        <Text style={[
+                            styles.text,
+                            styles.textDisabled
+                        ]}>{state.openAsModal["name"]}</Text>
+                    </View>
                 </View>
                 <View style={[styles.divider]} />
                 <View style=
@@ -62,10 +68,10 @@ export default function UnknownFiletypeModal() {
                         onPress={() => {
                             dispatch({
                                 type: "TEXTEDITORMODAL",
-                                payload: state.unknownFiletypeModal
+                                payload: state.openAsModal
                             })
                             dispatch({
-                                type: "UNKNOWNFILETYPEMODAL",
+                                type: "OPENASMODAL",
                                 payload: 0
                             })
                         }}
@@ -89,14 +95,14 @@ export default function UnknownFiletypeModal() {
                         onPress={() => {
                             dispatch({
                                 type: "SETMEDIABOX",
-                                payload: state.unknownFiletypeModal
+                                payload: state.openAsModal
                             })
                             dispatch({
                                 type: "SETMEDIATYPE",
                                 payload: 1
                             })
                             dispatch({
-                                type: "UNKNOWNFILETYPEMODAL",
+                                type: "OPENASMODAL",
                                 payload: 0
                             })
                         }}
@@ -120,14 +126,14 @@ export default function UnknownFiletypeModal() {
                         onPress={() => {
                             dispatch({
                                 type: "SETMEDIABOX",
-                                payload: state.unknownFiletypeModal
+                                payload: state.openAsModal
                             })
                             dispatch({
                                 type: "SETMEDIATYPE",
                                 payload: 2
                             })
                             dispatch({
-                                type: "UNKNOWNFILETYPEMODAL",
+                                type: "OPENASMODAL",
                                 payload: 0
                             })
                         }}
@@ -151,14 +157,14 @@ export default function UnknownFiletypeModal() {
                         onPress={() => {
                             dispatch({
                                 type: "SETMEDIABOX",
-                                payload: state.unknownFiletypeModal
+                                payload: state.openAsModal
                             })
                             dispatch({
                                 type: "SETMEDIATYPE",
                                 payload: 2
                             })
                             dispatch({
-                                type: "UNKNOWNFILETYPEMODAL",
+                                type: "OPENASMODAL",
                                 payload: 0
                             })
                         }}
@@ -185,7 +191,7 @@ export default function UnknownFiletypeModal() {
                                 payload: {
                                     tabKey: state.tabCounter,
                                     title: "Browser",
-                                    path: state.unknownFiletypeModal["path"],
+                                    path: state.openAsModal["path"],
                                     type: "webbrowser",
                                 }
                             })
@@ -197,7 +203,7 @@ export default function UnknownFiletypeModal() {
                                 type: "INCREASETABCOUNTER",
                             })
                             dispatch({
-                                type: "UNKNOWNFILETYPEMODAL",
+                                type: "OPENASMODAL",
                                 payload: 0
                             })
                         }}

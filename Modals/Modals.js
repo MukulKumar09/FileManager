@@ -12,7 +12,7 @@ import AllTabsModal from "./AllTabsModal/AllTabsModal";
 import TextEditor from "../Features/TextEditor/TextEditor";
 import textEditorUnsavedModal from "../Reducers/textEditorUnsavedModal";
 import TextEditorUnsavedModal from "./TextEditorUnsavedModal/TextEditorUnsavedModal";
-import UnknownFiletypeModal from "./UnknownFiletypeModal/UnknownFiletypeModal";
+import OpenAsModal from "./OpenAsModal/OpenAsModal";
 
 export default function Modals(props) {
     const state = {
@@ -28,7 +28,7 @@ export default function Modals(props) {
         allTabsModal: useSelector(state => state.allTabsModal),
         textEditorModal: useSelector(state => state.textEditorModal),
         textEditorUnsavedModal: useSelector(state => state.textEditorUnsavedModal),
-        unknownFiletypeModal: useSelector(state => state.unknownFiletypeModal),
+        openAsModal: useSelector(state => state.openAsModal),
     }
     return (
         <>
@@ -87,7 +87,7 @@ export default function Modals(props) {
                 : null}
             {state.textEditorModal ? <TextEditor />
                 : null}
-            {state.unknownFiletypeModal ? <UnknownFiletypeModal />
+            {state.openAsModal ? <OpenAsModal />
                 : null}
         </>
     )
