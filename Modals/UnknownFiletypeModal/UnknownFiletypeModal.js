@@ -1,17 +1,15 @@
 import { Text, Pressable, View, Modal } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
-import MenuItem from "../../Common/MenuItem/MenuItem";
 import useIcon from "../../Hooks/useIcon";
-import { useState } from "react";
 
 export default function UnknownFiletypeModal() {
     const dispatch = useDispatch()
     const state = {
         unknownFiletypeModal: useSelector(state => state.unknownFiletypeModal),
+        tabCounter: useSelector(state => state.tabCounter),
     }
-    const [isExternal, setIsExternal] = useState(0)
     return (
         <Modal
             onRequestClose={() => dispatch({
@@ -182,10 +180,29 @@ export default function UnknownFiletypeModal() {
                     </Pressable>
                     {/* <MenuItem
                         functionName={() => {
-
+                            dispatch({
+                                type: "ADDTAB",
+                                payload: {
+                                    tabKey: state.tabCounter,
+                                    title: "Browser",
+                                    path: state.unknownFiletypeModal["path"],
+                                    type: "webbrowser",
+                                }
+                            })
+                            dispatch({
+                                type: "SETCURRENTTAB",
+                                payload: state.tabCounter
+                            })
+                            dispatch({
+                                type: "INCREASETABCOUNTER",
+                            })
+                            dispatch({
+                                type: "UNKNOWNFILETYPEMODAL",
+                                payload: 0
+                            })
                         }}
-                        icon="file-move-outline"
-                        name="Other" /> */}
+                        icon="web"
+                        name="Web" /> */}
                 </View>
             </View>
         </Modal>)
