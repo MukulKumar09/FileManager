@@ -188,6 +188,8 @@ const Window = (props) => {
                                 selectedItems,
                         })
                     }
+                    functionId(-1)
+                    break
                 }
                 case 10: { //open as
                     if (selectedItem.length == 0 || selectedItem["isDirectory"]) {
