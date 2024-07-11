@@ -34,6 +34,7 @@ import allTabsModal from "./allTabsModal";
 import textEditorModal from "./textEditorModal";
 import textEditorUnsavedModal from "./textEditorUnsavedModal";
 import textEditorUnsavedPromiseResolver from "./textEditorUnsavedPromiseResolver";
+import unknownFiletypeModal from "./unknownFiletypeModal";
 
 const rootReducer = combineReducers({
     aboutModal,
@@ -71,6 +72,7 @@ const rootReducer = combineReducers({
     allTabsModal,
     textEditorModal,
     textEditorUnsavedModal,
-    textEditorUnsavedPromiseResolver
+    textEditorUnsavedPromiseResolver,
+    unknownFiletypeModal
 })
 export default rootReducer

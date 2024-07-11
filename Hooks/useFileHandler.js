@@ -34,9 +34,9 @@ export default function useFileHandler(state, dispatch, item) {
                 break
             }
             case "mp4":
-            case "mp3":
             case "avi":
             case "mkv":
+            case "mp3":
             case "wav":
             case "midi": {
                 dispatch({
@@ -49,24 +49,23 @@ export default function useFileHandler(state, dispatch, item) {
                 })
                 break
             }
-            case "txt": {
-                console.log(item)
-                dispatch({
-                    type: "TEXTEDITORMODAL",
-                    payload: item
-                })
-                break
-            }
+            case "txt":
+            case "php":
+            case "js":
+            case "jsx":
+            case "tsx":
+            case "ts":
+            case "config":
+            case "css":
+                {
+                    dispatch({
+                        type: "TEXTEDITORMODAL",
+                        payload: item
+                    })
+                    break
+                }
             default: {
-                dispatch({
-                    type: "SETMEDIABOX",
-                    payload: 0
-                })
-                dispatch({
-                    type: "SETMEDIATYPE",
-                    payload: 0
-                })
-                useOpenExternally(item)
+                useOpenExternally(dispatch, item)
             }
         }
     }

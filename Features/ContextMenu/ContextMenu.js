@@ -1,5 +1,5 @@
 import { Pressable, View } from "react-native";
-import styles from "../../styles";
+import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 import MenuItem from "../../Common/MenuItem/MenuItem";
@@ -46,9 +46,6 @@ export default function ContextMenu() {
                 ]}
             >
                 <MenuItem
-                    functionName={() => useCache(dispatch, state.tabs[state.currentTab]["path"])
-                    } icon="refresh" name="Refresh" />
-                <MenuItem
                     functionName={() => {
                         dispatch({
                             type: "FUNCTIONID",
@@ -59,9 +56,20 @@ export default function ContextMenu() {
                     functionName={() => {
                         dispatch({
                             type: "FUNCTIONID",
+                            payload: 10
+                        })
+                    }} icon="file-question-outline" name="Open as" />
+                <MenuItem
+                    functionName={() => {
+                        dispatch({
+                            type: "FUNCTIONID",
                             payload: 4
                         })
                     }} icon="tab-plus" name="Open in new tab" />
+                <View style={[styles.divider, { backgroundColor: secondaryColor }]} />
+                <MenuItem
+                    functionName={() => useCache(dispatch, state.tabs[state.currentTab]["path"])
+                    } icon="refresh" name="Refresh" />
                 <MenuItem
                     functionName={() => dispatch({
                         type: "CLIPBOARDMODAL"
@@ -84,6 +92,7 @@ export default function ContextMenu() {
                                 </Pressable>
                             </View>
                              */}
+
                 <MenuItem
                     functionName={() =>
                         dispatch({

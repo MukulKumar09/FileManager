@@ -169,7 +169,7 @@ const Window = (props) => {
                                 "No items selected",
                         })
                     } else {
-                        useOpenExternally(selectedItem)
+                        useOpenExternally(dispatch, selectedItem)
                     }
                     functionId(-1)
                     break
@@ -188,6 +188,22 @@ const Window = (props) => {
                                 selectedItems,
                         })
                     }
+                }
+                case 10: { //open as
+                    if (selectedItem.length == 0 || selectedItem["isDirectory"]) {
+                        dispatch({
+                            type: "TOAST",
+                            payload:
+                                "No items selected",
+                        })
+                    } else {
+                        dispatch({
+                            type: "UNKNOWNFILETYPEMODAL",
+                            payload: selectedItem
+                        })
+                    }
+                    functionId(-1)
+                    break
                 }
                 default: {
                     useStageItems(state, dispatch, selectedItem)

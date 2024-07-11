@@ -1,13 +1,14 @@
 import FileViewer from "react-native-file-viewer";
-export default function useOpenExternally(item) {
+export default function useOpenExternally(dispatch, item) {
     console.log("file://" + item["path"])
     FileViewer.open(item["path"], { showOpenWithDialog: true }) // absolute-path-to-my-local-file.
         .then(() => {
             // success
         })
-
         .catch((error) => {
-            console.log(error)
-            alert(error)
+            dispatch({
+                type: "UNKNOWNFILETYPEMODAL",
+                payload: item
+            })
         });
 }
