@@ -1,6 +1,7 @@
 import { Pressable, View } from "react-native";
 import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
+import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import useCache from "../../Hooks/useCache";
 import MenuItem from "../../Common/MenuItem/MenuItem";
 
@@ -12,12 +13,15 @@ export default function ContextMenu() {
     }
     const dispatch = useDispatch()
     return (
-        <View style={{
-            position: 'absolute',
-            zIndex: 1,
-            height: '100%',
-            width: '100%',
-        }}>
+        <Animated.View
+            entering={FadeInDown.duration(50)}
+            exiting={FadeOutDown.duration(50)}
+            style={{
+                position: 'absolute',
+                zIndex: 1,
+                height: '100%',
+                width: '100%',
+            }}>
             <Pressable
                 onPressIn={() => dispatch({
                     type: "CONTEXTMENU"
@@ -111,5 +115,5 @@ export default function ContextMenu() {
                     })
                     } icon="close" name="Close" />
             </View>
-        </View>)
+        </Animated.View>)
 }

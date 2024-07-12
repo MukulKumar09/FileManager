@@ -49,10 +49,13 @@ const Window = (props) => {
     useEffect(() => {
         if (state.currentTab == props.index) {
             const backAction = () => {
-                if (state.tabs[state.currentTab]["path"] == "Home")
+                if (state.tabs[props.index]["path"] == "Home") {
                     return false
-                else
+                }
+                else {
+                    setSelectedItem({ path: state.tabs[props.index]["path"] })
                     useNavigateParent(state, dispatch)
+                }
                 return true;
             };
             const backHandler = BackHandler.addEventListener(

@@ -87,14 +87,14 @@ export default function Webbrowser(props) {
                     dispatch({
                         type: "MODIFYTABPATH",
                         payload: {
-                            tabId: state.currentTab,
+                            tabId: props.index,
                             value: synthenticEvent["nativeEvent"]["url"]
                         }
                     })
                     dispatch({
                         type: "MODIFYTABNAME",
                         payload: {
-                            tabId: state.currentTab,
+                            tabId: props.index,
                             value: synthenticEvent["nativeEvent"]["title"]
                         }
                     })

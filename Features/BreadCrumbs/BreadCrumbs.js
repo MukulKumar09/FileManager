@@ -103,10 +103,14 @@ export default function BreadCrumbs(props) {
                                         <Text
                                             numberOfLines={1}
                                             ellipsizeMode="tail"
-                                            style={[styles.smallPill,
-                                            styles.smallText,
-                                            styles.text,
-                                            styles.textDisabled]}
+                                            style={
+                                                [
+                                                    styles.smallPill,
+                                                    styles.smallText,
+                                                    styles.text,
+                                                    styles.textDisabled
+                                                ]
+                                            }
                                         >{folder["name"]}</Text>
                                     </Pressable>
                                 </View>

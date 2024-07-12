@@ -1,4 +1,5 @@
 import { Text, Pressable, View, Modal } from "react-native";
+import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import { useSelector, useDispatch } from "react-redux";
 import styles, { backgroundColor } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
@@ -23,54 +24,59 @@ export default function OpenAsModal() {
             visible={state.openAsModal ? true : false}
             transparent={true}
         >
-            <Pressable
-                onPress={() => dispatch({
-                    type: "OPENASMODAL",
-                    payload: 0
-                })}
-                style={[styles.modalBackground]}
-            />
+            <Animated.View
+                entering={FadeInDown.duration(50)}
+                exiting={FadeOutDown.duration(50)}
+                style={[styles.wide]}
+            >
+                <Pressable
+                    onPress={() => dispatch({
+                        type: "OPENASMODAL",
+                        payload: 0
+                    })}
+                    style={[styles.modalBackground]}
+                />
 
-            <View style={[
-                styles.pill,
-                styles.modal,
-                {
-                    backgroundColor: backgroundColor,
-                    position: 'absolute',
-                    left: 10,
-                    right: 10,
-                    bottom: 10,
-                }
-            ]}>
-                <View style={
-                    [
-                        styles.rowLayout,
-                        styles.padding,
-                        {
-                            width: '100%',
-                            justifyContent: 'space-between'
-                        }
-                    ]
-                }>
+                <View style={[
+                    styles.pill,
+                    styles.modal,
+                    {
+                        backgroundColor: backgroundColor,
+                        position: 'absolute',
+                        left: 10,
+                        right: 10,
+                        bottom: 10,
+                    }
+                ]}>
                     <View style={
                         [
                             styles.rowLayout,
-                            styles.bigGap
+                            styles.padding,
+                            {
+                                width: '100%',
+                                justifyContent: 'space-between'
+                            }
                         ]
                     }>
-                        <MaterialIcon name="file-question-outline" />
-                        <View>
-                            <Text style={[
-                                styles.text,
-                                styles.headingText
-                            ]}>Open as...</Text>
-                            <Text style={[
-                                styles.text,
-                                styles.textDisabled
-                            ]}>{state.openAsModal["name"]}</Text>
+                        <View style={
+                            [
+                                styles.rowLayout,
+                                styles.bigGap
+                            ]
+                        }>
+                            <MaterialIcon name="file-question-outline" />
+                            <View>
+                                <Text style={[
+                                    styles.text,
+                                    styles.headingText
+                                ]}>Open as...</Text>
+                                <Text style={[
+                                    styles.text,
+                                    styles.textDisabled
+                                ]}>{state.openAsModal["name"]}</Text>
+                            </View>
                         </View>
-                    </View>
-                    {/* <Pressable
+                        {/* <Pressable
                         onPress={() => setIsExternal(!isExternal)}
                         style={
                             [
@@ -88,160 +94,162 @@ export default function OpenAsModal() {
                             {isExternal ? "Externally" : "Internally"}
                         </Text>
                     </Pressable> */}
+                    </View>
+                    <View style={[styles.divider]} />
+                    <View style=
+                        {
+                            [
+                                { width: '100%' }
+                            ]
+                        }>
+                        <Pressable
+                            onPress={() => {
+                                dispatch({
+                                    type: "TEXTEDITORMODAL",
+                                    payload: state.openAsModal
+                                })
+                                dispatch({
+                                    type: "OPENASMODAL",
+                                    payload: 0
+                                })
+                            }}
+                            style={
+                                [
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.padding
+                                ]
+                            }>
+                            {useIcon("txt")}
+                            <Text style={
+                                [
+                                    styles.text
+                                ]
+                            }>
+                                Text
+                            </Text>
+                        </Pressable>
+                        <Pressable
+                            onPress={() => {
+                                dispatch({
+                                    type: "SETMEDIABOX",
+                                    payload: state.openAsModal
+                                })
+                                dispatch({
+                                    type: "SETMEDIATYPE",
+                                    payload: 1
+                                })
+                                dispatch({
+                                    type: "OPENASMODAL",
+                                    payload: 0
+                                })
+                            }}
+                            style={
+                                [
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.padding
+                                ]
+                            }>
+                            {useIcon("png")}
+                            <Text style={
+                                [
+                                    styles.text
+                                ]
+                            }>
+                                Image
+                            </Text>
+                        </Pressable>
+                        <Pressable
+                            onPress={() => {
+                                dispatch({
+                                    type: "SETMEDIABOX",
+                                    payload: state.openAsModal
+                                })
+                                dispatch({
+                                    type: "SETMEDIATYPE",
+                                    payload: 2
+                                })
+                                dispatch({
+                                    type: "OPENASMODAL",
+                                    payload: 0
+                                })
+                            }}
+                            style={
+                                [
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.padding
+                                ]
+                            }>
+                            {useIcon("mp4")}
+                            <Text style={
+                                [
+                                    styles.text
+                                ]
+                            }>
+                                Video
+                            </Text>
+                        </Pressable>
+                        <Pressable
+                            onPress={() => {
+                                dispatch({
+                                    type: "SETMEDIABOX",
+                                    payload: state.openAsModal
+                                })
+                                dispatch({
+                                    type: "SETMEDIATYPE",
+                                    payload: 2
+                                })
+                                dispatch({
+                                    type: "OPENASMODAL",
+                                    payload: 0
+                                })
+                            }}
+                            style={
+                                [
+                                    styles.rowLayout,
+                                    styles.bigGap,
+                                    styles.padding
+                                ]
+                            }>
+                            {useIcon("mp3")}
+                            <Text style={
+                                [
+                                    styles.text
+                                ]
+                            }>
+                                Audio
+                            </Text>
+                        </Pressable>
+                        <MenuItem
+                            functionName={() => {
+                                dispatch({
+                                    type: "ADDTAB",
+                                    payload: {
+                                        tabKey: state.tabCounter,
+                                        title: "Browser",
+                                        path: "file://" + state.openAsModal["path"],
+                                        type: "webbrowser",
+                                    }
+                                })
+                                dispatch({
+                                    type: "SETCURRENTTAB",
+                                    payload: state.tabCounter
+                                })
+                                dispatch({
+                                    type: "INCREASETABCOUNTER",
+                                })
+                                dispatch({
+                                    type: "OPENASMODAL",
+                                    payload: 0
+                                })
+                            }}
+                            icon="web"
+                            name="Web" />
+                    </View>
                 </View>
-                <View style={[styles.divider]} />
-                <View style=
-                    {
-                        [
-                            { width: '100%' }
-                        ]
-                    }>
-                    <Pressable
-                        onPress={() => {
-                            dispatch({
-                                type: "TEXTEDITORMODAL",
-                                payload: state.openAsModal
-                            })
-                            dispatch({
-                                type: "OPENASMODAL",
-                                payload: 0
-                            })
-                        }}
-                        style={
-                            [
-                                styles.rowLayout,
-                                styles.bigGap,
-                                styles.padding
-                            ]
-                        }>
-                        {useIcon("txt")}
-                        <Text style={
-                            [
-                                styles.text
-                            ]
-                        }>
-                            Text
-                        </Text>
-                    </Pressable>
-                    <Pressable
-                        onPress={() => {
-                            dispatch({
-                                type: "SETMEDIABOX",
-                                payload: state.openAsModal
-                            })
-                            dispatch({
-                                type: "SETMEDIATYPE",
-                                payload: 1
-                            })
-                            dispatch({
-                                type: "OPENASMODAL",
-                                payload: 0
-                            })
-                        }}
-                        style={
-                            [
-                                styles.rowLayout,
-                                styles.bigGap,
-                                styles.padding
-                            ]
-                        }>
-                        {useIcon("png")}
-                        <Text style={
-                            [
-                                styles.text
-                            ]
-                        }>
-                            Image
-                        </Text>
-                    </Pressable>
-                    <Pressable
-                        onPress={() => {
-                            dispatch({
-                                type: "SETMEDIABOX",
-                                payload: state.openAsModal
-                            })
-                            dispatch({
-                                type: "SETMEDIATYPE",
-                                payload: 2
-                            })
-                            dispatch({
-                                type: "OPENASMODAL",
-                                payload: 0
-                            })
-                        }}
-                        style={
-                            [
-                                styles.rowLayout,
-                                styles.bigGap,
-                                styles.padding
-                            ]
-                        }>
-                        {useIcon("mp4")}
-                        <Text style={
-                            [
-                                styles.text
-                            ]
-                        }>
-                            Video
-                        </Text>
-                    </Pressable>
-                    <Pressable
-                        onPress={() => {
-                            dispatch({
-                                type: "SETMEDIABOX",
-                                payload: state.openAsModal
-                            })
-                            dispatch({
-                                type: "SETMEDIATYPE",
-                                payload: 2
-                            })
-                            dispatch({
-                                type: "OPENASMODAL",
-                                payload: 0
-                            })
-                        }}
-                        style={
-                            [
-                                styles.rowLayout,
-                                styles.bigGap,
-                                styles.padding
-                            ]
-                        }>
-                        {useIcon("mp3")}
-                        <Text style={
-                            [
-                                styles.text
-                            ]
-                        }>
-                            Audio
-                        </Text>
-                    </Pressable>
-                    <MenuItem
-                        functionName={() => {
-                            dispatch({
-                                type: "ADDTAB",
-                                payload: {
-                                    tabKey: state.tabCounter,
-                                    title: "Browser",
-                                    path: "file://" + state.openAsModal["path"],
-                                    type: "webbrowser",
-                                }
-                            })
-                            dispatch({
-                                type: "SETCURRENTTAB",
-                                payload: state.tabCounter
-                            })
-                            dispatch({
-                                type: "INCREASETABCOUNTER",
-                            })
-                            dispatch({
-                                type: "OPENASMODAL",
-                                payload: 0
-                            })
-                        }}
-                        icon="web"
-                        name="Web" />
-                </View>
-            </View>
-        </Modal>)
+            </Animated.View>
+        </Modal>
+    )
 }

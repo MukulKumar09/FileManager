@@ -1,5 +1,5 @@
-import { Text, Pressable, View, Modal, TextInput } from "react-native";
 import { useState } from "react";
+import { Text, Pressable, View, Modal, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux"
 import styles, { backgroundColor } from "../../styles";
 
@@ -33,17 +33,18 @@ export default function InputModal() {
                 style={[styles.modalBackground]}
             />
 
-            <View style={[
-                styles.pill,
-                styles.modal,
-                {
-                    backgroundColor: backgroundColor,
-                    position: 'absolute',
-                    left: 10,
-                    right: 10,
-                    bottom: 10,
-                }
-            ]}>
+            <View
+                style={[
+                    styles.pill,
+                    styles.modal,
+                    {
+                        backgroundColor: backgroundColor,
+                        position: 'absolute',
+                        left: 10,
+                        right: 10,
+                        bottom: 10,
+                    }
+                ]}>
                 <View style={[
                     styles.padding,]}>
                     <Text style={[styles.text,

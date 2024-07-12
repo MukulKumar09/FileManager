@@ -116,12 +116,16 @@ export default function TextEditor() {
                     }
                 ]
             }>
-                <Text style={
-                    [
-                        styles.text,
-                        styles.padding
-                    ]
-                }>{isEdited == 1 && "*"}{state.textEditorModal["name"]}</Text>
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={
+                        [
+                            styles.text,
+                            styles.wide,
+                            styles.padding
+                        ]
+                    }>{isEdited == 1 && "*"}{state.textEditorModal["name"]}</Text>
                 <View style={
                     [
                         styles.rowLayout
