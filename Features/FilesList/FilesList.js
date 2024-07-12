@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import useCache from "../../Hooks/useCache";
 import ListItem from "../../Common/ListItem/ListItem";
 import styles from "../../styles";
+import { useEffect, useRef } from "react";
 
 const FilesList = (props) => {
     const dispatch = useDispatch()
@@ -10,6 +11,21 @@ const FilesList = (props) => {
         tabs: useSelector(state => state.tabs),
         currentTab: useSelector(state => state.currentTab),
     }
+    const filesListRef = useRef(0)
+    useEffect(() => {
+        let findItem = props.finalList.find(item => props.selectedItem["path"] === item["path"])
+        findItem ?
+            filesListRef.current.scrollToItem({
+                item: findItem,
+                animated: false,
+                viewOffset: 500
+            })
+            :
+            filesListRef.current.scrollToOffset({
+                offset: 0,
+                animated: false
+            })
+    }, [props.finalList])
     const renderItem =
         ({ item }) =>
             <ListItem
@@ -23,6 +39,7 @@ const FilesList = (props) => {
             />
     return (
         <VirtualizedList
+            ref={filesListRef}
             onRefresh={() => useCache(dispatch, state.tabs[state.currentTab]["path"])}
             ListEmptyComponent={<Text style={[styles.text, styles.textDisabled, styles.padding]}>No items</Text>}
             refreshing={false}

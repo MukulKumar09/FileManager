@@ -6,10 +6,11 @@ import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 export default function FavouritesModal() {
     const dispatch = useDispatch()
     const state = {
+        tabs: useSelector(state => state.tabs),
+        tabCounter: useSelector(state => state.tabCounter),
+        currentTab: useSelector(state => state.currentTab),
         favouriteItems: useSelector(state => state.favouriteItems),
         favouritesModal: useSelector(state => state.favouritesModal),
-        tabs: useSelector(state => state.tabs),
-        currentTab: useSelector(state => state.currentTab),
     }
     return (<Modal
         onRequestClose={() => dispatch({
@@ -93,18 +94,20 @@ export default function FavouritesModal() {
                                 <Pressable
                                     onPress={() => {
                                         dispatch({
-                                            type: "MODIFYTABPATH",
+                                            type: "ADDTAB",
                                             payload: {
-                                                tabId: state.currentTab,
-                                                value: item["path"]
+                                                tabKey: state.tabCounter,
+                                                title: item["name"],
+                                                path: item["path"],
+                                                type: "filebrowser",
                                             }
                                         })
                                         dispatch({
-                                            type: "MODIFYTABNAME",
-                                            payload: {
-                                                tabId: state.currentTab,
-                                                value: item["name"]
-                                            }
+                                            type: "SETCURRENTTAB",
+                                            payload: state.tabCounter
+                                        })
+                                        dispatch({
+                                            type: "INCREASETABCOUNTER",
                                         })
                                         dispatch({
                                             type: "FAVOURITESMODAL"

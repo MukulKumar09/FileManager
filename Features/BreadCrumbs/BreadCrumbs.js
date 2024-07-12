@@ -127,6 +127,7 @@ export default function BreadCrumbs(props) {
                     }>  |  </Text>
                     <Pressable
                         onPressIn={() => {
+                            props.setSelectedItem({ path: state.tabs[state.currentTab]["path"] })
                             useNavigateParent(state, dispatch)
                         }}
                         style={[

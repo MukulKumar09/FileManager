@@ -10,7 +10,7 @@ export default function ListItem(props) {
                     styles.rowLayout,
                     styles.padding,
                     props.selectedItems.some(item => item["path"] === props.item["path"]) && styles.listItemHighlight,
-                    props.selectedItem == props.item && styles.listItemSelected
+                    props.selectedItem["path"] == props.item["path"] && styles.listItemSelected
                 ]
             }
             onPressIn={() => props.setSelectedItem(props.item)}
