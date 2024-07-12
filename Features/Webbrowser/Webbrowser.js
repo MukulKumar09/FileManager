@@ -74,12 +74,12 @@ export default function Webbrowser(props) {
         }>
             <WebView
                 ref={webViewRef}
-                // source={{ html: "file:///storage/emulated/0/bbs (1)/Demo.txt" }}
                 source={url}
                 scalesPageToFit={true}
                 incognito={true}
                 saveFormDataDisabled={true}
                 thirdPartyCookiesEnabled={false}
+                blobDownloadingEnabled={true}
                 onLoadStart={() => setIsLoading(1)}
                 onNavigationStateChange={(page) => setUrlVal(page.url)}
                 originWhitelist={["*"]}
@@ -122,18 +122,14 @@ export default function Webbrowser(props) {
                 }}
                 onMessage={(event) => {
                     event = JSON.parse(event["nativeEvent"]["data"])
-                    if (event["type"] == "modal")
-                        dispatch({
-                            type: "WEBBROWSERMODAL",
-                            payload: {
-                                path: event["url"]
-                            }
-                        })
-                    if (event["type"] == "target_blank")
-                        console.log("abcd")
+                    dispatch({
+                        type: "WEBBROWSERMODAL",
+                        payload: event
+                    })
                 }}
                 injectedJavaScript={`
                 let pressTimer;
+                let link={};
                     function clearPressTimer(event) {
                         window.clearTimeout(pressTimer);
                         pressTimer = null;
@@ -145,13 +141,21 @@ export default function Webbrowser(props) {
                     window.addEventListener(
                         "touchstart", 
                         function(event) {
-                            if (event.target.tagName.toLowerCase() === 'a' || event.target.getAttribute('role')==='link') {
-                                let link={type:"modal",url:event.target.toString()};
+                            if (
+                                event.target.tagName.toLowerCase() === 'a' 
+                                || event.target.getAttribute('role')==='link'
+                                || event.target.tagName.toLowerCase() === 'img' 
+                            ) {
                                 pressTimer = window.setTimeout(function() {
-                                        window.ReactNativeWebView.postMessage(JSON.stringify(link));
+                                    link["type"]="link";
+                                    if(event.target.href)
+                                        link["url"]=event.target.href; 
+                                    else if(event.target.src)
+                                        link["url"]=event.target.src; 
+                                    window.ReactNativeWebView.postMessage(JSON.stringify(link));
                                     }
                                 , 500);
-                                };
+                            }
                             window.addEventListener("touchcancel", clearPressTimer);
                             window.addEventListener("touchmove", clearPressTimer);
                             window.addEventListener("touchend", clearPressTimer);
@@ -159,11 +163,6 @@ export default function Webbrowser(props) {
                     );
                 `}
             />
-            {/* <CircularButton
-                    functionName={() => { [webViewRef+state.currentTab].current.goBack(); }
-                    }
-                    name="arrow-left"
-                /> */}
             <View style={
                 [
                     styles.rowLayout,

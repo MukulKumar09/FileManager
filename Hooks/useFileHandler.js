@@ -64,6 +64,25 @@ export default function useFileHandler(state, dispatch, item) {
                     })
                     break
                 }
+            case "html": {
+                dispatch({
+                    type: "ADDTAB",
+                    payload: {
+                        tabKey: state.tabCounter,
+                        title: "Browser",
+                        path: "file://" + item["path"],
+                        type: "webbrowser",
+                    }
+                })
+                dispatch({
+                    type: "SETCURRENTTAB",
+                    payload: state.tabCounter
+                })
+                dispatch({
+                    type: "INCREASETABCOUNTER",
+                })
+                break
+            }
             default: {
                 useOpenExternally(dispatch, item)
             }

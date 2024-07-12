@@ -89,9 +89,8 @@ export default function BreadCrumbs(props) {
                                     <Text
                                         style={[
                                             styles.text,
-                                            styles.smallText,
                                             styles.textDisabled
-                                        ]}>></Text>
+                                        ]}>›</Text>
                                     <Pressable
                                         onPress={() => dispatch({
                                             type: "MODIFYTABPATH",

@@ -94,7 +94,6 @@ export default function useStageItems(state, dispatch, selectedItems) {
                     type: "DUPLICATETAB",
                     payload: {
                         tabKey: state.tabCounter,
-
                         title: state.tabs[state.currentTab]["name"],
                         path: state.tabs[state.currentTab]["path"],
                         type: "filebrowser",

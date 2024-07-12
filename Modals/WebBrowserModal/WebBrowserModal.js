@@ -63,7 +63,7 @@ export default function WebBrowserModal() {
                                 styles.wide
                             ]
                         }
-                    >{state.webBrowserModal["path"]}</Text>
+                    >{state.webBrowserModal["url"]}</Text>
                 </View>
                 <View style={[styles.divider]} />
                 <MenuItem
@@ -73,7 +73,7 @@ export default function WebBrowserModal() {
                             payload: {
                                 tabKey: state.tabCounter,
                                 title: "Browser",
-                                path: state.webBrowserModal["path"],
+                                path: state.webBrowserModal["url"],
                                 type: "webbrowser",
                             }
                         })
@@ -89,11 +89,19 @@ export default function WebBrowserModal() {
                             payload: 0
                         })
                     }}
-                    icon="tab-plus" name="Open in new tab"
+                    icon="tab-plus" name="Open URL in new tab"
                 />
+                {state.webBrowserModal["type"] == "image" ?
+                    <MenuItem
+                        functionName={() => {
+
+                        }}
+                        icon="download-outline" name="Download Image"
+                    />
+                    : null}
                 <MenuItem
                     functionName={() => {
-                        Clipboard.setString(state.webBrowserModal["path"]);
+                        Clipboard.setString(state.webBrowserModal["url"]);
                         dispatch({
                             type: "TOAST",
                             payload:
@@ -107,7 +115,7 @@ export default function WebBrowserModal() {
                     icon="content-copy" name="Copy link address"
                 />
                 {/* <MenuItem
-                    functionName={() => useCache(dispatch, state.tabs[state.currentTab]["path"])}
+                    functionName={() => useCache(dispatch, state.tabs[state.currentTab]["url"])}
                     icon="share" name="Share link"
                 /> */}
             </View>
