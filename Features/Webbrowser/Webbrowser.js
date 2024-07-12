@@ -79,7 +79,6 @@ export default function Webbrowser(props) {
                 incognito={true}
                 saveFormDataDisabled={true}
                 thirdPartyCookiesEnabled={false}
-                blobDownloadingEnabled={true}
                 onLoadStart={() => setIsLoading(1)}
                 onNavigationStateChange={(page) => setUrlVal(page.url)}
                 originWhitelist={["*"]}
