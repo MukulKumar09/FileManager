@@ -23,23 +23,6 @@ export default function BreadCrumbs(props) {
             styles.smallGap,
             styles.paddingCloseBottom
         ]}>
-            <View style={[
-                styles.rowLayout,
-                styles.smallGap
-            ]}>
-                {/* <Pressable
-                    onPressIn={() => {
-                        props.setSortModal(1)
-                    }}
-                    style={[
-                        styles.smallPill,
-                    ]}>
-                    <Image
-                        style={[styles.smallImageIcon]}
-                        source={require('../../assets/sort.png')} />
-
-                </Pressable>*/}
-            </View>
             <Pressable
                 onPressIn={() => {
                     props.setSearchModal(1)
@@ -48,6 +31,15 @@ export default function BreadCrumbs(props) {
                     styles.smallPill,
                 ]}>
                 <SmallMaterialIcon name="magnify" color={grey} />
+            </Pressable>
+            <Pressable
+                onPressIn={() => {
+                    props.setSortModal(1)
+                }}
+                style={[
+                    styles.smallPill,
+                ]}>
+                <SmallMaterialIcon name="sort-variant" color={grey} />
             </Pressable>
             <ScrollView
                 horizontal

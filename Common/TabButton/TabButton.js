@@ -1,5 +1,8 @@
-import { Text, TouchableOpacity, View, Image, } from "react-native";
-import { useSelector, useDispatch } from "react-redux"
+import { Text, TouchableOpacity, View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import Animated, {
+    Easing, FadeInLeft, FadeOutLeft, LinearTransition
+} from 'react-native-reanimated';
 import styles from "../../styles";
 import SmallMaterialIcon from "../SmallMaterialIcon/SmallMaterialIcon";
 
@@ -20,99 +23,140 @@ const TabButton = (props) => {
             break
         }
     }
+
+
     return (
-        <View
-            onLayout={(event) => {
-                props.setPosition(
-                    {
-                        ...props.position,
-                        [props.index]: event.nativeEvent.layout.x
-                    }
-                )
-                props.position[props.index] = event.nativeEvent.layout["x"]
-            }}
+        <Animated.View
+            entering={FadeInLeft}
+            exiting={FadeOutLeft.duration(200).duration(400)
+                .easing(
+                    Easing.out(
+                        Easing.poly(4)
+                    )
+                )}
+            layout={LinearTransition.duration(200).duration(400)
+                .easing(
+                    Easing.out(
+                        Easing.poly(4)
+                    )
+                )}
             style={[
-                styles.rowLayout,
                 styles.pill,
                 props.index == state.currentTab && styles.pillHighlight,
+                { overflow: 'hidden' }
             ]}>
-
-            <TouchableOpacity
-                onPress={() => {
-                    dispatch({
-                        type: "SETCURRENTTAB",
-                        payload: props.index
-                    })
-                }}
-                style={
-                    [
-                        styles.rowLayout,
-                        styles.padding,
-                        styles.mediumGap,
-                    ]
-                }
+            <View
+                // onLayout={(event) => {
+                //     console.log(event.nativeEvent.layout)
+                //     props.setPosition(
+                //         {
+                //             ...props.position,
+                //             [props.index]: event.nativeEvent.layout.x
+                //         }
+                //     )
+                //     props.position[props.index] = event.nativeEvent.layout["x"]
+                // }}
+                style={[
+                    styles.rowLayout,
+                ]}
             >
-                {icon}
-                <View style={
-                    { maxWidth: 100 }}
+                <TouchableOpacity
+                    onPress={() => {
+                        dispatch({
+                            type: "SETCURRENTTAB",
+                            payload: props.index
+                        })
+                    }}
+                    style={
+                        [
+                            styles.rowLayout,
+                            styles.padding,
+                            styles.mediumGap,
+                        ]
+                    }
                 >
-                    <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        style={[
-                            styles.text
-                        ]}
+                    {icon}
+                    <View style={
+                        { maxWidth: 100 }}
                     >
-                        {state.tabs[props.index]["title"]}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            {
-                props.index == state.currentTab ?
-                    <TouchableOpacity
-                        onPress={() => {
-                            let tempTabs = Object.keys(state.tabs)
-                            let tabKey = tempTabs.indexOf(state.currentTab.toString())
-                            let currentTab = state.currentTab
-                            if (tempTabs[tabKey + 1]) {
-                                currentTab = tempTabs[tabKey + 1]
-                            } else if (tempTabs[tabKey - 1]) {
-                                currentTab = tempTabs[tabKey - 1]
+                        <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={[
+                                styles.text
+                            ]}
+                        >
+                            {state.tabs[props.index]["title"]}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+                {
+                    props.index == state.currentTab ?
+                        <Animated.View
+                            entering={
+                                FadeInLeft
+                                    .duration(400)
+                                    .easing(
+                                        Easing.out(
+                                            Easing.poly(4)
+                                        )
+                                    )
+                            } exiting={
+                                FadeOutLeft
+                                    .duration(400)
+                                    .easing(
+                                        Easing.out(
+                                            Easing.poly(4)
+                                        )
+                                    )
                             }
-                            if (tempTabs.length > 1) {
-                                dispatch({
-                                    type: "SETCURRENTTAB",
-                                    payload: currentTab
-                                })
-                                dispatch({
-                                    type: "DELETETAB",
-                                    payload: state.currentTab
-                                })
-                            } else {
-                                dispatch({
-                                    type: "SETCURRENTTAB",
-                                    payload: "0"
-                                })
-                                dispatch({
-                                    type: "RESETTABS"
-                                })
-                            }
-                        }}
-                        style={
-                            [
-                                styles.padding,
-                                { paddingStart: 0 }
-                            ]
-                        }
-                    >
-                        <SmallMaterialIcon
-                            name="close"
-                            color="#ffffff"
-                        />
-                    </TouchableOpacity>
-                    : null
-            }
-
-        </View>)
+                        >
+                            <TouchableOpacity
+                                onPress={() => {
+                                    let tempTabs = Object.keys(state.tabs)
+                                    let tabKey = tempTabs.indexOf(state.currentTab.toString())
+                                    let currentTab = state.currentTab
+                                    if (tempTabs[tabKey + 1]) {
+                                        currentTab = tempTabs[tabKey + 1]
+                                    } else if (tempTabs[tabKey - 1]) {
+                                        currentTab = tempTabs[tabKey - 1]
+                                    }
+                                    if (tempTabs.length > 1) {
+                                        dispatch({
+                                            type: "SETCURRENTTAB",
+                                            payload: currentTab
+                                        })
+                                        dispatch({
+                                            type: "DELETETAB",
+                                            payload: state.currentTab
+                                        })
+                                    } else {
+                                        dispatch({
+                                            type: "SETCURRENTTAB",
+                                            payload: "0"
+                                        })
+                                        dispatch({
+                                            type: "RESETTABS"
+                                        })
+                                    }
+                                }}
+                                style={
+                                    [
+                                        styles.padding,
+                                        { paddingStart: 0 }
+                                    ]
+                                }
+                            >
+                                <SmallMaterialIcon
+                                    name="close"
+                                    color="#ffffff"
+                                />
+                            </TouchableOpacity>
+                        </Animated.View>
+                        : null
+                }
+            </View>
+        </Animated.View>
+    )
 }
 export default TabButton

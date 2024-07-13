@@ -32,63 +32,29 @@ export default function Modals(props) {
     }
     return (
         <>
-            {
-                state.inputModal ?
-                    <InputModal />
-                    : null
-            }
-            {
-                state.deleteModal ?
-                    <DeleteModal />
-                    : null
-            }
-            {
-                state.itemExistsModal ?
-                    <ItemExistsModal />
-                    : null
-            }
-            {
-                state.
-                    favouritesModal ?
-                    <FavouritesModal />
-                    : null
-            }
-            {
-                state.clipBoardModal ?
-                    <ClipboardModal
-                        setClipBoardModal={props.setClipBoardModal}
-                        setShowPaste={props.setShowPaste}
-                        setForceRefresh={props.setForceRefresh}
-                        clipboardItems={props.clipboardItems}
-                        inputRef={props.inputRef}
-                    />
-                    : null
-            }
-            {
-                state.
-                    aboutModal ?
-                    <AboutModal
-                        setAboutModal={props.setAboutModal}
-                    />
-                    : null
-            }
-            {state.propertiesModal ?
-                <PropertiesModal />
-                : null}
-            {state.webBrowserModal ?
-                <WebBrowserModal />
-                : null}
-            {state.tabsContextMenu ?
-                <TabsContextMenu />
-                : null}
-            {state.allTabsModal ? <AllTabsModal />
-                : null}
-            {state.textEditorUnsavedModal ? <TextEditorUnsavedModal />
-                : null}
-            {state.textEditorModal ? <TextEditor />
-                : null}
-            {state.openAsModal ? <OpenAsModal />
-                : null}
+            {state.inputModal ? <InputModal /> : null}
+            {state.deleteModal ? <DeleteModal /> : null}
+            {state.itemExistsModal ? <ItemExistsModal /> : null}
+            {state.favouritesModal ? <FavouritesModal /> : null}
+            {state.clipBoardModal ?
+                <ClipboardModal
+                    setClipBoardModal={props.setClipBoardModal}
+                    setShowPaste={props.setShowPaste}
+                    setForceRefresh={props.setForceRefresh}
+                    clipboardItems={props.clipboardItems}
+                    inputRef={props.inputRef}
+                /> : null}
+            {state.aboutModal ?
+                <AboutModal
+                    setAboutModal={props.setAboutModal}
+                /> : null}
+            {state.propertiesModal ? <PropertiesModal /> : null}
+            {state.webBrowserModal ? <WebBrowserModal /> : null}
+            {state.tabsContextMenu ? <TabsContextMenu /> : null}
+            {state.allTabsModal ? <AllTabsModal /> : null}
+            {state.textEditorUnsavedModal ? <TextEditorUnsavedModal /> : null}
+            {state.textEditorModal ? <TextEditor /> : null}
+            {state.openAsModal ? <OpenAsModal /> : null}
         </>
     )
 }

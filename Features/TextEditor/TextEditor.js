@@ -1,7 +1,8 @@
-import styles, { backgroundColor, grey, secondaryColor } from "../../styles";
 import { useEffect, useRef, useState } from "react";
-import RNFS, { write } from 'react-native-fs';
+import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
+import RNFS from 'react-native-fs';
 import { useSelector, useDispatch } from "react-redux";
+import styles, { backgroundColor, grey, secondaryColor } from "../../styles";
 import { Keyboard, Pressable, Text, TextInput, View } from "react-native";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 
@@ -79,7 +80,9 @@ export default function TextEditor() {
     }
 
     return (
-        <View
+        <Animated.View
+            entering={FadeInDown.duration(100)}
+            exiting={FadeOutDown.duration(100)}
             style={{
                 position: 'absolute',
                 zIndex: 2,
@@ -169,6 +172,6 @@ export default function TextEditor() {
                     </Pressable>
                 </View>
             </View>
-        </View>
+        </Animated.View>
     )
 }

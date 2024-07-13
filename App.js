@@ -1,15 +1,15 @@
 import { useEffect } from "react";
-import { View, Dimensions, Pressable, Text, BackHandler } from "react-native";
+import { View, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Window from "./Window";
 import styles from "./styles";
 import FileBrowserToolBar from "./Features/FileBrowserToolBar/FileBrowserToolBar";
 import Tabbar from "./Features/Tabbar/Tabbar";
-import MediaWindow from "./Features/MediaWindow/MediaWindow";
 import Modals from "./Modals/Modals";
 import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
 import Webbrowser from "./Features/Webbrowser/Webbrowser";
+import MediaViewer from "./Features/MediaViewer/MediaViewer";
 
 const App = () => {
     const dispatch = useDispatch()
@@ -18,35 +18,20 @@ const App = () => {
         operationWindow: useSelector(state => state.operationWindow),
         currentTab: useSelector(state => state.currentTab),
         cache: useSelector(state => state.cache["Home"]),
-        mediaBox: useSelector(state => state.mediaBox)
+        mediaBox: useSelector(state => state.mediaBox),
     }
 
     let width = Dimensions.get('window').width
-
 
     useEffect(() => { //first find all mounting points
         useMountingPoints(dispatch)
     }, [])
 
-    useEffect(() => {
-        const backAction = () => {
-            if (state.mediaBox)
-                dispatch({
-                    type: "SETMEDIABOX",
-                    payload: 0
-                })
-            return true;
-        };
-        const backHandler = BackHandler.addEventListener(
-            'hardwareBackPress',
-            backAction,
-        );
-        return () => backHandler.remove();
-    }, [state.mediaBox])
     return (
         <View style={[styles.mainBody]}>
+            {/* <Home /> */}
             <Modals />
-            <MediaWindow />
+            {state.mediaBox ? <MediaViewer /> : null}
             <View
                 style={
                     {

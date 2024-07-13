@@ -1,10 +1,12 @@
 import { Text, Pressable, View, Image, Modal } from "react-native";
-import styles, { backgroundColor } from "../../styles";
+import styles, { backgroundColor, grey } from "../../styles";
 import MaterialIcon from "../../Common/MaterialIcon/MaterialIcon";
 import { useDispatch, useSelector } from "react-redux";
 import useNiceBytes from "../../Hooks/useNiceBytes";
+import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 import RNFS from 'react-native-fs';
 import { useState } from "react";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 export default function PropertiesModal() {
     const [size, setSize] = useState(0)
@@ -119,7 +121,7 @@ export default function PropertiesModal() {
                 <View style={[styles.divider]} />
                 <View style={[
                     styles.padding,
-                    styles.bigGap,
+                    styles.smallGap,
                     { width: '100%' }
                 ]
                 }>
@@ -146,13 +148,23 @@ export default function PropertiesModal() {
                         }
                     </View>
                     <View style={[styles.rowLayout]}>
-                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Type: </Text><Text style={[styles.text, styles.wide]}>{type}</Text>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Type: </Text>
+                        <Text style={[styles.text, styles.wide]}>{type}</Text>
                     </View>
                     <View style={[styles.rowLayout]}>
-                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Size: </Text><Text style={[styles.text, styles.wide]}>{useNiceBytes(size)}</Text>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Size: </Text>
+                        <Text style={[styles.text, styles.wide]}>{useNiceBytes(size)}</Text>
                     </View>
                     <View style={[styles.rowLayout]}>
-                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Path: </Text><Text style={[styles.text, styles.wide]}>{path}</Text>
+                        <Text style={[styles.text, styles.textDisabled, { width: '40%' }]}>Path:  <Pressable onPress={() => {
+                            Clipboard.setString(path);
+                            dispatch({
+                                type: "TOAST",
+                                payload:
+                                    "Copied to clipboard",
+                            })
+                        }}><SmallMaterialIcon name="content-copy" color={grey} /></Pressable></Text>
+                        <Text style={[styles.text, styles.wide]}>{path}</Text>
                     </View>
                     {itemsCount > 1 ?
                         null :
@@ -166,6 +178,7 @@ export default function PropertiesModal() {
                         </>
                     }
                 </View>
+                <View style={[styles.divider]} />
                 <View style={[
                     styles.padding,
                     styles.mediumGap,

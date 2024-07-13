@@ -1,7 +1,8 @@
 save maincache
 useCollectAllItem check exists
 
+tab position
+
 sorting
     modified
 fix share
-scroll to active: navigate, tab delete d

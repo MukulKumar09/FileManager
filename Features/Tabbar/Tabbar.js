@@ -16,12 +16,20 @@ export default function Tabbar(props) {
     }
     const scrollViewRef = useRef(0);
     const [position, setPosition] = useState({})
-    useEffect(() => {
-        scrollViewRef.current.scrollTo({ x: position[state.currentTab] })
-    }, [state.currentTab, position])
+    // useEffect(() => {
+    //     scrollViewRef.current.scrollTo({ x: position[state.currentTab] })
+    // }, [state.currentTab, position])
     return (
-        <View style={[styles.rowLayout,
-        styles.mediumGap, { paddingTop: 10, justifyContent: 'space-between' }]}>
+        <View style={
+            [
+                styles.rowLayout,
+                styles.mediumGap,
+                {
+                    paddingTop: 10,
+                    justifyContent: 'space-between'
+                }
+            ]
+        }>
             <ScrollView
                 ref={scrollViewRef}
                 horizontal={true}
