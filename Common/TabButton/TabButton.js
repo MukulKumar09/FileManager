@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Animated, {
     Easing, FadeInLeft, FadeOutLeft, LinearTransition
@@ -28,13 +28,13 @@ const TabButton = (props) => {
     return (
         <Animated.View
             entering={FadeInLeft}
-            exiting={FadeOutLeft.duration(200).duration(400)
+            exiting={FadeOutLeft.duration(400)
                 .easing(
                     Easing.out(
                         Easing.poly(4)
                     )
                 )}
-            layout={LinearTransition.duration(200).duration(400)
+            layout={LinearTransition.duration(400)
                 .easing(
                     Easing.out(
                         Easing.poly(4)

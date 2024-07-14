@@ -2,6 +2,9 @@ import { Text, Pressable, View, ScrollView, Image } from "react-native";
 import TabButton from "../../Common/TabButton/TabButton";
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
+import Animated, {
+    Easing, FadeInLeft, FadeOutLeft, LinearTransition
+} from 'react-native-reanimated';
 import SmallMaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
 import { useEffect, useRef, useState } from "react";
 
@@ -36,8 +39,12 @@ export default function Tabbar(props) {
                 showsHorizontalScrollIndicator={false}
             >
                 <View
-                    style={[styles.rowLayout,
-                    styles.mediumGap]}
+                    style={
+                        [
+                            styles.rowLayout,
+                            styles.mediumGap
+                        ]
+                    }
                 >
                     {
                         Object.keys(state.tabs).map((index) => {

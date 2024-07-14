@@ -1,10 +1,11 @@
-import { Dimensions, Image, BackHandler, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, BackHandler, Text, TouchableOpacity, View, Image } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Video from "react-native-video";
 import styles, { backgroundColor, secondaryColor } from "../../styles";
 import MaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
-import Animated, { FadeInUp, FadeOutUp, LinearTransition } from 'react-native-reanimated';
-import { useState, useEffect } from "react";
+import Animated, { FadeInUp, FadeOutUp, LinearTransition, clamp, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { useState, useEffect, useRef, createRef } from "react";
 
 function MediaViewer() {
     const dispatch = useDispatch()
@@ -12,6 +13,64 @@ function MediaViewer() {
         mediaBox: useSelector(state => state.mediaBox),
         mediaType: useSelector(state => state.mediaType),
     }
+    const [fullScreen, setFullScreen] = useState(0)
+
+    const { width, height } = Dimensions.get('screen');
+
+    ////////scale
+    const scale = useSharedValue(1);
+    const startScale = useSharedValue(0);
+    const translationX = useSharedValue(0);
+    const translationY = useSharedValue(0);
+    const prevTranslationX = useSharedValue(0);
+    const prevTranslationY = useSharedValue(0);
+
+    const boxAnimatedStyles = useAnimatedStyle(() => ({
+        transform: [
+            { scale: scale.value },
+            { translateX: translationX.value },
+            { translateY: translationY.value },
+        ],
+    }));
+
+    const pinch = Gesture.Pinch()
+        .onStart(() => {
+            startScale.value = scale.value;
+        })
+        .onUpdate((event) => {
+            scale.value = clamp(
+                startScale.value * event.scale,
+                1,
+                Math.max(width / 80, height / 80)
+            );
+        });
+
+    const pan = Gesture.Pan()
+        .minDistance(1)
+        .onStart(() => {
+            prevTranslationX.value = translationX.value;
+            prevTranslationY.value = translationY.value;
+        })
+        .onUpdate((event) => {
+            if (scale.value == 1) {
+                translationX.value = 0
+                translationY.value = 0
+            } else {
+                const maxTranslateX = width / 2 - 50;
+                const maxTranslateY = height / 2 - 50;
+
+                translationX.value = clamp(
+                    prevTranslationX.value + event.translationX,
+                    -maxTranslateX,
+                    maxTranslateX
+                );
+                translationY.value = clamp(
+                    prevTranslationY.value + event.translationY,
+                    -maxTranslateY,
+                    maxTranslateY
+                );
+            }
+        })
 
     useEffect(() => {
         const backAction = () => {
@@ -28,7 +87,7 @@ function MediaViewer() {
         );
         return () => backHandler.remove();
     }, [state.mediaBox])
-    const [fullScreen, setFullScreen] = useState(0)
+
     return (
         <Animated.View
             entering={FadeInUp.duration(100)}
@@ -49,14 +108,22 @@ function MediaViewer() {
                         flex: 1,
                     }
                 }>
-                {state.mediaType === 1 &&
-                    <Image style={
-                        {
-                            flex: 1,
-                            resizeMode: 'contain'
-                        }
-                    }
-                        source={{ uri: 'file://' + state.mediaBox["path"] }} />
+                {state.mediaType === 1 && <GestureHandlerRootView>
+                    <GestureDetector gesture={Gesture.Simultaneous(pinch, pan)}>
+                        <Animated.View
+                            style={[boxAnimatedStyles,]}>
+                            <Image
+                                source={{ uri: 'file://' + state.mediaBox["path"] }}
+                                style={{
+
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                                resizeMode="contain"
+                            />
+                        </Animated.View>
+                    </GestureDetector>
+                </GestureHandlerRootView>
                 }
                 {state.mediaType === 2 && <Video
                     // Can be a URL or a local file.
