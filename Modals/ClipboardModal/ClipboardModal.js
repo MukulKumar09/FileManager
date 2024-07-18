@@ -56,10 +56,16 @@ export default function ClipboardModal(props) {
                             ]
                         }>
                             <MaterialIcon name="clipboard-outline" />
-                            <Text style={[
-                                styles.text,
-                                styles.headingText
-                            ]}>Clipboard</Text>
+                            <View>
+                                <Text style={[
+                                    styles.text,
+                                    styles.headingText
+                                ]}>Clipboard</Text>
+                                <Text style={[
+                                    styles.text,
+                                    styles.smallDarkText
+                                ]}>{state.clipboardItems.length} items</Text>
+                            </View>
                         </View>
                         <Text style={[
                             styles.text,
@@ -73,21 +79,21 @@ export default function ClipboardModal(props) {
                             })
                         }}>Clear</Text>
                     </View>
-                    {state.clipboardItems && state.clipboardItems.length && [0, 1].includes(state.operationType) ?
+                    <View style={[styles.divider]} />
+                    {Boolean(state.clipboardItems) && Boolean(state.clipboardItems.length) && [0, 1].includes(state.operationType) &&
                         <View style={
                             [
                                 styles.rowLayout,
                                 styles.padding,
-                                { paddingTop: 0 }
                             ]
                         }>
-                            <Text style={[styles.textDisabled]}>Below Items are ready to {state.operationType ? "Move" : "Copy"}. </Text>
+                            <Text style={[styles.textDisabled]}>These Items are ready to {state.operationType ? "Move" : "Copy"}. </Text>
                             <Text style={{ textDecorationLine: 'underline' }} onPress={() => dispatch({
                                 type: "OPERATIONTYPE",
                                 payload: state.operationType == 1 ? 0 : 1
                             })}>{state.operationType ? "Copy" : "Move"} instead</Text>
                         </View>
-                        : null}
+                    }
                     <View style={[styles.divider]} />
                     <View style={[
                         {

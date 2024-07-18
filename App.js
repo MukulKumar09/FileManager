@@ -31,7 +31,7 @@ const App = () => {
         <View style={[styles.mainBody]}>
             {/* <Home /> */}
             <Modals />
-            {state.mediaBox ? <MediaViewer /> : null}
+            {Boolean(state.mediaBox) && <MediaViewer />}
             <View
                 style={
                     {
@@ -75,11 +75,11 @@ const App = () => {
                 }
                 )}
             </View>
-            {state.operationWindow ?
+            {Boolean(state.operationWindow) &&
                 <OperationWindow />
-                : null}
-            {state.tabs[state.currentTab] && state.tabs[state.currentTab]["type"] == "filebrowser" ? <FileBrowserToolBar />
-                : null}
+            }
+            {Boolean(state.tabs[state.currentTab]) && state.tabs[state.currentTab]["type"] == "filebrowser" && <FileBrowserToolBar />
+            }
             <Tabbar width={width} />
         </View>
 

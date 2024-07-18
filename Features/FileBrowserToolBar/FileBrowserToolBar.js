@@ -16,13 +16,12 @@ export default function FileBrowserToolBar(props) {
     return (
         <>
             {
-                state.contextMenu ?
-                    <ContextMenu
-                        setContextMenu={props.setContextMenu}
-                        setClipBoardModal={props.setClipBoardModal}
-                        setAboutModal={props.setAboutModal}
-                    />
-                    : null
+                Boolean(state.contextMenu) &&
+                <ContextMenu
+                    setContextMenu={props.setContextMenu}
+                    setClipBoardModal={props.setClipBoardModal}
+                    setAboutModal={props.setAboutModal}
+                />
             }
             <View
                 style={[

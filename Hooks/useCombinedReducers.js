@@ -16,7 +16,7 @@ import ItemExistsDecisionReducer from "../Reducers/ItemExistsDecisionReducer";
 import ItemExistsPromiseResolverReducer from "../Reducers/ItemExistsPromiseResolverReducer";
 import UpdatedNameReducer from "../Reducers/UpdatedNameReducer";
 import ItemInOperationReducer from "../Reducers/ItemInOperationReducer";
-import DeleteModalReducer from "../Reducers/DeleteModalReducer";
+import DeleteModalReducer from "../Reducers/recycleBin";
 import DeletePromiseResolverReducer from "../Reducers/DeletePromiseResolverReducer";
 import SelectedItemReducer from "../Reducers/SelectedItemReducer";
 import MountingPointsReducer from "../Reducers/MountingPointsReducers";
@@ -44,7 +44,7 @@ export default function useCombinedReducers(state, action) {
         operationWindow: OperationWindowReducer(state.operationWindow, action),
         inputModal: InputModalReducer(state.inputModal, action),
         inputPromiseResolver: InputPromiseResolveReducer(state.inputPromiseResolver, action),
-        deleteModal: DeleteModalReducer(state.deleteModal, action),
+        recycleBin: DeleteModalReducer(state.recycleBin, action),
         deletePromiseResolver: DeletePromiseResolverReducer(state.deletePromiseResolver, action),
         itemExistsModal: ItemExistsModalReducer(state.itemExistsModal, action),
         itemExistsDecision: ItemExistsDecisionReducer(state.itemExistsDecision, action),

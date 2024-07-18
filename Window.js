@@ -18,12 +18,13 @@ const Window = (props) => {
     const dispatch = useDispatch()
     const state = {
         tabs: useSelector(state => state.tabs),
-        clipboardItems: useSelector(state => state.clipboardItems),
         currentTab: useSelector(state => state.currentTab),
+        clipboardItems: useSelector(state => state.clipboardItems),
         tabCounter: useSelector(state => state.tabCounter),
         cache: useSelector(state => state.cache["Home"]),
         functionId: useSelector(state => state.functionId),
-        mediaBox: useSelector(state => state.mediaBox)
+        mediaBox: useSelector(state => state.mediaBox),
+        recycleBin: useSelector(state => state.recycleBin),
     }
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
@@ -33,8 +34,8 @@ const Window = (props) => {
     const [selectionFlag, setSelectionFlag] = useState(0)
     //sorting
     const [sortModal, setSortModal] = useState(0)
-    const [sortType, setSortType] = useState(1)
-    const [sortOrder, setSortOrder] = useState(0)
+    let sortType = 1
+    let sortOrder = 0
 
     const tabPath = useSelector(state => state.tabs[props.index]["path"])
     const cache = useSelector(state => state.cache[tabPath])
@@ -74,7 +75,7 @@ const Window = (props) => {
 
     useEffect(() => {
         if (cache) {
-            setFilesList(useSort(cache, sortType, sortOrder))
+            handleSort(cache)
             let tempSelectedItems = [...selectedItems].filter(item => {
                 return cache.some(cacheItem => cacheItem.path === item.path)
             })
@@ -89,6 +90,7 @@ const Window = (props) => {
         else
             setSelectionFlag(1)
     }, [selectedItems])
+
 
 
     useEffect(() => {
@@ -145,7 +147,26 @@ const Window = (props) => {
                         functionId(-1)
                     }
                     else {
-                        useStageItems(state, dispatch, selectedItems)
+                        let items = []
+                        selectedItems.map((item) => {
+                            let tempItem = {
+                                name: item["name"],
+                                path: item["path"],
+                                fileType: item["fileType"],
+                                size: item["size"]
+                            }
+                            if (state.recycleBin.find((item) => item["path"] == tempItem["path"]) == undefined) {
+                                items.push(tempItem)
+                            }
+                        })
+                        dispatch({
+                            type: "ADDTORECYCLEBIN",
+                            payload: items
+                        })
+                        dispatch({
+                            type: "TOAST",
+                            payload: selectedItems.length + ' item(s) added to Recycle Bin'
+                        })
                         functionId(-1)
                     }
                     break
@@ -238,9 +259,14 @@ const Window = (props) => {
         }
     }
 
-    const handleSort = (items) => {
+    const handleSortProps = (type, order) => {
+        sortType = type
+        sortOrder = order
+        handleSort(filesList)
+    }
+    const handleSort = (data) => {
         setSortModal(0)
-        setFilesList(useSort(items, sortType, sortOrder))
+        setFilesList(useSort(data, sortType, sortOrder))
     }
 
     const selectItem = (item) => {
@@ -277,17 +303,14 @@ const Window = (props) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {sortModal ?
+            {Boolean(sortModal) &&
                 <SortModal
                     sortModal={sortModal}
                     sortType={sortType}
                     sortOrder={sortOrder}
                     setSortModal={setSortModal}
-                    setSortType={setSortType}
-                    handleSort={handleSort}
-                    setSortOrder={setSortOrder}
+                    handleSortProps={handleSortProps}
                 />
-                : null
             }
             {
                 useMemo(() => {

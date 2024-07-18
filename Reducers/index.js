@@ -6,7 +6,7 @@ import clipboardItems from "./clipboardItems";
 import selectedItem from "./SelectedItemReducer";
 import contextMenu from "./contextMenu";
 import currentTab from "./CurrentTabReducer";
-import deleteModal from "./DeleteModalReducer";
+import recycleBin from "./recycleBin";
 import deletePromiseResolver from "./DeletePromiseResolverReducer";
 import favouriteItems from "./FavouriteItemsReducer";
 import favouritesModal from "./FavouritesModalReducer";
@@ -35,6 +35,8 @@ import textEditorModal from "./textEditorModal";
 import textEditorUnsavedModal from "./textEditorUnsavedModal";
 import textEditorUnsavedPromiseResolver from "./textEditorUnsavedPromiseResolver";
 import openAsModal from "./openAsModal";
+import recycleBinModal from "./recycleBinModal";
+import deleteModal from "./deleteModal";
 
 const rootReducer = combineReducers({
     aboutModal,
@@ -44,7 +46,7 @@ const rootReducer = combineReducers({
     contextMenu,
     currentTab,
     selectedItem,
-    deleteModal,
+    recycleBin,
     deletePromiseResolver,
     favouriteItems,
     favouritesModal,
@@ -73,6 +75,8 @@ const rootReducer = combineReducers({
     textEditorModal,
     textEditorUnsavedModal,
     textEditorUnsavedPromiseResolver,
-    openAsModal
+    openAsModal,
+    recycleBinModal,
+    deleteModal,
 })
 export default rootReducer

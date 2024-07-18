@@ -4,6 +4,9 @@ import Animated, { Easing, ReduceMotion, useSharedValue, withTiming, useAnimated
 import styles from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import useStartOperation from "../../Hooks/useStartOperation";
+import useCache from "../../Hooks/useCache";
+import useCollectAllItem from "../../Hooks/useCollectAllItems";
+
 export default function OperationWindow() {
     const dispatch = useDispatch()
     const state = {
@@ -29,7 +32,69 @@ export default function OperationWindow() {
     }, [])
 
     useEffect(() => {
-        useStartOperation(state, dispatch)
+        const asyncOperation = async () => {
+            let collectedItems = await useCollectAllItem(state.clipboardItems, state.operationDest)
+            let totalSize = 0
+            collectedItems.forEach(item => {
+                totalSize = totalSize + item["size"]
+            })
+            let completedSize = 0
+            const itemExistsModal = () => dispatch({
+                type: "ITEMEXISTSMODAL"
+            })
+            const itemInOperation = (payload) => dispatch({
+                type: "ITEMINOPERATION",
+                payload: payload,
+            })
+            for (item of collectedItems) {
+                completedSize = await useStartOperation(
+                    state,
+                    dispatch,
+                    itemExistsModal,
+                    itemInOperation,
+                    completedSize,
+                    totalSize
+                )
+            }
+            dispatch({
+                type: "SETPROGRESS",
+                payload: ((completedSize / totalSize) * 100).toFixed(0)
+            })
+            let toastMessage
+            switch (state.operationType) {
+                case -2: {
+                    toastMessage = "Operation Cancelled"
+                    break
+                }
+                case 0: {
+                    toastMessage = "Copy successful."
+                    break
+                }
+                case 1: {
+                    toastMessage = "Move successful."
+                    break
+                }
+            }
+            dispatch({
+                type: "OPERATIONWINDOW"
+            })
+            itemInOperation("")
+            useCache(dispatch, state.operationDest)
+            state.operationType &&
+                useCache(dispatch, state.operationSource)
+            dispatch({
+                type: "TOAST",
+                payload: toastMessage
+            })
+            dispatch({
+                type: "OPERATIONTYPE",
+                payload: -1,
+            })
+            dispatch({
+                type: "CLEARCB"
+            })
+        }
+        asyncOperation()
     }, [state.operationDest])
 
     useEffect(() => {
@@ -38,8 +103,7 @@ export default function OperationWindow() {
                 duration: 730,
                 easing: Easing.out(Easing.exp),
                 reduceMotion: ReduceMotion.System,
-            }
-            )
+            })
     }, [state.progress])
     return (<View style={[
         styles.pill,
@@ -82,10 +146,11 @@ export default function OperationWindow() {
                     {state.operationType == 1 && "Move"}
                     {state.operationType == 2 && "Delete"}
                     {state.operationType == 3 && "Zipp"}
+                    {state.operationType == -2 && "Cancell"}
                     ing {state.itemInOperation}
                 </Text>
             </View>
-            <Text
+            {/* <Text
                 onPress={() => dispatch({
                     type: "OPERATIONTYPE",
                     payload: -2,
@@ -98,7 +163,7 @@ export default function OperationWindow() {
                         textDecorationLine: 'underline'
                     }
                 ]}
-            >Cancel</Text>
+            >Cancel</Text> */}
         </View>
     </View>
     )

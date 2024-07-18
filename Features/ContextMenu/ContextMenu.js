@@ -96,7 +96,12 @@ export default function ContextMenu() {
                                 </Pressable>
                             </View>
                              */}
-
+                <MenuItem
+                    functionName={() => {
+                        dispatch({
+                            type: "RECYCLEBINMODAL"
+                        })
+                    }} icon="delete-empty-outline" name="Recycle Bin" />
                 <MenuItem
                     functionName={() =>
                         dispatch({

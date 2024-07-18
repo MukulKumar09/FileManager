@@ -6,7 +6,7 @@ export default function useInitStates() {
         clipboardItems: [],
         contextMenu: 0,
         currentTab: 0,
-        deleteModal: 0,
+        recycleBin: 0,
         deletePromiseResolver: 0,
         favouriteItems: [],
         favouritesModal: 0,

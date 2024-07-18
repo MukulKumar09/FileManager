@@ -22,6 +22,7 @@ export default StyleSheet.create({
         fontFamily: 'Pop-reg',
         includeFontPadding: false,
         color: textColor,
+        fontSize: 15
     },
     imageIcon: {
         maxHeight: 20,

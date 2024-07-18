@@ -55,12 +55,15 @@ export default function InputModal() {
                 <View style={[styles.divider]} />
                 <View style={
                     [
+                        styles.bigGap,
                         styles.padding,
                         { width: '100%' }
                     ]
                 }>
-                    {alreadyExists ? <Text style={[styles.text,
-                    styles.smallText]}>Already exists!</Text> : null}
+                    {Boolean(alreadyExists) &&
+                        <Text style={[styles.text,
+                        styles.smallText]}>Already exists!</Text>
+                    }
                     <View style={
                         [
                             styles.rowLayout,
@@ -124,7 +127,7 @@ export default function InputModal() {
                         styles.padding]}>
                         <Text style={[
                             styles.text,
-                            alreadyExists ? styles.textDisabled : null
+                            alreadyExists && styles.textDisabled
                         ]}>Done</Text>
                     </Pressable>
                 </View>

@@ -83,8 +83,7 @@ export default function AboutModal() {
                                         <SmallMaterialIcon name="web" color={grey} />
                                         <Text
                                             style={[
-                                                styles.smallText,
-                                                styles.text,
+                                                styles.text, styles.smallText,
                                                 styles.textDisabled
                                             ]}>
                                             Website
@@ -101,8 +100,7 @@ export default function AboutModal() {
                                         <SmallMaterialIcon name="linkedin" color={grey} />
                                         <Text
                                             style={[
-                                                styles.smallText,
-                                                styles.text,
+                                                styles.text, styles.smallText,
                                                 styles.textDisabled
                                             ]}>
                                             LinkedIn

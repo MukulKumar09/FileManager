@@ -1,6 +1,7 @@
 import { Text, View, Pressable } from "react-native";
 import styles from "../../styles";
 import useIcon from "../../Hooks/useIcon";
+import useNiceBytes from "../../Hooks/useNiceBytes";
 
 export default function ListItem(props) {
     return (
@@ -35,14 +36,13 @@ export default function ListItem(props) {
                     <Text style={[styles.text]}>{props.item["name"]}</Text>
                 </View>
             </View>
-            {props.item.isFile ?
+            {Boolean(props.item.isFile) &&
                 <View style={{ width: 60, alignItems: 'flex-end' }}>
                     <Text style={[styles.text,
                     styles.smallDarkText]}>
-                        {props.item["size"]}
+                        {useNiceBytes(props.item["size"])}
                     </Text>
                 </View>
-                : null
             }
         </Pressable>
     )

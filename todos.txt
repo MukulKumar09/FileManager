@@ -1,8 +1,8 @@
-save maincache
-useCollectAllItem check exists
-
-tab position
-
+delete, copy, move cancel
 sorting
     modified
+tab position
+
+save maincache
+useCollectAllItem check exists
 fix share

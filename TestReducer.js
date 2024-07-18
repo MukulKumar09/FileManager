@@ -38,7 +38,7 @@ const initialState = {
     itemExistsModal: 0,
     favouritesModal: 0,
     clipBoardModal: 0,
-    deleteModal: 0,
+    recycleBin: 0,
     aboutModal: 0,
     progress: 0,
     contextMenu: 0,

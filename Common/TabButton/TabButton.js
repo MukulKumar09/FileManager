@@ -91,69 +91,68 @@ const TabButton = (props) => {
                     </View>
                 </TouchableOpacity>
                 {
-                    props.index == state.currentTab ?
-                        <Animated.View
-                            entering={
-                                FadeInLeft
-                                    .duration(400)
-                                    .easing(
-                                        Easing.out(
-                                            Easing.poly(4)
-                                        )
+                    props.index == state.currentTab &&
+                    <Animated.View
+                        entering={
+                            FadeInLeft
+                                .duration(400)
+                                .easing(
+                                    Easing.out(
+                                        Easing.poly(4)
                                     )
-                            } exiting={
-                                FadeOutLeft
-                                    .duration(400)
-                                    .easing(
-                                        Easing.out(
-                                            Easing.poly(4)
-                                        )
+                                )
+                        } exiting={
+                            FadeOutLeft
+                                .duration(400)
+                                .easing(
+                                    Easing.out(
+                                        Easing.poly(4)
                                     )
+                                )
+                        }
+                    >
+                        <TouchableOpacity
+                            onPress={() => {
+                                let tempTabs = Object.keys(state.tabs)
+                                let tabKey = tempTabs.indexOf(state.currentTab.toString())
+                                let currentTab = state.currentTab
+                                if (tempTabs[tabKey + 1]) {
+                                    currentTab = tempTabs[tabKey + 1]
+                                } else if (tempTabs[tabKey - 1]) {
+                                    currentTab = tempTabs[tabKey - 1]
+                                }
+                                if (tempTabs.length > 1) {
+                                    dispatch({
+                                        type: "SETCURRENTTAB",
+                                        payload: currentTab
+                                    })
+                                    dispatch({
+                                        type: "DELETETAB",
+                                        payload: state.currentTab
+                                    })
+                                } else {
+                                    dispatch({
+                                        type: "SETCURRENTTAB",
+                                        payload: "0"
+                                    })
+                                    dispatch({
+                                        type: "RESETTABS"
+                                    })
+                                }
+                            }}
+                            style={
+                                [
+                                    styles.padding,
+                                    { paddingStart: 0 }
+                                ]
                             }
                         >
-                            <TouchableOpacity
-                                onPress={() => {
-                                    let tempTabs = Object.keys(state.tabs)
-                                    let tabKey = tempTabs.indexOf(state.currentTab.toString())
-                                    let currentTab = state.currentTab
-                                    if (tempTabs[tabKey + 1]) {
-                                        currentTab = tempTabs[tabKey + 1]
-                                    } else if (tempTabs[tabKey - 1]) {
-                                        currentTab = tempTabs[tabKey - 1]
-                                    }
-                                    if (tempTabs.length > 1) {
-                                        dispatch({
-                                            type: "SETCURRENTTAB",
-                                            payload: currentTab
-                                        })
-                                        dispatch({
-                                            type: "DELETETAB",
-                                            payload: state.currentTab
-                                        })
-                                    } else {
-                                        dispatch({
-                                            type: "SETCURRENTTAB",
-                                            payload: "0"
-                                        })
-                                        dispatch({
-                                            type: "RESETTABS"
-                                        })
-                                    }
-                                }}
-                                style={
-                                    [
-                                        styles.padding,
-                                        { paddingStart: 0 }
-                                    ]
-                                }
-                            >
-                                <SmallMaterialIcon
-                                    name="close"
-                                    color="#ffffff"
-                                />
-                            </TouchableOpacity>
-                        </Animated.View>
-                        : null
+                            <SmallMaterialIcon
+                                name="close"
+                                color="#ffffff"
+                            />
+                        </TouchableOpacity>
+                    </Animated.View>
                 }
             </View>
         </Animated.View>

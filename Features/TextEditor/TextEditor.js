@@ -126,7 +126,7 @@ export default function TextEditor() {
                         [
                             styles.text,
                             styles.wide,
-                            styles.padding
+                            { padding: 15 }
                         ]
                     }>{isEdited == 1 && "*"}{state.textEditorModal["name"]}</Text>
                 <View style={
@@ -144,9 +144,7 @@ export default function TextEditor() {
                             })
                         }}
                         style={
-                            [
-                                styles.padding
-                            ]
+                            { padding: 15 }
                         }>
                         <MaterialIcon name="keyboard-outline" color={keyboard ? "white" : grey} />
                     </Pressable>
@@ -155,18 +153,14 @@ export default function TextEditor() {
                             saveFile()
                         }}
                         style={
-                            [
-                                styles.padding
-                            ]
+                            { padding: 15 }
                         }>
                         <MaterialIcon name="content-save-outline" color="white" />
                     </Pressable>
                     <Pressable onPress={() => closeEditor()}
 
                         style={
-                            [
-                                styles.padding
-                            ]
+                            { padding: 15 }
                         }>
                         <MaterialIcon name="close" color="white" />
                     </Pressable>

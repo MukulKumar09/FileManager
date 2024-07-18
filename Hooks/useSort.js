@@ -1,4 +1,5 @@
 export default function useSort(items, sortType, sortOrder) {
+    console.log(sortType, sortOrder)
     switch (sortType) {
         case 0: { //name
             items.sort((a, b) => {
@@ -42,14 +43,14 @@ export default function useSort(items, sortType, sortOrder) {
         case 3: {//size
             let allFolders = items.filter(i => i.isDirectory)
             allFolders.sort((a, b) => {
-                var x = a["name"].toLowerCase();
-                var y = b["name"].toLowerCase();
+                var x = a["size"];
+                var y = b["size"];
                 return ((x < y) ? -1 : ((x > y) ? 1 : 0));
             })
             let allFiles = items.filter(i => i.isFile)
             allFiles.sort((a, b) => {
-                var x = a["size"].toLowerCase();
-                var y = b["size"].toLowerCase();
+                var x = a["size"];
+                var y = b["size"];
                 if (sortOrder) {
                     return ((x < y) ? 1 : ((x > y) ? -1 : 0));
                 } else {

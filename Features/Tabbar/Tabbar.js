@@ -64,7 +64,7 @@ export default function Tabbar(props) {
                 </View>
             </ScrollView>
             <>
-                {state.clipboardItems.length > 0 && [0, 1].includes(state.operationType) ?
+                {state.clipboardItems.length > 0 && [0, 1].includes(state.operationType) &&
                     <Pressable
                         style={
                             [
@@ -84,7 +84,7 @@ export default function Tabbar(props) {
                         }}>
                         <SmallMaterialIcon name="content-paste" />
                     </Pressable>
-                    : null}
+                }
                 <Pressable
                     style={[
                         styles.pill,

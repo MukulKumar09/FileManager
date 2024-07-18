@@ -1,4 +1,3 @@
-import useDeleteItem from "./useDeleteItem";
 import useCopyMoveItem from "./useCopyMoveItem";
 import useNewItem from "./useNewItem";
 import useCache from "./useCache";
@@ -21,42 +20,6 @@ export default function useStageItems(state, dispatch, selectedItems) {
         payload: payload,
     })
     switch (state.functionId) {
-        case 2: { //delete
-            dispatch({
-                type: "DELETEMODAL",
-                payload: selectedItems
-            })
-            const deleteAsync = async () => {
-                let deleteDecision = await new Promise((resolve) => {
-                    dispatch({
-                        type: "DELETEPROMISERESOLVER",
-                        payload: resolve
-                    })
-                })
-                if (deleteDecision) {
-                    dispatch({
-                        type: "DELETEMODAL",
-                        payload: 0
-                    })
-                    for (item of selectedItems) {
-                        await useDeleteItem(item["path"])
-                    }
-                    await useCache(dispatch, state.tabs[state.currentTab]["path"])
-                    dispatch({
-                        type: "TOAST",
-                        payload: 'Item(s) deleted.'
-                    })
-                } else {
-                    dispatch({
-                        type: "DELETEMODAL",
-                        payload: 0
-                    })
-
-                }
-            }
-            deleteAsync()
-            break
-        }
         case 3: { //rename
             operationType(1)
             console.log(selectedItems["name"])

@@ -3,21 +3,22 @@ import ClipboardModal from "./ClipboardModal/ClipboardModal";
 import AboutModal from "./AboutModal/AboutModal";
 import FavouritesModal from "./FavouritesModal/FavouritesModal";
 import ItemExistsModal from "./ItemExistsModal/ItemExistsModal";
-import DeleteModal from "./DeleteModal/DeleteModal";
+import RecycleBinModal from "./RecycleBinModal/RecycleBinModal";
 import InputModal from "./InputModal/InputModal";
 import PropertiesModal from "./PropertiesModal/PropertiesModal";
 import WebBrowserModal from "./WebBrowserModal/WebBrowserModal";
 import TabsContextMenu from "../Features/TabsContextMenu/TabsContextMenu";
 import AllTabsModal from "./AllTabsModal/AllTabsModal";
 import TextEditor from "../Features/TextEditor/TextEditor";
-import textEditorUnsavedModal from "../Reducers/textEditorUnsavedModal";
 import TextEditorUnsavedModal from "./TextEditorUnsavedModal/TextEditorUnsavedModal";
 import OpenAsModal from "./OpenAsModal/OpenAsModal";
+import DeleteModal from "./DeleteModal/DeleteModal";
 
 export default function Modals(props) {
     const state = {
         itemExistsModal: useSelector(state => state.itemExistsModal),
         inputModal: useSelector(state => state.inputModal),
+        recycleBinModal: useSelector(state => state.recycleBinModal),
         deleteModal: useSelector(state => state.deleteModal),
         clipBoardModal: useSelector(state => state.clipBoardModal),
         aboutModal: useSelector(state => state.aboutModal),
@@ -32,29 +33,30 @@ export default function Modals(props) {
     }
     return (
         <>
-            {state.inputModal ? <InputModal /> : null}
-            {state.deleteModal ? <DeleteModal /> : null}
-            {state.itemExistsModal ? <ItemExistsModal /> : null}
-            {state.favouritesModal ? <FavouritesModal /> : null}
-            {state.clipBoardModal ?
+            {Boolean(state.inputModal) && <InputModal />}
+            {Boolean(state.recycleBinModal) && <RecycleBinModal />}
+            {Boolean(state.deleteModal) && <DeleteModal />}
+            {Boolean(state.itemExistsModal) && <ItemExistsModal />}
+            {Boolean(state.favouritesModal) && <FavouritesModal />}
+            {Boolean(state.clipBoardModal) &&
                 <ClipboardModal
                     setClipBoardModal={props.setClipBoardModal}
                     setShowPaste={props.setShowPaste}
                     setForceRefresh={props.setForceRefresh}
                     clipboardItems={props.clipboardItems}
                     inputRef={props.inputRef}
-                /> : null}
-            {state.aboutModal ?
+                />}
+            {Boolean(state.aboutModal) &&
                 <AboutModal
                     setAboutModal={props.setAboutModal}
-                /> : null}
-            {state.propertiesModal ? <PropertiesModal /> : null}
-            {state.webBrowserModal ? <WebBrowserModal /> : null}
-            {state.tabsContextMenu ? <TabsContextMenu /> : null}
-            {state.allTabsModal ? <AllTabsModal /> : null}
-            {state.textEditorUnsavedModal ? <TextEditorUnsavedModal /> : null}
-            {state.textEditorModal ? <TextEditor /> : null}
-            {state.openAsModal ? <OpenAsModal /> : null}
+                />}
+            {Boolean(state.propertiesModal) && <PropertiesModal />}
+            {Boolean(state.webBrowserModal) && <WebBrowserModal />}
+            {Boolean(state.tabsContextMenu) && <TabsContextMenu />}
+            {Boolean(state.allTabsModal) && <AllTabsModal />}
+            {Boolean(state.textEditorUnsavedModal) && <TextEditorUnsavedModal />}
+            {Boolean(state.textEditorModal) && <TextEditor />}
+            {Boolean(state.openAsModal) && <OpenAsModal />}
         </>
     )
 }

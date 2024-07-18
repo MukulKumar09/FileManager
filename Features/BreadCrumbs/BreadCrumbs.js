@@ -64,8 +64,7 @@ export default function BreadCrumbs(props) {
                     >
                         <Text
                             style={[styles.smallPill,
-                            styles.smallText,
-                            styles.text,
+                            styles.text, styles.smallText,
                             styles.textDisabled]}
                         >Home</Text>
                     </Pressable>
@@ -98,8 +97,7 @@ export default function BreadCrumbs(props) {
                                             style={
                                                 [
                                                     styles.smallPill,
-                                                    styles.smallText,
-                                                    styles.text,
+                                                    styles.text, styles.smallText,
                                                     styles.textDisabled
                                                 ]
                                             }
@@ -133,8 +131,7 @@ export default function BreadCrumbs(props) {
                     >
                         <Text
                             style={[
-                                styles.smallText,
-                                styles.text,
+                                styles.text, styles.smallText,
                                 styles.textDisabled,
                             ]}
                         >

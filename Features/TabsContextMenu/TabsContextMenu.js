@@ -56,6 +56,13 @@ export default function TabsContextMenu() {
                     })}
                 />
                 <View style={[styles.divider, { backgroundColor: secondaryColor }]} />
+                {/* <MenuItem
+                    icon="note-edit-outline"
+                    name="New Notes"
+                    functionName={() => dispatch({
+                        type: "ALLTABSMODAL",
+                    })}
+                /> */}
                 <MenuItem
                     icon="tab-plus"
                     name="New File Browser"

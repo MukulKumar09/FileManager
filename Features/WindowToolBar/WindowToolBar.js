@@ -7,14 +7,13 @@ export default function WindowToolBar(props) {
     return (
         <>
             <View>
-                {props.selectionFlag ?
+                {Boolean(props.selectionFlag) &&
                     <StatusBar
                         selectedItems={props.selectedItems}
                         setSelectedItems={props.setSelectedItems}
                         setSelectedItem={props.setSelectedItem}
                         filesList={props.filesList}
                     />
-                    : null
                 }
                 <BreadCrumbs
                     setSelectedItem={props.setSelectedItem}
@@ -24,14 +23,14 @@ export default function WindowToolBar(props) {
                     breadCrumbs={props.breadCrumbs}
                     tabData={props.tabData}
                 />
-                {props.searchModal ?
+                {Boolean(props.searchModal) &&
                     <SearchBar
                         index={props.index}
                         handleSort={props.handleSort}
                         filesList={props.filesList}
                         setSearchModal={props.setSearchModal}
                     />
-                    : null}
+                }
             </View>
         </>
     )

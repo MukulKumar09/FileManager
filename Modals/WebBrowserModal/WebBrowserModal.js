@@ -91,14 +91,14 @@ export default function WebBrowserModal() {
                     }}
                     icon="tab-plus" name="Open URL in new tab"
                 />
-                {state.webBrowserModal["type"] == "image" ?
+                {state.webBrowserModal["type"] == "image" &&
                     <MenuItem
                         functionName={() => {
 
                         }}
                         icon="download-outline" name="Download Image"
                     />
-                    : null}
+                }
                 <MenuItem
                     functionName={() => {
                         Clipboard.setString(state.webBrowserModal["url"]);
