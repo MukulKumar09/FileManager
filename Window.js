@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { BackHandler, View } from "react-native";
+import { BackHandler, Text, View, Pressable } from "react-native";
 import RNFS from 'react-native-fs';
 import { useSelector, useDispatch } from "react-redux";
 import Share from 'react-native-share';
+import MaterialIcon from "./Common/MaterialIcon/MaterialIcon";
 import FilesList from "./Features/FilesList/FilesList";
 import SortModal from "./Modals/SortModal/SortModal";
 import WindowToolBar from "./Features/WindowToolBar/WindowToolBar";
@@ -13,6 +14,7 @@ import useRangeSelect from "./Hooks/useRangeSelect";
 import useCache from "./Hooks/useCache";
 import useOpenExternally from "./Hooks/useOpenExternally";
 import useNavigateParent from "./Hooks/useNavigateParent";
+import styles, { backgroundColor } from "./styles";
 
 const Window = (props) => {
     const dispatch = useDispatch()
@@ -25,6 +27,7 @@ const Window = (props) => {
         functionId: useSelector(state => state.functionId),
         mediaBox: useSelector(state => state.mediaBox),
         recycleBin: useSelector(state => state.recycleBin),
+        favouriteItems: useSelector(state => state.favouriteItems)
     }
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
@@ -34,8 +37,8 @@ const Window = (props) => {
     const [selectionFlag, setSelectionFlag] = useState(0)
     //sorting
     const [sortModal, setSortModal] = useState(0)
-    let sortType = 1
-    let sortOrder = 0
+    const [sortType, setSortType] = useState(1)
+    const [sortOrder, setSortOrder] = useState(0)
 
     const tabPath = useSelector(state => state.tabs[props.index]["path"])
     const cache = useSelector(state => state.cache[tabPath])
@@ -81,8 +84,7 @@ const Window = (props) => {
             })
             setSelectedItems(tempSelectedItems)
         }
-    }, [cache])
-
+    }, [cache, sortType, sortOrder])
 
     useEffect(() => {
         if (selectedItems.length == 0)
@@ -90,8 +92,6 @@ const Window = (props) => {
         else
             setSelectionFlag(1)
     }, [selectedItems])
-
-
 
     useEffect(() => {
         if (state.currentTab == props.index && state.functionId > -1) {
@@ -259,12 +259,8 @@ const Window = (props) => {
         }
     }
 
-    const handleSortProps = (type, order) => {
-        sortType = type
-        sortOrder = order
-        handleSort(filesList)
-    }
     const handleSort = (data) => {
+        console.log("sort called")
         setSortModal(0)
         setFilesList(useSort(data, sortType, sortOrder))
     }
@@ -309,7 +305,8 @@ const Window = (props) => {
                     sortType={sortType}
                     sortOrder={sortOrder}
                     setSortModal={setSortModal}
-                    handleSortProps={handleSortProps}
+                    setSortType={setSortType}
+                    setSortOrder={setSortOrder}
                 />
             }
             {
@@ -326,6 +323,90 @@ const Window = (props) => {
                         />
                     )
                 }, [filesList, selectedItem, selectedItems, selectionFlag])
+            }
+
+            {
+                Boolean(state.tabs[props.index]["path"] == "Home") &&
+                <View style={
+                    [
+                        styles.padding,
+                    ]
+                }>
+                    <View style={
+                        [
+                            styles.pill,
+                            styles.padding,
+                            styles.bigGap
+                        ]
+                    }>
+                        <View style={
+                            [
+                                styles.rowLayout,
+                                styles.bigGap
+                            ]
+                        }>
+                            <MaterialIcon name="heart-outline" />
+                            <Text style={
+                                [
+                                    styles.text,
+                                    styles.headingText
+                                ]
+                            }>Favourites</Text>
+                        </View>
+                        <View style={[styles.divider, { backgroundColor: backgroundColor }]} />
+                        {
+                            state.favouriteItems.length == 0 ?
+                                <Text style={
+                                    [
+                                        styles.text,
+                                        styles.textDisabled,
+                                    ]
+                                }>
+                                    No items
+                                </Text>
+                                : state.favouriteItems.map(
+                                    (item, i) =>
+                                        <View
+                                            key={i}
+                                            style={
+                                                [
+                                                    styles.rowLayout,
+                                                ]
+                                            }>
+                                            <Pressable
+                                                onPress={() => {
+                                                    dispatch({
+                                                        type: "ADDTAB",
+                                                        payload: {
+                                                            tabKey: state.tabCounter,
+                                                            title: item["name"],
+                                                            path: item["path"],
+                                                            type: "filebrowser",
+                                                        }
+                                                    })
+                                                    dispatch({
+                                                        type: "SETCURRENTTAB",
+                                                        payload: state.tabCounter
+                                                    })
+                                                    dispatch({
+                                                        type: "INCREASETABCOUNTER",
+                                                    })
+                                                }}
+                                                style={
+                                                    [
+                                                        styles.rowLayout,
+                                                        styles.wide,
+                                                        styles.bigGap,
+                                                    ]
+                                                }
+                                            >
+                                                <MaterialIcon name="folder" color="#FFC107" />
+                                                <Text style={[styles.text]}>{item["name"]}</Text>
+                                            </Pressable>
+                                        </View>
+                                )}
+                    </View>
+                </View>
             }
             <WindowToolBar
                 index={props.index}

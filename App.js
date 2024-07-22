@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, Pressable, Text } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Window from "./Window";
 import styles from "./styles";
@@ -10,6 +10,7 @@ import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
 import Webbrowser from "./Features/Webbrowser/Webbrowser";
 import MediaViewer from "./Features/MediaViewer/MediaViewer";
+import { openDatabase } from 'react-native-sqlite-storage';
 
 const App = () => {
     const dispatch = useDispatch()
@@ -20,6 +21,35 @@ const App = () => {
         cache: useSelector(state => state.cache["Home"]),
         mediaBox: useSelector(state => state.mediaBox),
     }
+
+    // const getDBConnection = async () => {
+    //     return openDatabase({
+    //         name: 'tabber.db',
+    //         location: 'default',
+    //     });
+    // };
+    // const getAllTasks = async () => {
+    //     const db = await getDBConnection();
+
+    //     let query = "SELECT * FROM paths;";
+    //     await db.transaction((tx) => {
+    //         tx.executeSql(query, [], (tx, results) => {
+    //             console.log(results.rows)
+    //         })
+    //         // return tx
+    //     }, (error) => {
+    //         console.log(error);
+    //     });
+    //     query = "SELECT * FROM thumbnails;";
+    //     await db.transaction((tx) => {
+    //         tx.executeSql(query, [], (tx, results) => {
+    //             console.log(results.rows)
+    //         })
+    //         // return tx
+    //     }, (error) => {
+    //         console.log(error);
+    //     });
+    // };
 
     let width = Dimensions.get('window').width
 
@@ -81,7 +111,8 @@ const App = () => {
             {Boolean(state.tabs[state.currentTab]) && state.tabs[state.currentTab]["type"] == "filebrowser" && <FileBrowserToolBar />
             }
             <Tabbar width={width} />
-        </View>
+            {/* <Pressable onPress={() => getAllTasks()}><Text>All data</Text></Pressable> */}
+        </View >
 
     );
 };

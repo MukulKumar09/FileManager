@@ -82,7 +82,7 @@ export default function SortModal(props) {
                                 }
                                 onPressIn={() => setSortType(2)}
                             >
-                                <Text style={[styles.text]}> Date </Text>
+                                <Text style={[styles.text]}> Modified </Text>
                             </Pressable>
                             <Pressable
                                 style={
@@ -139,7 +139,8 @@ export default function SortModal(props) {
                                         styles.pillHighlight,
                                         styles.padding]}
                                 onPressIn={() => {
-                                    props.handleSortProps(sortType, sortOrder)
+                                    props.setSortType(sortType)
+                                    props.setSortOrder(sortOrder)
                                 }}
                             >
                                 <Text style={[styles.text]}> Done </Text>

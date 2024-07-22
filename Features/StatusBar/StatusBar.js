@@ -6,6 +6,7 @@ export default function StatusBar(props) {
         <View style={[
             styles.rowLayout,
             styles.pill,
+            styles.padding,
             styles.paddingCloseBottom, {
                 justifyContent: 'space-between',
                 paddingHorizontal: 20,

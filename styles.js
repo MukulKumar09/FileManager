@@ -50,6 +50,8 @@ export default StyleSheet.create({
         paddingStart: 0
     },
     paddingCloseBottom: {
+        // marginHorizontal: 20,
+        // marginVertical: 10,
         margin: 10,
         marginBottom: 0
     },

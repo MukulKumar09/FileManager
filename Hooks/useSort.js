@@ -2,7 +2,8 @@ export default function useSort(items, sortType, sortOrder) {
     console.log(sortType, sortOrder)
     switch (sortType) {
         case 0: { //name
-            items.sort((a, b) => {
+            let tempItems = [...items]
+            tempItems.sort((a, b) => {
                 var x = a["name"].toLowerCase();
                 var y = b["name"].toLowerCase();
                 if (sortOrder) {
@@ -11,7 +12,7 @@ export default function useSort(items, sortType, sortOrder) {
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                 }
             })
-            return items
+            return tempItems
         }
         case 1: { //type
             let allFolders = items.filter(i => i.isDirectory)
@@ -37,8 +38,18 @@ export default function useSort(items, sortType, sortOrder) {
             })
             return [...allFolders, ...allFiles]
         }
-        case 2: {
-            return filesList
+        case 2: { //date
+            let tempItems = [...items]
+            tempItems.sort((a, b) => {
+                var x = new Date(a["mtime"]).getTime();
+                var y = new Date(b["mtime"]).getTime();
+                if (sortOrder) {
+                    return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+                } else {
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                }
+            })
+            return tempItems
         }
         case 3: {//size
             let allFolders = items.filter(i => i.isDirectory)

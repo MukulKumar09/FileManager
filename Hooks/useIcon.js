@@ -1,9 +1,11 @@
 import { Image, Text } from 'react-native'
-import { Image as Img } from 'react-native-compressor';
+import RNFS from 'react-native-fs';
+import { openDatabase } from 'react-native-sqlite-storage';
 import styles from '../styles'
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon'
 
 export default function useIcon(fileType) {
+
     if (fileType)
         switch (fileType) {
             case "txt":
@@ -42,8 +44,11 @@ export default function useIcon(fileType) {
             }
             default:
                 return (
-                    <Text style={[styles.text,
-                    styles.smallDarkText]}>{fileType}</Text>
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={[styles.text,
+                        styles.smallDarkText]}>{fileType}</Text>
                 )
         }
     else

@@ -4,6 +4,8 @@ import useIcon from "../../Hooks/useIcon";
 import useNiceBytes from "../../Hooks/useNiceBytes";
 
 export default function ListItem(props) {
+    let mtime = new Date(props.item["mtime"])
+    let ctime = new Date(props.item["ctime"])
     return (
         <Pressable
             style={
@@ -33,14 +35,32 @@ export default function ListItem(props) {
                 <View style={[
                     styles.wide,
                 ]}>
-                    <Text style={[styles.text]}>{props.item["name"]}</Text>
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={[styles.text]}
+                    >
+                        {props.item["name"]}
+                    </Text>
+                    {Boolean(props.item.isFile) &&
+                        <Text style={[styles.text,
+                        styles.smallDarkText]}>
+                            {useNiceBytes(props.item["size"])}
+                        </Text>
+                    }
                 </View>
             </View>
-            {Boolean(props.item.isFile) &&
-                <View style={{ width: 60, alignItems: 'flex-end' }}>
+            {Boolean(mtime.toLocaleDateString() !== "Invalid Date") &&
+                <View style={{ width: 80, alignItems: 'flex-end', paddingStart: 20 }}>
+                    <Text
+                        style={[styles.text,
+                        styles.smallDarkText]}
+                    >
+                        {mtime.toLocaleDateString()}
+                    </Text>
                     <Text style={[styles.text,
                     styles.smallDarkText]}>
-                        {useNiceBytes(props.item["size"])}
+                        {mtime.toLocaleTimeString()}
                     </Text>
                 </View>
             }

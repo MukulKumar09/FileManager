@@ -1,8 +1,40 @@
 import RNFS from 'react-native-fs';
+import { openDatabase } from 'react-native-sqlite-storage';
 
 export default async function useMountingPoints(dispatch) {
-    console.log("mounting points")
+    const getDBConnection = async () => {
+        return openDatabase({
+            name: 'tabber.db',
+            location: 'default',
+        });
+    };
     async function MntPnts() {
+
+        // const db = await getDBConnection();
+
+        // let query
+        // let test = 0
+
+        // query = `CREATE TABLE IF NOT EXISTS paths(
+        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+        //     path TEXT NOT NULL
+        // )`;
+        // if (test) {
+        //     query = `DROP TABLE paths`
+        // }
+        // await db.executeSql(query, [], () => { }, (e) => { console.log("db error: ", e) });
+
+        // query = `CREATE TABLE IF NOT EXISTS thumbnails(
+        //     path_id INTEGER,
+        //     name TEXT NOT NULL,
+        //     modified_date TEXT NOT NULL
+        // )`;
+        // if (test) {
+        //     query = `DROP TABLE thumbnails`
+        // }
+        // await db.executeSql(query, [], () => { }, (e) => { console.log("db error: ", e) });
+
+
         let mntPnts = []
         let allMounts = await RNFS.getAllExternalFilesDirs()
         allMounts.map((i) => {
@@ -36,6 +68,9 @@ export default async function useMountingPoints(dispatch) {
             payload: JSON.parse(favorites)
         })
     } else {
+        dispatch({
+            type: "ABOUTMODAL"
+        })
         await RNFS.writeFile(RNFS.ExternalCachesDirectoryPath + "/favorites.json", "[]")
     }
 
