@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { BackHandler, Text, View, Pressable } from "react-native";
+import { BackHandler, Text, View, Pressable, ScrollView } from "react-native";
 import RNFS from 'react-native-fs';
 import { useSelector, useDispatch } from "react-redux";
 import Share from 'react-native-share';
@@ -318,98 +318,100 @@ const Window = (props) => {
                         console.log(props.index, "usememo")
                         return (
                             Boolean(state.tabs[props.index]["path"] == "Home") ?
-                                <View style={
-                                    [
-                                        styles.padding,
-                                        styles.bigGap,
-                                    ]
-                                }>
-                                    {
-                                        state.cache.map(
-                                            (item, i) =>
-                                                <Pressable
-                                                    key={i}
-                                                    onPress={() => useFileHandler(state, dispatch, item)}
-                                                    style={
-                                                        [
-                                                            styles.pill,
-                                                            styles.rowLayout,
-                                                            styles.padding,
-                                                            styles.bigGap,
-                                                            { justifyContent: 'flex-start' }
-                                                        ]
-                                                    }
-                                                >
-                                                    <MaterialIcon name="sd" />
-                                                    <Text style={[styles.text]}>{item["name"]}</Text>
-                                                </Pressable>
-                                        )}
+                                <ScrollView>
                                     <View style={
                                         [
-                                            styles.pill,
+                                            styles.padding,
+                                            styles.bigGap,
                                         ]
                                     }>
+                                        {
+                                            state.cache.map(
+                                                (item, i) =>
+                                                    <Pressable
+                                                        key={i}
+                                                        onPress={() => useFileHandler(state, dispatch, item)}
+                                                        style={
+                                                            [
+                                                                styles.pill,
+                                                                styles.rowLayout,
+                                                                styles.padding,
+                                                                styles.bigGap,
+                                                                { justifyContent: 'flex-start' }
+                                                            ]
+                                                        }
+                                                    >
+                                                        <MaterialIcon name="sd" />
+                                                        <Text style={[styles.text]}>{item["name"]}</Text>
+                                                    </Pressable>
+                                            )}
                                         <View style={
                                             [
-                                                styles.rowLayout,
-                                                styles.bigGap,
-                                                styles.padding,
+                                                styles.pill,
                                             ]
                                         }>
-                                            <MaterialIcon name="heart" />
-                                            <Text style={
+                                            <View style={
                                                 [
-                                                    styles.text,
+                                                    styles.rowLayout,
+                                                    styles.bigGap,
+                                                    styles.padding,
                                                 ]
-                                            }>Favourites</Text>
-                                        </View>
-                                        <View style={[styles.divider, { backgroundColor: backgroundColor }]} />
-                                        {
-                                            state.favouriteItems.length == 0 ?
+                                            }>
+                                                <MaterialIcon name="heart" />
                                                 <Text style={
                                                     [
                                                         styles.text,
-                                                        styles.textDisabled,
                                                     ]
-                                                }>
-                                                    No items
-                                                </Text>
-                                                : state.favouriteItems.map(
-                                                    (item, i) =>
-                                                        <Pressable
-                                                            key={i}
-                                                            onPress={() => {
-                                                                dispatch({
-                                                                    type: "ADDTAB",
-                                                                    payload: {
-                                                                        tabKey: state.tabCounter,
-                                                                        title: item["name"],
-                                                                        path: item["path"],
-                                                                        type: "filebrowser",
-                                                                    }
-                                                                })
-                                                                dispatch({
-                                                                    type: "SETCURRENTTAB",
-                                                                    payload: state.tabCounter
-                                                                })
-                                                                dispatch({
-                                                                    type: "INCREASETABCOUNTER",
-                                                                })
-                                                            }}
-                                                            style={
-                                                                [
-                                                                    styles.rowLayout,
-                                                                    styles.bigGap,
-                                                                    styles.padding,
-                                                                ]
-                                                            }
-                                                        >
-                                                            <MaterialIcon name="folder" color="#FFC107" />
-                                                            <Text style={[styles.text]}>{item["name"]}</Text>
-                                                        </Pressable>
-                                                )}
+                                                }>Favourites</Text>
+                                            </View>
+                                            <View style={[styles.divider, { backgroundColor: backgroundColor }]} />
+                                            {
+                                                state.favouriteItems.length == 0 ?
+                                                    <Text style={
+                                                        [
+                                                            styles.text,
+                                                            styles.textDisabled,
+                                                        ]
+                                                    }>
+                                                        No items
+                                                    </Text>
+                                                    : state.favouriteItems.map(
+                                                        (item, i) =>
+                                                            <Pressable
+                                                                key={i}
+                                                                onPress={() => {
+                                                                    dispatch({
+                                                                        type: "ADDTAB",
+                                                                        payload: {
+                                                                            tabKey: state.tabCounter,
+                                                                            title: item["name"],
+                                                                            path: item["path"],
+                                                                            type: "filebrowser",
+                                                                        }
+                                                                    })
+                                                                    dispatch({
+                                                                        type: "SETCURRENTTAB",
+                                                                        payload: state.tabCounter
+                                                                    })
+                                                                    dispatch({
+                                                                        type: "INCREASETABCOUNTER",
+                                                                    })
+                                                                }}
+                                                                style={
+                                                                    [
+                                                                        styles.rowLayout,
+                                                                        styles.bigGap,
+                                                                        styles.padding,
+                                                                    ]
+                                                                }
+                                                            >
+                                                                <MaterialIcon name="folder" color="#FFC107" />
+                                                                <Text style={[styles.text]}>{item["name"]}</Text>
+                                                            </Pressable>
+                                                    )}
+                                        </View>
                                     </View>
-                                </View>
+                                </ScrollView>
                                 :
                                 <FilesList
                                     handlePress={handlePress}

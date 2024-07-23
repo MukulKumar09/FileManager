@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, Dimensions, Pressable, Text } from "react-native";
+import { View, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Window from "./Window";
 import styles from "./styles";

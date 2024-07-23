@@ -3,7 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Video from "react-native-video";
 import styles, { secondaryColor } from "../../styles";
 import MaterialIcon from "../../Common/SmallMaterialIcon/SmallMaterialIcon";
-import Animated, { Easing, FadeInUp, FadeOutUp, ReduceMotion, clamp, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, {
+    FadeInUp,
+    FadeOutUp,
+    clamp,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring
+} from 'react-native-reanimated';
 import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useEffect } from "react";
 
@@ -15,12 +22,11 @@ function MediaViewer() {
     }
     const { width, height } = Dimensions.get('screen');
 
-    let h = Math.round(Dimensions.get('window').width * 9 / 16)
     let fH = Dimensions.get('window').height
-    const wheight = useSharedValue(h);
+    const wheight = useSharedValue(30);
     const prevWheight = useSharedValue(0)
     const wStyle = useAnimatedStyle(() => ({
-        height: wheight.value
+        height: wheight.value + '%'
     }))
     const panWindow = Gesture.Pan()
         .minDistance(1)
@@ -29,9 +35,9 @@ function MediaViewer() {
         })
         .onUpdate((event) => {
             wheight.value = clamp(
-                prevWheight.value + event.translationY,
-                h,
-                fH
+                prevWheight.value + ((event.translationY / fH) * 100),
+                30,
+                100
             );
         })
 

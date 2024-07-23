@@ -173,8 +173,6 @@ export default function AboutModal() {
                                 {"\n"}
                                 &bull; Clearing cache deletes favourites
                                 {"\n"}
-                                &bull; Media Viewer popup breaks it's layout in landscape orientation
-                                {"\n"}
                                 &bull; Large lists in dialogue boxes might not show all item
                             </Text>
                         </View>
