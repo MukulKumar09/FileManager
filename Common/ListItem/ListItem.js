@@ -36,7 +36,7 @@ export default function ListItem(props) {
                     styles.wide,
                 ]}>
                     <Text
-                        numberOfLines={1}
+                        numberOfLines={2}
                         ellipsizeMode="tail"
                         style={[styles.text]}
                     >

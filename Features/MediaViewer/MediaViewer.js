@@ -211,7 +211,7 @@ function MediaViewer() {
                                 }>{state.mediaBox["name"]}</Text>
                         </View>
                     </GestureDetector>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={
                             {
                                 padding: 15
@@ -256,7 +256,7 @@ function MediaViewer() {
                                 )
                         }}>
                         <MaterialIcon name="fullscreen" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         style={
                             {

@@ -15,6 +15,7 @@ import useCache from "./Hooks/useCache";
 import useOpenExternally from "./Hooks/useOpenExternally";
 import useNavigateParent from "./Hooks/useNavigateParent";
 import styles, { backgroundColor } from "./styles";
+import TextEditor from "./Features/TextEditor/TextEditor";
 
 const Window = (props) => {
     const dispatch = useDispatch()
@@ -27,7 +28,7 @@ const Window = (props) => {
         functionId: useSelector(state => state.functionId),
         mediaBox: useSelector(state => state.mediaBox),
         recycleBin: useSelector(state => state.recycleBin),
-        favouriteItems: useSelector(state => state.favouriteItems)
+        favouriteItems: useSelector(state => state.favouriteItems),
     }
     const [filesList, setFilesList] = useState([])
     const [searchModal, setSearchModal] = useState(0)
@@ -355,11 +356,10 @@ const Window = (props) => {
                                                 styles.padding,
                                             ]
                                         }>
-                                            <MaterialIcon name="heart-outline" />
+                                            <MaterialIcon name="heart" />
                                             <Text style={
                                                 [
                                                     styles.text,
-                                                    styles.headingText
                                                 ]
                                             }>Favourites</Text>
                                         </View>

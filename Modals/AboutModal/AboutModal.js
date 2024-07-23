@@ -152,7 +152,7 @@ export default function AboutModal() {
                                 {"\n"}
                                 However this won't be possible without your support!
                                 {"\n"}
-                                All you need to do is rate 5 stars and leave a feedback on Play Store.
+                                You can support by rating and leaving a feedback on Play Store.
                             </Text>
                         </View>
                         <View style={[styles.divider]} />

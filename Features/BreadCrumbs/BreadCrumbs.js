@@ -23,24 +23,28 @@ export default function BreadCrumbs(props) {
             styles.smallGap,
             styles.paddingCloseBottom
         ]}>
-            <Pressable
-                onPressIn={() => {
-                    props.setSearchModal(1)
-                }}
-                style={[
-                    styles.smallPill,
-                ]}>
-                <SmallMaterialIcon name="magnify" color={grey} />
-            </Pressable>
-            <Pressable
-                onPressIn={() => {
-                    props.setSortModal(1)
-                }}
-                style={[
-                    styles.smallPill,
-                ]}>
-                <SmallMaterialIcon name="sort-variant" color={grey} />
-            </Pressable>
+            {!Boolean(state.tabs[props.index]["path"] == "Home") &&
+                <>
+                    <Pressable
+                        onPressIn={() => {
+                            props.setSearchModal(1)
+                        }}
+                        style={[
+                            styles.smallPill,
+                        ]}>
+                        <SmallMaterialIcon name="magnify" color={grey} />
+                    </Pressable>
+                    <Pressable
+                        onPressIn={() => {
+                            props.setSortModal(1)
+                        }}
+                        style={[
+                            styles.smallPill,
+                        ]}>
+                        <SmallMaterialIcon name="sort-variant" color={grey} />
+                    </Pressable>
+                </>
+            }
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}

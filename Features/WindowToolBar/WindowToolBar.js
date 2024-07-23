@@ -16,6 +16,7 @@ export default function WindowToolBar(props) {
                     />
                 }
                 <BreadCrumbs
+                    index={props.index}
                     setSelectedItem={props.setSelectedItem}
                     setSortModal={props.setSortModal}
                     setSearchModal={props.setSearchModal}
