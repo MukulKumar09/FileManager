@@ -296,9 +296,10 @@ const Window = (props) => {
             console.error('Error sharing files: ', error);
         }
     }
-
     return (
-        <View style={{ flex: 1 }}>
+        <View
+            style={{ flex: 1 }}
+        >
             {Boolean(sortModal) &&
                 <SortModal
                     sortModal={sortModal}
@@ -309,105 +310,121 @@ const Window = (props) => {
                     setSortOrder={setSortOrder}
                 />
             }
-            {
-                useMemo(() => {
-                    return (
-                        <FilesList
-                            handlePress={handlePress}
-                            handleLongPress={handleLongPress}
-                            setSelectedItems={setSelectedItems}
-                            setSelectedItem={setSelectedItem}
-                            finalList={filesList}
-                            selectedItems={selectedItems}
-                            selectedItem={selectedItem}
-                        />
-                    )
-                }, [filesList, selectedItem, selectedItems, selectionFlag])
-            }
 
-            {
-                Boolean(state.tabs[props.index]["path"] == "Home") &&
-                <View style={
-                    [
-                        styles.padding,
-                    ]
-                }>
-                    <View style={
-                        [
-                            styles.pill,
-                            styles.padding,
-                            styles.bigGap
-                        ]
-                    }>
-                        <View style={
-                            [
-                                styles.rowLayout,
-                                styles.bigGap
-                            ]
-                        }>
-                            <MaterialIcon name="heart-outline" />
-                            <Text style={
-                                [
-                                    styles.text,
-                                    styles.headingText
-                                ]
-                            }>Favourites</Text>
-                        </View>
-                        <View style={[styles.divider, { backgroundColor: backgroundColor }]} />
-                        {
-                            state.favouriteItems.length == 0 ?
-                                <Text style={
+            <View style={[styles.wide]}>
+                {
+                    useMemo(() => {
+                        console.log(props.index, "usememo")
+                        return (
+                            Boolean(state.tabs[props.index]["path"] == "Home") ?
+                                <View style={
                                     [
-                                        styles.text,
-                                        styles.textDisabled,
+                                        styles.padding,
+                                        styles.bigGap,
                                     ]
                                 }>
-                                    No items
-                                </Text>
-                                : state.favouriteItems.map(
-                                    (item, i) =>
-                                        <View
-                                            key={i}
-                                            style={
+                                    {
+                                        state.cache.map(
+                                            (item, i) =>
+                                                <Pressable
+                                                    key={i}
+                                                    onPress={() => useFileHandler(state, dispatch, item)}
+                                                    style={
+                                                        [
+                                                            styles.pill,
+                                                            styles.rowLayout,
+                                                            styles.padding,
+                                                            styles.bigGap,
+                                                            { justifyContent: 'flex-start' }
+                                                        ]
+                                                    }
+                                                >
+                                                    <MaterialIcon name="sd" />
+                                                    <Text style={[styles.text]}>{item["name"]}</Text>
+                                                </Pressable>
+                                        )}
+                                    <View style={
+                                        [
+                                            styles.pill,
+                                        ]
+                                    }>
+                                        <View style={
+                                            [
+                                                styles.rowLayout,
+                                                styles.bigGap,
+                                                styles.padding,
+                                            ]
+                                        }>
+                                            <MaterialIcon name="heart-outline" />
+                                            <Text style={
                                                 [
-                                                    styles.rowLayout,
+                                                    styles.text,
+                                                    styles.headingText
                                                 ]
-                                            }>
-                                            <Pressable
-                                                onPress={() => {
-                                                    dispatch({
-                                                        type: "ADDTAB",
-                                                        payload: {
-                                                            tabKey: state.tabCounter,
-                                                            title: item["name"],
-                                                            path: item["path"],
-                                                            type: "filebrowser",
-                                                        }
-                                                    })
-                                                    dispatch({
-                                                        type: "SETCURRENTTAB",
-                                                        payload: state.tabCounter
-                                                    })
-                                                    dispatch({
-                                                        type: "INCREASETABCOUNTER",
-                                                    })
-                                                }}
-                                                style={
-                                                    [
-                                                        styles.rowLayout,
-                                                        styles.wide,
-                                                        styles.bigGap,
-                                                    ]
-                                                }
-                                            >
-                                                <MaterialIcon name="folder" color="#FFC107" />
-                                                <Text style={[styles.text]}>{item["name"]}</Text>
-                                            </Pressable>
+                                            }>Favourites</Text>
                                         </View>
-                                )}
-                    </View>
-                </View>
-            }
+                                        <View style={[styles.divider, { backgroundColor: backgroundColor }]} />
+                                        {
+                                            state.favouriteItems.length == 0 ?
+                                                <Text style={
+                                                    [
+                                                        styles.text,
+                                                        styles.textDisabled,
+                                                    ]
+                                                }>
+                                                    No items
+                                                </Text>
+                                                : state.favouriteItems.map(
+                                                    (item, i) =>
+                                                        <Pressable
+                                                            key={i}
+                                                            onPress={() => {
+                                                                dispatch({
+                                                                    type: "ADDTAB",
+                                                                    payload: {
+                                                                        tabKey: state.tabCounter,
+                                                                        title: item["name"],
+                                                                        path: item["path"],
+                                                                        type: "filebrowser",
+                                                                    }
+                                                                })
+                                                                dispatch({
+                                                                    type: "SETCURRENTTAB",
+                                                                    payload: state.tabCounter
+                                                                })
+                                                                dispatch({
+                                                                    type: "INCREASETABCOUNTER",
+                                                                })
+                                                            }}
+                                                            style={
+                                                                [
+                                                                    styles.rowLayout,
+                                                                    styles.bigGap,
+                                                                    styles.padding,
+                                                                ]
+                                                            }
+                                                        >
+                                                            <MaterialIcon name="folder" color="#FFC107" />
+                                                            <Text style={[styles.text]}>{item["name"]}</Text>
+                                                        </Pressable>
+                                                )}
+                                    </View>
+                                </View>
+                                :
+                                <FilesList
+                                    handlePress={handlePress}
+                                    handleLongPress={handleLongPress}
+                                    setSelectedItems={setSelectedItems}
+                                    setSelectedItem={setSelectedItem}
+                                    finalList={filesList}
+                                    selectedItems={selectedItems}
+                                    selectedItem={selectedItem}
+                                />
+                        )
+                    }, [filesList, selectedItem, selectedItems, selectionFlag])
+
+                }
+            </View>
             <WindowToolBar
                 index={props.index}
                 selectionFlag={selectionFlag}

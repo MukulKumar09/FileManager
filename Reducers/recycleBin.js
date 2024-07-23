@@ -6,9 +6,6 @@ export default function recycleBin(state = [], action) {
         case "SETRECYCLEBIN": {
             return action.payload
         }
-        case "CLEARRB": {
-            return []
-        }
     }
     if (action.type == "ADDTORECYCLEBIN")
         return action.payload

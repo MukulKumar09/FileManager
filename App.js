@@ -10,7 +10,6 @@ import useMountingPoints from "./Hooks/useMountingPoints";
 import OperationWindow from "./Features/OperationWindow/OperationWindow";
 import Webbrowser from "./Features/Webbrowser/Webbrowser";
 import MediaViewer from "./Features/MediaViewer/MediaViewer";
-import { openDatabase } from 'react-native-sqlite-storage';
 
 const App = () => {
     const dispatch = useDispatch()

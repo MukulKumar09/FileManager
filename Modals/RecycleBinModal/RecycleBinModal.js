@@ -101,16 +101,6 @@ export default function RecycleBinModal() {
                 }>
                     <Pressable
                         onPress={() => {
-                            dispatch({
-                                type: "CLEARRB"
-                            })
-                            setSelectedItems([])
-                        }
-                        }>
-                        <MaterialIcon name="delete-off-outline" color="white" />
-                    </Pressable>
-                    <Pressable
-                        onPress={() => {
                             setSelectedItems(state.recycleBin)
                         }
                         }>
@@ -149,7 +139,13 @@ export default function RecycleBinModal() {
                             <View style={{ width: 30, }}>
                                 {useIcon(item["fileType"])}
                             </View>
-                            <Text style={[styles.text]}>{item["name"]}</Text>
+                            <Text
+                                numberOfLines={2}
+                                ellipsizeMode="tail"
+                                style={[styles.wide, styles.text]}
+                            >
+                                {item["name"]}
+                            </Text>
                         </Pressable>
                     )
                 }

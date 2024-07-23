@@ -171,9 +171,7 @@ export default function AboutModal() {
                                 {"\n"}
                                 &bull; Cancelling Copy, Move, Delete Progress is not supported
                                 {"\n"}
-                                &bull; Sort Dialogue shows incorrect selected options
-                                {"\n"}
-                                &bull; Date Sorting is buggy
+                                &bull; Clearing cache deletes favourites
                                 {"\n"}
                                 &bull; Media Viewer popup breaks it's layout in landscape orientation
                                 {"\n"}

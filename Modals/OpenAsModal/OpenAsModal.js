@@ -61,19 +61,23 @@ export default function OpenAsModal() {
                         <View style={
                             [
                                 styles.rowLayout,
-                                styles.bigGap
+                                styles.bigGap,
                             ]
                         }>
                             <MaterialIcon name="file-question-outline" />
-                            <View>
+                            <View
+                                style={[styles.wide]}>
                                 <Text style={[
                                     styles.text,
                                     styles.headingText
                                 ]}>Open as...</Text>
-                                <Text style={[
-                                    styles.text,
-                                    styles.textDisabled
-                                ]}>{state.openAsModal["name"]}</Text>
+                                <Text
+                                    numberOfLines={2}
+                                    ellipsizeMode="tail"
+                                    style={[
+                                        styles.text,
+                                        styles.textDisabled
+                                    ]}>{state.openAsModal["name"]}</Text>
                             </View>
                         </View>
                         {/* <Pressable
@@ -121,11 +125,12 @@ export default function OpenAsModal() {
                                 ]
                             }>
                             {useIcon("txt")}
-                            <Text style={
-                                [
-                                    styles.text
-                                ]
-                            }>
+                            <Text
+                                style={
+                                    [
+                                        styles.text
+                                    ]
+                                }>
                                 Text
                             </Text>
                         </Pressable>
