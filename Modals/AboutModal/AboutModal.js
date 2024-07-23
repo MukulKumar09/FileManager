@@ -57,105 +57,17 @@ export default function AboutModal() {
                     </View>
                     <View style={[styles.divider]} />
                     <View style={[styles.padding, styles.bigGap]}>
-                        <View style={
-                            [
-                                styles.rowLayout,
-                                styles.bigGap
-                            ]
-                        }>
-                            <Image source={{ uri: 'https://github.com/MukulKumar09.png' }}
-                                style={{
-                                    height: 70,
-                                    width: 70,
-                                    borderRadius: 20
-                                }} />
-                            <View>
-                                <Text style={[styles.text]}>Author: Mukul Kumar{"\n"}</Text>
-                                <View style={
-                                    [
-                                        styles.mediumGap
-                                    ]
-                                }>
-                                    <View style={
-                                        [
-                                            styles.rowLayout,
-                                            styles.mediumGap
-                                        ]
-                                    }>
-                                        <Pressable
-                                            onPressIn={() => Linking.openURL('https://www.linkedin.com/in/mukul-kumar-488b1119b/')}
-                                            style={[
-                                                styles.rowLayout,
-                                                styles.mediumGap,
-                                                styles.smallPill
-                                            ]}
-                                        >
-                                            <SmallMaterialIcon name="linkedin" color={grey} />
-                                            <Text
-                                                style={[
-                                                    styles.text, styles.smallText,
-                                                    styles.textDisabled
-                                                ]}>
-                                                LinkedIn
-                                            </Text>
-                                        </Pressable>
-                                        <Pressable
-                                            onPressIn={() => Linking.openURL('https://www.reddit.com/user/ElectionExciting2087/')}
-                                            style={[
-                                                styles.rowLayout,
-                                                styles.mediumGap,
-                                                styles.smallPill
-                                            ]}
-                                        >
-                                            <SmallMaterialIcon name="reddit" color={grey} />
-                                            <Text
-                                                style={[
-                                                    styles.text, styles.smallText,
-                                                    styles.textDisabled
-                                                ]}>
-                                                Reddit
-                                            </Text>
-                                        </Pressable>
-                                    </View>
-                                    <View style={
-                                        [
-                                            styles.rowLayout,
-                                            styles.mediumGap
-                                        ]
-                                    }>
-                                        <Pressable
-                                            onPressIn={() => Linking.openURL('http://tabberfm.000webhostapp.com')}
-                                            style={[
-                                                styles.rowLayout,
-                                                styles.mediumGap,
-                                                styles.smallPill
-                                            ]}
-                                        >
-                                            <SmallMaterialIcon name="web" color={grey} />
-                                            <Text
-                                                style={[
-                                                    styles.text, styles.smallText,
-                                                    styles.textDisabled
-                                                ]}>
-                                                Privacy Policy
-                                            </Text>
-                                        </Pressable>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
                         <View>
                             <Text style={[styles.text]}>
                                 Thanks for downloading my app!
-                                {"\n"}
-                                I'm an independent developer based out of India. My goal is to keep all of my products free to use.
+                                {"\n\n"}
+                                Hi it's Mukul, I'm an independent developer based out of India. My goal is to keep all of my products free to use.
                                 {"\n"}
                                 However this won't be possible without your support!
                                 {"\n"}
                                 You can support by rating and leaving a feedback on Play Store.
                             </Text>
                         </View>
-                        <View style={[styles.divider]} />
                         <View
                             style={[
                                 styles.rowLayout,
@@ -175,6 +87,71 @@ export default function AboutModal() {
                                 {"\n"}
                                 &bull; Large lists in dialogue boxes might not show all item
                             </Text>
+                        </View>
+                        <View style={
+                            [
+                                styles.mediumGap
+                            ]
+                        }>
+                            <View style={
+                                [
+                                    styles.rowLayout,
+                                    styles.smallGap,
+                                    { justifyContent: 'center' }
+                                ]
+                            }>
+                                <Pressable
+                                    onPressIn={() => Linking.openURL('https://www.linkedin.com/in/mukul-kumar-488b1119b/')}
+                                    style={[
+                                        styles.rowLayout,
+                                        styles.mediumGap,
+                                        styles.smallPill
+                                    ]}
+                                >
+                                    <SmallMaterialIcon name="linkedin" color={grey} />
+                                    <Text
+                                        style={[
+                                            styles.text, styles.smallText,
+                                            styles.textDisabled
+                                        ]}>
+                                        LinkedIn
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    onPressIn={() => Linking.openURL('https://www.reddit.com/user/ElectionExciting2087/')}
+                                    style={[
+                                        styles.rowLayout,
+                                        styles.mediumGap,
+                                        styles.smallPill
+                                    ]}
+                                >
+                                    <SmallMaterialIcon name="reddit" color={grey} />
+                                    <Text
+                                        style={[
+                                            styles.text, styles.smallText,
+                                            styles.textDisabled
+                                        ]}>
+                                        Reddit
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    onPressIn={() => Linking.openURL('http://tabberfm.000webhostapp.com')}
+                                    style={[
+                                        styles.rowLayout,
+                                        styles.mediumGap,
+                                        styles.smallPill
+                                    ]}
+                                >
+                                    <SmallMaterialIcon name="web" color={grey} />
+                                    <Text
+                                        style={[
+                                            styles.text, styles.smallText,
+                                            styles.textDisabled
+                                        ]}>
+                                        Privacy Policy
+                                    </Text>
+                                </Pressable>
+                            </View>
                         </View>
                         <View
                             style={[

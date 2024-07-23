@@ -315,7 +315,6 @@ const Window = (props) => {
             <View style={[styles.wide]}>
                 {
                     useMemo(() => {
-                        console.log(props.index, "usememo")
                         return (
                             Boolean(state.tabs[props.index]["path"] == "Home") ?
                                 <ScrollView>

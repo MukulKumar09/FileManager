@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import styles, { secondaryColor } from "../../styles";
 import { useSelector, useDispatch } from "react-redux"
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
