@@ -356,20 +356,18 @@ const Window = props => {
                         key={i}
                         onPress={() => {
                           dispatch({
-                            type: 'ADDTAB',
+                            type: 'MODIFYTABPATH',
                             payload: {
-                              tabKey: state.tabCounter,
-                              title: item['name'],
-                              path: item['path'],
-                              type: 'filebrowser',
+                              tabId: state.currentTab,
+                              value: item['path'],
                             },
                           });
                           dispatch({
-                            type: 'SETCURRENTTAB',
-                            payload: state.tabCounter,
-                          });
-                          dispatch({
-                            type: 'INCREASETABCOUNTER',
+                            type: 'MODIFYTABNAME',
+                            payload: {
+                              tabId: state.currentTab,
+                              value: item['name'],
+                            },
                           });
                         }}
                         style={[
