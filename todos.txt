@@ -1,8 +1,47 @@
 delete, copy, move cancel
-sorting
-    modified
 tab position
 
 save maincache
 useCollectAllItem check exists
 fix share
+
+import RNFS from 'react-native-fs';
+
+// Define initial parameters
+const INITIAL_CHUNK_SIZE = 16 * 1024; // 16 KB
+const MAX_CHUNK_SIZE = 256 * 1024; // 256 KB
+const MIN_CHUNK_SIZE = 4 * 1024; // 4 KB
+const TIME_THRESHOLD = 2000; // 2 seconds
+
+// Function to copy file with dynamic chunk size adjustment
+const copyFileWithDynamicChunkSize = async (sourcePath, destPath) => {
+  let chunkSize = INITIAL_CHUNK_SIZE;
+  let bytesCopied = 0;
+  const stats = await RNFS.stat(sourcePath);
+  const totalSize = stats.size;
+
+  while (bytesCopied < totalSize) {
+    const startTime = Date.now();
+
+    const chunkEnd = Math.min(bytesCopied + chunkSize, totalSize);
+    const chunk = await RNFS.readFile(sourcePath, 'base64', bytesCopied, chunkEnd - bytesCopied);
+    await RNFS.writeFile(destPath, chunk, 'base64', bytesCopied);
+
+    const elapsedTime = Date.now() - startTime;
+
+    if (elapsedTime < TIME_THRESHOLD) {
+      // Increase chunk size if copying was fast
+      chunkSize = Math.min(chunkSize * 2, MAX_CHUNK_SIZE);
+    } else {
+      // Decrease chunk size if copying was slow
+      chunkSize = Math.max(chunkSize / 2, MIN_CHUNK_SIZE);
+    }
+
+    bytesCopied += chunkSize;
+  }
+
+  console.log('File copy completed');
+};
+
+// Usage example
+copyFileWithDynamicChunkSize('/path/to/source', '/path/to/destination');
