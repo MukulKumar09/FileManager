@@ -1,11 +1,8 @@
-import {Image, Text} from 'react-native';
-import RNFS from 'react-native-fs';
-import {openDatabase} from 'react-native-sqlite-storage';
+import {Text} from 'react-native';
 import styles from '../styles';
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 
 export default function useIcon(fileType) {
-  console.log(fileType);
   if (fileType == undefined)
     return <MaterialIcon name="folder" color="orange" />;
   else

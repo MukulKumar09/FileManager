@@ -1,17 +1,20 @@
-import {Text, View, ScrollView, Pressable} from 'react-native';
+import {Text, View, ScrollView, Pressable, TextInput} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import styles, {secondaryColor} from '../../styles';
 import ContextMenu from '../ContextMenu/ContextMenu';
 import CircularButton from '../../Common/CircularButton/CircularButton';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
+import SearchBar from '../SearchBar/SearchBar';
 
-export default function FileBrowserToolBar(props) {
+export default function ToolBar(props) {
   const dispatch = useDispatch();
   const state = {
     contextMenu: useSelector(state => state.contextMenu),
     tabs: useSelector(state => state.tabs),
     currentTab: useSelector(state => state.currentTab),
+    searchBar: useSelector(state => state.searchBar),
   };
+
   return (
     <>
       <View
@@ -23,8 +26,17 @@ export default function FileBrowserToolBar(props) {
             overflow: 'hidden',
           },
         ]}>
+        {Boolean(state.searchBar) && <SearchBar />}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={[styles.rowLayout]}>
+            <CircularButton
+              functionName={() => {
+                dispatch({
+                  type: 'SEARCHBAR',
+                });
+              }}
+              name="magnify"
+            />
             {state.currentTab &&
             state.tabs[state.currentTab]['path'] == 'Home' ? null : (
               <>
