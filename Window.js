@@ -1,20 +1,18 @@
 import {useEffect, useMemo, useState} from 'react';
 import {BackHandler, Text, View, Pressable, ScrollView} from 'react-native';
-import RNFS from 'react-native-fs';
 import {useSelector, useDispatch} from 'react-redux';
 import Share from 'react-native-share';
 import MaterialIcon from './Common/MaterialIcon/MaterialIcon';
 import FilesList from './Features/FilesList/FilesList';
 import SortModal from './Modals/SortModal/SortModal';
 import WindowToolBar from './Features/WindowToolBar/WindowToolBar';
-import useStageItems from './Hooks/useStageItems';
 import useFileHandler from './Hooks/useFileHandler';
 import useSort from './Hooks/useSort';
 import useRangeSelect from './Hooks/useRangeSelect';
 import useCache from './Hooks/useCache';
-import useOpenExternally from './Hooks/useOpenExternally';
 import useNavigateParent from './Hooks/useNavigateParent';
 import styles, {backgroundColor} from './styles';
+import ToolBar from './Features/ToolBar/ToolBar';
 
 const Window = props => {
   const dispatch = useDispatch();
@@ -31,6 +29,7 @@ const Window = props => {
   };
   const [filesList, setFilesList] = useState([]);
   const [searchModal, setSearchModal] = useState(0);
+  const [contextMenu, setContextMenu] = useState(0);
   //selection
   const [selectedItem, setSelectedItem] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -57,6 +56,7 @@ const Window = props => {
           return false;
         } else {
           setSelectedItem({path: state.tabs[props.index]['path']});
+          setContextMenu(0);
           useNavigateParent(state, dispatch);
         }
         return true;
@@ -90,158 +90,6 @@ const Window = props => {
     if (selectedItems.length == 0) setSelectionFlag(0);
     else setSelectionFlag(1);
   }, [selectedItems]);
-
-  useEffect(() => {
-    if (state.currentTab == props.index && state.functionId > -1) {
-      switch (state.functionId) {
-        case 0:
-        case 1: {
-          //copy, move
-          if (selectedItems.length == 0) {
-            dispatch({
-              type: 'TOAST',
-              payload: 'No items selected',
-            });
-            functionId(-1);
-          } else {
-            const checkExists = async () => {
-              let tempSelectedItems = [...selectedItems];
-              for (let i = 0; i < tempSelectedItems.length; i++) {
-                if (await RNFS.exists(tempSelectedItems[i]['path'])) {
-                  let itemStat = await RNFS.stat(tempSelectedItems[i]['path']);
-                  tempSelectedItems[i]['size'] = itemStat['size'];
-                }
-              }
-              dispatch({
-                type: 'COPYTOCB',
-                payload: tempSelectedItems,
-              });
-              dispatch({
-                type: 'OPERATIONTYPE',
-                payload: state.functionId,
-              });
-              dispatch({
-                type: 'OPERATIONSOURCE',
-                payload: state.tabs[state.currentTab]['path'],
-              });
-              dispatch({
-                type: 'TOAST',
-                payload:
-                  tempSelectedItems.length +
-                  ' item(s) ' +
-                  (state.functionId ? 'moving' : 'copied'),
-              });
-            };
-            checkExists();
-            functionId(-1);
-          }
-          break;
-        }
-        case 2: {
-          //delete
-          if (selectedItems.length == 0) {
-            dispatch({
-              type: 'TOAST',
-              payload: 'No items selected',
-            });
-            functionId(-1);
-          } else {
-            let items = [];
-            selectedItems.map(item => {
-              let tempItem = {
-                name: item['name'],
-                path: item['path'],
-                fileType: item['fileType'],
-                size: item['size'],
-              };
-              if (
-                state.recycleBin.find(
-                  item => item['path'] == tempItem['path'],
-                ) == undefined
-              ) {
-                items.push(tempItem);
-              }
-            });
-            dispatch({
-              type: 'ADDTORECYCLEBIN',
-              payload: items,
-            });
-            dispatch({
-              type: 'TOAST',
-              payload: selectedItems.length + ' item(s) added to Recycle Bin',
-            });
-            functionId(-1);
-          }
-          break;
-        }
-        case 3: {
-          //rename
-          if (selectedItem.length == 0) {
-            dispatch({
-              type: 'TOAST',
-              payload: 'No items selected',
-            });
-          } else {
-            useStageItems(state, dispatch, selectedItem);
-          }
-          functionId(-1);
-          break;
-        }
-        case 8: {
-          if (selectedItem.length == 0 || selectedItem['isDirectory']) {
-            dispatch({
-              type: 'TOAST',
-              payload: 'No items selected',
-            });
-          } else {
-            useOpenExternally(dispatch, selectedItem);
-          }
-          functionId(-1);
-          break;
-        }
-        case 9: {
-          if (selectedItems.length == 0) {
-            dispatch({
-              type: 'TOAST',
-              payload: 'No items selected',
-            });
-          } else {
-            dispatch({
-              type: 'PROPERTIESMODAL',
-              payload: selectedItems,
-            });
-          }
-          functionId(-1);
-          break;
-        }
-        case 10: {
-          //open as
-          if (selectedItem.length == 0 || selectedItem['isDirectory']) {
-            dispatch({
-              type: 'TOAST',
-              payload: 'No items selected',
-            });
-          } else {
-            dispatch({
-              type: 'OPENASMODAL',
-              payload: selectedItem,
-            });
-          }
-          functionId(-1);
-          break;
-        }
-        default: {
-          useStageItems(state, dispatch, selectedItem);
-          functionId(-1);
-        }
-      }
-    }
-  }, [state.functionId]);
-
-  useEffect(() => {
-    if (state.currentTab == props.index)
-      useStageItems(state, dispatch, selectedItems);
-  }, [state.clipboardItems]);
 
   const handlePress = item => {
     if (selectionFlag) selectItem(item);
@@ -407,6 +255,12 @@ const Window = props => {
         setSortModal={setSortModal}
         setSearchModal={setSearchModal}
         handleSort={handleSort}
+      />
+      <ToolBar
+        selectedItem={selectedItem}
+        selectedItems={selectedItems}
+        contextMenu={contextMenu}
+        setContextMenu={setContextMenu}
       />
     </View>
   );

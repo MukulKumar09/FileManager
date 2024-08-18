@@ -37,7 +37,6 @@ import textEditorUnsavedPromiseResolver from './textEditorUnsavedPromiseResolver
 import openAsModal from './openAsModal';
 import recycleBinModal from './recycleBinModal';
 import deleteModal from './deleteModal';
-import searchBar from './searchBar';
 
 const rootReducer = combineReducers({
   aboutModal,
@@ -79,6 +78,5 @@ const rootReducer = combineReducers({
   openAsModal,
   recycleBinModal,
   deleteModal,
-  searchBar,
 });
 export default rootReducer;

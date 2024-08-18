@@ -6,7 +6,7 @@ import styles, {backgroundColor, grey} from '../../styles';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const dispatch = useDispatch();
   const state = {
     contextMenu: useSelector(state => state.contextMenu),
@@ -18,8 +18,8 @@ export default function SearchBar() {
   const [typeModal, setTypeModal] = useState(0);
   return (
     <Animated.View
-      entering={FadeInLeft.duration(50)}
-      exiting={FadeOutLeft.duration(50)}
+      // entering={FadeInLeft.duration(50)}
+      // exiting={FadeOutLeft.duration(50)}
       style={[
         styles.pill,
         styles.rowLayout,
@@ -53,10 +53,10 @@ export default function SearchBar() {
             ]}>
             <View style={{width: '100%'}}>
               <Pressable
-                onPress={() => {
-                  setType('search');
-                  setTypeModal(0);
-                }}
+                // onPress={() => {
+                //   setType('search');
+                //   setTypeModal(0);
+                // }}
                 style={[
                   styles.rowLayout,
                   styles.wide,
@@ -64,11 +64,13 @@ export default function SearchBar() {
                   styles.padding,
                 ]}>
                 <MaterialIcon name="magnify" />
-                <Text style={[styles.text]}>Files Search</Text>
+                <Text style={[styles.text, styles.textDisabled]}>
+                  Files Search (Coming soon)
+                </Text>
               </Pressable>
               <Pressable
                 onPress={() => {
-                  setType('webbrowser');
+                  setType('webview');
                   setTypeModal(0);
                 }}
                 style={[
@@ -100,9 +102,7 @@ export default function SearchBar() {
       )}
       <Pressable
         onPress={() => {
-          dispatch({
-            type: 'SEARCHBAR',
-          });
+          props.setSearchBar(0);
         }}
         style={[styles.padding]}>
         <SmallMaterialIcon name="close" color={grey} />
@@ -119,7 +119,7 @@ export default function SearchBar() {
           {type == 'filebrowser' && (
             <SmallMaterialIcon name="folder" color="#FFC107" />
           )}
-          {type == 'webbrowser' && (
+          {type == 'webview' && (
             <SmallMaterialIcon name="web" color="#4FC3F7" />
           )}
           {type == 'search' && (

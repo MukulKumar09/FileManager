@@ -1,40 +1,34 @@
-import {Pressable, ScrollView, View} from 'react-native';
-import styles, {backgroundColor, secondaryColor} from '../../styles';
+import {Pressable, ScrollView, View, Modal} from 'react-native';
+import styles, {backgroundColor} from '../../styles';
 import {useSelector, useDispatch} from 'react-redux';
-import Animated, {FadeInDown, FadeOutDown} from 'react-native-reanimated';
 import useCache from '../../Hooks/useCache';
 import MenuItem from '../../Common/MenuItem/MenuItem';
+import openInNewTabOperation from '../../Common/Operations/openInNewTabOperation';
+import useOpenExternally from '../../Hooks/useOpenExternally';
 
-export default function ContextMenu() {
+export default function ContextMenu(props) {
   const state = {
     tabs: useSelector(state => state.tabs),
     currentTab: useSelector(state => state.currentTab),
     tabCounter: useSelector(state => state.tabCounter),
+    contextMenu: useSelector(state => state.contextMenu),
   };
   const dispatch = useDispatch();
+  const contextMenuHide = () => {
+    props.setContextMenu(0);
+  };
   return (
-    <Animated.View
-      entering={FadeInDown.duration(50)}
-      exiting={FadeOutDown.duration(50)}
-      style={{
-        position: 'absolute',
-        zIndex: 1,
-        height: '100%',
-        width: '100%',
-      }}>
+    <Modal onRequestClose={() => contextMenuHide()} transparent={true}>
       <Pressable
-        onPressIn={() =>
-          dispatch({
-            type: 'CONTEXTMENU',
-          })
-        }
+        onPress={() => contextMenuHide()}
         style={{
           position: 'absolute',
           top: 0,
           bottom: 0,
           left: 0,
           right: 0,
-        }}></Pressable>
+        }}
+      />
       <View
         style={[
           styles.pill,
@@ -52,39 +46,55 @@ export default function ContextMenu() {
         <ScrollView>
           <MenuItem
             functionName={() => {
-              dispatch({
-                type: 'FUNCTIONID',
-                payload: 8,
-              });
+              if (
+                props.selectedItem.length == 0 ||
+                props.selectedItem['isDirectory']
+              ) {
+                dispatch({
+                  type: 'TOAST',
+                  payload: 'No items selected',
+                });
+              } else {
+                useOpenExternally(dispatch, props.selectedItem);
+              }
             }}
             icon="file-move-outline"
             name="Open in another app"
           />
           <MenuItem
             functionName={() => {
-              dispatch({
-                type: 'FUNCTIONID',
-                payload: 10,
-              });
+              if (
+                props.selectedItem.length == 0 ||
+                props.selectedItem['isDirectory']
+              ) {
+                dispatch({
+                  type: 'TOAST',
+                  payload: 'No items selected',
+                });
+              } else {
+                dispatch({
+                  type: 'OPENASMODAL',
+                  payload: props.selectedItem,
+                });
+              }
             }}
             icon="file-question-outline"
             name="Open as"
           />
           <MenuItem
             functionName={() => {
-              dispatch({
-                type: 'FUNCTIONID',
-                payload: 4,
-              });
+              openInNewTabOperation(state, dispatch, props.selectedItem);
+              contextMenuHide();
             }}
             icon="tab-plus"
             name="Open in new tab"
           />
           <View style={[styles.divider, {backgroundColor: backgroundColor}]} />
           <MenuItem
-            functionName={() =>
-              useCache(dispatch, state.tabs[state.currentTab]['path'])
-            }
+            functionName={() => {
+              useCache(dispatch, state.tabs[state.currentTab]['path']);
+              contextMenuHide();
+            }}
             icon="refresh"
             name="Refresh"
           />
@@ -98,23 +108,23 @@ export default function ContextMenu() {
             name="Clipboard"
           />
           {/* 
-                            <View
-                                style={[
-                                    styles.rowLayout
-                                ]}>
-                                <Pressable
-                                    style={[
-                                        styles.rowLayout,
-                                        styles.bigGap,
-                                        styles.wide,
-                                        styles.padding
-                                    ]}
-                                    onPressIn={() => { readySet(4, selectedItems) }}
-                               ><Image source={require('../../assets/archive.png')} />
-                                    <Text style={[styles.text,styles.wide]}>Archive</Text>
-                                </Pressable>
-                            </View>
-                             */}
+            <View
+                style={[
+                    styles.rowLayout
+                ]}>
+                <Pressable
+                    style={[
+                        styles.rowLayout,
+                        styles.bigGap,
+                        styles.wide,
+                        styles.padding
+                    ]}
+                    onPressIn={() => { readySet(4, selectedItems) }}
+                ><Image source={require('../../assets/archive.png')} />
+                    <Text style={[styles.text,styles.wide]}>Archive</Text>
+                </Pressable>
+            </View>
+              */}
           <MenuItem
             functionName={() => {
               dispatch({
@@ -125,12 +135,19 @@ export default function ContextMenu() {
             name="Recycle Bin"
           />
           <MenuItem
-            functionName={() =>
-              dispatch({
-                type: 'FUNCTIONID',
-                payload: 9,
-              })
-            }
+            functionName={() => {
+              if (props.selectedItems.length == 0) {
+                dispatch({
+                  type: 'TOAST',
+                  payload: 'No items selected',
+                });
+              } else {
+                dispatch({
+                  type: 'PROPERTIESMODAL',
+                  payload: props.selectedItems,
+                });
+              }
+            }}
             icon="details"
             name="Properties"
           />
@@ -155,6 +172,6 @@ export default function ContextMenu() {
           />
         </ScrollView>
       </View>
-    </Animated.View>
+    </Modal>
   );
 }

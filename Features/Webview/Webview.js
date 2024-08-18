@@ -13,7 +13,7 @@ import styles, {grey} from '../../styles';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import RNFS from 'react-native-fs';
 
-export default function Webbrowser(props) {
+export default function Webview(props) {
   const dispatch = useDispatch();
   const state = {
     tabs: useSelector(state => state.tabs),
@@ -113,7 +113,7 @@ export default function Webbrowser(props) {
               tabKey: state.tabCounter,
               title: 'Browser',
               path: synthenticEvent['nativeEvent']['targetUrl'],
-              type: 'webbrowser',
+              type: 'webview',
             },
           });
           dispatch({

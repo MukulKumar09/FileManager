@@ -1,10 +1,15 @@
-import {Text, View, ScrollView, Pressable, TextInput} from 'react-native';
+import {Text, View, ScrollView, Pressable} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import styles, {secondaryColor} from '../../styles';
 import ContextMenu from '../ContextMenu/ContextMenu';
 import CircularButton from '../../Common/CircularButton/CircularButton';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import SearchBar from '../SearchBar/SearchBar';
+import copyOperation from '../../Common/Operations/copyOperation';
+import renameOperation from '../../Common/Operations/renameOperation';
+import deleteOperation from '../../Common/Operations/deleteOperation';
+import newItemOperation from '../../Common/Operations/newItemOperation';
+import {useState} from 'react';
 
 export default function ToolBar(props) {
   const dispatch = useDispatch();
@@ -12,8 +17,9 @@ export default function ToolBar(props) {
     contextMenu: useSelector(state => state.contextMenu),
     tabs: useSelector(state => state.tabs),
     currentTab: useSelector(state => state.currentTab),
-    searchBar: useSelector(state => state.searchBar),
+    recycleBin: useSelector(state => state.recycleBin),
   };
+  const [searchBar, setSearchBar] = useState(0);
 
   return (
     <>
@@ -26,14 +32,12 @@ export default function ToolBar(props) {
             overflow: 'hidden',
           },
         ]}>
-        {Boolean(state.searchBar) && <SearchBar />}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {Boolean(searchBar) && <SearchBar setSearchBar={setSearchBar} />}
+        <ScrollView horizontal>
           <View style={[styles.rowLayout]}>
             <CircularButton
               functionName={() => {
-                dispatch({
-                  type: 'SEARCHBAR',
-                });
+                setSearchBar(1);
               }}
               name="magnify"
             />
@@ -42,38 +46,26 @@ export default function ToolBar(props) {
               <>
                 <CircularButton
                   functionName={() => {
-                    dispatch({
-                      type: 'FUNCTIONID',
-                      payload: 0,
-                    });
+                    copyOperation(state, dispatch, props.selectedItems, 0);
                   }}
                   name="content-copy"
                 />
                 <CircularButton
                   functionName={() => {
-                    dispatch({
-                      type: 'FUNCTIONID',
-                      payload: 1,
-                    });
+                    copyOperation(state, dispatch, props.selectedItems, 1);
                   }}
                   name="content-cut"
                 />
                 <CircularButton
                   functionName={() => {
-                    dispatch({
-                      type: 'FUNCTIONID',
-                      payload: 2,
-                    });
+                    deleteOperation(state, dispatch, props.selectedItems);
                   }}
                   name="delete-outline"
                 />
                 <CircularButton
-                  functionName={() =>
-                    dispatch({
-                      type: 'FUNCTIONID',
-                      payload: 3,
-                    })
-                  }
+                  functionName={() => {
+                    renameOperation(state, dispatch, props.selectedItem);
+                  }}
                   name="square-edit-outline"
                 />
                 {/* <CircularButton
@@ -82,21 +74,11 @@ export default function ToolBar(props) {
                         /> */}
                 <Text style={{color: secondaryColor}}> | </Text>
                 <CircularButton
-                  functionName={() =>
-                    dispatch({
-                      type: 'FUNCTIONID',
-                      payload: 6,
-                    })
-                  }
+                  functionName={() => newItemOperation(state, dispatch, 1)}
                   name="file-plus-outline"
                 />
                 <CircularButton
-                  functionName={() =>
-                    dispatch({
-                      type: 'FUNCTIONID',
-                      payload: 5,
-                    })
-                  }
+                  functionName={() => newItemOperation(state, dispatch, 0)}
                   name="folder-plus-outline"
                 />
               </>
@@ -115,16 +97,14 @@ export default function ToolBar(props) {
         />
         <Pressable
           style={[styles.pill, styles.text, styles.padding]}
-          onPress={() =>
-            dispatch({
-              type: 'CONTEXTMENU',
-            })
-          }>
+          onPress={() => props.setContextMenu(!props.contextMenu)}>
           <MaterialIcon name="menu" />
         </Pressable>
       </View>
-      {Boolean(state.contextMenu) && (
+      {Boolean(props.contextMenu) && (
         <ContextMenu
+          selectedItem={props.selectedItem}
+          selectedItems={props.selectedItems}
           setContextMenu={props.setContextMenu}
           setClipBoardModal={props.setClipBoardModal}
           setAboutModal={props.setAboutModal}

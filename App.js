@@ -8,7 +8,7 @@ import Tabbar from './Features/Tabbar/Tabbar';
 import Modals from './Modals/Modals';
 import useMountingPoints from './Hooks/useMountingPoints';
 import OperationWindow from './Features/OperationWindow/OperationWindow';
-import Webbrowser from './Features/Webbrowser/Webbrowser';
+import Webview from './Features/Webview/Webview';
 import MediaViewer from './Features/MediaViewer/MediaViewer';
 
 const App = () => {
@@ -80,7 +80,7 @@ const App = () => {
                 </View>
               );
             }
-            case 'webbrowser': {
+            case 'webview': {
               return (
                 <View
                   key={index}
@@ -88,7 +88,7 @@ const App = () => {
                     flex: 1,
                     display: state.currentTab == index ? 'flex' : 'none',
                   }}>
-                  <Webbrowser index={index} />
+                  <Webview index={index} />
                 </View>
               );
             }
@@ -96,8 +96,7 @@ const App = () => {
         })}
       </View>
       {Boolean(state.operationWindow) && <OperationWindow />}
-      {Boolean(state.tabs[state.currentTab]) &&
-        state.tabs[state.currentTab]['type'] == 'filebrowser' && <ToolBar />}
+      {/* {Boolean(state.tabs[state.currentTab]) && state.tabs[state.currentTab]['type'] == 'filebrowser' && <ToolBar />} */}
       <Tabbar width={width} />
       {/* <Pressable onPress={() => getAllTasks()}><Text>All data</Text></Pressable> */}
     </View>

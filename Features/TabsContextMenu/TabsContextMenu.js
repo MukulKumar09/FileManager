@@ -90,7 +90,7 @@ export default function TabsContextMenu() {
         />
         <MenuItem
           icon="web"
-          name="New Web Browser"
+          name="New Webview"
           functionName={() => {
             dispatch({
               type: 'ADDTAB',
@@ -98,7 +98,7 @@ export default function TabsContextMenu() {
                 tabKey: state.tabCounter,
                 title: 'Browser',
                 path: '',
-                type: 'webbrowser',
+                type: 'webview',
               },
             });
             dispatch({
