@@ -1,6 +1,4 @@
 import RNFS from 'react-native-fs';
-import {openDatabase} from 'react-native-sqlite-storage';
-import useThumbnail from './useThumbnail';
 
 export default async function useCache(dispatch, path) {
   // const getDBConnection = async () => {
@@ -28,8 +26,12 @@ export default async function useCache(dispatch, path) {
   //     console.log(error);
   // });
 
-  let dirData = await RNFS.readDir(path);
-  console.log(dirData[0]);
+  let dirData = [];
+  try {
+    dirData = await RNFS.readDir(path);
+  } catch (error) {
+    console.log(dirData);
+  }
   dirData.map(item => {
     item['isDirectory'] = item.isDirectory();
     item['isFile'] = item.isFile();

@@ -1,5 +1,5 @@
 import {Text, Pressable, View, Modal} from 'react-native';
-import styles, {backgroundColor} from '../../styles';
+import styles, {backgroundColor} from '../../styles/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';

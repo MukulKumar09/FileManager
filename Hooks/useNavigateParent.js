@@ -3,7 +3,7 @@ export default function useNavigateParent(state, dispatch) {
   for (let i = 0; i < state.cache.length; i++) {
     if (path == state.cache[i]['path']) {
       dispatch({
-        type: 'MODIFYTABPATH',
+        type: 'UPDATETAB',
         payload: {
           tabId: state.currentTab,
           value: 'Home',
@@ -25,7 +25,7 @@ export default function useNavigateParent(state, dispatch) {
   let parentPath = path;
   path = path.join('/');
   dispatch({
-    type: 'MODIFYTABPATH',
+    type: 'UPDATETAB',
     payload: {
       tabId: state.currentTab,
       value: path,

@@ -1,5 +1,5 @@
 import {Text} from 'react-native';
-import styles from '../styles';
+import styles from '../styles/styles';
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 
 export default function useIcon(fileType) {

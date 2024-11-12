@@ -1,6 +1,6 @@
 import {View, Image, Pressable, TextInput} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import styles, {grey} from '../../styles';
+import styles, {grey} from '../../styles/styles';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
 export default function FilterBar(props) {
   const dispatch = useDispatch();

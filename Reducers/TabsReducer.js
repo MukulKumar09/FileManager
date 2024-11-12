@@ -1,38 +1,18 @@
 export default function tabs(state = {}, action) {
   switch (action.type) {
-    case 'ADDTAB':
+    case 'ADDTAB': {
       return {
         ...state,
-        [action.payload.tabKey]: {
-          title: action.payload.title,
-          path: action.payload.path,
-          type: action.payload.type,
+        [action.payload.counter]: {
+          item: {name: 'Home', path: 'Home'},
         },
       };
-    case 'MODIFYTABNAME': {
+    }
+    case 'UPDATETAB': {
       let tempState = {...state};
-      tempState[action.payload.tabId]['title'] = action.payload.value;
+      tempState[action.payload.index]['item'] = action.payload.item;
       return tempState;
     }
-    case 'MODIFYTABPATH': {
-      let tempState = {...state};
-      tempState[action.payload.tabId]['path'] = action.payload.value;
-      return tempState;
-    }
-    case 'MODIFYTABTYPE': {
-      let tempState = {...state};
-      tempState[action.payload.tabId]['type'] = action.payload.value;
-      return tempState;
-    }
-    case 'DUPLICATETAB':
-      return {
-        ...state,
-        [action.payload.tabKey]: {
-          title: action.payload.title,
-          path: action.payload.path,
-          type: action.payload.type,
-        },
-      };
     case 'DELETETAB': {
       let tempState = {...state};
       delete tempState[action.payload];
@@ -45,9 +25,7 @@ export default function tabs(state = {}, action) {
     case 'RESETTABS':
       return {
         0: {
-          title: 'Home',
-          path: 'Home',
-          type: 'filebrowser',
+          item: {name: 'Home', path: 'Home'},
         },
       };
     default:

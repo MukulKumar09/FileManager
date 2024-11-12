@@ -9,7 +9,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {WebView} from 'react-native-webview';
 import {useEffect, useRef, useState} from 'react';
-import styles, {grey} from '../../styles';
+import styles, {grey} from '../../styles/styles';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import RNFS from 'react-native-fs';
 
@@ -90,7 +90,7 @@ export default function Webview(props) {
         mixedContentMode="never"
         onLoadEnd={synthenticEvent => {
           dispatch({
-            type: 'MODIFYTABPATH',
+            type: 'UPDATETAB',
             payload: {
               tabId: props.index,
               value: synthenticEvent['nativeEvent']['url'],

@@ -1,5 +1,5 @@
 import {Pressable, ScrollView, View, Modal} from 'react-native';
-import styles, {backgroundColor} from '../../styles';
+import styles, {backgroundColor} from '../../styles/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import useCache from '../../Hooks/useCache';
 import MenuItem from '../../Common/MenuItem/MenuItem';

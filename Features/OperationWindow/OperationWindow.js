@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import styles from '../../styles';
+import styles from '../../styles/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import useStartOperation from '../../Hooks/useStartOperation';
 import useCache from '../../Hooks/useCache';

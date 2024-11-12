@@ -1,7 +1,7 @@
 import {Text, Pressable, View, Modal} from 'react-native';
 import Animated, {FadeInDown, FadeOutDown} from 'react-native-reanimated';
 import {useSelector, useDispatch} from 'react-redux';
-import styles, {backgroundColor} from '../../styles';
+import styles, {backgroundColor} from '../../styles/styles';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import useIcon from '../../Hooks/useIcon';
 import {useState} from 'react';

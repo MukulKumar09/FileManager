@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {grey} from '../../styles';
+import {grey} from '../../styles/styles';
 
 export default function SmallMaterialIcon(props) {
   return (

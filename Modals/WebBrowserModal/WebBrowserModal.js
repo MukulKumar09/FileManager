@@ -1,9 +1,9 @@
 import {Text, Pressable, View, Modal} from 'react-native';
-import styles, {backgroundColor} from '../../styles';
+import styles, {backgroundColor} from '../../styles/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import MenuItem from '../../Common/MenuItem/MenuItem';
-import Clipboard from '@react-native-clipboard/clipboard';
+// import Clipboard from '@react-native-clipboard/clipboard';
 
 export default function WebBrowserModal() {
   const dispatch = useDispatch();
@@ -94,7 +94,7 @@ export default function WebBrowserModal() {
             name="Download Image"
           />
         )}
-        <MenuItem
+        {/* <MenuItem
           functionName={() => {
             Clipboard.setString(state.webBrowserModal['url']);
             dispatch({
@@ -108,7 +108,7 @@ export default function WebBrowserModal() {
           }}
           icon="content-copy"
           name="Copy link address"
-        />
+        /> */}
         {/* <MenuItem
                     functionName={() => useCache(dispatch, state.tabs[state.currentTab]["url"])}
                     icon="share" name="Share link"
