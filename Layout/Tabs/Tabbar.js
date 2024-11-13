@@ -31,7 +31,6 @@ export default function Tabbar() {
         styles.rowLayout,
         styles.mediumGap,
         {
-          paddingTop: 10,
           justifyContent: 'space-between',
         },
       ]}>

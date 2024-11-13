@@ -24,12 +24,12 @@ function Windows() {
           />
         );
       })}
-      <Pressable onPress={() => setPath('/storage/emulated/0/Download')}>
+      {/* <Pressable onPress={() => setPath('/storage/emulated/0/Download')}>
         <Text>true path</Text>
       </Pressable>
       <Pressable onPress={() => setPath('/storage/emulated/0/Downloa')}>
         <Text>false path</Text>
-      </Pressable>
+      </Pressable> */}
     </>
   );
 }

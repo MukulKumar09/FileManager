@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View, Pressable} from 'react-native';
+import {useDispatch} from 'react-redux';
 import styles from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
-import {useDispatch} from 'react-redux';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import getAndSetFilesList from '../../../Services/getAndSetFilesList';
 
@@ -63,6 +63,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         dispatch={dispatch}
         index={index}
         filesList={filesList}
+        setFilesList={setFilesList}
         addBreadCrumb={addBreadCrumb}
       />
       <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
