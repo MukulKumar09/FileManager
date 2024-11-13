@@ -7,6 +7,7 @@ export default async function buildCache(realm, fullPath, cacheToInvalidate) {
     realm.write(() => {
       realm.delete(cacheToInvalidate);
     });
+
   const rnfsData = await RNFS.readDir(fullPath);
   for (item of rnfsData) {
     const {name, path, size, mtime, isDirectory} = item;

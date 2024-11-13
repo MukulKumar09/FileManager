@@ -1,30 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
-import getFilesList from '../../../Services/getFilesList';
 import FilesList from '../FilesList/FilesList';
 import {useDispatch} from 'react-redux';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
+import getAndSetFilesList from '../../../Services/getAndSetFilesList';
 
-const Window = React.memo(({index, sort, item, isActive}) => {
+const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
+  const dispatch = useDispatch();
+
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
   const [breadCrumbs, setBreadCrumbs] = useState([item]);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setIsLoading(1);
-    async function fetchFilesList() {
-      const data = await getFilesList(
-        breadCrumbs[breadCrumbs.length - 1],
-        sort,
-      );
-      setIsLoading(0);
-      setFilesList(data);
-    }
-    fetchFilesList();
-  }, [breadCrumbs]);
+  const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
 
   const addBreadCrumb = useCallback(
     item => {
@@ -32,6 +20,41 @@ const Window = React.memo(({index, sort, item, isActive}) => {
     },
     [breadCrumbs],
   );
+
+  useEffect(() => {
+    if (isRefresh) {
+      if (isActive) {
+        //if refresh recieved for current tab, refresh
+        getAndSetFilesList(setFilesList, setIsLoading, item, sort);
+      } else {
+        //otherwise set flag
+        setShouldBeRefreshed(1);
+      }
+    }
+  }, [isRefresh]);
+
+  useEffect(() => {
+    if (isActive) {
+      if (shouldBeRefreshed) {
+        //if flag is active, refresh
+        getAndSetFilesList(setFilesList, setIsLoading, item, sort);
+        setShouldBeRefreshed(0);
+      }
+    }
+  }, [isActive]);
+
+  //retrieve filesList for last breadcrumb
+  useEffect(() => {
+    const item = breadCrumbs[breadCrumbs.length - 1];
+    getAndSetFilesList(setFilesList, setIsLoading, item, sort);
+    dispatch({
+      type: 'UPDATETAB',
+      payload: {
+        index,
+        item,
+      },
+    });
+  }, [breadCrumbs]);
 
   return (
     <View style={[styles.wide, {display: isActive ? 'flex' : 'none'}]}>
@@ -42,12 +65,13 @@ const Window = React.memo(({index, sort, item, isActive}) => {
         filesList={filesList}
         addBreadCrumb={addBreadCrumb}
       />
-      <BreadCrumbs
-        dispatch={dispatch}
-        index={index}
-        breadCrumbs={breadCrumbs}
-        setBreadCrumbs={setBreadCrumbs}
-      />
+      <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
+      <Pressable
+        onPress={() =>
+          getAndSetFilesList(setFilesList, setIsLoading, item, sort)
+        }>
+        <Text>Refresh</Text>
+      </Pressable>
     </View>
   );
 });
