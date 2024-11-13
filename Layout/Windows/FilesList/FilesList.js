@@ -1,43 +1,69 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
+import {useDispatch} from 'react-redux';
 import navigateItem from '../../../Actions/navigateItem';
 import FilesListItem from './FilesListItem/FilesListItem';
 import highlightItem from '../../../Actions/highlightItem';
+import highlightItemsRange from '../../../Actions/highlightItemsRange';
 
-function FilesList({filesList, setFilesList, dispatch, index, addBreadCrumb}) {
+function FilesList({filesList, setFilesList, index, addBreadCrumb}) {
+  const dispatch = useDispatch();
+
+  //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
   const [selectedItems, setSelectedItems] = useState(0);
+  const [lastSelectItem, setLastSelectItem] = useState();
+
+  // useEffect(() => console.log(lastSelectItem), [lastSelectItem]);
 
   useEffect(() => {
     if (selectedItems == 0) setSelectionFlag(0);
   }, [selectedItems]);
-  const handlePress = item => {
-    if (selectionFlag) {
-      handleHighlightItem(item);
-    } else {
-      navigateItem(dispatch, index, item, addBreadCrumb);
-    }
-  };
 
-  const handleLongPress = item => {
-    if (selectionFlag) {
-    } else {
-      handleHighlightItem(item);
-    }
-  };
+  useEffect(() => {
+    const selected = filesList.filter(item => item.isHighlighted);
+    setSelectedItems(selected.length);
+  }, [filesList]);
 
-  const handleHighlightItem = item => {
-    highlightItem(
-      item,
-      filesList,
-      setFilesList,
-      setSelectionFlag,
-      setSelectedItems,
-    );
-  };
+  const handlePress = useCallback(
+    item => {
+      if (selectionFlag) {
+        const selectItems = highlightItem(item, filesList, setLastSelectItem);
+        setFilesList(selectItems);
+      } else {
+        navigateItem(dispatch, index, item, addBreadCrumb);
+      }
+    },
+    [filesList, index, selectionFlag],
+  );
+
+  const handleLongPress = useCallback(
+    item => {
+      if (selectionFlag) {
+        if (lastSelectItem.isHighlighted && item.isHighlighted) {
+          // toggleDragDrop([...filesList.filter(item=>item.isHighlighted)])
+          dispatch({type: 'TOAST', payload: 'toggle drag drop'});
+        } else {
+          const selectItems = highlightItemsRange(
+            item,
+            lastSelectItem,
+            filesList,
+            setLastSelectItem,
+          );
+          setFilesList(selectItems);
+        }
+      } else {
+        setSelectionFlag(1);
+        const selectItems = highlightItem(item, filesList, setLastSelectItem);
+        setFilesList(selectItems);
+      }
+    },
+    [lastSelectItem, filesList, selectionFlag],
+  );
 
   return (
     <ScrollView>
+      {/* convert to virtualized list */}
       {filesList.map(item => {
         return (
           <FilesListItem
@@ -45,6 +71,7 @@ function FilesList({filesList, setFilesList, dispatch, index, addBreadCrumb}) {
             item={item}
             handlePress={handlePress}
             handleLongPress={handleLongPress}
+            setLastSelectItem={setLastSelectItem}
             isHighlighted={item.isHighlighted}
           />
         );

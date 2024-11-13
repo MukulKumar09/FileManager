@@ -60,7 +60,6 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     <View style={[styles.wide, {display: isActive ? 'flex' : 'none'}]}>
       {Boolean(isLoading) && <Text>Loading...{item.name}</Text>}
       <FilesList
-        dispatch={dispatch}
         index={index}
         filesList={filesList}
         setFilesList={setFilesList}

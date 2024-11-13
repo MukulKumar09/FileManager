@@ -1,6 +1,5 @@
 import {Pressable, Text, View} from 'react-native';
 import React from 'react';
-import getStorageName from '../../../Services/getStorageName';
 import updateBreadCrumbs from '../../../Services/BreadCrumbs/updateBreadCrumbs';
 import goBackBreadCrumb from '../../../Services/BreadCrumbs/goBackBreadCrumb';
 import styles from '../../../styles/styles';
@@ -14,9 +13,7 @@ function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
             onPress={() => {
               setBreadCrumbs(updateBreadCrumbs(breadCrumbs, i));
             }}>
-            <Text>
-              {item.name == '' ? getStorageName(item.parent) : item.name}
-            </Text>
+            <Text>{item.name}</Text>
           </Pressable>
         );
       })}
