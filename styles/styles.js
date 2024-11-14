@@ -74,7 +74,7 @@ export default StyleSheet.create({
   },
   pill: {
     backgroundColor: primaryColor,
-    borderRadius: 30,
+    borderRadius: 10,
     justifyContent: 'center',
   },
   centered: {
@@ -128,6 +128,11 @@ export default StyleSheet.create({
   },
   bordered: {
     borderColor: secondaryColor,
+    borderWidth: 2,
+    borderStyle: 'solid',
+  },
+  whiteBordered: {
+    borderColor: 'white',
     borderWidth: 2,
     borderStyle: 'solid',
   },

@@ -13,8 +13,8 @@ export default function FilesListItem({
       onPress={() => {
         handlePress(item);
       }}
-      onLongPress={() => {
-        handleLongPress(item);
+      onLongPress={e => {
+        handleLongPress(e, item);
       }}
       style={[isHighlighted && styles.bordered]}>
       <Text>{item.name}</Text>

@@ -20,7 +20,7 @@ const TabButton = React.memo(({index, isActive, item}) => {
         styles.rowLayout,
         styles.pill,
         isActive && styles.pillHighlight,
-        {overflow: 'hidden'},
+        {overflow: 'hidden', marginHorizontal: 5},
       ]}>
       <Pressable
         onPress={() => {

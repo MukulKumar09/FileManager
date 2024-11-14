@@ -38,11 +38,17 @@ function FilesList({filesList, setFilesList, index, addBreadCrumb}) {
   );
 
   const handleLongPress = useCallback(
-    item => {
+    (e, item) => {
       if (selectionFlag) {
         if (lastSelectItem.isHighlighted && item.isHighlighted) {
-          // toggleDragDrop([...filesList.filter(item=>item.isHighlighted)])
-          dispatch({type: 'TOAST', payload: 'toggle drag drop'});
+          const {pageX, pageY} = e.nativeEvent;
+          dispatch({
+            type: 'DRAGNDROPICON',
+            payload: {
+              coordinates: {pageX, pageY},
+              items: [...filesList.filter(item => item.isHighlighted)],
+            },
+          });
         } else {
           const selectItems = highlightItemsRange(
             item,

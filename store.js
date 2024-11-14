@@ -31,7 +31,7 @@ import tabs from './Reducers/TabsReducer';
 import ToastReducer from './Reducers/ToastReducer';
 import propertiesModal from './Reducers/propertiesModal';
 import webBrowserModal from './Reducers/webBrowserModal';
-import tabsContextMenu from './Reducers/tabsContextMenu';
+import dragNDropIcon from './Reducers/dragNDropIcon';
 import allTabsModal from './Reducers/allTabsModal';
 import textEditorModal from './Reducers/textEditorModal';
 import textEditorUnsavedModal from './Reducers/textEditorUnsavedModal';
@@ -72,7 +72,7 @@ const rootReducer = combineReducers({
   tabs,
   ToastReducer,
   webBrowserModal,
-  tabsContextMenu,
+  dragNDropIcon,
   allTabsModal,
   textEditorModal,
   textEditorUnsavedModal,

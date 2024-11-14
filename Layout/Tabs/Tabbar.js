@@ -29,7 +29,6 @@ export default function Tabbar() {
     <View
       style={[
         styles.rowLayout,
-        styles.mediumGap,
         {
           justifyContent: 'space-between',
         },
@@ -38,7 +37,7 @@ export default function Tabbar() {
         ref={scrollViewRef}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        <View style={[styles.rowLayout, styles.mediumGap]}>
+        <View style={[styles.rowLayout]}>
           {Object.keys(state.tabs).map(index => {
             return (
               <TabButton

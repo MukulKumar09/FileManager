@@ -12,7 +12,7 @@ import TextEditorUnsavedModal from './TextEditorUnsavedModal/TextEditorUnsavedMo
 import OpenAsModal from './OpenAsModal/OpenAsModal';
 import DeleteModal from './DeleteModal/DeleteModal';
 import TextEditor from '../Features/TextEditor/TextEditor';
-import TabsContextMenu from '../Layout/Tabs/TabsContextMenu/TabsContextMenu';
+// import TabsContextMenu from '../Layout/Tabs/TabsContextMenu/TabsContextMenu';
 
 export default function Modals(props) {
   const state = {
@@ -25,7 +25,7 @@ export default function Modals(props) {
     favouritesModal: useSelector(state => state.favouritesModal),
     propertiesModal: useSelector(state => state.propertiesModal),
     webBrowserModal: useSelector(state => state.webBrowserModal),
-    tabsContextMenu: useSelector(state => state.tabsContextMenu),
+    // dragNDropIcon: useSelector(state => state.dragNDropIcon),
     allTabsModal: useSelector(state => state.allTabsModal),
     textEditorModal: useSelector(state => state.textEditorModal),
     textEditorUnsavedModal: useSelector(state => state.textEditorUnsavedModal),
@@ -52,7 +52,7 @@ export default function Modals(props) {
       )}
       {Boolean(state.propertiesModal) && <PropertiesModal />}
       {Boolean(state.webBrowserModal) && <WebBrowserModal />}
-      {Boolean(state.tabsContextMenu) && <TabsContextMenu />}
+      {/* {Boolean(state.dragNDropIcon) && <TabsContextMenu />} */}
       {Boolean(state.allTabsModal) && <AllTabsModal />}
       {Boolean(state.textEditorUnsavedModal) && <TextEditorUnsavedModal />}
       {Boolean(state.textEditorModal) && <TextEditor />}
