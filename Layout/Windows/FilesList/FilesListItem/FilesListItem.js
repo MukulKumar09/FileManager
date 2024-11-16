@@ -3,20 +3,18 @@ import styles from '../../../../styles/styles';
 
 export default function FilesListItem({
   item,
-  handlePress,
-  handleLongPress,
+  setHoveredItem,
   isHighlighted,
+  isHovered,
 }) {
   return (
     <Pressable
-      key={item.path}
-      onPress={() => {
-        handlePress(item);
-      }}
-      onLongPress={e => {
-        handleLongPress(e, item);
-      }}
-      style={[isHighlighted && styles.bordered]}>
+      onPressIn={() => setHoveredItem(item)}
+      style={[
+        isHighlighted && styles.bordered,
+        isHovered && styles.listItemSelected,
+        {height: 100},
+      ]}>
       <Text>{item.name}</Text>
     </Pressable>
   );

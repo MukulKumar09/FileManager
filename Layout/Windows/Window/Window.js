@@ -61,6 +61,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
       {Boolean(isLoading) && <Text>Loading...{item.name}</Text>}
       <FilesList
         index={index}
+        path={item.path}
         filesList={filesList}
         setFilesList={setFilesList}
         addBreadCrumb={addBreadCrumb}

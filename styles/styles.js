@@ -55,9 +55,9 @@ export default StyleSheet.create({
     backgroundColor: secondaryColor,
   },
   listItemSelected: {
-    borderWidth: 1,
+    borderWidth: 3,
     borderStyle: 'dashed',
-    borderColor: 'white',
+    borderColor: 'orange',
   },
   rowLayout: {
     flexDirection: 'row',

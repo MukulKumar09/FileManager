@@ -1,15 +1,9 @@
-import {Text, Pressable, View, ScrollView, Image} from 'react-native';
+import {Pressable, View, ScrollView, Text} from 'react-native';
 import TabButton from '../../Common/TabButton/TabButton';
 import styles from '../../styles/styles';
 import {useSelector, useDispatch} from 'react-redux';
-import Animated, {
-  Easing,
-  FadeInLeft,
-  FadeOutLeft,
-  LinearTransition,
-} from 'react-native-reanimated';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 export default function Tabbar() {
   const dispatch = useDispatch();
@@ -19,14 +13,36 @@ export default function Tabbar() {
     operationType: useSelector(state => state.operationType),
     currentTab: useSelector(state => state.currentTab),
     tabCounter: useSelector(state => state.tabCounter),
+    dragNDropIcon: useSelector(state => state.dragNDropIcon),
   };
   const scrollViewRef = useRef(0);
   const [position, setPosition] = useState({});
+
+  const [tabbarLayout, setTabbarLayout] = useState({});
+  const [tabLayouts, setLayouts] = useState({});
+
+  useEffect(() => {
+    if (state.dragNDropIcon.droppedCoordinates?.y >= tabbarLayout.y)
+      Object.keys(tabLayouts).map(tabLayout => {
+        const start = tabLayouts[tabLayout].x;
+        const end = tabLayouts[tabLayout].xWidth;
+        const droppedC = state.dragNDropIcon.droppedCoordinates?.x;
+
+        if (start <= droppedC && droppedC <= end) {
+          dispatch({
+            type: 'SETCURRENTTAB',
+            payload: tabLayout,
+          });
+        }
+      });
+    // console.log(state.dragNDropIcon['droppedCoordinates']);
+  }, [state.dragNDropIcon]);
   // useEffect(() => {
   //     scrollViewRef.current.scrollTo({ x: position[state.currentTab] })
   // }, [state.currentTab, position])
   return (
     <View
+      onLayout={event => setTabbarLayout(event.nativeEvent.layout)}
       style={[
         styles.rowLayout,
         {
@@ -45,6 +61,8 @@ export default function Tabbar() {
                 index={index}
                 item={state.tabs[index]['item']}
                 isActive={index == state.currentTab}
+                tabLayouts={tabLayouts}
+                setLayouts={setLayouts}
               />
             );
           })}
