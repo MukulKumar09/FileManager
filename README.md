@@ -12,7 +12,7 @@ Discover the ultimate file management experience with Tabber. Designed with a sl
 - Recycle Bin: Restore/Permanently Delete from it's Recycle Bin and ensure safety against accidental deletion.
 
 ### Trailer
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/nIyb3YC1uNo/0.jpg)](http://www.youtube.com/watch?v=nIyb3YC1uNo)
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/Lszvw3tU1CA/0.jpg)](https://youtu.be/Lszvw3tU1CA)
 
 ### Why Choose Tabber?
 
