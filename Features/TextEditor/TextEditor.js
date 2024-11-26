@@ -121,7 +121,7 @@ export default function TextEditor() {
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"
-          style={[styles.text, styles.wide, {padding: 15}]}>
+          style={[styles.text, styles.wide, styles.padding]}>
           {isEdited == 1 && '*'}
           {state.textEditorModal['name']}
         </Text>
@@ -136,7 +136,7 @@ export default function TextEditor() {
                   'Virtual Keyboard ' + (keyboard ? 'Disabled' : 'Enabled'),
               });
             }}
-            style={{padding: 15}}>
+            style={styles.padding}>
             <MaterialIcon
               name="keyboard-outline"
               color={keyboard ? 'white' : grey}
@@ -146,10 +146,10 @@ export default function TextEditor() {
             onPress={() => {
               saveFile();
             }}
-            style={{padding: 15}}>
+            style={styles.padding}>
             <MaterialIcon name="content-save-outline" color="white" />
           </Pressable>
-          <Pressable onPress={() => closeEditor()} style={{padding: 15}}>
+          <Pressable onPress={() => closeEditor()} style={styles.padding}>
             <MaterialIcon name="close" color="white" />
           </Pressable>
         </View>

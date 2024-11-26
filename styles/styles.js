@@ -14,8 +14,10 @@ export default StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
   },
+  oswald: {
+    fontFamily: 'Oswald-Regular',
+  },
   text: {
-    fontFamily: 'Pop-reg',
     includeFontPadding: false,
     color: textColor,
     fontSize: 15,
@@ -35,8 +37,11 @@ export default StyleSheet.create({
   textDisabled: {
     color: 'grey',
   },
+  marginSmall: {
+    margin: 5,
+  },
   padding: {
-    padding: 20,
+    padding: 15,
   },
   paddingTop: {
     paddingTop: 10,
@@ -46,8 +51,6 @@ export default StyleSheet.create({
     paddingStart: 0,
   },
   paddingCloseBottom: {
-    // marginHorizontal: 20,
-    // marginVertical: 10,
     margin: 10,
     marginBottom: 0,
   },
@@ -55,13 +58,16 @@ export default StyleSheet.create({
     backgroundColor: secondaryColor,
   },
   listItemSelected: {
-    borderWidth: 3,
+    borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: 'orange',
+    borderColor: 'white',
   },
   rowLayout: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  largeGap: {
+    gap: 40,
   },
   bigGap: {
     gap: 20,
@@ -82,7 +88,7 @@ export default StyleSheet.create({
   },
   pillHighlight: {
     backgroundColor: secondaryColor,
-    color: 'white',
+    color: 'whiter',
   },
   wide: {
     flex: 1,
@@ -90,7 +96,7 @@ export default StyleSheet.create({
   smallPill: {
     padding: 10,
     backgroundColor: primaryColor,
-    borderRadius: 20,
+    borderRadius: 8,
     alignItems: 'center',
   },
   input: {

@@ -107,7 +107,7 @@ export default function OpenAsModal() {
                 });
               }}
               style={[styles.rowLayout, styles.bigGap, styles.padding]}>
-              {useIcon('txt')}
+              {useIcon({ext: 'txt'})}
               <Text style={[styles.text]}>Text</Text>
             </Pressable>
             <Pressable
@@ -126,7 +126,7 @@ export default function OpenAsModal() {
                 });
               }}
               style={[styles.rowLayout, styles.bigGap, styles.padding]}>
-              {useIcon('png')}
+              {useIcon({ext: 'png'})}
               <Text style={[styles.text]}>Image</Text>
             </Pressable>
             <Pressable
@@ -145,7 +145,7 @@ export default function OpenAsModal() {
                 });
               }}
               style={[styles.rowLayout, styles.bigGap, styles.padding]}>
-              {useIcon('mp4')}
+              {useIcon({ext: 'mp4'})}
               <Text style={[styles.text]}>Video</Text>
             </Pressable>
             <Pressable
@@ -164,7 +164,7 @@ export default function OpenAsModal() {
                 });
               }}
               style={[styles.rowLayout, styles.bigGap, styles.padding]}>
-              {useIcon('mp3')}
+              {useIcon({ext: 'mp3'})}
               <Text style={[styles.text]}>Audio</Text>
             </Pressable>
             <MenuItem

@@ -199,7 +199,7 @@ function MediaViewer() {
                 styles.rowLayout,
                 styles.mediumGap,
                 styles.wide,
-                {padding: 15},
+                styles.padding,
               ]}>
               <MaterialIcon name="drag-vertical" />
               <Text

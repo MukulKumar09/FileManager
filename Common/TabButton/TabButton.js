@@ -11,6 +11,7 @@ const TabButton = React.memo(
     return (
       <View
         onLayout={e => {
+          console.log('tabbut');
           const layout = e.nativeEvent.layout;
           setLayouts({
             ...tabLayouts,
@@ -24,7 +25,7 @@ const TabButton = React.memo(
           styles.rowLayout,
           styles.pill,
           isActive && styles.pillHighlight,
-          {overflow: 'hidden', marginHorizontal: 5},
+          {overflow: 'hidden'},
         ]}>
         <Pressable
           onPress={() => {
@@ -33,13 +34,14 @@ const TabButton = React.memo(
               payload: index,
             });
           }}
-          style={[styles.rowLayout, styles.mediumGap, {padding: 15}]}>
-          {useIcon()}
-          <View style={{maxWidth: 100}}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}>
-              {item.name}
-            </Text>
-          </View>
+          style={[styles.rowLayout, styles.padding]}>
+          {useIcon(item)}
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.text, styles.oswald, {maxWidth: 100}]}>
+            {item.name}
+          </Text>
         </Pressable>
         {isActive && (
           <Pressable

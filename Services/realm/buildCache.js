@@ -2,7 +2,7 @@ import normalizeTimestamp from '../normalizeTimestamp';
 import RNFS from 'react-native-fs';
 
 export default async function buildCache(realm, fullPath, cacheToInvalidate) {
-  console.log('built cache');
+  console.log('built cache', fullPath);
   if (cacheToInvalidate)
     realm.write(() => {
       realm.delete(cacheToInvalidate);
@@ -36,6 +36,8 @@ export default async function buildCache(realm, fullPath, cacheToInvalidate) {
     item.path = path;
     item.type = type;
     item.ext = ext;
+    item.mtime = normalizedMtime;
   }
+
   return rnfsData;
 }

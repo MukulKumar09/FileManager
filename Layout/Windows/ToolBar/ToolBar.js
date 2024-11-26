@@ -1,15 +1,9 @@
 import {Text, View, ScrollView, Pressable} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import styles, {secondaryColor} from '../../styles/styles';
-import ContextMenu from '../ContextMenu/ContextMenu';
-import CircularButton from '../../Common/CircularButton/CircularButton';
-import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
-import SearchBar from '../SearchBar/SearchBar';
-import copyOperation from '../../Common/Operations/copyOperation';
-import renameOperation from '../../Common/Operations/renameOperation';
-import deleteOperation from '../../Common/Operations/deleteOperation';
-import newItemOperation from '../../Common/Operations/newItemOperation';
 import {useState} from 'react';
+import CircularButton from '../../../Common/CircularButton/CircularButton';
+import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
+import styles, {secondaryColor} from '../../../styles/styles';
 
 export default function ToolBar(props) {
   const dispatch = useDispatch();
@@ -26,8 +20,8 @@ export default function ToolBar(props) {
       <View
         style={[
           styles.rowLayout,
-          styles.paddingCloseBottom,
           styles.pill,
+          styles.marginSmall,
           {
             overflow: 'hidden',
           },
@@ -41,48 +35,48 @@ export default function ToolBar(props) {
               }}
               name="magnify"
             />
-            {state.currentTab &&
-            state.tabs[state.currentTab]['path'] == 'Home' ? null : (
-              <>
-                <CircularButton
-                  functionName={() => {
-                    copyOperation(state, dispatch, props.selectedItems, 0);
-                  }}
-                  name="content-copy"
-                />
-                <CircularButton
-                  functionName={() => {
-                    copyOperation(state, dispatch, props.selectedItems, 1);
-                  }}
-                  name="content-cut"
-                />
-                <CircularButton
-                  functionName={() => {
-                    deleteOperation(state, dispatch, props.selectedItems);
-                  }}
-                  name="delete-outline"
-                />
-                <CircularButton
-                  functionName={() => {
-                    renameOperation(state, dispatch, props.selectedItem);
-                  }}
-                  name="square-edit-outline"
-                />
-                {/* <CircularButton
-                            functionName={() => props.shareFiles()}
+            {/* {state.currentTab &&
+            state.tabs[state.currentTab]['path'] == 'Home' ? null : ( */}
+            <>
+              <CircularButton
+                functionName={() => {
+                  copyOperation(state, dispatch, props?.selectedItems, 0);
+                }}
+                name="content-copy"
+              />
+              <CircularButton
+                functionName={() => {
+                  copyOperation(state, dispatch, props?.selectedItems, 1);
+                }}
+                name="content-cut"
+              />
+              <CircularButton
+                functionName={() => {
+                  deleteOperation(state, dispatch, props?.selectedItems);
+                }}
+                name="delete-outline"
+              />
+              <CircularButton
+                functionName={() => {
+                  renameOperation(state, dispatch, props?.selectedItem);
+                }}
+                name="square-edit-outline"
+              />
+              {/* <CircularButton
+                            functionName={() => props?.shareFiles()}
                             imageUrl={require('../../assets/share.png')}
                         /> */}
-                <Text style={{color: secondaryColor}}> | </Text>
-                <CircularButton
-                  functionName={() => newItemOperation(state, dispatch, 1)}
-                  name="file-plus-outline"
-                />
-                <CircularButton
-                  functionName={() => newItemOperation(state, dispatch, 0)}
-                  name="folder-plus-outline"
-                />
-              </>
-            )}
+              <Text style={{color: secondaryColor}}> | </Text>
+              <CircularButton
+                functionName={() => newItemOperation(state, dispatch, 1)}
+                name="file-plus-outline"
+              />
+              <CircularButton
+                functionName={() => newItemOperation(state, dispatch, 0)}
+                name="folder-plus-outline"
+              />
+            </>
+            {/* )} */}
           </View>
         </ScrollView>
         <Text style={{color: secondaryColor}}> | </Text>
@@ -97,17 +91,17 @@ export default function ToolBar(props) {
         />
         <Pressable
           style={[styles.pill, styles.text, styles.padding]}
-          onPress={() => props.setContextMenu(!props.contextMenu)}>
+          onPress={() => props?.setContextMenu(!props?.contextMenu)}>
           <MaterialIcon name="menu" />
         </Pressable>
       </View>
-      {Boolean(props.contextMenu) && (
+      {Boolean(props?.contextMenu) && (
         <ContextMenu
-          selectedItem={props.selectedItem}
-          selectedItems={props.selectedItems}
-          setContextMenu={props.setContextMenu}
-          setClipBoardModal={props.setClipBoardModal}
-          setAboutModal={props.setAboutModal}
+          selectedItem={props?.selectedItem}
+          selectedItems={props?.selectedItems}
+          setContextMenu={props?.setContextMenu}
+          setClipBoardModal={props?.setClipBoardModal}
+          setAboutModal={props?.setAboutModal}
         />
       )}
     </>

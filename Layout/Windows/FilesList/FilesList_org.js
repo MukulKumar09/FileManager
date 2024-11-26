@@ -41,7 +41,8 @@ const FilesList = props => {
   return (
     <VirtualizedList
       ref={filesListRef}
-      onRefresh={() => useCache(dispatch, state.tabs[state.currentTab]['path'])}
+      // onRefresh={() => useCache(dispatch, state.tabs[state.currentTab]['path'])}
+      // refreshing={} //refresh flag
       ListEmptyComponent={
         <Text style={[styles.text, styles.textDisabled, styles.padding]}>
           No items found. Possible reasons: {'\n'}

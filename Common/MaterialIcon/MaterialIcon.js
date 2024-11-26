@@ -6,6 +6,7 @@ export default function MaterialIcon(props) {
     <MaterialCommunityIcons
       {...props}
       size={20}
+      style={{width: 30, textAlign: ''}}
       color={props.color ? props.color : grey}
     />
   );

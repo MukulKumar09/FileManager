@@ -1,8 +1,14 @@
-import {Pressable, Text} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import styles from '../../../../styles/styles';
+import useIcon from '../../../../Hooks/useIcon';
+import React from 'react';
+import {unixToDate} from '../../../../Services/unixToDate';
+import {bytesToSize} from '../../../../Services/bytesToSize';
 
-export default function FilesListItem({
+function FilesListItem({
   item,
+  handlePress,
+  handleLongPress,
   setHoveredItem,
   isHighlighted,
   isHovered,
@@ -10,12 +16,33 @@ export default function FilesListItem({
   return (
     <Pressable
       onPressIn={() => setHoveredItem(item)}
+      onPress={() => handlePress()}
+      onLongPress={event => handleLongPress(event.nativeEvent)}
       style={[
-        isHighlighted && styles.bordered,
+        styles.rowLayout,
+        styles.largeGap,
+        isHighlighted && styles.listItemHighlight,
         isHovered && styles.listItemSelected,
-        {height: 100},
+        {justifyContent: 'space-between'},
       ]}>
-      <Text>{item.name}</Text>
+      <View
+        style={[styles.wide, styles.rowLayout, styles.padding, styles.bigGap]}>
+        {useIcon(item)}
+        <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.text]}>
+          {item.name}
+        </Text>
+      </View>
+      <View style={[styles.padding, {alignItems: 'flex-end'}]}>
+        <Text style={[styles.text, styles.smallText]}>
+          {unixToDate(item.mtime)}
+        </Text>
+        {item.ext !== '/' && (
+          <Text style={[styles.text, styles.smallText]}>
+            {bytesToSize(item.size)}
+          </Text>
+        )}
+      </View>
     </Pressable>
   );
 }
+export default React.memo(FilesListItem);

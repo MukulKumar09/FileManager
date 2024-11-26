@@ -10,7 +10,8 @@ export default function sortFiles(data, sort) {
     nameDescending: (a, b) => b.name.localeCompare(a.name),
     sizeAscending: (a, b) => a.size - b.size,
     sizeDescending: (a, b) => b.size - a.size,
-    extAscending: (a, b) => a.ext - b.ext,
+    extAscending: (a, b) => a.ext.localeCompare(b.ext),
+    extDescending: (a, b) => b.ext.localeCompare(a.ext),
   };
 
   if (sort == 'extAscending') {

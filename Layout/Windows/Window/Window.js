@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View, Pressable} from 'react-native';
+import {Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import styles from '../../../styles/styles';
+import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
-import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import getAndSetFilesList from '../../../Services/getAndSetFilesList';
+import WindowToolBar from '../WindowToolBar/WindowToolBar';
+import ToolBar from '../ToolBar/ToolBar';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const dispatch = useDispatch();
@@ -57,22 +58,33 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   }, [breadCrumbs]);
 
   return (
-    <View style={[styles.wide, {display: isActive ? 'flex' : 'none'}]}>
+    <View
+      style={[
+        styles.wide,
+        {backgroundColor, display: isActive ? 'flex' : 'none'},
+      ]}>
       {Boolean(isLoading) && <Text>Loading...{item.name}</Text>}
-      <FilesList
-        index={index}
-        path={item.path}
-        filesList={filesList}
-        setFilesList={setFilesList}
-        addBreadCrumb={addBreadCrumb}
+
+      <View style={[styles.wide]}>
+        <FilesList
+          index={index}
+          path={item.path}
+          filesList={filesList}
+          setFilesList={setFilesList}
+          addBreadCrumb={addBreadCrumb}
+        />
+      </View>
+      <WindowToolBar
+        breadCrumbs={breadCrumbs}
+        setBreadCrumbs={setBreadCrumbs}
       />
-      <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
-      <Pressable
+      <ToolBar />
+      {/* <Pressable
         onPress={() =>
           getAndSetFilesList(setFilesList, setIsLoading, item, sort)
         }>
-        <Text>Refresh</Text>
-      </Pressable>
+        <Text style={[styles.text]}>Refresh</Text>
+      </Pressable> */}
     </View>
   );
 });

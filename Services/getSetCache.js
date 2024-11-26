@@ -6,11 +6,11 @@ export default async function getSetCache(realm, path) {
     return realmData;
   }
   //check if exists in cache
-  const findOneCache = realm
-    .objects('cache')
-    .find(cache => cache.parent == `${path}/`);
-  if (findOneCache) {
-    const cache = realm.objects('cache').filtered(`parent == "${path}/"`);
+  // const findOneCache = realm
+  //   .objects('cache')
+  //   .find(cache => cache.parent == `${path}/`);
+  const cache = realm.objects('cache').filtered(`parent == "${path}/"`);
+  if (cache.length > 0) {
     const cacheValidation = await validateCache(realm, path);
     if (cacheValidation) {
       //if yes, return cache

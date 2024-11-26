@@ -1,38 +1,35 @@
-import {View} from 'react-native';
-import FilterBar from '../FilterBar/FilterBar';
+import {Pressable, Text, View} from 'react-native';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
-import StatusBar from '../StatusBar/StatusBar';
+import styles from '../../../styles/styles';
+import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 
-export default function WindowToolBar(props) {
+export default function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
   return (
-    <>
-      <View>
-        {Boolean(props.selectionFlag) && (
-          <StatusBar
-            selectedItems={props.selectedItems}
-            setSelectedItems={props.setSelectedItems}
-            setSelectedItem={props.setSelectedItem}
-            filesList={props.filesList}
-          />
-        )}
-        <BreadCrumbs
-          index={props.index}
-          setSelectedItem={props.setSelectedItem}
-          setSortModal={props.setSortModal}
-          setSearchModal={props.setSearchModal}
-          setTabPath={props.setTabPath}
-          breadCrumbs={props.breadCrumbs}
-          tabData={props.tabData}
-        />
-        {Boolean(props.searchModal) && (
-          <FilterBar
-            index={props.index}
-            handleSort={props.handleSort}
-            filesList={props.filesList}
-            setSearchModal={props.setSearchModal}
-          />
-        )}
-      </View>
-    </>
+    <View style={[styles.rowLayout, styles.marginSmall, styles.mediumGap]}>
+      <Pressable style={[styles.rowLayout, styles.mediumGap]}>
+        <Text
+          style={[
+            styles.smallPill,
+            styles.text,
+            styles.textDisabled,
+            styles.smallText,
+          ]}>
+          <SmallMaterialIcon name="sort" color />
+        </Text>
+      </Pressable>
+      <Pressable style={[styles.rowLayout, styles.mediumGap]}>
+        <Text
+          style={[
+            styles.smallPill,
+            styles.text,
+            styles.textDisabled,
+            styles.smallText,
+          ]}>
+          <SmallMaterialIcon name="filter" color />
+        </Text>
+      </Pressable>
+      <Text style={[styles.textDisabled]}>|</Text>
+      <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
+    </View>
   );
 }

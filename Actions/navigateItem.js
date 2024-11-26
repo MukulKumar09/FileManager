@@ -1,9 +1,10 @@
 import useOpenExternally from '../Hooks/useOpenExternally';
 
 export default function navigateItem(dispatch, index, item, addBreadCrumb) {
-  const {parent, name, type} = item;
+  const {type} = item;
+
   if (type == 'file') {
-    useOpenExternally(dispatch, `${parent}${name}`);
+    useOpenExternally(dispatch, item);
     return;
   }
   addBreadCrumb(item);

@@ -20,11 +20,13 @@ const DragNDropIcon = ({dragNDropIcon}) => {
         },
       ]}>
       <Text
-        style={{
-          color: textColor,
-          fontSize: 15,
-          fontWeight: 'bold',
-        }}>
+        style={[
+          styles.oswald,
+          {
+            color: textColor,
+            fontSize: 16,
+          },
+        ]}>
         {items?.length}
       </Text>
       <Text style={[styles.smallText, {color: textColor}]}>items</Text>
