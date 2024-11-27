@@ -1,7 +1,7 @@
 import {Pressable, Text, View} from 'react-native';
 import styles from '../../../../styles/styles';
 import useIcon from '../../../../Hooks/useIcon';
-import React from 'react';
+import {memo} from 'react';
 import {unixToDate} from '../../../../Services/unixToDate';
 import {bytesToSize} from '../../../../Services/bytesToSize';
 
@@ -16,8 +16,8 @@ function FilesListItem({
   return (
     <Pressable
       onPressIn={() => setHoveredItem(item)}
-      onPress={() => handlePress()}
-      onLongPress={event => handleLongPress(event.nativeEvent)}
+      onPress={() => handlePress(item)}
+      onLongPress={event => handleLongPress(item, event.nativeEvent)}
       style={[
         styles.rowLayout,
         styles.largeGap,
@@ -45,4 +45,4 @@ function FilesListItem({
     </Pressable>
   );
 }
-export default React.memo(FilesListItem);
+export default memo(FilesListItem);

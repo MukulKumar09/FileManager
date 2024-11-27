@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {memo, useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import navigateItem from '../../../Actions/navigateItem';
 import highlightItem from '../../../Actions/highlightItem';
@@ -37,26 +37,30 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
     });
   };
 
-  const handlePress = useCallback(() => {
-    if (selectionFlag) {
-      const selectItems = highlightItem(
-        hoveredItem,
-        filesList,
-        setLastSelectItem,
-        setSelectedItems,
-      );
-      setFilesList(selectItems);
-    } else {
-      navigateItem(dispatch, index, hoveredItem, addBreadCrumb);
-    }
-  }, [hoveredItem, index, selectionFlag]);
+  const handlePress = useCallback(
+    item => {
+      if (selectionFlag) {
+        const selectItems = highlightItem(
+          item,
+          filesList,
+          setLastSelectItem,
+          setSelectedItems,
+        );
+        setFilesList(selectItems);
+      } else {
+        navigateItem(dispatch, index, item, addBreadCrumb);
+      }
+    },
+    [filesList, index, selectionFlag],
+  );
 
   const handleLongPress = useCallback(
-    event => {
+    (item, event) => {
       activateDragNDrop(event);
       if (selectionFlag) {
+        console.log('just clicked');
         const selectItems = highlightItemsRange(
-          hoveredItem,
+          item,
           lastSelectItem,
           filesList,
           setLastSelectItem,
@@ -66,7 +70,7 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
       } else {
         setSelectionFlag(1);
         const selectItems = highlightItem(
-          hoveredItem,
+          item,
           filesList,
           setLastSelectItem,
           setSelectedItems,
@@ -74,20 +78,17 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
         setFilesList(selectItems);
       }
     },
-    [lastSelectItem, hoveredItem, filesList, selectionFlag],
+    [filesList, lastSelectItem, selectionFlag],
   );
 
   return (
-    <>
-      {/* <Text style={[styles.text]}>{selectedItems}</Text> */}
-      <VirtualizedFilesList
-        filesList={filesList}
-        handlePress={handlePress}
-        handleLongPress={handleLongPress}
-        setHoveredItem={setHoveredItem}
-        hoveredItem={hoveredItem}
-      />
-    </>
+    <VirtualizedFilesList
+      filesList={filesList}
+      handlePress={handlePress}
+      handleLongPress={handleLongPress}
+      setHoveredItem={setHoveredItem}
+      hoveredItem={hoveredItem}
+    />
   );
 }
-export default React.memo(FilesList);
+export default memo(FilesList);

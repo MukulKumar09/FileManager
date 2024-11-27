@@ -1,32 +1,25 @@
-import React from 'react';
 import FilesListItem from './FilesListItem/FilesListItem';
 import {VirtualizedList} from 'react-native';
-import {useCallback} from 'react';
-export default function VirtualizedFilesList({
+import {memo} from 'react';
+
+function VirtualizedFilesList({
   filesList,
   handlePress,
   handleLongPress,
   setHoveredItem,
   hoveredItem,
 }) {
-  const renderItem = useCallback(
-    ({item}) => {
-      // console.log('rerend');
-      return (
-        <FilesListItem
-          key={item.path}
-          item={item}
-          handlePress={handlePress}
-          handleLongPress={handleLongPress}
-          setHoveredItem={setHoveredItem}
-          isHighlighted={item.isHighlighted}
-          isHovered={hoveredItem == item}
-        />
-      );
-    },
-    [hoveredItem],
+  const renderItem = ({item}) => (
+    <FilesListItem
+      key={item.path}
+      item={item}
+      handlePress={handlePress}
+      handleLongPress={handleLongPress}
+      setHoveredItem={setHoveredItem}
+      isHighlighted={item.isHighlighted}
+      isHovered={hoveredItem == item}
+    />
   );
-
   return (
     <VirtualizedList
       // onRefresh={() => {}}
@@ -47,3 +40,4 @@ export default function VirtualizedFilesList({
     />
   );
 }
+export default memo(VirtualizedFilesList);

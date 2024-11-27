@@ -1,17 +1,13 @@
 import LayoutWrapper from './LayoutWrapper';
 import {useSelector, useDispatch} from 'react-redux';
-import {Pressable, Text, View} from 'react-native';
+import {View} from 'react-native';
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from 'react-native-reanimated';
+import {useSharedValue} from 'react-native-reanimated';
 import styles from '../styles/styles';
-import DragNDropIcon from './DragNDropIcon';
 import Tabbar from './Tabs/Tabbar';
 
 export default function GestureWrapper() {

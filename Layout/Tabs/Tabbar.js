@@ -8,7 +8,6 @@ import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import DragNDropIcon from '../DragNDropIcon';
 
 export default function Tabbar({translationX, translationY}) {
-  console.log('tabbar rerenderd');
   const dispatch = useDispatch();
   const state = {
     tabs: useSelector(state => state.tabs),
@@ -24,16 +23,11 @@ export default function Tabbar({translationX, translationY}) {
       {translateY: translationY.value},
     ],
   }));
-  const scrollViewRef = useRef(0);
 
   const [tabbarLayout, setTabbarLayout] = useState({});
   const [tabLayouts, setLayouts] = useState({});
   const [scrollOffset, setScrollOffset] = useState(0);
   const scrollTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    console.log(scrollOffset);
-  }, [scrollOffset]);
 
   useEffect(() => {
     if (state.dragNDropIcon.droppedCoordinates?.y >= tabbarLayout.y)
@@ -44,7 +38,6 @@ export default function Tabbar({translationX, translationY}) {
           state.dragNDropIcon.droppedCoordinates?.x + scrollOffset;
 
         if (start <= droppedC && droppedC <= end) {
-          console.log(tabLayout);
           dispatch({
             type: 'SETCURRENTTAB',
             payload: tabLayout,
@@ -70,7 +63,6 @@ export default function Tabbar({translationX, translationY}) {
     <>
       <View
         onLayout={event => {
-          console.log(event.nativeEvent);
           setTabbarLayout(event.nativeEvent.layout);
         }}
         style={[
@@ -83,7 +75,6 @@ export default function Tabbar({translationX, translationY}) {
           },
         ]}>
         <ScrollView
-          ref={scrollViewRef}
           horizontal={true}
           onScroll={handleScroll}
           showsHorizontalScrollIndicator={false}>

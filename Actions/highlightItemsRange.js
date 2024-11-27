@@ -25,11 +25,19 @@ export default function highlightItemsRange(
       };
     }
   }
+  console.log(lastSelectItem);
   setSelectedItems(prev => prev + selectedItems);
-  setLastSelectItem({
-    item: tempSelectedItems[indexOfItem],
-    isHighlighted: lastSelectItem.isHighlighted,
-  });
+  const one = tempSelectedItems[indexOfItem];
+  console.log('-------- STEP 1');
+  const two = lastSelectItem.isHighlighted;
+  console.log('-------- STEP 2');
+  const obj = {
+    item: one,
+    isHighlighted: two,
+  };
+  console.log('-------- STEP 3');
+  setLastSelectItem(obj);
+  console.log('-------- STEP 4');
 
   return tempSelectedItems;
 }

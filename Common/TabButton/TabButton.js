@@ -11,7 +11,6 @@ const TabButton = React.memo(
     return (
       <View
         onLayout={e => {
-          console.log('tabbut');
           const layout = e.nativeEvent.layout;
           setLayouts({
             ...tabLayouts,
