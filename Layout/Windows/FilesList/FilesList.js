@@ -66,12 +66,13 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
       //                           last not-highlighted - deselect range
       // Long press not highlighted - last highlighted - select range
       //                             last not-highlighted - do nothing
+
       if (selectionFlag) {
         if (
           (lastClickedItem.isHighlighted || lastClickedItem == 0) &&
-          item.isHighlighted
+          item.isHighlighted == 1
         ) {
-          //only prepare dragnDrop if last thing done was, selecting an item, or deselecting range
+          //only prepare dragnDrop if last thing done was either selecting an item, or deselecting range
           prepareDragNDrop(item, event);
         } else {
           const selectItems = highlightItemsRange(
