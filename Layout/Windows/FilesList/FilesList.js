@@ -3,7 +3,8 @@ import {useDispatch} from 'react-redux';
 import VirtualizedFilesList from './VirtualizedFilesList';
 import {Text} from 'react-native';
 import handleFileLongPress from '../../../Actions/handleFileLongPress';
-import handleFilePress from '../../../Actions/handleFilePress';
+import navigateItem from '../../../Actions/navigateItem';
+import highlightItemCB from '../../../Actions/highlightItemCB';
 
 function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
   const dispatch = useDispatch();
@@ -23,40 +24,46 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
     setSelectedItems(0);
   }, [path]);
 
+  const callHighlightItemCB = item =>
+    highlightItemCB(
+      setSelectionFlag,
+      item,
+      filesList,
+      setLastClickedItem,
+      setSelectedItems,
+      setFilesList,
+    );
+
   const handlePress = useCallback(
     item => {
-      handleFilePress(
-        selectionFlag,
-        setSelectionFlag,
-        item,
-        filesList,
-        setLastClickedItem,
-        setSelectedItems,
-        setFilesList,
-        dispatch,
-        index,
-        addBreadCrumb,
-      );
+      if (selectionFlag) {
+        callHighlightItemCB(item);
+      } else {
+        navigateItem(dispatch, index, item, addBreadCrumb);
+      }
     },
-    [filesList, index, selectionFlag],
+    [selectionFlag, filesList, index],
   );
-
   const handleLongPress = useCallback(
     (item, event) => {
-      handleFileLongPress(
-        dispatch,
-        item,
-        event,
-        lastClickedItem,
-        selectionFlag,
-        filesList,
-        setLastClickedItem,
-        setSelectedItems,
-        setFilesList,
-        setSelectionFlag,
-      );
+      if (selectionFlag) {
+        const res = handleFileLongPress(
+          dispatch,
+          item,
+          event,
+          lastClickedItem,
+          filesList,
+        );
+        if (res) {
+          setLastClickedItem(res.lastClickedItem);
+          setSelectedItems(res.selectedItems);
+          setFilesList(res.filesList);
+        }
+      } else {
+        callHighlightItemCB(item);
+      }
     },
-    [lastClickedItem, selectionFlag, filesList],
+    [selectionFlag, filesList, lastClickedItem],
   );
 
   return (
