@@ -1,30 +1,37 @@
-import {StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {useEffect} from 'react';
-import {backgroundColor} from '../styles/styles';
-import useAppLaunch from '../Hooks/useAppLaunch';
-import MediaViewer from '../Features/MediaViewer/MediaViewer';
-
+import {View} from 'react-native';
+import {
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import styles from '../styles/styles';
 import Windows from './Windows/Windows';
-import Modals from '../Modals/Modals';
+import Tabbar from './Tabs/Tabbar';
+import useAppLaunch from '../Hooks/useAppLaunch';
+import {useEffect} from 'react';
+import usePanHandler from '../Hooks/usePanHandler';
 
-function LayoutWrapper() {
+export default function LayoutWrapper() {
   const dispatch = useDispatch();
   const state = {
-    mediaBox: useSelector(state => state.mediaBox),
+    dragNDropIcon: useSelector(state => state.dragNDropIcon),
   };
 
   useEffect(() => {
     useAppLaunch(dispatch); //Runs on App Launch
   }, []);
+  const {pan, translationX, translationY} = usePanHandler(state.dragNDropIcon);
 
   return (
     <>
-      <StatusBar backgroundColor={backgroundColor} />
-      {Boolean(state.mediaBox) && <MediaViewer />}
-      <Windows />
-      <Modals />
+      <GestureHandlerRootView>
+        <GestureDetector gesture={pan}>
+          <View style={[styles.wide]}>
+            <Windows />
+          </View>
+        </GestureDetector>
+      </GestureHandlerRootView>
+      <Tabbar translationX={translationX} translationY={translationY} />
     </>
   );
 }
-export default LayoutWrapper;

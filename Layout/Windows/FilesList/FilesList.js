@@ -1,10 +1,9 @@
 import {memo, useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import navigateItem from '../../../Actions/navigateItem';
-import highlightItem from '../../../Actions/highlightItem';
-import highlightItemsRange from '../../../Actions/highlightItemsRange';
 import VirtualizedFilesList from './VirtualizedFilesList';
 import {Text} from 'react-native';
+import handleFileLongPress from '../../../Actions/handleFileLongPress';
+import handleFilePress from '../../../Actions/handleFilePress';
 
 function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
   const dispatch = useDispatch();
@@ -24,78 +23,40 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
     setSelectedItems(0);
   }, [path]);
 
-  const prepareDragNDrop = useCallback(
-    (item, event) => {
-      const {nativeEvent} = event;
-      const x = nativeEvent.pageX;
-      const y = nativeEvent.pageY;
-      dispatch({
-        type: 'DRAGNDROPICON',
-        payload: {
-          visible: 0,
-          isActive: item.isHighlighted,
-          items: [...filesList.filter(item => item.isHighlighted)],
-          x,
-          y,
-        },
-      });
-    },
-    [lastClickedItem, filesList],
-  );
-
   const handlePress = useCallback(
     item => {
-      if (selectionFlag) {
-        const selectItems = highlightItem(
-          item,
-          filesList,
-          setLastClickedItem,
-          setSelectedItems,
-        );
-        setFilesList(selectItems);
-      } else {
-        navigateItem(dispatch, index, item, addBreadCrumb);
-      }
+      handleFilePress(
+        selectionFlag,
+        setSelectionFlag,
+        item,
+        filesList,
+        setLastClickedItem,
+        setSelectedItems,
+        setFilesList,
+        dispatch,
+        index,
+        addBreadCrumb,
+      );
     },
     [filesList, index, selectionFlag],
   );
 
   const handleLongPress = useCallback(
     (item, event) => {
-      // Long press highlighted - last highlighted - dragNDrop
-      //                           last not-highlighted - deselect range
-      // Long press not highlighted - last highlighted - select range
-      //                             last not-highlighted - do nothing
-
-      if (selectionFlag) {
-        if (
-          (lastClickedItem.isHighlighted || lastClickedItem == 0) &&
-          item.isHighlighted == 1
-        ) {
-          //only prepare dragnDrop if last thing done was either selecting an item, or deselecting range
-          prepareDragNDrop(item, event);
-        } else {
-          const selectItems = highlightItemsRange(
-            item,
-            lastClickedItem,
-            filesList,
-            setLastClickedItem,
-            setSelectedItems,
-          );
-          setFilesList(selectItems);
-        }
-      } else {
-        setSelectionFlag(1);
-        const selectItems = highlightItem(
-          item,
-          filesList,
-          setLastClickedItem,
-          setSelectedItems,
-        );
-        setFilesList(selectItems);
-      }
+      handleFileLongPress(
+        dispatch,
+        item,
+        event,
+        lastClickedItem,
+        selectionFlag,
+        filesList,
+        setLastClickedItem,
+        setSelectedItems,
+        setFilesList,
+        setSelectionFlag,
+      );
     },
-    [filesList, lastClickedItem, selectionFlag],
+    [lastClickedItem, selectionFlag, filesList],
   );
 
   return (

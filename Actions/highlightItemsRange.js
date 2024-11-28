@@ -1,15 +1,11 @@
-export default function highlightItemsRange(
-  item,
-  lastClickedItem,
-  filesList,
-  setLastClickedItem,
-  setSelectedItems,
-) {
+export default function highlightItemsRange(item, lastClickedItem, filesList) {
   const tempSelectedItems = [...filesList];
   const indexOfLastSelectItem = tempSelectedItems.indexOf(lastClickedItem.item);
   const indexOfItem = tempSelectedItems.indexOf(item);
   const step = indexOfItem >= indexOfLastSelectItem ? 1 : -1;
   let selectedItems = 0;
+
+  let res = {};
 
   if (!item.isHighlighted && lastClickedItem.isHighlighted) {
     //select range
@@ -27,10 +23,10 @@ export default function highlightItemsRange(
       }
     }
 
-    setLastClickedItem({
+    res.lastClickedItem = {
       item: tempSelectedItems[indexOfItem],
       isHighlighted: lastClickedItem.isHighlighted,
-    });
+    };
   }
 
   if (item.isHighlighted && !lastClickedItem.isHighlighted) {
@@ -49,10 +45,11 @@ export default function highlightItemsRange(
       }
     }
     //setting it to 0, so that dragNDrop can be activated right after deselecting range
-    setLastClickedItem(0);
+    res.lastClickedItem = 0;
   }
 
-  setSelectedItems(prev => prev + selectedItems);
+  res.selectedItems = selectedItems;
 
-  return tempSelectedItems;
+  res.filesList = tempSelectedItems;
+  return res;
 }

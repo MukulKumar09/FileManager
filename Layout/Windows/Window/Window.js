@@ -79,12 +79,6 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         setBreadCrumbs={setBreadCrumbs}
       />
       <ToolBar />
-      {/* <Pressable
-        onPress={() =>
-          getAndSetFilesList(setFilesList, setIsLoading, item, sort)
-        }>
-        <Text style={[styles.text]}>Refresh</Text>
-      </Pressable> */}
     </View>
   );
 });
