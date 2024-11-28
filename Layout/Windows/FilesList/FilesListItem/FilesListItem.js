@@ -7,8 +7,7 @@ import {bytesToSize} from '../../../../Services/bytesToSize';
 
 function FilesListItem({
   item,
-  handlePress,
-  handleLongPress,
+  setDetectPressType,
   setHoveredItem,
   isHighlighted,
   isHovered,
@@ -16,8 +15,8 @@ function FilesListItem({
   return (
     <Pressable
       onPressIn={() => setHoveredItem(item)}
-      onPress={() => handlePress(item)}
-      onLongPress={event => handleLongPress(item, event.nativeEvent)}
+      onPress={() => setDetectPressType({type: 1, item})}
+      onLongPress={event => setDetectPressType({type: 2, item, event})}
       style={[
         styles.rowLayout,
         styles.largeGap,

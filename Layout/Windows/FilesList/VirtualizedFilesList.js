@@ -1,6 +1,6 @@
 import FilesListItem from './FilesListItem/FilesListItem';
 import {VirtualizedList} from 'react-native';
-import {memo} from 'react';
+import {memo, useState, useEffect} from 'react';
 
 function VirtualizedFilesList({
   filesList,
@@ -9,12 +9,22 @@ function VirtualizedFilesList({
   setHoveredItem,
   hoveredItem,
 }) {
+  const [detectPressType, setDetectPressType] = useState(0);
+  useEffect(() => {
+    if (detectPressType.type == 1) {
+      //onPress
+      handlePress(detectPressType.item);
+    }
+    if (detectPressType.type == 2) {
+      //onLongPress
+      handleLongPress(detectPressType.item, detectPressType.event);
+    }
+  }, [detectPressType]);
   const renderItem = ({item}) => (
     <FilesListItem
       key={item.path}
       item={item}
-      handlePress={handlePress}
-      handleLongPress={handleLongPress}
+      setDetectPressType={setDetectPressType}
       setHoveredItem={setHoveredItem}
       isHighlighted={item.isHighlighted}
       isHovered={hoveredItem == item}

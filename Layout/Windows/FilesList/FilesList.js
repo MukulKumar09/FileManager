@@ -4,6 +4,7 @@ import navigateItem from '../../../Actions/navigateItem';
 import highlightItem from '../../../Actions/highlightItem';
 import highlightItemsRange from '../../../Actions/highlightItemsRange';
 import VirtualizedFilesList from './VirtualizedFilesList';
+import {Text} from 'react-native';
 
 function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
   const dispatch = useDispatch();
@@ -11,7 +12,7 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
   //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
   const [selectedItems, setSelectedItems] = useState(0);
-  const [lastSelectItem, setLastSelectItem] = useState({});
+  const [lastClickedItem, setLastClickedItem] = useState({});
   const [hoveredItem, setHoveredItem] = useState({});
 
   useEffect(() => {
@@ -23,19 +24,24 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
     setSelectedItems(0);
   }, [path]);
 
-  const activateDragNDrop = event => {
-    const x = event.pageX;
-    const y = event.pageY;
-    dispatch({
-      type: 'DRAGNDROPICON',
-      payload: {
-        visible: 0,
-        items: [...filesList.filter(item => item.isHighlighted)],
-        x,
-        y,
-      },
-    });
-  };
+  const prepareDragNDrop = useCallback(
+    (item, event) => {
+      const {nativeEvent} = event;
+      const x = nativeEvent.pageX;
+      const y = nativeEvent.pageY;
+      dispatch({
+        type: 'DRAGNDROPICON',
+        payload: {
+          visible: 0,
+          isActive: item.isHighlighted,
+          items: [...filesList.filter(item => item.isHighlighted)],
+          x,
+          y,
+        },
+      });
+    },
+    [lastClickedItem, filesList],
+  );
 
   const handlePress = useCallback(
     item => {
@@ -43,7 +49,7 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
         const selectItems = highlightItem(
           item,
           filesList,
-          setLastSelectItem,
+          setLastClickedItem,
           setSelectedItems,
         );
         setFilesList(selectItems);
@@ -56,39 +62,52 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
 
   const handleLongPress = useCallback(
     (item, event) => {
-      activateDragNDrop(event);
+      // Long press highlighted - last highlighted - dragNDrop
+      //                           last not-highlighted - deselect range
+      // Long press not highlighted - last highlighted - select range
+      //                             last not-highlighted - do nothing
       if (selectionFlag) {
-        console.log('just clicked');
-        const selectItems = highlightItemsRange(
-          item,
-          lastSelectItem,
-          filesList,
-          setLastSelectItem,
-          setSelectedItems,
-        );
-        setFilesList(selectItems);
+        if (
+          (lastClickedItem.isHighlighted || lastClickedItem == 0) &&
+          item.isHighlighted
+        ) {
+          //only prepare dragnDrop if last thing done was, selecting an item, or deselecting range
+          prepareDragNDrop(item, event);
+        } else {
+          const selectItems = highlightItemsRange(
+            item,
+            lastClickedItem,
+            filesList,
+            setLastClickedItem,
+            setSelectedItems,
+          );
+          setFilesList(selectItems);
+        }
       } else {
         setSelectionFlag(1);
         const selectItems = highlightItem(
           item,
           filesList,
-          setLastSelectItem,
+          setLastClickedItem,
           setSelectedItems,
         );
         setFilesList(selectItems);
       }
     },
-    [filesList, lastSelectItem, selectionFlag],
+    [filesList, lastClickedItem, selectionFlag],
   );
 
   return (
-    <VirtualizedFilesList
-      filesList={filesList}
-      handlePress={handlePress}
-      handleLongPress={handleLongPress}
-      setHoveredItem={setHoveredItem}
-      hoveredItem={hoveredItem}
-    />
+    <>
+      <Text style={{color: 'white'}}>{selectedItems}</Text>
+      <VirtualizedFilesList
+        filesList={filesList}
+        setHoveredItem={setHoveredItem}
+        handlePress={handlePress}
+        handleLongPress={handleLongPress}
+        hoveredItem={hoveredItem}
+      />
+    </>
   );
 }
 export default memo(FilesList);

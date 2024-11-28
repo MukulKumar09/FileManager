@@ -23,10 +23,12 @@ export default function GestureWrapper() {
     .activateAfterLongPress(1000)
     .onStart(() => {
       console.log('pan started');
-      dispatch({
-        type: 'TOAST',
-        payload: 'Drag on a tab to paste',
-      });
+      state.dragNDropIcon['shouldBeVisible'] &&
+        dispatch({
+          type: 'TOAST',
+          payload: 'Drag on a tab to paste',
+        });
+
       translationX.value = state.dragNDropIcon['x'];
       translationY.value = state.dragNDropIcon['y'];
       dispatch({

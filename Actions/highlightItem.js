@@ -1,7 +1,7 @@
 export default function highlightItem(
   item,
   filesList,
-  setLastSelectItem,
+  setLastClickedItem,
   setSelectedItems,
 ) {
   const tempFilesList = [...filesList];
@@ -15,6 +15,9 @@ export default function highlightItem(
     setSelectedItems(prev => prev + 1);
   }
   tempFilesList[indexOfItem] = {...item, isHighlighted};
-  setLastSelectItem({item: tempFilesList[indexOfItem], isHighlighted});
+  setLastClickedItem({
+    item: tempFilesList[indexOfItem],
+    isHighlighted,
+  });
   return tempFilesList;
 }

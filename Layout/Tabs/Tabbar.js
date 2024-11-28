@@ -131,26 +131,27 @@ export default function Tabbar({translationX, translationY}) {
           </Pressable>
         </>
       </View>
-      {Boolean(state.dragNDropIcon['visible']) && (
-        <Animated.View
-          style={[
-            styles.pill,
-            styles.bordered,
-            {
-              position: 'absolute',
-              zIndex: 10,
-              height: 60,
-              width: 60,
-              marginLeft: -30,
-              marginRight: -30,
-              marginTop: -100,
-              pointerEvents: 'none',
-            },
-            animatedStyles,
-          ]}>
-          <DragNDropIcon dragNDropIcon={state.dragNDropIcon} />
-        </Animated.View>
-      )}
+      {Boolean(state.dragNDropIcon['isActive']) &&
+        Boolean(state.dragNDropIcon['visible']) && (
+          <Animated.View
+            style={[
+              styles.pill,
+              styles.bordered,
+              {
+                position: 'absolute',
+                zIndex: 10,
+                height: 60,
+                width: 60,
+                marginLeft: -30,
+                marginRight: -30,
+                marginTop: -100,
+                pointerEvents: 'none',
+              },
+              animatedStyles,
+            ]}>
+            <DragNDropIcon dragNDropIcon={state.dragNDropIcon} />
+          </Animated.View>
+        )}
     </>
   );
 }
