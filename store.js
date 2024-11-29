@@ -39,8 +39,10 @@ import textEditorUnsavedPromiseResolver from './Reducers/textEditorUnsavedPromis
 import openAsModal from './Reducers/openAsModal';
 import recycleBinModal from './Reducers/recycleBinModal';
 import deleteModal from './Reducers/deleteModal';
+import modalStack from './Reducers/modalStack';
 
 const rootReducer = combineReducers({
+  modalStack,
   aboutModal,
   conf,
   clipBoardModal,

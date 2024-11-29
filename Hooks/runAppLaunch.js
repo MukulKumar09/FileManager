@@ -4,7 +4,7 @@ import {
   updateMountingPoints,
   deleteMountingPoints,
 } from '../Services/updateMountingPoints';
-export default async function useAppLaunch(dispatch) {
+export default async function runAppLaunch(dispatch) {
   try {
     //Step 1: Open realm
     const realm = await realmOpen();

@@ -13,13 +13,11 @@ const handleFileLongPress = (
   // Long press not highlighted - last highlighted - select range
   //                             last not-highlighted - do nothing
 
-  if (
-    (lastClickedItem.isHighlighted || lastClickedItem == 0) &&
-    item.isHighlighted == 1
-  ) {
-    //only prepare dragnDrop if last thing done was either selecting an item, or deselecting range
-    prepareDragNDrop(dispatch, filesList, item, event);
+  console.log(item);
+  if (lastClickedItem.isHighlighted && item.isHighlighted) {
+    prepareDragNDrop(dispatch, filesList, event);
   } else {
+    prepareDragNDrop(dispatch, 0);
     return highlightItemsRange(item, lastClickedItem, filesList);
   }
 };

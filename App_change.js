@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Window from './Layout/Windows/Window/Window';
 import styles from './styles/styles';
 import Tabbar from './Layout/Tabs/Tabbar';
-import useAppLaunch from './Hooks/useAppLaunch';
+import runAppLaunch from './Hooks/runAppLaunch';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const App = () => {
   let width = Dimensions.get('window').width;
 
   useEffect(() => {
-    useAppLaunch(dispatch);
+    runAppLaunch(dispatch);
   }, []);
 
   return (

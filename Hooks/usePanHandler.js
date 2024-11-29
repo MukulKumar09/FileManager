@@ -1,8 +1,11 @@
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useSharedValue} from 'react-native-reanimated';
 import {Gesture} from 'react-native-gesture-handler';
-export default function usePanHandler(dragNDropIcon) {
+export default function usePanHandler() {
   const dispatch = useDispatch();
+  const state = {
+    dragNDropIcon: useSelector(state => state.dragNDropIcon),
+  };
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
 
@@ -10,20 +13,21 @@ export default function usePanHandler(dragNDropIcon) {
     .runOnJS(true)
     .activateAfterLongPress(1000)
     .onStart(() => {
-      dragNDropIcon['shouldBeVisible'] &&
+      if (state.dragNDropIcon['isActive']) {
         dispatch({
           type: 'TOAST',
           payload: 'Drag on a tab to paste',
         });
-      translationX.value = dragNDropIcon['x'];
-      translationY.value = dragNDropIcon['y'];
-      dispatch({
-        type: 'DRAGNDROPICON',
-        payload: {
-          ...dragNDropIcon,
-          visible: 1,
-        },
-      });
+        translationX.value = state.dragNDropIcon['x'];
+        translationY.value = state.dragNDropIcon['y'];
+        dispatch({
+          type: 'DRAGNDROPICON',
+          payload: {
+            ...state.dragNDropIcon,
+            visible: 1,
+          },
+        });
+      }
     })
     .onUpdate(event => {
       translationX.value = event.absoluteX;
@@ -33,7 +37,7 @@ export default function usePanHandler(dragNDropIcon) {
       dispatch({
         type: 'DRAGNDROPICON',
         payload: {
-          ...dragNDropIcon,
+          ...state.dragNDropIcon,
           droppedCoordinates: {x: event.x, y: event.y},
           visible: 0,
         },

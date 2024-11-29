@@ -56,7 +56,7 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
         );
         if (res) {
           setLastClickedItem(res.lastClickedItem);
-          setSelectedItems(res.selectedItems);
+          setSelectedItems(prev => prev + res.selectedItems);
           setFilesList(res.filesList);
         }
       } else {

@@ -7,6 +7,7 @@ import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon'
 import DragNDropIcon from '../DragNDropIcon';
 import addNewTab from '../../Actions/addNewTab';
 import Tabs from './Tabs/Tabs';
+import detectDropLocation from '../../Actions/detectDropLocation';
 
 export default function Tabbar({translationX, translationY}) {
   const dispatch = useDispatch();
@@ -28,21 +29,16 @@ export default function Tabbar({translationX, translationY}) {
       {translateY: translationY.value},
     ],
   }));
-
   useEffect(() => {
-    if (state.dragNDropIcon.droppedCoordinates?.y >= tabbarLayout.y)
-      Object.keys(tabLayouts).map(tabLayout => {
-        const start = tabLayouts[tabLayout].x;
-        const end = tabLayouts[tabLayout].xWidth;
-        const droppedC =
-          state.dragNDropIcon.droppedCoordinates?.x + scrollOffset;
-        if (start <= droppedC && droppedC <= end) {
-          dispatch({
-            type: 'SETCURRENTTAB',
-            payload: tabLayout,
-          });
-        }
-      });
+    state.dragNDropIcon &&
+      detectDropLocation(
+        state.tabs,
+        state.dragNDropIcon,
+        tabbarLayout,
+        tabLayouts,
+        scrollOffset,
+        dispatch,
+      );
   }, [state.dragNDropIcon]);
 
   const handleScroll = useCallback(event => {

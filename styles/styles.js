@@ -18,7 +18,6 @@ export default StyleSheet.create({
     fontFamily: 'Oswald-Regular',
   },
   text: {
-    includeFontPadding: false,
     color: textColor,
     fontSize: 15,
   },
@@ -32,7 +31,7 @@ export default StyleSheet.create({
     resizeMode: 'contain',
   },
   headingText: {
-    fontSize: 20,
+    fontSize: 25,
   },
   textDisabled: {
     color: 'grey',
@@ -104,9 +103,13 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   modal: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
+    position: 'absolute',
+    bottom: 15,
+    left: 15,
+    right: 15,
+    // alignItems: 'flex-start',
+    // justifyContent: 'flex-start',
+    // flexDirection: 'column',
   },
   modalBackground: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
@@ -144,7 +147,7 @@ export default StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: primaryColor,
+    backgroundColor: secondaryColor,
     width: '100%',
   },
 });
