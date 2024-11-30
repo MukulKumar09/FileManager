@@ -1,6 +1,5 @@
 import {useSelector} from 'react-redux';
 import ModalTemplate from './ModalTemplate';
-import {useEffect} from 'react';
 export default function Modals() {
   const state = {
     modalStack: useSelector(state => state.modalStack),

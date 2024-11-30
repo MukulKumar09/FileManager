@@ -60,22 +60,24 @@ function ModalTemplate({modalData}) {
         <View style={[styles.rowLayout, styles.mediumGap]}>
           {buttons &&
             buttons.length > 0 &&
-            buttons.map((button, index) => (
-              <Pressable
-                key={index}
-                onPress={button.onPress}
-                style={[
-                  styles.pill,
-                  button.pillHighlight && styles.pillHighlight,
-                  button.bordered && styles.bordered,
-                  styles.wide,
-                  styles.centered,
-                  styles.padding,
-                  button.style,
-                ]}>
-                <Text style={[styles.text]}>{button.title}</Text>
-              </Pressable>
-            ))}
+            buttons.map((button, index) => {
+              return (
+                <Pressable
+                  key={index}
+                  onPress={button.onPress}
+                  style={[
+                    styles.pill,
+                    button.pillHighlight && styles.pillHighlight,
+                    button.bordered && styles.bordered,
+                    styles.wide,
+                    styles.centered,
+                    styles.padding,
+                    button.style,
+                  ]}>
+                  <Text style={[styles.text]}>{button.title}</Text>
+                </Pressable>
+              );
+            })}
         </View>
       </View>
     </Modal>
