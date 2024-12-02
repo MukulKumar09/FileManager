@@ -1,3 +1,4 @@
+import getFileExtension from '../getFileExtension';
 import normalizeTimestamp from '../normalizeTimestamp';
 import RNFS from 'react-native-fs';
 
@@ -12,13 +13,13 @@ export default async function buildCache(realm, fullPath, cacheToInvalidate) {
   for (item of rnfsData) {
     const {name, path, size, mtime, isDirectory} = item;
     const normalizedMtime = normalizeTimestamp(mtime);
-    const extension = name.split('.');
+
     if (isDirectory()) {
       var type = 'dir';
       var ext = '/';
     } else {
       var type = 'file';
-      var ext = extension[extension.length - 1];
+      var ext = getFileExtension(name);
     }
     const realmDoc = {
       name,

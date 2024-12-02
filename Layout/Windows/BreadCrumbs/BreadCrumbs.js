@@ -8,11 +8,11 @@ function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
     <>
       <ScrollView
         horizontal={true}
-        style={[styles.wide, styles.mediumGap, {transform: [{scaleX: -1}]}]}>
+        style={[styles.wide, styles.smallGap, {transform: [{scaleX: -1}]}]}>
         <View
           style={[
             styles.rowLayout,
-            styles.mediumGap,
+            styles.smallGap,
             {transform: [{scaleX: -1}]},
           ]}>
           {breadCrumbs.map((item, i) => {

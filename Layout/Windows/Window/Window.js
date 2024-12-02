@@ -6,6 +6,7 @@ import FilesList from '../FilesList/FilesList';
 import getAndSetFilesList from '../../../Services/getAndSetFilesList';
 import WindowToolBar from '../WindowToolBar/WindowToolBar';
 import ToolBar from '../ToolBar/ToolBar';
+import collectHighilightedItems from '../../../Services/collectHighilightedItems';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const [isLoading, setIsLoading] = useState(0);
   const [breadCrumbs, setBreadCrumbs] = useState([item]);
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
+  const [option, setOption] = useState(0);
 
   const addBreadCrumb = useCallback(
     item => {
@@ -21,6 +23,36 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     },
     [breadCrumbs],
   );
+
+  useEffect(() => {
+    console.log(option);
+    switch (option) {
+      case 'copy': {
+        const items = collectHighilightedItems(filesList);
+        dispatch({
+          type: 'COPYTOCB',
+          payload: {type: 'copy', items},
+        });
+        dispatch({
+          type: 'TOAST',
+          payload: `${items.length} items added to clipboard.`,
+        });
+        break;
+      }
+      case 'move': {
+        const items = collectHighilightedItems(filesList);
+        dispatch({
+          type: 'COPYTOCB',
+          payload: {type: 'move', items},
+        });
+        dispatch({
+          type: 'TOAST',
+          payload: `${items.length} items added to clipboard.`,
+        });
+        break;
+      }
+    }
+  }, [option]);
 
   useEffect(() => {
     if (isRefresh) {
@@ -78,7 +110,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
       />
-      <ToolBar />
+      <ToolBar setOption={setOption} />
     </View>
   );
 });

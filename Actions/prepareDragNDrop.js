@@ -1,3 +1,5 @@
+import collectHighilightedItems from '../Services/collectHighilightedItems';
+
 export default function prepareDragNDrop(dispatch, filesList, event) {
   //pan handler will always flip visible flag of dragNDrop icon. isActive flag controls this visibility
   if (!filesList) {
@@ -18,7 +20,7 @@ export default function prepareDragNDrop(dispatch, filesList, event) {
     payload: {
       visible: 0,
       isActive: 1,
-      items: [...filesList.filter(item => item.isHighlighted)],
+      items: collectHighilightedItems(filesList),
       x,
       y,
     },

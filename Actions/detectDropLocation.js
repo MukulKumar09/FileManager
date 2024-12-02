@@ -1,4 +1,5 @@
 import pasteHere from '../Layout/Modal/ModalBodies/pasteHere';
+import copyItems from '../Services/Rnfs/copyItems';
 import modalPromise from './modalPromise';
 
 export default async function detectDropLocation(
@@ -19,14 +20,16 @@ export default async function detectDropLocation(
           type: 'SETCURRENTTAB',
           payload: i,
         });
-
         const modProm = await modalPromise(
           dispatch,
           pasteHere,
           dragNDropIcon.items,
-          tabs[i].item.path,
+          tabs[i],
         );
-        if (modProm) dispatch({type: 'TOAST', payload: 'Copy started'});
+        if (modProm) {
+          dispatch({type: 'TOAST', payload: 'Copy started'});
+          await copyItems(dispatch, dragNDropIcon.items, tabs[i]);
+        }
         break;
       }
     }

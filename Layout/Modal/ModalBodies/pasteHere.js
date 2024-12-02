@@ -4,11 +4,16 @@ import useIcon from '../../../Hooks/useIcon';
 
 const pasteHere = (resolve, dispatch, params) => {
   const items = params[0];
-  const destination = params[1];
+  const destTab = params[1];
+  const onRequestClose = () => {
+    dispatch({type: 'POPMODALSTACK'});
+    resolve(0);
+  };
   return {
     icon: 'content-paste',
     heading: `Copy ${items.length} Items Here?`,
-    subHeading: `To: ${destination}`,
+    subHeading: `To: ${destTab.item.path + '/'}`,
+    onRequestClose,
     body: () => (
       <View style={[styles.mediumGap]}>
         {items.map(item => (
@@ -36,10 +41,7 @@ const pasteHere = (resolve, dispatch, params) => {
       {
         title: 'Cancel',
         bordered: true,
-        onPress: () => {
-          dispatch({type: 'POPMODALSTACK'});
-          resolve(0);
-        },
+        onPress: onRequestClose,
       },
       {
         title: 'Done',

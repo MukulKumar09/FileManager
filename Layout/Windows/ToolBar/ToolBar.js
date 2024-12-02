@@ -1,20 +1,11 @@
+import {memo} from 'react';
 import {Text, View, ScrollView, Pressable} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {useState} from 'react';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 import styles, {secondaryColor} from '../../../styles/styles';
 
-export default function ToolBar(props) {
-  const dispatch = useDispatch();
-  const state = {
-    contextMenu: useSelector(state => state.contextMenu),
-    tabs: useSelector(state => state.tabs),
-    currentTab: useSelector(state => state.currentTab),
-    recycleBin: useSelector(state => state.recycleBin),
-  };
-  const [searchBar, setSearchBar] = useState(0);
-
+function ToolBar({setOption}) {
+  console.log('toolbar');
   return (
     <>
       <View
@@ -26,12 +17,11 @@ export default function ToolBar(props) {
             overflow: 'hidden',
           },
         ]}>
-        {Boolean(searchBar) && <SearchBar setSearchBar={setSearchBar} />}
         <ScrollView horizontal>
           <View style={[styles.rowLayout]}>
             <CircularButton
               functionName={() => {
-                setSearchBar(1);
+                setOption('search');
               }}
               name="magnify"
             />
@@ -40,25 +30,25 @@ export default function ToolBar(props) {
             <>
               <CircularButton
                 functionName={() => {
-                  copyOperation(state, dispatch, props?.selectedItems, 0);
+                  setOption('copy');
                 }}
                 name="content-copy"
               />
               <CircularButton
                 functionName={() => {
-                  copyOperation(state, dispatch, props?.selectedItems, 1);
+                  setOption('move');
                 }}
                 name="content-cut"
               />
               <CircularButton
                 functionName={() => {
-                  deleteOperation(state, dispatch, props?.selectedItems);
+                  setOption('delete');
                 }}
                 name="delete-outline"
               />
               <CircularButton
                 functionName={() => {
-                  renameOperation(state, dispatch, props?.selectedItem);
+                  setOption('rename');
                 }}
                 name="square-edit-outline"
               />
@@ -68,42 +58,29 @@ export default function ToolBar(props) {
                         /> */}
               <Text style={{color: secondaryColor}}> | </Text>
               <CircularButton
-                functionName={() => newItemOperation(state, dispatch, 1)}
+                functionName={() => setOption('newFile')}
                 name="file-plus-outline"
               />
               <CircularButton
-                functionName={() => newItemOperation(state, dispatch, 0)}
+                functionName={() => setOption('newFolder')}
                 name="folder-plus-outline"
               />
             </>
-            {/* )} */}
           </View>
         </ScrollView>
         <Text style={{color: secondaryColor}}> | </Text>
         <CircularButton
-          functionName={() =>
-            dispatch({
-              type: 'FAVOURITESMODAL',
-            })
-          }
+          functionName={() => setOption('favourtes')}
           name="heart"
           color="#FF5252"
         />
         <Pressable
           style={[styles.pill, styles.text, styles.padding]}
-          onPress={() => props?.setContextMenu(!props?.contextMenu)}>
+          onPress={() => setOption('menu')}>
           <MaterialIcon name="menu" />
         </Pressable>
       </View>
-      {Boolean(props?.contextMenu) && (
-        <ContextMenu
-          selectedItem={props?.selectedItem}
-          selectedItems={props?.selectedItems}
-          setContextMenu={props?.setContextMenu}
-          setClipBoardModal={props?.setClipBoardModal}
-          setAboutModal={props?.setAboutModal}
-        />
-      )}
     </>
   );
 }
+export default memo(ToolBar);

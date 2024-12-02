@@ -8,6 +8,7 @@ import highlightItemCB from '../../../Actions/highlightItemCB';
 
 function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
   const dispatch = useDispatch();
+  // console.log(filesList);
 
   //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
