@@ -1,53 +1,66 @@
-import {TextInput, View} from 'react-native';
+import {TextInput, View, Pressable, Text} from 'react-native';
 import styles from '../../../styles/styles';
 import checkExists from '../../../Services/Rnfs/checkExists';
+import {useDispatch} from 'react-redux';
+import {useState} from 'react';
 
-const inputValue = (resolve, dispatch, params) => {
-  const {destFilePath, name} = params[0];
+const InputValue = ({resolve, item, onRequestClose}) => {
+  const dispatch = useDispatch();
+  const [isNameExists, setIsNameExists] = useState(false);
+  const {name, destFilePath} = item;
   let value = name;
-  const onRequestClose = () => {
-    resolve('/');
-    dispatch({type: 'POPMODALSTACK'});
-  };
-
   async function checkNameAvailable() {
     const isExists = await checkExists(destFilePath + value);
     if (isExists == true) {
-      dispatch({type: 'TOAST', payload: 'This name already exists!'});
+      setIsNameExists(true);
     } else {
       dispatch({type: 'POPMODALSTACK'});
       resolve(value);
     }
   }
 
-  return {
-    icon: 'file-edit-outline',
-    heading: `Enter Name`,
-    subHeading: `For: ${name}`,
-    onRequestClose,
-    body: () => (
-      <View style={[styles.mediumGap]}>
-        <TextInput
-          defaultValue={value}
-          onChangeText={text => {
-            value = text;
-          }}
-          style={[styles.pill, styles.padding, styles.text, styles.bordered]}
-        />
+  return (
+    <View style={[styles.bigGap]}>
+      {isNameExists && <Text style={[styles.text]}>Name already exists!</Text>}
+      <TextInput
+        defaultValue={value}
+        onChangeText={text => {
+          setIsNameExists(false);
+          value = text;
+        }}
+        style={[
+          styles.pill,
+          styles.padding,
+          styles.text,
+          styles.bordered,
+          isNameExists && {borderColor: 'darkred'},
+        ]}
+      />
+      <View style={[styles.rowLayout, styles.mediumGap]}>
+        <Pressable
+          onPress={() => onRequestClose()}
+          style={[
+            styles.pill,
+            styles.bordered,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Cancel</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => checkNameAvailable()}
+          style={[
+            styles.pill,
+            styles.pillHighlight,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Rename</Text>
+        </Pressable>
       </View>
-    ),
-    buttons: [
-      {
-        title: 'Cancel',
-        bordered: true,
-        onPress: onRequestClose,
-      },
-      {
-        title: 'Rename',
-        pillHighlight: true,
-        onPress: () => checkNameAvailable(),
-      },
-    ],
-  };
+    </View>
+  );
 };
-export default inputValue;
+export default InputValue;

@@ -5,6 +5,11 @@ export default function modalStack(state = [], action) {
       tempState.push(action.payload);
       return tempState;
     }
+    case 'UPDATEPROGRESSMODALSTACK': {
+      const tempState = [...state];
+      tempState[0] = action.payload;
+      return tempState;
+    }
     case 'POPMODALSTACK': {
       const tempState = [...state];
       tempState.pop();

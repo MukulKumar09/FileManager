@@ -1,10 +1,21 @@
 import modalPromise from '../../Actions/modalPromise';
-import itemExists from '../../Layout/Modal/ModalBodies/itemExists';
+import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
+import ItemExists from '../../Layout/Modal/ModalBodies/ItemExists';
+import progress from '../../Layout/Modal/ModalBodies/progress';
 import checkExists from './checkExists';
 import collectItems from './collectItems';
 import copyItem from './copyItem';
 
 export default async function copyItems(dispatch, items, destTab) {
+  // dispatch({
+  //   type: 'PUSHMODALSTACK',
+  //   payload: progress(dispatch),
+  // });
+  // dispatch({
+  //   type: 'UPDATEPROGRESSMODALSTACK',
+  //   payload: progress(dispatch, 'Copying', 'downloads.jpeg', '40%', '89%'),
+  // });
+
   const destDirPath = destTab.item.path;
 
   const collectedItems = await collectItems(items, destDirPath);
@@ -13,8 +24,18 @@ export default async function copyItems(dispatch, items, destTab) {
     try {
       const isItemExists = await checkExists(destFilePath + name);
       if (isItemExists) {
-        const whatToDo = await modalPromise(dispatch, itemExists, item);
+        const whatToDo = await modalPromise(
+          dispatch,
+          ItemExists,
+          {item},
+          {
+            icon: <MaterialIcon name="alert-outline" />,
+            heading: `Item Already Exists!`,
+            subHeading: `In Destination: ${item.destFilePath}`,
+          },
+        );
         switch (whatToDo) {
+          case '/<>':
           case '/skip': {
             console.log('skipped item');
             break;

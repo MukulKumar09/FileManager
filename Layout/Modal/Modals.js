@@ -4,11 +4,12 @@ export default function Modals() {
   const state = {
     modalStack: useSelector(state => state.modalStack),
   };
-  // useEffect(() => console.log(state.modalStack.length), [state.modalStack]);
   return (
     <>
-      {state.modalStack.map((modalData, index) => (
-        <ModalTemplate key={index} index={modalData.id} modalData={modalData} />
+      {state.modalStack.map(({templateProps, modal}, index) => (
+        <ModalTemplate key={index} {...templateProps}>
+          {modal}
+        </ModalTemplate>
       ))}
     </>
   );

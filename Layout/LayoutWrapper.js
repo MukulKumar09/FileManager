@@ -1,5 +1,5 @@
-import {useSelector, useDispatch} from 'react-redux';
-import {View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {Pressable, View} from 'react-native';
 import {
   GestureDetector,
   GestureHandlerRootView,
@@ -11,14 +11,14 @@ import runAppLaunch from '../Hooks/runAppLaunch';
 import {useEffect} from 'react';
 import usePanHandler from '../Hooks/usePanHandler';
 import Modals from './Modal/Modals';
-import clipboard from './Modal/ModalBodies/clipboard';
+import ProgressBar from './Modal/ModalBodies/ProgressBar';
+import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 
 export default function LayoutWrapper() {
   const dispatch = useDispatch();
   useEffect(() => {
     runAppLaunch(dispatch); //Runs on App Launch
   }, []);
-  console.log('layoutwrapper ran');
   const {pan, translationX, translationY} = usePanHandler();
   return (
     <>

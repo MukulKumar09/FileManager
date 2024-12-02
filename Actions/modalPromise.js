@@ -1,11 +1,29 @@
-export default async function modalPromise(dispatch, bodyFunc, ...params) {
-  //modalbodies function and its parameters
-  const modalPromise = await new Promise(resolve => {
-    const payload = bodyFunc(resolve, dispatch, params);
-    dispatch({
-      type: 'PUSHMODALSTACK',
-      payload,
-    });
+export default async function modalPromise(
+  dispatch,
+  Component,
+  compProps,
+  templateProps,
+) {
+  const iscConfirmPaste = await new Promise(resolve => {
+    const onRequestClose = () => {
+      resolve('/<>');
+      dispatch({type: 'POPMODALSTACK'});
+    };
+    const tempProps = {
+      ...templateProps,
+      onRequestClose,
+    };
+    const payload = {
+      templateProps: tempProps,
+      modal: (
+        <Component
+          resolve={resolve}
+          onRequestClose={onRequestClose}
+          {...compProps}
+        />
+      ),
+    };
+    dispatch({type: 'PUSHMODALSTACK', payload});
   });
-  return modalPromise;
+  return iscConfirmPaste;
 }

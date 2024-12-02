@@ -1,4 +1,5 @@
-import pasteHere from '../Layout/Modal/ModalBodies/pasteHere';
+import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
+import PasteHere from '../Layout/Modal/ModalBodies/PasteHere';
 import copyItems from '../Services/Rnfs/copyItems';
 import modalPromise from './modalPromise';
 
@@ -20,13 +21,19 @@ export default async function detectDropLocation(
           type: 'SETCURRENTTAB',
           payload: i,
         });
-        const modProm = await modalPromise(
+
+        const isConfirmPaste = await modalPromise(
           dispatch,
-          pasteHere,
-          dragNDropIcon.items,
-          tabs[i],
+          PasteHere,
+          {items: dragNDropIcon.items},
+          {
+            icon: <MaterialIcon name="content-paste" />,
+            heading: `Copy ${dragNDropIcon.items.length} Items here?`,
+            subHeading: `To: ${tabs[i].item.path + '/'}`,
+          },
         );
-        if (modProm) {
+
+        if (isConfirmPaste) {
           dispatch({type: 'TOAST', payload: 'Copy started'});
           await copyItems(dispatch, dragNDropIcon.items, tabs[i]);
         }

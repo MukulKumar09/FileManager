@@ -1,10 +1,10 @@
 import {memo} from 'react';
-import {Text, View, ScrollView, Pressable} from 'react-native';
+import {Text, View, ScrollView} from 'react-native';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
-import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
-import styles, {secondaryColor} from '../../../styles/styles';
-
-function ToolBar({setOption}) {
+import styles, {secondaryColor, textColor} from '../../../styles/styles';
+import {useSelector} from 'react-redux';
+function ToolBar({setOption, isPathHome}) {
+  const state = {clipboardItems: useSelector(state => state.clipboardItems)};
   console.log('toolbar');
   return (
     <>
@@ -18,22 +18,29 @@ function ToolBar({setOption}) {
           },
         ]}>
         <ScrollView horizontal>
-          <View style={[styles.rowLayout]}>
-            <CircularButton
-              functionName={() => {
-                setOption('search');
-              }}
-              name="magnify"
-            />
-            {/* {state.currentTab &&
-            state.tabs[state.currentTab]['path'] == 'Home' ? null : ( */}
-            <>
+          {!isPathHome && (
+            <View style={[styles.rowLayout]}>
+              <CircularButton
+                functionName={() => {
+                  setOption('search');
+                }}
+                name="magnify"
+              />
               <CircularButton
                 functionName={() => {
                   setOption('copy');
                 }}
                 name="content-copy"
               />
+              {state.clipboardItems.items.length > 0 && (
+                <CircularButton
+                  functionName={() => {
+                    setOption('paste');
+                  }}
+                  name="content-paste"
+                  color={textColor}
+                />
+              )}
               <CircularButton
                 functionName={() => {
                   setOption('move');
@@ -53,9 +60,11 @@ function ToolBar({setOption}) {
                 name="square-edit-outline"
               />
               {/* <CircularButton
-                            functionName={() => props?.shareFiles()}
-                            imageUrl={require('../../assets/share.png')}
-                        /> */}
+                functionName={() => {
+                  setOption('share');
+                }}
+                name="share-variant-outline"
+              /> */}
               <Text style={{color: secondaryColor}}> | </Text>
               <CircularButton
                 functionName={() => setOption('newFile')}
@@ -65,8 +74,8 @@ function ToolBar({setOption}) {
                 functionName={() => setOption('newFolder')}
                 name="folder-plus-outline"
               />
-            </>
-          </View>
+            </View>
+          )}
         </ScrollView>
         <Text style={{color: secondaryColor}}> | </Text>
         <CircularButton
@@ -74,11 +83,7 @@ function ToolBar({setOption}) {
           name="heart"
           color="#FF5252"
         />
-        <Pressable
-          style={[styles.pill, styles.text, styles.padding]}
-          onPress={() => setOption('menu')}>
-          <MaterialIcon name="menu" />
-        </Pressable>
+        <CircularButton functionName={() => setOption('menu')} name="menu" />
       </View>
     </>
   );

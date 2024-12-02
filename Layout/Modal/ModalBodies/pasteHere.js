@@ -1,57 +1,56 @@
-import {Text, View} from 'react-native';
+import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import useIcon from '../../../Hooks/useIcon';
+import {useDispatch} from 'react-redux';
 
-const pasteHere = (resolve, dispatch, params) => {
-  const items = params[0];
-  const destTab = params[1];
-  const onRequestClose = () => {
+export default function PasteHere({resolve, onRequestClose, items}) {
+  const dispatch = useDispatch();
+  const handleConfirm = () => {
+    resolve(1);
     dispatch({type: 'POPMODALSTACK'});
-    resolve(0);
   };
-  return {
-    icon: 'content-paste',
-    heading: `Copy ${items.length} Items Here?`,
-    subHeading: `To: ${destTab.item.path + '/'}`,
-    onRequestClose,
-    body: () => (
-      <View style={[styles.mediumGap]}>
-        {items.map(item => (
-          <View key={item.path} style={[styles.rowLayout, styles.smallGap]}>
-            {useIcon(item)}
-            <View style={[styles.wide]}>
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={[styles.text]}>
-                {item.name}
-              </Text>
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={2}
-                style={[styles.text, styles.smallText, styles.textDisabled]}>
-                {item.path}
-              </Text>
-            </View>
+  return (
+    <View style={[styles.bigGap]}>
+      {items.map(item => (
+        <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
+          {useIcon(item)}
+          <View style={[styles.wide]}>
+            <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
+              {item.name}
+            </Text>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={2}
+              style={[styles.text, styles.smallText, styles.textDisabled]}>
+              {item.path}
+            </Text>
           </View>
-        ))}
+        </View>
+      ))}
+      <View style={[styles.rowLayout, styles.mediumGap]}>
+        <Pressable
+          onPress={onRequestClose}
+          style={[
+            styles.pill,
+            styles.bordered,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Cancel</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => handleConfirm()}
+          style={[
+            styles.pill,
+            styles.pillHighlight,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Confirm</Text>
+        </Pressable>
       </View>
-    ),
-    buttons: [
-      {
-        title: 'Cancel',
-        bordered: true,
-        onPress: onRequestClose,
-      },
-      {
-        title: 'Done',
-        pillHighlight: true,
-        onPress: () => {
-          dispatch({type: 'POPMODALSTACK'});
-          resolve(1);
-        },
-      },
-    ],
-  };
-};
-export default pasteHere;
+    </View>
+  );
+}

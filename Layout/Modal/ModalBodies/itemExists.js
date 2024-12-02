@@ -1,71 +1,89 @@
-import {Text, View} from 'react-native';
+import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import useIcon from '../../../Hooks/useIcon';
 import modalPromise from '../../../Actions/modalPromise';
-import inputValue from './inputValue';
+import InputValue from './InputValue';
+import {useDispatch} from 'react-redux';
+import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 
-const itemExists = (resolve, dispatch, params) => {
-  const item = params[0];
-  const onRequestClose = () => {
-    dispatch({type: 'POPMODALSTACK'});
-    resolve('/skip');
-  };
+const ItemExists = ({resolve, item, onRequestClose}) => {
+  const dispatch = useDispatch();
   const askToRename = async () => {
-    let newNameForExistingItem = await modalPromise(dispatch, inputValue, item);
-    if (newNameForExistingItem !== '/') {
+    let newNameForExistingItem = await modalPromise(
+      dispatch,
+      InputValue,
+      {item},
+      {
+        icon: <MaterialIcon name="file-edit-outline" />,
+        heading: `Enter New Name`,
+        subHeading: `For: ${item.name}`,
+      },
+    );
+    if (newNameForExistingItem !== '/<>') {
       resolve(newNameForExistingItem);
     }
   };
 
-  return {
-    icon: 'alert-outline',
-    heading: `Item Already Exists!`,
-    subHeading: `In Destination: ${item.destFilePath}`,
-    onRequestClose,
-    body: () => (
-      <View style={[styles.mediumGap]}>
-        <View
-          key={item.path}
-          style={[
-            styles.rowLayout,
-            styles.smallGap,
-            {alignItems: 'flex-start'},
-          ]}>
-          {useIcon(item)}
-          <View style={[styles.wide]}>
-            <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
-              {item.name}
-            </Text>
-            <Text
-              ellipsizeMode="tail"
-              numberOfLines={5}
-              style={[styles.text, styles.smallText, styles.textDisabled]}>
-              {item.path}
-            </Text>
-          </View>
+  return (
+    <View style={[styles.bigGap]}>
+      <View
+        style={[
+          styles.rowLayout,
+          styles.mediumGap,
+          {alignItems: 'flex-start'},
+        ]}>
+        {useIcon(item)}
+        <View style={[styles.wide]}>
+          <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
+            {item.name}
+          </Text>
+          <Text
+            ellipsizeMode="tail"
+            numberOfLines={5}
+            style={[styles.text, styles.smallText, styles.textDisabled]}>
+            {item.path}
+          </Text>
         </View>
       </View>
-    ),
-    buttons: [
-      {
-        title: 'Skip',
-        bordered: true,
-        onPress: onRequestClose,
-      },
-      {
-        title: 'Overwrite',
-        bordered: true,
-        onPress: () => {
-          dispatch({type: 'POPMODALSTACK'});
-          resolve('/overwrite');
-        },
-      },
-      {
-        title: 'Rename',
-        pillHighlight: true,
-        onPress: askToRename,
-      },
-    ],
-  };
+      <View style={[styles.rowLayout, styles.mediumGap]}>
+        <Pressable
+          onPress={() => onRequestClose()}
+          style={[
+            styles.pill,
+            styles.bordered,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Skip</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            resolve('/overwrite');
+            dispatch({type: 'POPMODALSTACK'});
+          }}
+          style={[
+            styles.pill,
+            styles.bordered,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Overwrite</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => askToRename()}
+          style={[
+            styles.pill,
+            styles.pillHighlight,
+            styles.wide,
+            styles.centered,
+            styles.padding,
+          ]}>
+          <Text style={[styles.text]}>Rename</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
 };
-export default itemExists;
+export default ItemExists;

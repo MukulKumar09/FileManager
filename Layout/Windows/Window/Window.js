@@ -10,12 +10,11 @@ import collectHighilightedItems from '../../../Services/collectHighilightedItems
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const dispatch = useDispatch();
-
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
   const [breadCrumbs, setBreadCrumbs] = useState([item]);
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
-  const [option, setOption] = useState(0);
+  const [option, setOption] = useState('');
 
   const addBreadCrumb = useCallback(
     item => {
@@ -51,7 +50,10 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         });
         break;
       }
+      case 'paste': {
+      }
     }
+    setOption('');
   }, [option]);
 
   useEffect(() => {
@@ -110,7 +112,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
       />
-      <ToolBar setOption={setOption} />
+      <ToolBar setOption={setOption} isPathHome={item.path == 'Home'} />
     </View>
   );
 });

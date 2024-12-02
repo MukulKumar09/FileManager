@@ -26,7 +26,7 @@ const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
             payload: index,
           });
         }}
-        style={[styles.rowLayout, styles.padding]}>
+        style={[styles.rowLayout, styles.padding, styles.mediumGap]}>
         {useIcon(item)}
         <Text
           numberOfLines={1}
