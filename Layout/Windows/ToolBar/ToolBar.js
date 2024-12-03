@@ -1,7 +1,11 @@
 import {memo} from 'react';
 import {Text, View, ScrollView} from 'react-native';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
-import styles, {secondaryColor, textColor} from '../../../styles/styles';
+import styles, {
+  backgroundColor,
+  secondaryColor,
+  textColor,
+} from '../../../styles/styles';
 import {useSelector} from 'react-redux';
 function ToolBar({setOption, isPathHome}) {
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
@@ -66,6 +70,7 @@ function ToolBar({setOption, isPathHome}) {
                 name="share-variant-outline"
               /> */}
               <Text style={{color: secondaryColor}}> | </Text>
+
               <CircularButton
                 functionName={() => setOption('newFile')}
                 name="file-plus-outline"

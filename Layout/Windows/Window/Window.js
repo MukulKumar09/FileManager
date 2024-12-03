@@ -1,15 +1,21 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
 import getAndSetFilesList from '../../../Services/getAndSetFilesList';
 import WindowToolBar from '../WindowToolBar/WindowToolBar';
 import ToolBar from '../ToolBar/ToolBar';
 import collectHighilightedItems from '../../../Services/collectHighilightedItems';
+import copyItems from '../../../Services/Rnfs/copyItems';
+import moveItems from '../../../Services/Rnfs/moveItems';
+import modalPromise from '../../../Actions/modalPromise';
+import Progress from '../../Modal/ModalBodies/Progress';
+import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const dispatch = useDispatch();
+  const state = {clipboardItems: useSelector(state => state.clipboardItems)};
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
   const [breadCrumbs, setBreadCrumbs] = useState([item]);
@@ -22,6 +28,10 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     },
     [breadCrumbs],
   );
+
+  function getCB() {
+    return useSelector(state => state.clipboardItems);
+  }
 
   useEffect(() => {
     console.log(option);
@@ -51,6 +61,21 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         break;
       }
       case 'paste': {
+        const operationType = state.clipboardItems.type;
+        const paste = async () =>
+          await modalPromise(
+            dispatch,
+            Progress,
+            {
+              cb: operationType == 'copy' ? copyItems : moveItems,
+              arrayOfArgs: [state.clipboardItems.items, item],
+            },
+            {
+              icon: <MaterialIcon name="progress-clock" />,
+              heading: `Copy in progress...`,
+            },
+          );
+        paste();
       }
     }
     setOption('');

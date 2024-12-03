@@ -1,9 +1,10 @@
 import {Pressable, Text, View} from 'react-native';
+import {memo} from 'react';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import styles from '../../../styles/styles';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 
-export default function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
+function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
   return (
     <View style={[styles.rowLayout, styles.marginSmall, styles.mediumGap]}>
       <Pressable style={[styles.rowLayout, styles.mediumGap]}>
@@ -33,3 +34,4 @@ export default function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
     </View>
   );
 }
+export default memo(WindowToolBar);

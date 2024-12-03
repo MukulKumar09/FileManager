@@ -1,5 +1,6 @@
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 import PasteHere from '../Layout/Modal/ModalBodies/PasteHere';
+import Progress from '../Layout/Modal/ModalBodies/Progress';
 import copyItems from '../Services/Rnfs/copyItems';
 import modalPromise from './modalPromise';
 
@@ -33,9 +34,22 @@ export default async function detectDropLocation(
           },
         );
 
-        if (isConfirmPaste) {
+        if (isConfirmPaste == 1) {
           dispatch({type: 'TOAST', payload: 'Copy started'});
-          await copyItems(dispatch, dragNDropIcon.items, tabs[i]);
+          await modalPromise(
+            dispatch,
+            Progress,
+            {
+              cb: copyItems,
+              arrayOfArgs: [dragNDropIcon.items, tabs[i]['item']],
+            },
+            {
+              icon: <MaterialIcon name="progress-clock" />,
+              heading: `Copy in progress...`,
+            },
+          );
+
+          // await copyItems(dispatch, dragNDropIcon.items, tabs[i]);
         }
         break;
       }
