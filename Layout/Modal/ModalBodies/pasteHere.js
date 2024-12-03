@@ -2,6 +2,8 @@ import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import useIcon from '../../../Hooks/useIcon';
 import {useDispatch} from 'react-redux';
+import BorderButton from '../../../Common/BorderButton/BorderButton';
+import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 
 export default function PasteHere({resolve, onRequestClose, items}) {
   const dispatch = useDispatch();
@@ -28,28 +30,8 @@ export default function PasteHere({resolve, onRequestClose, items}) {
         </View>
       ))}
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <Pressable
-          onPress={onRequestClose}
-          style={[
-            styles.pill,
-            styles.bordered,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Cancel</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => handleConfirm()}
-          style={[
-            styles.pill,
-            styles.pillHighlight,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Confirm</Text>
-        </Pressable>
+        <BorderButton label="Cancel" onPress={onRequestClose} />
+        <HighlightButton label="Confirm" onPress={() => handleConfirm()} />
       </View>
     </View>
   );

@@ -11,8 +11,6 @@ import runAppLaunch from '../Hooks/runAppLaunch';
 import {useEffect} from 'react';
 import usePanHandler from '../Hooks/usePanHandler';
 import Modals from './Modal/Modals';
-import ProgressBar from './Modal/ModalBodies/ProgressBar';
-import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 
 export default function LayoutWrapper() {
   const dispatch = useDispatch();

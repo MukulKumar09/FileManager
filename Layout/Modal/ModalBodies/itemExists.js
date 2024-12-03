@@ -5,6 +5,8 @@ import modalPromise from '../../../Actions/modalPromise';
 import InputValue from './InputValue';
 import {useDispatch} from 'react-redux';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
+import BorderButton from '../../../Common/BorderButton/BorderButton';
+import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 
 const ItemExists = ({resolve, item, onRequestClose}) => {
   const dispatch = useDispatch();
@@ -46,42 +48,15 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
         </View>
       </View>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <Pressable
-          onPress={() => onRequestClose()}
-          style={[
-            styles.pill,
-            styles.bordered,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Skip</Text>
-        </Pressable>
-        <Pressable
+        <BorderButton label="Skip" onPress={() => onRequestClose()} />
+        <BorderButton
+          label="Overwrite"
           onPress={() => {
             resolve('/overwrite');
             dispatch({type: 'POPMODALSTACK'});
           }}
-          style={[
-            styles.pill,
-            styles.bordered,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Overwrite</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => askToRename()}
-          style={[
-            styles.pill,
-            styles.pillHighlight,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Rename</Text>
-        </Pressable>
+        />
+        <HighlightButton label="Rename" onPress={() => askToRename()} />
       </View>
     </View>
   );

@@ -3,6 +3,7 @@ import styles, {textColor} from '../../../styles/styles';
 import useIcon from '../../../Hooks/useIcon';
 import {useDispatch} from 'react-redux';
 import {useEffect, useState} from 'react';
+import BorderButton from '../../../Common/BorderButton/BorderButton';
 
 const Progress = ({onRequestClose, cb, arrayOfArgs}) => {
   const [item, setItem] = useState({name: 'Loading...', ext: '/'});
@@ -64,17 +65,7 @@ const Progress = ({onRequestClose, cb, arrayOfArgs}) => {
           <Text style={[styles.text, styles.smallText]}>{totalProgress}</Text>
         </View>
       </View>
-      <Pressable
-        onPress={onRequestClose}
-        style={[
-          styles.pill,
-          styles.bordered,
-          styles.wide,
-          styles.centered,
-          styles.padding,
-        ]}>
-        <Text style={[styles.text]}>Cancel</Text>
-      </Pressable>
+      <BorderButton label="Cancel" onPress={onRequestClose} />
     </View>
   );
 };

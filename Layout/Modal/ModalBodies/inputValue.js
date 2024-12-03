@@ -3,6 +3,8 @@ import styles from '../../../styles/styles';
 import checkExists from '../../../Services/Rnfs/checkExists';
 import {useDispatch} from 'react-redux';
 import {useState} from 'react';
+import BorderButton from '../../../Common/BorderButton/BorderButton';
+import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 
 const InputValue = ({resolve, item, onRequestClose}) => {
   const dispatch = useDispatch();
@@ -37,28 +39,8 @@ const InputValue = ({resolve, item, onRequestClose}) => {
         ]}
       />
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <Pressable
-          onPress={() => onRequestClose()}
-          style={[
-            styles.pill,
-            styles.bordered,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Cancel</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => checkNameAvailable()}
-          style={[
-            styles.pill,
-            styles.pillHighlight,
-            styles.wide,
-            styles.centered,
-            styles.padding,
-          ]}>
-          <Text style={[styles.text]}>Rename</Text>
-        </Pressable>
+        <BorderButton label="Cancel" onPress={() => onRequestClose()} />
+        <HighlightButton label="Rename" onPress={() => checkNameAvailable()} />
       </View>
     </View>
   );

@@ -4,7 +4,6 @@ import {combineReducers} from 'redux';
 import conf from './Reducers/conf';
 import clipboardItems from './Reducers/clipboardItems';
 import selectedItem from './Reducers/SelectedItemReducer';
-import contextMenu from './Reducers/contextMenu';
 import currentTab from './Reducers/CurrentTabReducer';
 import recycleBin from './Reducers/recycleBin';
 import favouriteItems from './Reducers/FavouriteItemsReducer';
@@ -20,7 +19,6 @@ const rootReducer = combineReducers({
   conf,
   clipboardItems,
   selectedItem,
-  contextMenu,
   currentTab,
   recycleBin,
   favouriteItems,
