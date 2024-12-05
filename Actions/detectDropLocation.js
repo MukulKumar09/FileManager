@@ -41,7 +41,7 @@ export default async function detectDropLocation(
             Progress,
             {
               cb: copyItems,
-              arrayOfArgs: [dragNDropIcon.items, tabs[i]['item']],
+              arrayOfArgs: [dragNDropIcon.items, tabs[i]],
             },
             {
               icon: <MaterialIcon name="progress-clock" />,

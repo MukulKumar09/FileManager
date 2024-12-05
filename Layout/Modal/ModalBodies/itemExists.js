@@ -21,7 +21,7 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
         subHeading: `For: ${item.name}`,
       },
     );
-    if (newNameForExistingItem !== '/<>') {
+    if (newNameForExistingItem !== null) {
       resolve(newNameForExistingItem);
     }
   };

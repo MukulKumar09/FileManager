@@ -27,7 +27,7 @@ function Tabs({tabs, handleScroll, currentTab, tabLayouts, setLayouts}) {
           <TabButton
             key={index}
             index={index}
-            item={tabs[index]['item']}
+            item={tabs[index]}
             isActive={index == currentTab}
             setTabLayout={setTabLayout}
           />

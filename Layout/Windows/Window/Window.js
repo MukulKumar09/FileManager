@@ -29,10 +29,6 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     [breadCrumbs],
   );
 
-  function getCB() {
-    return useSelector(state => state.clipboardItems);
-  }
-
   useEffect(() => {
     console.log(option);
     switch (option) {
@@ -97,7 +93,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     if (isActive) {
       if (shouldBeRefreshed) {
         //if flag is active, refresh
-        getAndSetFilesList(setFilesList, setIsLoading, item, sort);
+        getAndSetFilesList(setIsLoading, item, sort);
         setShouldBeRefreshed(0);
       }
     }
@@ -105,15 +101,18 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
 
   //retrieve filesList for last breadcrumb
   useEffect(() => {
-    const item = breadCrumbs[breadCrumbs.length - 1];
-    getAndSetFilesList(setFilesList, setIsLoading, item, sort);
-    dispatch({
-      type: 'UPDATETAB',
-      payload: {
-        index,
-        item,
-      },
-    });
+    const lastItem = {...breadCrumbs[breadCrumbs.length - 1]};
+    async function getSet() {
+      setFilesList(await getAndSetFilesList(setIsLoading, lastItem, sort));
+      dispatch({
+        type: 'UPDATETAB',
+        payload: {
+          index,
+          item: lastItem,
+        },
+      });
+    }
+    getSet();
   }, [breadCrumbs]);
 
   return (

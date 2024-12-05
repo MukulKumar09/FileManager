@@ -6,7 +6,7 @@ export default async function modalPromise(
 ) {
   const iscConfirmPaste = await new Promise(resolve => {
     const onRequestClose = () => {
-      resolve('/<>');
+      resolve(null);
       dispatch({type: 'POPMODALSTACK'});
     };
     const tempProps = {

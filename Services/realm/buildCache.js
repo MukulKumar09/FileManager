@@ -4,10 +4,11 @@ import RNFS from 'react-native-fs';
 
 export default async function buildCache(realm, fullPath, cacheToInvalidate) {
   console.log('built cache', fullPath);
-  if (cacheToInvalidate)
+  if (cacheToInvalidate) {
     realm.write(() => {
       realm.delete(cacheToInvalidate);
     });
+  }
 
   const rnfsData = await RNFS.readDir(fullPath);
   for (item of rnfsData) {

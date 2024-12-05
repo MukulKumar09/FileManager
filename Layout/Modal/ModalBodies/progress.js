@@ -5,13 +5,12 @@ import {useDispatch} from 'react-redux';
 import {useEffect, useState} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 
-const Progress = ({onRequestClose, cb, arrayOfArgs}) => {
+const Progress = ({resolve, onRequestClose, cb, arrayOfArgs}) => {
   const [item, setItem] = useState({name: 'Loading...', ext: '/'});
   const [itemProgress, setItemProgress] = useState('0%');
   const [totalProgress, setTotalProgress] = useState('0%');
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(cb, ...arrayOfArgs);
     async function callCB() {
       await cb(
         dispatch,

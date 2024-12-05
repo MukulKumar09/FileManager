@@ -36,6 +36,13 @@ function ToolBar({setOption, isPathHome}) {
                 }}
                 name="content-copy"
               />
+
+              <CircularButton
+                functionName={() => {
+                  setOption('move');
+                }}
+                name="content-cut"
+              />
               {state.clipboardItems.items.length > 0 && (
                 <CircularButton
                   functionName={() => {
@@ -45,12 +52,6 @@ function ToolBar({setOption, isPathHome}) {
                   color={textColor}
                 />
               )}
-              <CircularButton
-                functionName={() => {
-                  setOption('move');
-                }}
-                name="content-cut"
-              />
               <CircularButton
                 functionName={() => {
                   setOption('delete');

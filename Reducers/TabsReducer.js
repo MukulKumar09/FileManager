@@ -3,14 +3,12 @@ export default function tabs(state = {}, action) {
     case 'ADDTAB': {
       return {
         ...state,
-        [action.payload.counter]: {
-          item: {name: 'Home', path: 'Home'},
-        },
+        [action.payload.counter]: {name: 'Home', path: 'Home'},
       };
     }
     case 'UPDATETAB': {
       let tempState = {...state};
-      tempState[action.payload.index]['item'] = action.payload.item;
+      tempState[action.payload.index] = action.payload.item;
       return tempState;
     }
     case 'DELETETAB': {
@@ -24,9 +22,7 @@ export default function tabs(state = {}, action) {
       };
     case 'RESETTABS':
       return {
-        0: {
-          item: {name: 'Home', path: 'Home'},
-        },
+        0: {name: 'Home', path: 'Home'},
       };
     default:
       return state;

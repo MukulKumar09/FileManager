@@ -18,9 +18,9 @@ function Windows() {
             key={index}
             index={index}
             sort={state.conf[0]['sort']}
-            item={state.tabs[index]['item']}
+            item={state.tabs[index]}
             isActive={state.currentTab == index}
-            isRefresh={state.tabs[index]['item']['path'] == path}
+            isRefresh={state.tabs[index]['path'] == path}
           />
         );
       })}

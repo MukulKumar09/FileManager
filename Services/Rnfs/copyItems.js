@@ -36,7 +36,7 @@ export default async function copyItems(
           },
         );
         switch (whatToDo) {
-          case '/<>':
+          case null:
           case '/skip': {
             console.log('skipped item');
             break;
