@@ -4,6 +4,7 @@ import useIcon from '../../../Hooks/useIcon';
 import {useDispatch} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 
 export default function PasteHere({resolve, onRequestClose, items}) {
   const dispatch = useDispatch();
@@ -20,12 +21,9 @@ export default function PasteHere({resolve, onRequestClose, items}) {
             <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
               {item.name}
             </Text>
-            <Text
-              ellipsizeMode="tail"
-              numberOfLines={2}
-              style={[styles.text, styles.smallText, styles.textDisabled]}>
+            <SmallGrayText ellipsizeMode="tail" numberOfLines={2}>
               {item.path}
-            </Text>
+            </SmallGrayText>
           </View>
         </View>
       ))}

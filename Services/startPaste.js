@@ -1,6 +1,7 @@
 import modalPromise from '../Actions/modalPromise';
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 import Progress from '../Layout/Modal/ModalBodies/Progress';
+
 import copyItems from './Rnfs/copyItems';
 import moveItems from './Rnfs/moveItems';
 
@@ -21,6 +22,7 @@ export default async function startPaste(
     {
       icon: <MaterialIcon name="progress-clock" />,
       heading: `${type} in progress...`,
+      isStatic: true,
     },
   );
   dispatch({type: 'CLEARCB'});

@@ -21,16 +21,18 @@ function VirtualizedFilesList({
       handleLongPress(detectPressType.item, detectPressType.event);
     }
   }, [detectPressType]);
-  const renderItem = ({item}) => (
-    <FilesListItem
-      key={item.path}
-      item={item}
-      setDetectPressType={setDetectPressType}
-      setHoveredItem={setHoveredItem}
-      isHighlighted={item.isHighlighted}
-      isHovered={hoveredItem == item}
-    />
-  );
+  const renderItem = ({item}) => {
+    return (
+      <FilesListItem
+        key={item.path}
+        item={item}
+        setDetectPressType={setDetectPressType}
+        setHoveredItem={setHoveredItem}
+        isHighlighted={item.isHighlighted}
+        isHovered={hoveredItem == item}
+      />
+    );
+  };
   return (
     <VirtualizedList
       onRefresh={() => refresh(0)}

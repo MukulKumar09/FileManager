@@ -7,8 +7,10 @@ import {useDispatch} from 'react-redux';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 
 const ItemExists = ({resolve, item, onRequestClose}) => {
+  console.log(item);
   const dispatch = useDispatch();
   const askToRename = async () => {
     let newNameForExistingItem = await modalPromise(
@@ -23,6 +25,7 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
     );
     if (newNameForExistingItem !== null) {
       resolve(newNameForExistingItem);
+      dispatch({type: 'POPMODALSTACK'});
     }
   };
 
@@ -39,12 +42,9 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
           <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
             {item.name}
           </Text>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={5}
-            style={[styles.text, styles.smallText, styles.textDisabled]}>
+          <SmallGrayText ellipsizeMode="tail" numberOfLines={5}>
             {item.path}
-          </Text>
+          </SmallGrayText>
         </View>
       </View>
       <View style={[styles.rowLayout, styles.mediumGap]}>

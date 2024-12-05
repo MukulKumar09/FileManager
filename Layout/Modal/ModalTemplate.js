@@ -1,11 +1,25 @@
 import {Modal, View, Text, Pressable, ScrollView} from 'react-native';
 import styles from '../../styles/styles';
 import {memo} from 'react';
+import SmallGrayText from '../../Common/SmallGrayText/SmallGrayText';
 
-function ModalTemplate({heading, onRequestClose, icon, subHeading, children}) {
+function ModalTemplate({
+  heading,
+  isStatic,
+  onRequestClose,
+  icon,
+  subHeading,
+  children,
+}) {
+  console.log(isStatic);
   return (
-    <Modal onRequestClose={onRequestClose} transparent={true}>
-      <Pressable onPress={onRequestClose} style={[styles.modalBackground]} />
+    <Modal
+      onRequestClose={isStatic ? undefined : onRequestClose}
+      transparent={true}>
+      <Pressable
+        onPress={isStatic ? undefined : onRequestClose}
+        style={[styles.modalBackground]}
+      />
       <View style={[styles.pill, styles.bigGap, styles.padding, styles.modal]}>
         <View>
           {heading && (
@@ -21,17 +35,7 @@ function ModalTemplate({heading, onRequestClose, icon, subHeading, children}) {
                   ]}>
                   {heading}
                 </Text>
-                {subHeading && (
-                  <Text
-                    style={[
-                      styles.wide,
-                      styles.text,
-                      styles.textDisabled,
-                      styles.smallText,
-                    ]}>
-                    {subHeading}
-                  </Text>
-                )}
+                {subHeading && <SmallGrayText>{subHeading}</SmallGrayText>}
               </View>
             </View>
           )}

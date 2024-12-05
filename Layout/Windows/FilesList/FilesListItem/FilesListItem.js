@@ -4,6 +4,8 @@ import useIcon from '../../../../Hooks/useIcon';
 import {memo} from 'react';
 import {unixToDate} from '../../../../Services/unixToDate';
 import {bytesToSize} from '../../../../Services/bytesToSize';
+import unixTo12Hour from '../../../../Services/unixTo12Hour';
+import SmallGrayText from '../../../../Common/SmallGrayText/SmallGrayText';
 
 function FilesListItem({
   item,
@@ -27,18 +29,19 @@ function FilesListItem({
       <View
         style={[styles.wide, styles.rowLayout, styles.padding, styles.bigGap]}>
         {useIcon(item)}
-        <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.text]}>
-          {item.name}
-        </Text>
+        <View>
+          <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.text]}>
+            {item.name}
+          </Text>
+          {item.ext !== '/' && (
+            <SmallGrayText>{bytesToSize(item.size)}</SmallGrayText>
+          )}
+        </View>
       </View>
       <View style={[styles.padding, {alignItems: 'flex-end'}]}>
-        <Text style={[styles.text, styles.smallText]}>
-          {unixToDate(item.mtime)}
-        </Text>
+        <SmallGrayText>{unixToDate(item.mtime)}</SmallGrayText>
         {item.ext !== '/' && (
-          <Text style={[styles.text, styles.smallText]}>
-            {bytesToSize(item.size)}
-          </Text>
+          <SmallGrayText>{unixTo12Hour(item.mtime)}</SmallGrayText>
         )}
       </View>
     </Pressable>

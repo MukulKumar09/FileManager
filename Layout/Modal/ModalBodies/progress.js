@@ -7,8 +7,8 @@ import BorderButton from '../../../Common/BorderButton/BorderButton';
 
 const Progress = ({resolve, onRequestClose, cb, arrayOfArgs}) => {
   const [item, setItem] = useState({name: 'Loading...', ext: '/'});
-  const [itemProgress, setItemProgress] = useState('0%');
-  const [totalProgress, setTotalProgress] = useState('0%');
+  const [itemProgress, setItemProgress] = useState(0);
+  const [totalProgress, setTotalProgress] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
     async function callCB() {
@@ -40,31 +40,33 @@ const Progress = ({resolve, onRequestClose, cb, arrayOfArgs}) => {
             styles.pill,
             styles.pillHighlight,
             {
-              width: itemProgress,
+              width: `${itemProgress}%`,
               padding: 5,
               alignItems: 'center',
             },
           ]}>
           <ActivityIndicator color={textColor} />
-          <Text style={[styles.text, styles.smallText]}>{itemProgress}</Text>
+          <Text
+            style={[styles.text, styles.smallText]}>{`${itemProgress}%`}</Text>
         </View>
       </View>
-      <Text style={[styles.text]}>Progress</Text>
+      {/* <Text style={[styles.text]}>Progress</Text>
       <View style={[styles.wide]}>
         <View
           style={[
             styles.pill,
             styles.pillHighlight,
             {
-              width: totalProgress,
+              width: `${totalProgress}%`,
               padding: 5,
               alignItems: 'center',
             },
           ]}>
-          <Text style={[styles.text, styles.smallText]}>{totalProgress}</Text>
+          <Text
+            style={[styles.text, styles.smallText]}>{`${totalProgress}%`}</Text>
         </View>
-      </View>
-      <BorderButton label="Cancel" onPress={onRequestClose} />
+      </View> */}
+      {/* <BorderButton label="Cancel" onPress={onRequestClose} /> */}
     </View>
   );
 };

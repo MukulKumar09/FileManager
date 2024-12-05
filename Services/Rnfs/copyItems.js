@@ -1,8 +1,4 @@
-import modalPromise from '../../Actions/modalPromise';
-import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
-import ItemExists from '../../Layout/Modal/ModalBodies/ItemExists';
 import handleFile from '../handleFile';
-import checkExists from './checkExists';
 import copyItem from './copyItem';
 import RNFS from 'react-native-fs';
 
@@ -15,26 +11,44 @@ export default async function copyItems(
   setTotalProgress,
 ) {
   dispatch({type: 'TOAST', payload: `Copy started`});
-  const destDirPath = destTab.path;
+  const {path: destDirPath} = destTab;
   let isSuccess = 0;
 
   async function recursiveCopy(listItems, destination) {
     for (let item of listItems) {
       setItem(item);
+      setItemProgress(0);
+
       const {name, path, ext, isDirectory} = item;
       const destPath = destination + '/' + name;
 
-      if (ext == '/' || (isDirectory && isDirectory() == 1)) {
-        await RNFS.mkdir(destPath);
-        let dirItems = await RNFS.readDir(path);
-        await recursiveCopy(dirItems, destPath);
-      } else {
-        isSuccess = await handleFile(dispatch, copyItem, destPath, item, path);
+      try {
+        if (ext == '/' || (isDirectory && isDirectory() == 1)) {
+          await RNFS.mkdir(destPath);
+          let dirItems = await RNFS.readDir(path);
+          await recursiveCopy(dirItems, destPath);
+        } else {
+          isSuccess = await handleFile(
+            dispatch,
+            copyItem,
+            item,
+            path,
+            destination,
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
+
+      setItemProgress(100);
     }
     return 0;
   }
+
+  setTotalProgress(0);
   await recursiveCopy(items, destDirPath);
+  setTotalProgress(100);
+
   if (isSuccess == 1) {
     dispatch({
       type: 'TOAST',

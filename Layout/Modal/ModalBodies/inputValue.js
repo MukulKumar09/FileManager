@@ -16,8 +16,8 @@ const InputValue = ({resolve, item, onRequestClose}) => {
     if (isExists == true) {
       setIsNameExists(true);
     } else {
-      dispatch({type: 'POPMODALSTACK'});
       resolve(value);
+      dispatch({type: 'POPMODALSTACK'});
     }
   }
 

@@ -30,7 +30,7 @@ export default async function detectDropLocation(
           {
             icon: <MaterialIcon name="content-paste" />,
             heading: `Copy ${dragNDropIcon.items.length} Items here?`,
-            subHeading: `To: ${tabs[i].item.path + '/'}`,
+            subHeading: `To: ${tabs[i].path + '/'}`,
           },
         );
 
