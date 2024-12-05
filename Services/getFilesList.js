@@ -6,8 +6,7 @@ export default async function getFilesList(item, sort) {
   if (!item) return [];
 
   const realm = await realmOpen();
-  const {path} = item;
 
-  const data = await getSetCache(realm, path, sort);
+  const data = await getSetCache(realm, item, sort);
   return sortFiles(data, sort);
 }

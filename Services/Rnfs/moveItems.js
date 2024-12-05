@@ -20,6 +20,7 @@ export default async function moveItems(
   async function recursiveMove(listItems, destination) {
     let isAnythingRemaining = 0; //If the move fails or is skipped, set the flag to 1 and prevent the directory from being deleted.
     for (let item of listItems) {
+      setItem(item);
       const {name, path, ext, isDirectory} = item;
       const destPath = destination + '/' + name;
 

@@ -1,6 +1,7 @@
 import buildCache from './realm/buildCache';
 import validateCache from './realm/validateCache';
-export default async function getSetCache(realm, path) {
+export default async function getSetCache(realm, item) {
+  const {path} = item;
   if (path == 'Home') {
     const realmData = realm.objects('cache').filtered('type == "Home"');
     return realmData;
@@ -10,10 +11,12 @@ export default async function getSetCache(realm, path) {
   //   .objects('cache')
   //   .find(cache => cache.parent == `${path}/`);
   const cache = realm.objects('cache').filtered(`parent == "${path}/"`);
+
   if (cache.length > 0) {
-    const cacheValidation = await validateCache(realm, path);
+    //if exists, validate
+    const cacheValidation = await validateCache(realm, item);
     if (cacheValidation) {
-      //if yes, return cache
+      //if valid, return cache
       console.log('found cache');
       return cache;
     } else {
@@ -22,7 +25,7 @@ export default async function getSetCache(realm, path) {
       return realmData;
     }
   } else {
-    //if not, build cache
+    //if cache doesnt exists, or directory is empty, build cache
     const realmData = await buildCache(realm, path);
     return realmData;
   }

@@ -21,6 +21,7 @@ function Windows() {
             item={state.tabs[index]}
             isActive={state.currentTab == index}
             isRefresh={state.tabs[index]['path'] == path}
+            setPath={setPath}
           />
         );
       })}
