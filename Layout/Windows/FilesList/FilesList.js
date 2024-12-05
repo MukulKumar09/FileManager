@@ -6,7 +6,14 @@ import handleFileLongPress from '../../../Actions/handleFileLongPress';
 import navigateItem from '../../../Actions/navigateItem';
 import highlightItemCB from '../../../Actions/highlightItemCB';
 
-function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
+function FilesList({
+  filesList,
+  refresh,
+  path,
+  setFilesList,
+  index,
+  addBreadCrumb,
+}) {
   const dispatch = useDispatch();
   // console.log(filesList);
 
@@ -71,6 +78,7 @@ function FilesList({filesList, path, setFilesList, index, addBreadCrumb}) {
     <>
       <Text style={{color: 'white'}}>{selectedItems}</Text>
       <VirtualizedFilesList
+        refresh={refresh}
         filesList={filesList}
         setHoveredItem={setHoveredItem}
         handlePress={handlePress}

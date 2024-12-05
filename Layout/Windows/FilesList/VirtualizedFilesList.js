@@ -4,6 +4,7 @@ import {memo, useState, useEffect} from 'react';
 
 function VirtualizedFilesList({
   filesList,
+  refresh,
   handlePress,
   handleLongPress,
   setHoveredItem,
@@ -32,8 +33,8 @@ function VirtualizedFilesList({
   );
   return (
     <VirtualizedList
-      // onRefresh={() => {}}
-      // refreshing={} //refresh flag
+      onRefresh={() => refresh(0)}
+      refreshing={false} //refresh flag
       data={filesList}
       keyExtractor={item => item.path}
       getItemCount={data => data.length}

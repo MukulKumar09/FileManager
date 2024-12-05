@@ -1,9 +1,10 @@
 import modalPromise from '../../Actions/modalPromise';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import ItemExists from '../../Layout/Modal/ModalBodies/ItemExists';
+import handleFile from '../handleFile';
 import checkExists from './checkExists';
-import collectItems from './collectItems';
 import copyItem from './copyItem';
+import RNFS from 'react-native-fs';
 
 export default async function copyItems(
   dispatch,
@@ -17,54 +18,33 @@ export default async function copyItems(
   const destDirPath = destTab.path;
   let isSuccess = 0;
 
-  const collectedItems = await collectItems(items, destDirPath);
-  for (let item of collectedItems) {
-    setItem(item);
-    setItemProgress('0%');
-    const {destFilePath, name, path} = item;
-    try {
-      const isItemExists = await checkExists(destFilePath + name);
-      if (isItemExists) {
-        const whatToDo = await modalPromise(
-          dispatch,
-          ItemExists,
-          {item},
-          {
-            icon: <MaterialIcon name="alert-outline" />,
-            heading: `Item Already Exists!`,
-            subHeading: `In Destination: ${item.destFilePath}`,
-          },
-        );
-        switch (whatToDo) {
-          case null:
-          case '/skip': {
-            console.log('skipped item');
-            break;
-          }
-          case '/overwrite': {
-            console.log('overwrite write');
-            await copyItem(path, destFilePath, name);
-            break;
-          }
-          default: {
-            console.log('renamed item');
-            await copyItem(path, destFilePath, whatToDo);
-            break;
-          }
-        }
+  async function recursiveCopy(listItems, destination) {
+    for (let item of listItems) {
+      setItem(item);
+      const {name, path, ext, isDirectory} = item;
+      const destPath = destination + '/' + name;
+
+      if (ext == '/' || (isDirectory && isDirectory() == 1)) {
+        await RNFS.mkdir(destPath);
+        let dirItems = await RNFS.readDir(path);
+        await recursiveCopy(dirItems, destPath);
       } else {
-        await copyItem(path, destFilePath, name);
+        isSuccess = await handleFile(dispatch, copyItem, destPath, item, path);
       }
-      setItemProgress('100%');
-      isSuccess = 1;
-    } catch (error) {
-      console.log(error);
-      isSuccess = 0;
     }
+    return 0;
   }
-  dispatch({
-    type: 'TOAST',
-    payload: isSuccess ? 'Copy Successful.' : 'Copy Unsuccessful.',
-  });
+  await recursiveCopy(items, destDirPath);
+  if (isSuccess == 1) {
+    dispatch({
+      type: 'TOAST',
+      payload: 'Copy Successful.',
+    });
+  } else {
+    dispatch({
+      type: 'TOAST',
+      payload: 'Some items failed to copy.  ',
+    });
+  }
   return 1;
 }

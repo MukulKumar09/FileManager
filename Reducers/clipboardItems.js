@@ -16,7 +16,7 @@ export default function clipboardItems(
       return {...state.items, type: action.payload};
     }
     case 'CLEARCB': {
-      return {type: 'none', items: []};
+      return {type: 'none', items: [], source: ''};
     }
   }
   return state;

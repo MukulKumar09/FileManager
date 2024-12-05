@@ -23,6 +23,7 @@ export default async function startPaste(
       heading: `${type} in progress...`,
     },
   );
+  dispatch({type: 'CLEARCB'});
   setPath(clipboardItems.source); //refresh source path
   setTimeout(() => {
     setPath(item.path);

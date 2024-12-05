@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
 import getAndSetFilesList from '../../../Services/getAndSetFilesList';
@@ -26,7 +26,17 @@ const Window = React.memo(
     );
 
     function refresh(argItem) {
-      getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
+      if (argItem == 0) {
+        //hard refresh
+        getAndSetFilesList(
+          setFilesList,
+          setIsLoading,
+          {...item, mtime: 'latest'},
+          sort,
+        );
+      } else {
+        getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
+      }
     }
 
     useHandleToolBar(option, filesList, item, setOption, setPath, state);
@@ -66,6 +76,7 @@ const Window = React.memo(
             index={index}
             path={item.path}
             filesList={filesList}
+            refresh={refresh}
             setFilesList={setFilesList}
             addBreadCrumb={addBreadCrumb}
           />

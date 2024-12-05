@@ -2,6 +2,8 @@ import RNFS from 'react-native-fs';
 import normalizeTimestamp from '../normalizeTimestamp';
 export default async function validateCache(realm, item) {
   const {path, mtime} = item;
+  console.log(item);
+  if (mtime == 'latest') return 0; //force buildCache
   //get parent mtime from RNFS
   const stat = await RNFS.stat(path);
   const {mtime: mtimeStat} = stat;
@@ -11,8 +13,8 @@ export default async function validateCache(realm, item) {
   const realmData = realm.objects('cache').find(cache => cache.path == path);
   // console.log(mtime, normalizedMimeStat);
   if (mtime == 'cache') return realmData; //force getCache
-  if (mtime == 'latest') return 0; //force buildCache
-  const result = mtime == normalizedMimeStat;
+  const mtimeRealm = realmData.mtime;
+  const result = mtimeRealm == normalizedMimeStat;
   if (!result) {
     realm.write(() => {
       realm.create(
