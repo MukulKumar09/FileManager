@@ -1,4 +1,4 @@
-import handleFile from '../handleFile';
+import handleFile from './handleFile';
 import moveItem from './moveItem';
 import RNFS from 'react-native-fs';
 
@@ -29,6 +29,7 @@ export default async function moveItems(
           await RNFS.unlink(path);
         }
       } else {
+        item.destFilePath = destination;
         isSuccess = await handleFile(
           dispatch,
           moveItem,

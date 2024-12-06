@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs';
-import getFileExtension from '../getFileExtension';
+import getFileExtension from '../fileUtils/getFileExtension';
 
 export default async function collectItems(items, destDirPath) {
   let collectedItems = [];

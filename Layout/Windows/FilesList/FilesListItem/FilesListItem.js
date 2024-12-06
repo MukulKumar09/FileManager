@@ -2,9 +2,9 @@ import {Pressable, Text, View} from 'react-native';
 import styles from '../../../../styles/styles';
 import useIcon from '../../../../Hooks/useIcon';
 import {memo} from 'react';
-import {unixToDate} from '../../../../Services/unixToDate';
-import {bytesToSize} from '../../../../Services/bytesToSize';
-import unixTo12Hour from '../../../../Services/unixTo12Hour';
+import {unixToDate} from '../../../../Services/fileUtils/unixToDate';
+import {bytesToSize} from '../../../../Services/fileUtils/bytesToSize';
+import unixTo12Hour from '../../../../Services/fileUtils/unixTo12Hour';
 import SmallGrayText from '../../../../Common/SmallGrayText/SmallGrayText';
 
 function FilesListItem({

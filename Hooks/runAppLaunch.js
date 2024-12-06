@@ -1,9 +1,10 @@
-import {createConf} from '../Services/conf';
-import realmOpen from '../Services/realm/realmOpen';
 import {
   updateMountingPoints,
   deleteMountingPoints,
-} from '../Services/updateMountingPoints';
+} from '../Services/cache/updateMountingPoints';
+import {createConf} from '../Services/conf';
+import realmOpen from '../Services/realm/realmOpen';
+
 export default async function runAppLaunch(dispatch) {
   try {
     //Step 1: Open realm

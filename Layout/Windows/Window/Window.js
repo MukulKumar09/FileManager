@@ -3,11 +3,12 @@ import {Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
-import getAndSetFilesList from '../../../Services/getAndSetFilesList';
+
 import WindowToolBar from '../WindowToolBar/WindowToolBar';
 import ToolBar from '../ToolBar/ToolBar';
 import useHandleToolBar from '../../../Hooks/useHandleToolBar';
 import useBreadCrumb from '../../../Hooks/useBreadCrumb';
+import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
 
 const Window = React.memo(
   ({index, sort, item, isActive, isRefresh, setPath}) => {
@@ -77,6 +78,7 @@ const Window = React.memo(
             path={item.path}
             filesList={filesList}
             refresh={refresh}
+            isRefresh={isRefresh}
             setFilesList={setFilesList}
             addBreadCrumb={addBreadCrumb}
           />

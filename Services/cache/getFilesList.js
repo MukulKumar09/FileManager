@@ -1,5 +1,5 @@
-import realmOpen from './realm/realmOpen';
-import sortFiles from './sortFiles';
+import realmOpen from '../realm/realmOpen';
+import sortFiles from '../fileUtils/sortFiles';
 import getSetCache from './getSetCache';
 
 export default async function getFilesList(item, sort) {

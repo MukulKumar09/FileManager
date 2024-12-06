@@ -1,7 +1,7 @@
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 import PasteHere from '../Layout/Modal/ModalBodies/PasteHere';
 import Progress from '../Layout/Modal/ModalBodies/Progress';
-import copyItems from '../Services/Rnfs/copyItems';
+import copyItems from '../Services/rnfs/copyItems';
 import modalPromise from './modalPromise';
 
 export default async function detectDropLocation(

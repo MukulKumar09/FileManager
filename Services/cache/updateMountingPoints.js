@@ -1,4 +1,4 @@
-import getMountingPoints from '../Services/getMountingPoints';
+import getMountingPoints from './getMountingPoints';
 
 export async function updateMountingPoints(realm) {
   //Find all mounting points

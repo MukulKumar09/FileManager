@@ -1,5 +1,6 @@
 import RNFS from 'react-native-fs';
-import normalizeTimestamp from '../normalizeTimestamp';
+import normalizeTimestamp from '../fileUtils/normalizeTimestamp';
+
 export default async function validateCache(realm, item) {
   const {path, mtime} = item;
   console.log(item);

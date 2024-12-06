@@ -1,7 +1,7 @@
-import modalPromise from '../Actions/modalPromise';
-import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
-import ItemExists from '../Layout/Modal/ModalBodies/ItemExists';
-import checkExists from './Rnfs/checkExists';
+import modalPromise from '../../Actions/modalPromise';
+import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
+import ItemExists from '../../Layout/Modal/ModalBodies/ItemExists';
+import checkExists from './checkExists';
 
 export default async function handleFile(
   dispatch,
@@ -15,6 +15,7 @@ export default async function handleFile(
   try {
     const isItemExists = await checkExists(destination, name);
     if (isItemExists) {
+      console.log('itemexists', item);
       const whatToDo = await modalPromise(
         dispatch,
         ItemExists,

@@ -1,4 +1,4 @@
-import handleFile from '../handleFile';
+import handleFile from './handleFile';
 import copyItem from './copyItem';
 import RNFS from 'react-native-fs';
 
@@ -28,6 +28,7 @@ export default async function copyItems(
           let dirItems = await RNFS.readDir(path);
           await recursiveCopy(dirItems, destPath);
         } else {
+          item.destFilePath = destination;
           isSuccess = await handleFile(
             dispatch,
             copyItem,

@@ -1,6 +1,7 @@
-import getFileExtension from '../getFileExtension';
-import normalizeTimestamp from '../normalizeTimestamp';
+import getFileExtension from '../fileUtils/getFileExtension';
+
 import RNFS from 'react-native-fs';
+import normalizeTimestamp from '../fileUtils/normalizeTimestamp';
 
 export default async function buildCache(realm, fullPath, cacheToInvalidate) {
   console.log('built cache', fullPath);

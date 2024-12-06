@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
-import normalizeTimestamp from './normalizeTimestamp';
-import getStorageName from './getStorageName';
+import normalizeTimestamp from '../fileUtils/normalizeTimestamp';
+import getStorageName from '../fileUtils/getStorageName';
 export default async function getMountingPoints() {
   //get all mounting points
   try {

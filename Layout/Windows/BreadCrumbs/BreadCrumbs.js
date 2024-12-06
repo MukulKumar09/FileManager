@@ -1,7 +1,7 @@
 import {Pressable, Text, ScrollView, View} from 'react-native';
 import React from 'react';
-import updateBreadCrumbs from '../../../Services/BreadCrumbs/updateBreadCrumbs';
-import goBackBreadCrumb from '../../../Services/BreadCrumbs/goBackBreadCrumb';
+import updateBreadCrumbs from '../../../Services/breadCrumbs/updateBreadCrumbs';
+import goBackBreadCrumb from '../../../Services/breadCrumbs/goBackBreadCrumb';
 import styles from '../../../styles/styles';
 function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
   return (

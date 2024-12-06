@@ -1,5 +1,5 @@
-import buildCache from './realm/buildCache';
-import validateCache from './realm/validateCache';
+import buildCache from '../realm/buildCache';
+import validateCache from '../realm/validateCache';
 export default async function getSetCache(realm, item) {
   const {path} = item;
   if (path == 'Home') {

@@ -1,33 +1,15 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import useIcon from '../../../Hooks/useIcon';
-import modalPromise from '../../../Actions/modalPromise';
-import InputValue from './InputValue';
 import {useDispatch} from 'react-redux';
-import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
+import askToRename from '../../../Services/askToRename';
 
 const ItemExists = ({resolve, item, onRequestClose}) => {
   console.log(item);
   const dispatch = useDispatch();
-  const askToRename = async () => {
-    let newNameForExistingItem = await modalPromise(
-      dispatch,
-      InputValue,
-      {item},
-      {
-        icon: <MaterialIcon name="file-edit-outline" />,
-        heading: `Enter New Name`,
-        subHeading: `For: ${item.name}`,
-      },
-    );
-    if (newNameForExistingItem !== null) {
-      resolve(newNameForExistingItem);
-      dispatch({type: 'POPMODALSTACK'});
-    }
-  };
 
   return (
     <View style={[styles.bigGap]}>
@@ -56,7 +38,10 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
             dispatch({type: 'POPMODALSTACK'});
           }}
         />
-        <HighlightButton label="Rename" onPress={() => askToRename()} />
+        <HighlightButton
+          label="Rename"
+          onPress={async () => resolve(askToRename(dispatch, item, resolve))}
+        />
       </View>
     </View>
   );

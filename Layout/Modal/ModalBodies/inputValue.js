@@ -1,21 +1,21 @@
 import {TextInput, View, Pressable, Text} from 'react-native';
 import styles from '../../../styles/styles';
-import checkExists from '../../../Services/Rnfs/checkExists';
+import checkExists from '../../../Services/rnfs/checkExists';
 import {useDispatch} from 'react-redux';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import checkNameValid from '../../../Services/fileUtils/checkNameValid';
 
 const InputValue = ({resolve, item, onRequestClose}) => {
   const dispatch = useDispatch();
-  const [isNameExists, setIsNameExists] = useState(false);
-  const {name, destFilePath} = item;
+  const [error, setError] = useState(false);
+  const {name} = item;
   let value = name;
-  async function checkNameAvailable() {
-    const isExists = await checkExists(destFilePath + value);
-    if (isExists == true) {
-      setIsNameExists(true);
-    } else {
+
+  async function verifyName() {
+    const isValid = await checkNameValid(value, item, setError);
+    if (isValid) {
       resolve(value);
       dispatch({type: 'POPMODALSTACK'});
     }
@@ -23,11 +23,11 @@ const InputValue = ({resolve, item, onRequestClose}) => {
 
   return (
     <View style={[styles.bigGap]}>
-      {isNameExists && <Text style={[styles.text]}>Name already exists!</Text>}
+      {error && <Text style={[styles.text]}>{error}</Text>}
       <TextInput
         defaultValue={value}
         onChangeText={text => {
-          setIsNameExists(false);
+          setError(false);
           value = text;
         }}
         style={[
@@ -35,12 +35,12 @@ const InputValue = ({resolve, item, onRequestClose}) => {
           styles.padding,
           styles.text,
           styles.bordered,
-          isNameExists && {borderColor: 'darkred'},
+          error && {borderColor: 'darkred'},
         ]}
       />
       <View style={[styles.rowLayout, styles.mediumGap]}>
         <BorderButton label="Cancel" onPress={() => onRequestClose()} />
-        <HighlightButton label="Rename" onPress={() => checkNameAvailable()} />
+        <HighlightButton label="Rename" onPress={() => verifyName()} />
       </View>
     </View>
   );

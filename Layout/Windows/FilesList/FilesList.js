@@ -9,6 +9,7 @@ import highlightItemCB from '../../../Actions/highlightItemCB';
 function FilesList({
   filesList,
   refresh,
+  isRefresh,
   path,
   setFilesList,
   index,
@@ -30,7 +31,7 @@ function FilesList({
   useEffect(() => {
     setSelectionFlag(0);
     setSelectedItems(0);
-  }, [path]);
+  }, [path, isRefresh]);
 
   const callHighlightItemCB = item =>
     highlightItemCB(
