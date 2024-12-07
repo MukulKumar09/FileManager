@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs';
-export default async function moveItem(source, destinationPath, name) {
-  console.log(source, destinationPath, name);
-  return await RNFS.moveFile(source, destinationPath + '/' + name);
+export default async function moveItem(sourcePath, destPath, name) {
+  await RNFS.mkdir(destPath);
+  return await RNFS.moveFile(sourcePath, destPath + '/' + name);
 }

@@ -5,6 +5,7 @@ import styles from '../../../styles/styles';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 
 function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
+  console.log('breadCrumbs rendered');
   return (
     <View style={[styles.rowLayout, styles.marginSmall, styles.mediumGap]}>
       <Pressable style={[styles.rowLayout, styles.mediumGap]}>

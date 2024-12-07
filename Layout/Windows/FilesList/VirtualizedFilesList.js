@@ -8,6 +8,7 @@ function VirtualizedFilesList({
   handlePress,
   handleLongPress,
   setHoveredItem,
+  setSelectedItems,
   hoveredItem,
 }) {
   const [detectPressType, setDetectPressType] = useState(0);
@@ -35,7 +36,10 @@ function VirtualizedFilesList({
   };
   return (
     <VirtualizedList
-      onRefresh={() => refresh(0)}
+      onRefresh={() => {
+        refresh(0);
+        setSelectedItems(0);
+      }}
       refreshing={false} //refresh flag
       data={filesList}
       keyExtractor={item => item.path}

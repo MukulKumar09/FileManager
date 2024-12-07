@@ -1,6 +1,7 @@
 import {useSelector} from 'react-redux';
 import Window from './Window/Window';
 import {useState} from 'react';
+import {Pressable, Text} from 'react-native';
 
 function Windows() {
   //remoe view
@@ -10,6 +11,7 @@ function Windows() {
     currentTab: useSelector(state => state.currentTab),
     conf: useSelector(state => state.conf),
   };
+
   return (
     <>
       {Object.keys(state.tabs).map(index => {

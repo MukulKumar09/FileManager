@@ -1,23 +1,27 @@
 import modalPromise from '../../Actions/modalPromise';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import Progress from '../../Layout/Modal/ModalBodies/Progress';
-
-import copyItems from './copyItems';
-import moveItems from './moveItems';
+import collectItems from './collectItems';
+import copyItem from './copyItem';
+import deleteItem from './deleteItem';
+import moveItem from './moveItem';
 
 export default async function startPaste(
   dispatch,
-  item,
   clipboardItems,
+  destTab,
   setPath,
 ) {
-  const {type} = clipboardItems;
+  const {source, type} = clipboardItems;
+  const isItMove = type == 'move' ? 1 : 0;
+  const collectedItems = await collectItems(clipboardItems, destTab);
+  // console.log(JSON.stringify(collectedItems, null, 2));
   await modalPromise(
     dispatch,
     Progress,
     {
-      cb: type == 'copy' ? copyItems : moveItems,
-      arrayOfArgs: [clipboardItems.items, item],
+      items: collectedItems,
+      cb: isItMove ? moveItem : copyItem,
     },
     {
       icon: <MaterialIcon name="progress-clock" />,
@@ -25,9 +29,16 @@ export default async function startPaste(
       isStatic: true,
     },
   );
+  if (isItMove) {
+    for (let item of Object.keys(collectedItems)) {
+      if (collectedItems[item] == 0) {
+        await deleteItem(item);
+      }
+    }
+  }
   dispatch({type: 'CLEARCB'});
-  setPath(clipboardItems.source); //refresh source path
+  setPath(source); //refresh source path
   setTimeout(() => {
-    setPath(item.path);
+    setPath(destTab.path);
   }, 100); //refresh current path
 }

@@ -11,7 +11,6 @@ function ModalTemplate({
   subHeading,
   children,
 }) {
-  console.log(isStatic);
   return (
     <Modal
       onRequestClose={isStatic ? undefined : onRequestClose}

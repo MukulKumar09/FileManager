@@ -8,6 +8,7 @@ import styles, {
 } from '../../../styles/styles';
 import {useSelector} from 'react-redux';
 function ToolBar({setOption, isPathHome}) {
+  console.log('ToolBar rendered');
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
   console.log('toolbar');
   return (

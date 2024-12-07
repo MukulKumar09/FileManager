@@ -3,17 +3,11 @@ import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import ItemExists from '../../Layout/Modal/ModalBodies/ItemExists';
 import checkExists from './checkExists';
 
-export default async function handleFile(
-  dispatch,
-  cb,
-  item,
-  path,
-  destination,
-) {
-  let isSuccess = 0;
-  const {name} = item;
+export default async function handleFile(dispatch, cb, item) {
+  const {name, destPath, path} = item;
+
   try {
-    const isItemExists = await checkExists(destination, name);
+    const isItemExists = await checkExists(destPath, name);
     if (isItemExists) {
       console.log('itemexists', item);
       const whatToDo = await modalPromise(
@@ -23,33 +17,30 @@ export default async function handleFile(
         {
           icon: <MaterialIcon name="alert-outline" />,
           heading: `Item Already Exists!`,
-          subHeading: `In Destination: ${destination}/${name}`,
+          subHeading: `In destination: ${destPath}/${name}`,
         },
       );
       switch (whatToDo) {
         case null:
         case '/skip': {
-          dispatch({type: 'TOAST', payload: `Skipping ${name}`});
-          break;
+          return 1;
         }
         case '/overwrite': {
-          dispatch({type: 'TOAST', payload: `Overwriting ${name}`});
-          await cb(path, destination, name);
+          await cb(path, destPath, name);
           break;
         }
         default: {
           console.log('renamed item');
-          await cb(path, destination, whatToDo);
+          await cb(path, destPath, whatToDo);
           break;
         }
       }
     } else {
-      await cb(path, destination, name);
+      await cb(path, destPath, name);
     }
-    isSuccess = 1;
   } catch (error) {
     console.log(error); //if error in cb item
-    isSuccess = 0;
+    return 1;
   }
-  return isSuccess;
+  return 0;
 }

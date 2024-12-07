@@ -5,8 +5,6 @@ import {useDispatch} from 'react-redux';
 import startPaste from '../Services/rnfs/startPaste';
 import askToRename from '../Services/askToRename';
 import moveItem from '../Services/rnfs/moveItem';
-import collectItems from '../Services/rnfs/collectItems';
-import collectHighilightedItems from '../Services/collectHighilightedItems';
 
 export default function useHandleToolBar(
   option,
@@ -25,17 +23,11 @@ export default function useHandleToolBar(
         break;
       }
       case 'move': {
-        const hI = collectHighilightedItems(filesList);
-        const db = async () => {
-          const cI = await collectItems(hI, '/storage/emulated/0/Music');
-          console.log(cI);
-        };
-        db();
-        // copyToClipboard(dispatch, filesList, 'move', item);
+        copyToClipboard(dispatch, filesList, 'move', item);
         break;
       }
       case 'paste': {
-        startPaste(dispatch, item, state.clipboardItems, setPath);
+        startPaste(dispatch, state.clipboardItems, {...item}, setPath);
         break;
       }
       case 'rename': {

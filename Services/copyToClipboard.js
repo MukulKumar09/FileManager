@@ -4,7 +4,7 @@ export default function copyToClipboard(dispatch, filesList, type, item) {
   const items = collectHighilightedItems(filesList);
   dispatch({
     type: 'COPYTOCB',
-    payload: {type, source: item.path, items},
+    payload: {type, source: item, items},
   });
   dispatch({
     type: 'TOAST',

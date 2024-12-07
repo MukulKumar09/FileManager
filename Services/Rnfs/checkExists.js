@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs';
-export default async function checkExists(destinationPath, name) {
-  const checkExists = await RNFS.exists(destinationPath + '/' + name);
+export default async function checkExists(destPath, name) {
+  const checkExists = await RNFS.exists(destPath + '/' + name);
   return checkExists;
 }

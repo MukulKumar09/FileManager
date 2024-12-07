@@ -28,7 +28,7 @@ const Window = React.memo(
 
     function refresh(argItem) {
       if (argItem == 0) {
-        //hard refresh
+        //hard refresh same path
         getAndSetFilesList(
           setFilesList,
           setIsLoading,
@@ -36,6 +36,7 @@ const Window = React.memo(
           sort,
         );
       } else {
+        //navigate to path
         getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
       }
     }
@@ -63,7 +64,6 @@ const Window = React.memo(
         }
       }
     }, [isActive]);
-
     return (
       <View
         style={[

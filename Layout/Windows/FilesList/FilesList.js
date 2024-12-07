@@ -16,7 +16,6 @@ function FilesList({
   addBreadCrumb,
 }) {
   const dispatch = useDispatch();
-  // console.log(filesList);
 
   //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
@@ -80,6 +79,7 @@ function FilesList({
       <Text style={{color: 'white'}}>{selectedItems}</Text>
       <VirtualizedFilesList
         refresh={refresh}
+        setSelectedItems={setSelectedItems}
         filesList={filesList}
         setHoveredItem={setHoveredItem}
         handlePress={handlePress}
