@@ -1,7 +1,5 @@
 import {useSelector} from 'react-redux';
 import Window from './Window/Window';
-import {useState} from 'react';
-import {Pressable, Text} from 'react-native';
 
 function Windows() {
   //remoe view

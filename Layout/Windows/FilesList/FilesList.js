@@ -14,17 +14,20 @@ function FilesList({
   setFilesList,
   index,
   addBreadCrumb,
+  selectedItems,
+  setSelectedItems,
 }) {
   const dispatch = useDispatch();
 
   //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
-  const [selectedItems, setSelectedItems] = useState(0);
   const [lastClickedItem, setLastClickedItem] = useState({});
   const [hoveredItem, setHoveredItem] = useState({});
 
   useEffect(() => {
-    if (selectedItems == 0) setSelectionFlag(0);
+    if (selectedItems == 0) {
+      setSelectionFlag(0);
+    }
   }, [selectedItems]);
 
   useEffect(() => {

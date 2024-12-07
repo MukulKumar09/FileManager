@@ -9,6 +9,7 @@ import ToolBar from '../ToolBar/ToolBar';
 import useHandleToolBar from '../../../Hooks/useHandleToolBar';
 import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
+import SelectedItems from './SelectedItems/SelectedItems';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const state = {
@@ -21,6 +22,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const [breadCrumbs, setBreadCrumbs] = useState([item]);
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
   const [option, setOption] = useState('');
+  const [selectedItems, setSelectedItems] = useState(0);
 
   const addBreadCrumb = useCallback(
     item => {
@@ -84,8 +86,19 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
           isRefresh={isRefresh}
           setFilesList={setFilesList}
           addBreadCrumb={addBreadCrumb}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
         />
       </View>
+      {Boolean(selectedItems) && (
+        <SelectedItems
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+          filesList={filesList}
+          setFilesList={setFilesList}
+        />
+      )}
+
       <WindowToolBar
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
