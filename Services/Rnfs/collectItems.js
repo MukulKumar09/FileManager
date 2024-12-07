@@ -3,6 +3,7 @@ import getFileExtension from '../fileUtils/getFileExtension';
 
 export default async function collectItems(clipboardItems, destTab) {
   const {source, items} = clipboardItems;
+
   let collectedItems = {'/<>numberOfItems': 0};
 
   async function recurseCB(items, destination) {
@@ -22,7 +23,7 @@ export default async function collectItems(clipboardItems, destTab) {
           destPath: destination,
           ext: getFileExtension(item.name),
         };
-        if (`${source.path}/` == item.parent) {
+        if (source == item.parent) {
           collectedItems[item.path] = newItem;
         } else {
           listItems.push(newItem);

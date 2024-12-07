@@ -1,9 +1,9 @@
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 import PasteHere from '../Layout/Modal/ModalBodies/PasteHere';
-import copyItems from '../Services/rnfs/copyItems';
 import modalPromise from './modalPromise';
 import Progress from '../Layout/Modal/ModalBodies/Progress';
 import collectItems from '../Services/rnfs/collectItems';
+import copyItem from '../Services/rnfs/copyItem';
 
 export default async function detectDropLocation(
   tabs,
@@ -36,18 +36,13 @@ export default async function detectDropLocation(
         );
         if (isConfirmPaste == 1) {
           dispatch({type: 'TOAST', payload: 'Copy started'});
-          const collectedItems = await collectItems(
-            dragNDropIcon.items,
-            tabs[i],
-          );
-          console.log(collectedItems);
-          return 0;
+          const collectedItems = await collectItems(dragNDropIcon, tabs[i]);
           await modalPromise(
             dispatch,
             Progress,
             {
               items: collectedItems,
-              cb: copyItems,
+              cb: copyItem,
             },
             {
               icon: <MaterialIcon name="progress-clock" />,
@@ -55,6 +50,7 @@ export default async function detectDropLocation(
               isStatic: true,
             },
           );
+          dispatch({type: 'SETREFRESHPATH', payload: tabs[i].path});
         }
         break;
       }

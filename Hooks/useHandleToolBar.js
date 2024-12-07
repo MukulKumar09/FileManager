@@ -9,9 +9,8 @@ import moveItem from '../Services/rnfs/moveItem';
 export default function useHandleToolBar(
   option,
   filesList,
-  item,
+  tab,
   setOption,
-  setPath,
   state,
 ) {
   const dispatch = useDispatch();
@@ -19,15 +18,15 @@ export default function useHandleToolBar(
     console.log(option);
     switch (option) {
       case 'copy': {
-        copyToClipboard(dispatch, filesList, 'copy', item);
+        copyToClipboard(dispatch, filesList, 'copy', tab);
         break;
       }
       case 'move': {
-        copyToClipboard(dispatch, filesList, 'move', item);
+        copyToClipboard(dispatch, filesList, 'move', tab);
         break;
       }
       case 'paste': {
-        startPaste(dispatch, state.clipboardItems, {...item}, setPath);
+        startPaste(dispatch, state.clipboardItems, {...tab});
         break;
       }
       case 'rename': {
@@ -42,7 +41,7 @@ export default function useHandleToolBar(
             await moveItem(path, parent, newName);
             dispatch({type: 'TOAST', payload: 'Renamed successfully.'});
           }
-          setPath(item.path);
+          dispatch({type: 'SETREFRESHPATH', payload: tab.path});
           dispatch({type: 'POPMODALSTACK'});
         }
         asyncFnc();

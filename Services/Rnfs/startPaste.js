@@ -6,12 +6,7 @@ import copyItem from './copyItem';
 import deleteItem from './deleteItem';
 import moveItem from './moveItem';
 
-export default async function startPaste(
-  dispatch,
-  clipboardItems,
-  destTab,
-  setPath,
-) {
+export default async function startPaste(dispatch, clipboardItems, destTab) {
   const {source, type} = clipboardItems;
   const isItMove = type == 'move' ? 1 : 0;
   const collectedItems = await collectItems(clipboardItems, destTab);
@@ -37,8 +32,8 @@ export default async function startPaste(
     }
   }
   dispatch({type: 'CLEARCB'});
-  setPath(source); //refresh source path
+  dispatch({type: 'SETREFRESHPATH', payload: source}); //refresh source path
   setTimeout(() => {
-    setPath(destTab.path);
+    dispatch({type: 'SETREFRESHPATH', payload: destTab.path});
   }, 100); //refresh current path
 }

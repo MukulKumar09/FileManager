@@ -14,6 +14,7 @@ import tabs from './Reducers/TabsReducer';
 import ToastReducer from './Reducers/ToastReducer';
 import dragNDropIcon from './Reducers/dragNDropIcon';
 import modalStack from './Reducers/modalStack';
+import refreshPath from './Reducers/refreshPath';
 
 const rootReducer = combineReducers({
   conf,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   ToastReducer,
   dragNDropIcon,
   modalStack,
+  refreshPath,
 });
 
 const store = createStore(
