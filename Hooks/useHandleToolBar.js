@@ -13,6 +13,7 @@ export default function useHandleToolBar(
   filesList,
   tab,
   setOption,
+  setSearchBar,
   state,
 ) {
   const dispatch = useDispatch();
@@ -46,6 +47,9 @@ export default function useHandleToolBar(
       case 'newFolder': {
         handleNewFolder(dispatch, tab);
         break;
+      }
+      case 'search': {
+        setSearchBar(true);
       }
     }
     setOption('');

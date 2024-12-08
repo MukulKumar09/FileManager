@@ -22,6 +22,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
   const [option, setOption] = useState('');
   const [selectedItems, setSelectedItems] = useState(0);
+  const [searchBar, setSearchBar] = useState(false);
 
   const addBreadCrumb = useCallback(
     item => {
@@ -45,7 +46,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     }
   }
 
-  useHandleToolBar(option, filesList, item, setOption, state);
+  useHandleToolBar(option, filesList, item, setOption, setSearchBar, state);
   useBreadCrumb(breadCrumbs, refresh, index);
 
   useEffect(() => {
@@ -74,7 +75,9 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         styles.wide,
         {backgroundColor, display: isActive ? 'flex' : 'none'},
       ]}>
-      {Boolean(isLoading) && <Text>Loading...{item.name}</Text>}
+      {Boolean(isLoading) && (
+        <Text style={[styles.text]}>Loading...{item.name}</Text>
+      )}
 
       <View style={[styles.wide]}>
         <FilesList
@@ -101,8 +104,18 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
       <WindowToolBar
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
+        searchBar={searchBar}
+        filesList={filesList}
       />
-      <ToolBar setOption={setOption} isPathHome={item.path == 'Home'} />
+
+      <ToolBar
+        setOption={setOption}
+        searchBar={searchBar}
+        setSearchBar={setSearchBar}
+        isPathHome={item.path == 'Home'}
+        setFilesList={setFilesList}
+        tab={item}
+      />
     </View>
   );
 });

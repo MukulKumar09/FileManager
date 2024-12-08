@@ -1,16 +1,19 @@
 import {memo} from 'react';
 import {Text, View, ScrollView} from 'react-native';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
-import styles, {
-  backgroundColor,
-  secondaryColor,
-  textColor,
-} from '../../../styles/styles';
+import styles, {secondaryColor, textColor} from '../../../styles/styles';
 import {useSelector} from 'react-redux';
-function ToolBar({setOption, isPathHome}) {
-  console.log('ToolBar rendered');
+import SearchBar from './SearchBar/SearchBar';
+function ToolBar({
+  setOption,
+  searchBar,
+  setSearchBar,
+  isPathHome,
+  setFilesList,
+  tab,
+}) {
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
-  console.log('toolbar');
+
   return (
     <>
       <View
@@ -22,6 +25,14 @@ function ToolBar({setOption, isPathHome}) {
             overflow: 'hidden',
           },
         ]}>
+        {searchBar && (
+          <SearchBar
+            searchBar={searchBar}
+            setSearchBar={setSearchBar}
+            setFilesList={setFilesList}
+            tab={tab}
+          />
+        )}
         <ScrollView horizontal>
           {!isPathHome && (
             <View style={[styles.rowLayout]}>
