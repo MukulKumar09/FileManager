@@ -9,10 +9,11 @@ import modalPromise from '../Actions/modalPromise';
 import Confirm from '../Layout/Modal/ModalBodies/Confirm';
 import collectHighilightedItems from '../Services/collectHighilightedItems';
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
-import {ScrollView, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import styles from '../styles/styles';
 import useIcon from './useIcon';
 import SmallGrayText from '../Common/SmallGrayText/SmallGrayText';
+import DeleteProgress from '../Layout/Modal/ModalBodies/DeleteProgress';
 
 export default function useHandleToolBar(
   option,
@@ -75,6 +76,22 @@ export default function useHandleToolBar(
               heading: 'Confirm Delete?',
             },
           );
+          if (isConfirmDelete)
+            await modalPromise(
+              dispatch,
+              DeleteProgress,
+              {
+                items: highlightedItems,
+              },
+              {
+                icon: <MaterialIcon name="progress-clock" />,
+                heading: `Delete in progress...`,
+                isStatic: true,
+              },
+            );
+          dispatch({type: 'TOAST', payload: 'Items deleted.'});
+          dispatch({type: 'SETREFRESHPATH', payload: tab.path});
+          dispatch({type: 'POPMODALSTACK'});
         }
         asyncDelete();
         break;

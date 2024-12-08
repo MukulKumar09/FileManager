@@ -1,41 +1,22 @@
 import {View, Text, ActivityIndicator} from 'react-native';
 import styles, {textColor} from '../../../styles/styles';
 import useIcon from '../../../Hooks/useIcon';
-import {useDispatch} from 'react-redux';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
-import handleFile from '../../../Services/rnfs/handleFile';
+import deleteItem from '../../../Services/rnfs/deleteItem';
 
-const Progress = ({resolve, onRequestClose, items, cb}) => {
+const DeleteProgress = ({onRequestClose, items}) => {
   const [currItem, setItem] = useState({name: 'Loading...', ext: '/'});
   const [itemProgress, setItemProgress] = useState(0);
   const [totalProgress, setTotalProgress] = useState(0);
   const isRunning = useRef(1);
-  let totalItems;
-  const dispatch = useDispatch();
   useEffect(() => {
-    totalItems = items['/<>numberOfItems'];
-    delete items['/<>numberOfItems'];
     async function startIterating() {
-      for (let item of Object.keys(items)) {
+      for (let item of items) {
         if (isRunning.current) {
-          if (Array.isArray(items[item])) {
-            let isFail = 0;
-            for (let folderItem of items[item]) {
-              setItem(folderItem);
-              isFail += await handleFile(dispatch, cb, folderItem);
-            }
-            if (isFail == 0) {
-              items[item] = 0;
-            }
-          } else {
-            //if item
-            setItem(items[item]);
-            const isFail = await handleFile(dispatch, cb, items[item]);
-            if (isFail == 0) {
-              delete items[item];
-            }
-          }
+          //if item
+          setItem(item);
+          await deleteItem(item);
         } else {
           onRequestClose();
           break;
@@ -97,4 +78,4 @@ const Progress = ({resolve, onRequestClose, items, cb}) => {
     </View>
   );
 };
-export default Progress;
+export default DeleteProgress;
