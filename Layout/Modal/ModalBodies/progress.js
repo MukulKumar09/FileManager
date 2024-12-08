@@ -5,8 +5,9 @@ import {useDispatch} from 'react-redux';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import handleFile from '../../../Services/rnfs/handleFile';
+import iterateCollectedItems from '../../../Services/fileUtils/iterateCollectedItems';
 
-const Progress = ({resolve, onRequestClose, items, cb}) => {
+const Progress = ({onRequestClose, items, cb}) => {
   const [currItem, setItem] = useState({name: 'Loading...', ext: '/'});
   const [itemProgress, setItemProgress] = useState(0);
   const [totalProgress, setTotalProgress] = useState(0);
@@ -14,36 +15,14 @@ const Progress = ({resolve, onRequestClose, items, cb}) => {
   let totalItems;
   const dispatch = useDispatch();
   useEffect(() => {
-    totalItems = items['/<>numberOfItems'];
-    delete items['/<>numberOfItems'];
-    async function startIterating() {
-      for (let item of Object.keys(items)) {
-        if (isRunning.current) {
-          if (Array.isArray(items[item])) {
-            let isFail = 0;
-            for (let folderItem of items[item]) {
-              setItem(folderItem);
-              isFail += await handleFile(dispatch, cb, folderItem);
-            }
-            if (isFail == 0) {
-              items[item] = 0;
-            }
-          } else {
-            //if item
-            setItem(items[item]);
-            const isFail = await handleFile(dispatch, cb, items[item]);
-            if (isFail == 0) {
-              delete items[item];
-            }
-          }
-        } else {
-          onRequestClose();
-          break;
-        }
-      }
-      onRequestClose();
-    }
-    startIterating();
+    iterateCollectedItems(
+      dispatch,
+      cb,
+      onRequestClose,
+      items,
+      isRunning,
+      setItem,
+    );
   }, []);
 
   return (

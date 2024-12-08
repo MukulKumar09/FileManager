@@ -1,7 +1,6 @@
 import {memo, useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import VirtualizedFilesList from './VirtualizedFilesList';
-import {Text} from 'react-native';
 import handleFileLongPress from '../../../Actions/handleFileLongPress';
 import navigateItem from '../../../Actions/navigateItem';
 import highlightItemCB from '../../../Actions/highlightItemCB';
@@ -79,7 +78,6 @@ function FilesList({
 
   return (
     <>
-      <Text style={{color: 'white'}}>{selectedItems}</Text>
       <VirtualizedFilesList
         refresh={refresh}
         setSelectedItems={setSelectedItems}

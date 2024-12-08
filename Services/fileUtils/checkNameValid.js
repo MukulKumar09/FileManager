@@ -16,7 +16,7 @@ export default async function checkNameValid(value, item, setError) {
 
   const isExists = await checkExists(destFilePath, value);
   if (isExists == true) {
-    setError('Name already exists!');
+    setError('File already exists!');
     return 0;
   }
   return 1;

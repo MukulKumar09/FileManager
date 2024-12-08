@@ -1,6 +1,5 @@
 import {TextInput, View, Pressable, Text} from 'react-native';
 import styles from '../../../styles/styles';
-import checkExists from '../../../Services/rnfs/checkExists';
 import {useDispatch} from 'react-redux';
 import {useCallback, useState} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
@@ -40,7 +39,7 @@ const InputValue = ({resolve, item, onRequestClose}) => {
       />
       <View style={[styles.rowLayout, styles.mediumGap]}>
         <BorderButton label="Cancel" onPress={() => onRequestClose()} />
-        <HighlightButton label="Rename" onPress={() => verifyName()} />
+        <HighlightButton label="Confirm" onPress={() => verifyName()} />
       </View>
     </View>
   );

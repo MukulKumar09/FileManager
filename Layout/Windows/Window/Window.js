@@ -3,7 +3,6 @@ import {Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
-
 import WindowToolBar from '../WindowToolBar/WindowToolBar';
 import ToolBar from '../ToolBar/ToolBar';
 import useHandleToolBar from '../../../Hooks/useHandleToolBar';
