@@ -7,6 +7,9 @@ import handleDelete from '../Services/fileUtils/handleDelete';
 import handleRename from '../Services/fileUtils/handleRename';
 import handleNewFile from '../Services/fileUtils/handleNewFile';
 import handleNewFolder from '../Services/fileUtils/handleNewFolder';
+import handleClipboard from '../Services/fileUtils/handleClipboard';
+import handleRecycleBin from '../Services/fileUtils/handleRecycleBin';
+import addToRecycleBin from '../Services/addToRecycleBin';
 
 export default function useHandleToolBar(
   option,
@@ -33,7 +36,7 @@ export default function useHandleToolBar(
         break;
       }
       case 'delete': {
-        handleDelete(dispatch, filesList, tab);
+        addToRecycleBin(dispatch, filesList);
         break;
       }
       case 'rename': {
@@ -49,7 +52,16 @@ export default function useHandleToolBar(
         break;
       }
       case 'search': {
-        setSearchBar(true);
+        setSearchBar(prev => !prev);
+        break;
+      }
+      // case 'favorites': {
+      //   handleClipboard(dispatch);
+      //   break;
+      // }
+      case 'favorites': {
+        handleRecycleBin(dispatch);
+        break;
       }
     }
     setOption('');

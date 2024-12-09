@@ -9,6 +9,7 @@ import useHandleToolBar from '../../../Hooks/useHandleToolBar';
 import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
 import SelectedItems from './SelectedItems/SelectedItems';
+import SearchBar from '../ToolBar/SearchBar/SearchBar';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const state = {
@@ -83,12 +84,12 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         <FilesList
           index={index}
           path={item.path}
-          filesList={filesList}
-          refresh={refresh}
           isRefresh={isRefresh}
-          setFilesList={setFilesList}
-          addBreadCrumb={addBreadCrumb}
+          filesList={filesList}
           selectedItems={selectedItems}
+          refresh={refresh}
+          addBreadCrumb={addBreadCrumb}
+          setFilesList={setFilesList}
           setSelectedItems={setSelectedItems}
         />
       </View>
@@ -104,17 +105,20 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
       <WindowToolBar
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
-        searchBar={searchBar}
-        filesList={filesList}
       />
-
+      {searchBar && (
+        <SearchBar
+          filesList={filesList}
+          searchBar={searchBar}
+          setSearchBar={setSearchBar}
+          setFilesList={setFilesList}
+          tab={item}
+        />
+      )}
       <ToolBar
         setOption={setOption}
-        searchBar={searchBar}
-        setSearchBar={setSearchBar}
         isPathHome={item.path == 'Home'}
-        setFilesList={setFilesList}
-        tab={item}
+        selectedItems={selectedItems}
       />
     </View>
   );

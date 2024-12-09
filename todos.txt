@@ -1,8 +1,17 @@
-delete, copy, move cancel
-tab position
-
-save maincache
-useCollectAllItem check exists
+fix breadcrumb to navigate any path
+properties
+favorites
+sort
+select all
+clear clipboard
+clear recycle bin
+media player
+fix firstPath
+back button
+close tab
+open as
+open in new tab
+about
 fix share
 
 import RNFS from 'react-native-fs';

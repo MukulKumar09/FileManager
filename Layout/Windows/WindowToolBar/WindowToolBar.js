@@ -5,7 +5,7 @@ import styles from '../../../styles/styles';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import FilterBar from './FilterBar/FilterBar';
 
-function WindowToolBar({breadCrumbs, setBreadCrumbs, searchBar, filesList}) {
+function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
   const [filterBar, setFilterBar] = useState(false);
   return (
     <View style={[styles.rowLayout, styles.marginSmall, styles.mediumGap]}>
@@ -37,24 +37,7 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs, searchBar, filesList}) {
         </Text>
       </Pressable> */}
       <Text style={[styles.textDisabled]}>|</Text>
-      {Boolean(searchBar) ? (
-        <View
-          style={[
-            styles.pill,
-            styles.wide,
-            styles.padding,
-            {alignItems: 'flex-end'},
-          ]}>
-          <Text style={[styles.text, styles.smallText]}>
-            {filesList.length} items found
-          </Text>
-        </View>
-      ) : (
-        <BreadCrumbs
-          breadCrumbs={breadCrumbs}
-          setBreadCrumbs={setBreadCrumbs}
-        />
-      )}
+      <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
     </View>
   );
 }

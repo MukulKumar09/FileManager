@@ -1,34 +1,43 @@
-import {View, TextInput, Pressable, Text} from 'react-native';
+import {
+  View,
+  TextInput,
+  Pressable,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import MaterialIcon from '../../../../Common/MaterialIcon/MaterialIcon';
 import localSearch from '../../../../Services/rnfs/localSearch';
 import styles from '../../../../styles/styles';
 import SmallGrayText from '../../../../Common/SmallGrayText/SmallGrayText';
+import {useState} from 'react';
 
 export default function SearchBar({
+  filesList,
   searchBar,
   setSearchBar,
   setFilesList,
   tab,
 }) {
+  const [isSearching, setIsSearching] = useState(false);
   return (
     <View
       style={[
         styles.rowLayout,
         styles.mediumGap,
         styles.pill,
-        styles.pillHighlight,
-        // styles.bordered,
+        styles.marginSmall,
+        styles.bordered,
         {
-          position: 'absolute',
-          zIndex: 10,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
           paddingHorizontal: 15,
-          overflow: 'hidden',
         },
       ]}>
+      {isSearching ? (
+        <ActivityIndicator />
+      ) : (
+        <Text style={[styles.text, styles.smallText]}>
+          ({filesList.length})
+        </Text>
+      )}
       <TextInput
         value={searchBar}
         placeholder="Search Files..."
@@ -37,16 +46,19 @@ export default function SearchBar({
       />
       <Pressable
         onPress={async () => {
-          setFilesList(await localSearch(tab, searchBar));
+          setIsSearching(true);
+          let results = await localSearch(tab, searchBar);
+          setFilesList(results);
+          setIsSearching(false);
         }}
-        style={[styles.pill, styles.padding, styles.bordered]}>
-        <SmallGrayText>Search</SmallGrayText>
+        style={[styles.padding]}>
+        <SmallGrayText style={{color: 'white'}}>Search</SmallGrayText>
       </Pressable>
       <Pressable
         onPress={() => {
           setSearchBar(false);
         }}>
-        <MaterialIcon color="white" name="close-circle-outline" />
+        <MaterialIcon color="white" name="close" />
       </Pressable>
     </View>
   );

@@ -1,6 +1,5 @@
 import {View, Text} from 'react-native';
 import modalPromise from '../../Actions/modalPromise';
-import collectHighilightedItems from '../collectHighilightedItems';
 import useIcon from '../../Hooks/useIcon';
 import SmallGrayText from '../../Common/SmallGrayText/SmallGrayText';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
@@ -8,8 +7,7 @@ import DeleteProgress from '../../Layout/Modal/ModalBodies/DeleteProgress';
 import Confirm from '../../Layout/Modal/ModalBodies/Confirm';
 import styles from '../../styles/styles';
 
-export default async function handleDelete(dispatch, filesList, tab) {
-  const highlightedItems = collectHighilightedItems(filesList);
+export default async function handleDelete(dispatch, items) {
   const isConfirmDelete = await modalPromise(
     dispatch,
     Confirm,
@@ -17,9 +15,9 @@ export default async function handleDelete(dispatch, filesList, tab) {
       description: (
         <View style={[styles.bigGap]}>
           <Text style={[styles.text]}>
-            Do you want to delete these {highlightedItems.length} items?
+            Do you want to delete these {items.length} items?
           </Text>
-          {highlightedItems.map(item => (
+          {items.map(item => (
             <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
               {useIcon(item)}
               <View style={[styles.wide]}>
@@ -48,7 +46,7 @@ export default async function handleDelete(dispatch, filesList, tab) {
       dispatch,
       DeleteProgress,
       {
-        items: highlightedItems,
+        items,
       },
       {
         icon: <MaterialIcon name="progress-clock" />,
@@ -58,6 +56,6 @@ export default async function handleDelete(dispatch, filesList, tab) {
     );
     dispatch({type: 'TOAST', payload: 'Items deleted.'});
     dispatch({type: 'SETREFRESHPATH', payload: tab.path});
+    dispatch({type: 'POPMODALSTACK'});
   }
-  dispatch({type: 'POPMODALSTACK'});
 }
