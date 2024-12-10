@@ -2,7 +2,6 @@ export default function sortFiles(data, sort) {
   if (!Array.isArray(data)) {
     data = Array.from(data);
   }
-
   const sortFunctions = {
     modifiedOldest: (a, b) => a.mtime - b.mtime,
     modifiedNewest: (a, b) => b.mtime - a.mtime,

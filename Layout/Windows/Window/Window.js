@@ -89,6 +89,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
           selectedItems={selectedItems}
           refresh={refresh}
           addBreadCrumb={addBreadCrumb}
+          setBreadCrumbs={setBreadCrumbs}
           setFilesList={setFilesList}
           setSelectedItems={setSelectedItems}
         />
@@ -106,7 +107,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
       />
-      {searchBar && (
+      {item.path !== 'Home' && searchBar && (
         <SearchBar
           filesList={filesList}
           searchBar={searchBar}

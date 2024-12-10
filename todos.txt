@@ -1,4 +1,3 @@
-fix breadcrumb to navigate any path
 properties
 favorites
 sort

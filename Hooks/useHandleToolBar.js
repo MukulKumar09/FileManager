@@ -3,7 +3,6 @@ import copyToClipboard from '../Services/copyToClipboard';
 
 import {useDispatch} from 'react-redux';
 import startPaste from '../Services/rnfs/startPaste';
-import handleDelete from '../Services/fileUtils/handleDelete';
 import handleRename from '../Services/fileUtils/handleRename';
 import handleNewFile from '../Services/fileUtils/handleNewFile';
 import handleNewFolder from '../Services/fileUtils/handleNewFolder';

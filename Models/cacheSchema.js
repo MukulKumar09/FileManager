@@ -2,12 +2,12 @@ export const cacheSchema = {
   name: 'cache',
   properties: {
     name: 'string',
-    parent: 'string',
     path: 'string',
-    size: 'int',
+    parent: 'string?',
+    size: 'int?',
     type: 'string',
     ext: 'string',
-    mtime: 'int',
+    mtime: 'int?',
   },
   primaryKey: 'path',
 };

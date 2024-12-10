@@ -3,17 +3,12 @@ import getFileExtension from '../fileUtils/getFileExtension';
 import RNFS from 'react-native-fs';
 import normalizeTimestamp from '../fileUtils/normalizeTimestamp';
 
-export default async function buildCache(realm, fullPath, cacheToInvalidate) {
-  console.log('built cache', fullPath);
-  if (cacheToInvalidate) {
-    realm.write(() => {
-      realm.delete(cacheToInvalidate);
-    });
-  }
+export default async function buildCache(realm, clickedItemPath) {
+  console.log('built cache', clickedItemPath);
 
-  const rnfsData = await RNFS.readDir(fullPath);
-  for (item of rnfsData) {
-    const {name, path, size, mtime, isDirectory} = item;
+  const folderContents = await RNFS.readDir(clickedItemPath);
+  for (let i in folderContents) {
+    const {name, path, size, mtime, isDirectory} = folderContents[i];
     const normalizedMtime = normalizeTimestamp(mtime);
 
     if (isDirectory()) {
@@ -25,7 +20,7 @@ export default async function buildCache(realm, fullPath, cacheToInvalidate) {
     }
     const realmDoc = {
       name,
-      parent: `${fullPath}/`,
+      parent: `${clickedItemPath}/`,
       path,
       size,
       type,
@@ -33,14 +28,10 @@ export default async function buildCache(realm, fullPath, cacheToInvalidate) {
       mtime: normalizedMtime,
     };
     realm.write(() => {
-      realm.create('cache', realmDoc);
+      realm.create('cache', realmDoc, 'modified');
     });
-    item.parent = `${fullPath}/`;
-    item.path = path;
-    item.type = type;
-    item.ext = ext;
-    item.mtime = normalizedMtime;
+    folderContents[i] = {...folderContents[i], ...realmDoc};
   }
 
-  return rnfsData;
+  return folderContents;
 }

@@ -1,45 +1,74 @@
 import buildCache from '../realm/buildCache';
 import validateCache from '../realm/validateCache';
-export default async function getSetCache(realm, item) {
-  //this sends deepcopy of cache to each request. Because realm invalidates live object
-  const {path, mtime} = item;
-  console.log(item);
-  if (path == 'Home') {
-    const realmData = realm.objects('cache').filtered('type == "Home"');
-    return realmData;
+export default async function getSetCache(realm, clickedItem) {
+  const {path: clickedItemPath, name: clickedItemName, mtime} = clickedItem;
+  if (clickedItemPath == 'Home') {
+    const homeData = realm.objects('cache').filtered('type == "Home"');
+    return homeData;
   }
 
-  function duplicateData(cache) {
+  function deepCopy(data) {
     //otherwise all object will reference to realm live objects
-    const newCache = cache.map(item => ({...item}));
-    return newCache;
+    const duplicatedData = data.map(item => ({...item}));
+    return duplicatedData;
   }
 
-  const cache = realm.objects('cache').filtered(`parent == "${path}/"`);
-
-  if (mtime == 'latest') {
-    const realmData = await buildCache(realm, path, cache);
-    return duplicateData(realmData);
-  }
-  if (mtime == 'cache') {
-    return duplicateData(cache);
+  async function fetchFromStorage() {
+    const newData = await buildCache(realm, clickedItemPath);
+    return deepCopy(newData);
   }
 
-  if (cache.length > 0) {
-    //if exists, validate
-    const cacheValidation = await validateCache(realm, item);
-    if (cacheValidation) {
-      //if valid, return cache
-      console.log('found cache');
-      return duplicateData(cache);
-    } else {
-      //otherwise invalidate older and build new cache
-      const realmData = await buildCache(realm, path, cache);
-      return duplicateData(realmData);
+  const folderInDb = realm.objectForPrimaryKey('cache', clickedItemPath);
+
+  if (folderInDb) {
+    const folderContents = realm
+      .objects('cache')
+      .filtered(`parent == "${clickedItemPath}/"`);
+    if (mtime == 'latest') {
+      return await fetchFromStorage();
+    }
+
+    if (folderContents.length > 0) {
+      if (mtime == 'cache') {
+        return deepCopy(folderContents);
+      }
+      const isCacheValid = await validateCache(realm, folderInDb, clickedItem);
+      if (isCacheValid) {
+        console.log('found cache');
+        return deepCopy(folderContents);
+      }
     }
   } else {
-    //if cache doesnt exists, or directory is empty, build cache
-    const realmData = await buildCache(realm, path);
-    return duplicateData(realmData);
+    //create folder
+    console.log('folder created');
+    realm.write(() => {
+      realm.create('cache', {
+        name: clickedItemName,
+        path: clickedItemPath,
+        size: 0,
+        mtime: 0,
+        type: 'dir',
+        ext: '/',
+        parent: '',
+      });
+    });
   }
+
+  return await fetchFromStorage();
+
+  // if (folderContents.length == 0) {
+  //   //if cache doesnt exists, or directory is empty, build cache
+  //   return await fetchFromStorage();
+  // } else {
+  //   //if exists, validate
+  //   const isCacheValid = await validateCache(realm, folder, clickedItem);
+  //   if (isCacheValid) {
+  //     //if valid, return cache
+  //     console.log('found cache');
+  //     return deepCopy(folderContents);
+  //   } else {
+  //     //otherwise invalidate older and build new cache
+  //     return await fetchFromStorage(folderContents);
+  //   }
+  // }
 }

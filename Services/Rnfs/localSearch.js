@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
 import getFileExtension from '../fileUtils/getFileExtension';
-export default async function localSearch(item, searchString) {
+export default async function localSearch(tab, searchString) {
   async function recurseCB(list) {
     let listItems = [];
     for (let item of list) {
@@ -20,12 +20,11 @@ export default async function localSearch(item, searchString) {
         if (item.name.includes(searchString)) {
           item.ext = getFileExtension(item.name);
           item.isSearched = true;
-          listItems.push(item);
         }
       }
     }
     return listItems;
   }
-  const searchedItems = await recurseCB(await RNFS.readDir(item.path));
+  const searchedItems = await recurseCB(await RNFS.readDir(tab.path));
   return searchedItems;
 }

@@ -15,8 +15,8 @@ export default async function getMountingPoints() {
       const stat = await RNFS.stat(basePath);
       mountingPoints[i] = {
         name: getStorageName(basePath),
-        parent: '',
         path: basePath,
+        parent: '',
         size: -1,
         type: 'Home',
         ext: '/',

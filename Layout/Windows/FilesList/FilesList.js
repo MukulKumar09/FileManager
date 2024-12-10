@@ -4,6 +4,7 @@ import VirtualizedFilesList from './VirtualizedFilesList';
 import handleFileLongPress from '../../../Actions/handleFileLongPress';
 import navigateItem from '../../../Actions/navigateItem';
 import highlightItemCB from '../../../Actions/highlightItemCB';
+import navigatePath from '../../../Actions/navigatePath';
 
 function FilesList({
   filesList,
@@ -13,6 +14,7 @@ function FilesList({
   setFilesList,
   index,
   addBreadCrumb,
+  setBreadCrumbs,
   selectedItems,
   setSelectedItems,
 }) {
@@ -49,7 +51,11 @@ function FilesList({
       if (selectionFlag) {
         callHighlightItemCB(item);
       } else {
-        navigateItem(dispatch, index, item, addBreadCrumb);
+        if (item.isSearched) {
+          navigatePath(dispatch, index, item, setBreadCrumbs);
+        } else {
+          navigateItem(dispatch, index, item, addBreadCrumb);
+        }
       }
     },
     [selectionFlag, filesList, index],
