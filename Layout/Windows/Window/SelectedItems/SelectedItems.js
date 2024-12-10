@@ -8,7 +8,6 @@ export default function SelectedItems({
   filesList,
   setFilesList,
 }) {
-  console.log(selectedItems);
   return (
     <View
       style={[
@@ -20,18 +19,32 @@ export default function SelectedItems({
         {justifyContent: 'space-between'},
       ]}>
       <SmallGrayText>{selectedItems} items selected.</SmallGrayText>
-      <Pressable
-        onPress={() => {
-          setFilesList([
-            ...filesList.map(item => ({...item, isHighlighted: false})),
-          ]);
-          setSelectedItems(0);
-        }}>
-        <SmallGrayText
-          style={{color: 'white', textDecorationLine: 'underline'}}>
-          Deselect All
-        </SmallGrayText>
-      </Pressable>
+      <View style={[styles.rowLayout, styles.bigGap]}>
+        <Pressable
+          onPress={() => {
+            setFilesList([
+              ...filesList.map(item => ({...item, isHighlighted: false})),
+            ]);
+            setSelectedItems(0);
+          }}>
+          <SmallGrayText
+            style={{color: 'white', textDecorationLine: 'underline'}}>
+            Deselect All
+          </SmallGrayText>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setFilesList([
+              ...filesList.map(item => ({...item, isHighlighted: true})),
+            ]);
+            setSelectedItems(filesList.length);
+          }}>
+          <SmallGrayText
+            style={{color: 'white', textDecorationLine: 'underline'}}>
+            Select All
+          </SmallGrayText>
+        </Pressable>
+      </View>
     </View>
   );
 }

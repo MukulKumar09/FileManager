@@ -25,9 +25,12 @@ export default function SearchBar({
         styles.rowLayout,
         styles.mediumGap,
         styles.pill,
-        styles.marginSmall,
         styles.bordered,
         {
+          position: 'absolute',
+          zIndex: 10,
+          left: 0,
+          right: 0,
           paddingHorizontal: 15,
         },
       ]}>

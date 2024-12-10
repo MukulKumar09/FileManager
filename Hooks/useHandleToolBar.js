@@ -54,11 +54,13 @@ export default function useHandleToolBar(
         setSearchBar(prev => !prev);
         break;
       }
-      // case 'favorites': {
-      //   handleClipboard(dispatch);
-      //   break;
-      // }
+      // case 'clipboard': {
       case 'favorites': {
+        handleClipboard(dispatch);
+        break;
+      }
+      case 'recycleBin': {
+        // case 'favorites': {
         handleRecycleBin(dispatch);
         break;
       }

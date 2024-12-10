@@ -4,20 +4,30 @@ import CircularButton from '../../../Common/CircularButton/CircularButton';
 import styles, {secondaryColor, textColor} from '../../../styles/styles';
 import {useSelector} from 'react-redux';
 import SearchBar from './SearchBar/SearchBar';
-function ToolBar({setOption, isPathHome, selectedItems}) {
+function ToolBar({
+  setOption,
+  isPathHome,
+  selectedItems,
+  filesList,
+  searchBar,
+  setSearchBar,
+  setFilesList,
+  tab,
+}) {
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
 
   return (
     <>
-      <View
-        style={[
-          styles.rowLayout,
-          styles.pill,
-          styles.marginSmall,
-          {
-            overflow: 'hidden',
-          },
-        ]}>
+      <View style={[styles.rowLayout, styles.pill, styles.marginSmall]}>
+        {tab.path !== 'Home' && searchBar && (
+          <SearchBar
+            filesList={filesList}
+            searchBar={searchBar}
+            setSearchBar={setSearchBar}
+            setFilesList={setFilesList}
+            tab={tab}
+          />
+        )}
         <ScrollView horizontal>
           {!isPathHome && (
             <View style={[styles.rowLayout]}>

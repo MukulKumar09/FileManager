@@ -1,9 +1,6 @@
 properties
 favorites
 sort
-select all
-clear clipboard
-clear recycle bin
 media player
 fix firstPath
 back button

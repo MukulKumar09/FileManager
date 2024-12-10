@@ -39,7 +39,12 @@ export default function RecycleBin({onRequestClose}) {
                 handleDelete(dispatch, state.recycleBin);
               }}
             />
-            <BorderButton label="Clear" onPress={onRequestClose} />
+            <BorderButton
+              label="Clear"
+              onPress={() => {
+                dispatch({type: 'SETRECYCLEBIN', payload: []});
+              }}
+            />
           </>
         )}
         <HighlightButton label="Cancel" onPress={onRequestClose} />
