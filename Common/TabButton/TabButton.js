@@ -3,7 +3,7 @@ import {Text, Pressable, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import styles from '../../styles/styles';
 import SmallMaterialIcon from '../SmallMaterialIcon/SmallMaterialIcon';
-import useIcon from '../../Hooks/useIcon';
+import getIcon from '../../Hooks/getIcon';
 
 const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
           });
         }}
         style={[styles.rowLayout, styles.padding, styles.mediumGap]}>
-        {useIcon(item)}
+        {/* {getIcon(item)} */}
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"

@@ -1,6 +1,6 @@
 import {View, Text, ActivityIndicator} from 'react-native';
 import styles, {textColor} from '../../../styles/styles';
-import useIcon from '../../../Hooks/useIcon';
+import getIcon from '../../../Hooks/getIcon';
 import {useDispatch} from 'react-redux';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
@@ -28,7 +28,7 @@ const Progress = ({onRequestClose, items, cb}) => {
   return (
     <View style={[styles.bigGap]}>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        {useIcon(currItem)}
+        {getIcon(currItem)}
         <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
           {currItem.name}
         </Text>

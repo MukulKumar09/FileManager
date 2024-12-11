@@ -1,6 +1,6 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
-import useIcon from '../../../Hooks/useIcon';
+import getIcon from '../../../Hooks/getIcon';
 import {useDispatch} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
@@ -19,7 +19,7 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
           styles.mediumGap,
           {alignItems: 'flex-start'},
         ]}>
-        {useIcon(item)}
+        {getIcon(item)}
         <View style={[styles.wide]}>
           <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
             {item.name}

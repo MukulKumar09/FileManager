@@ -17,6 +17,7 @@ export default function useHandleToolBar(
   setOption,
   setSearchBar,
   state,
+  setMenu,
 ) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,8 +55,7 @@ export default function useHandleToolBar(
         setSearchBar(prev => !prev);
         break;
       }
-      // case 'clipboard': {
-      case 'favorites': {
+      case 'clipboard': {
         handleClipboard(dispatch);
         break;
       }
@@ -63,6 +63,8 @@ export default function useHandleToolBar(
         // case 'favorites': {
         handleRecycleBin(dispatch);
         break;
+      }
+      case 'menu': {
       }
     }
     setOption('');

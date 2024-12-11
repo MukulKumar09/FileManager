@@ -1,9 +1,10 @@
-import {memo} from 'react';
+import {memo, useState} from 'react';
 import {Text, View, ScrollView} from 'react-native';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
 import styles, {secondaryColor, textColor} from '../../../styles/styles';
 import {useSelector} from 'react-redux';
 import SearchBar from './SearchBar/SearchBar';
+import Menu from './Menu/Menu';
 function ToolBar({
   setOption,
   isPathHome,
@@ -16,9 +17,12 @@ function ToolBar({
 }) {
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
 
+  const [menu, setMenu] = useState(false);
+
   return (
     <>
       <View style={[styles.rowLayout, styles.pill, styles.marginSmall]}>
+        {menu && <Menu setOption={setOption} />}
         {tab.path !== 'Home' && searchBar && (
           <SearchBar
             filesList={filesList}
@@ -101,7 +105,10 @@ function ToolBar({
           name="heart"
           color="#FF5252"
         />
-        <CircularButton functionName={() => setOption('menu')} name="menu" />
+        <CircularButton
+          functionName={() => setMenu(prev => !prev)}
+          name="menu"
+        />
       </View>
     </>
   );

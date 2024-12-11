@@ -9,6 +9,7 @@ import useHandleToolBar from '../../../Hooks/useHandleToolBar';
 import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
 import SelectedItems from './SelectedItems/SelectedItems';
+import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const state = {
@@ -46,6 +47,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     }
   }
 
+  useFetchThumbnail(filesList, item, setFilesList);
   useHandleToolBar(option, filesList, item, setOption, setSearchBar, state);
   useBreadCrumb(breadCrumbs, refresh, index);
 

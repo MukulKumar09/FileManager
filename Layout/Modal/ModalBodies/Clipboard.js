@@ -1,6 +1,6 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
-import useIcon from '../../../Hooks/useIcon';
+import getIcon from '../../../Hooks/getIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
@@ -17,7 +17,7 @@ export default function Clipboard({onRequestClose}) {
       </Text>
       {state.clipboardItems.items.map(item => (
         <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-          {useIcon(item)}
+          {getIcon(item)}
           <View style={[styles.wide]}>
             <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
               {item.name}

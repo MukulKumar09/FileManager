@@ -1,6 +1,6 @@
 import {View, Text, ActivityIndicator} from 'react-native';
 import styles, {textColor} from '../../../styles/styles';
-import useIcon from '../../../Hooks/useIcon';
+import getIcon from '../../../Hooks/getIcon';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import deleteItem from '../../../Services/rnfs/deleteItem';
@@ -30,7 +30,7 @@ const DeleteProgress = ({onRequestClose, items}) => {
   return (
     <View style={[styles.bigGap]}>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        {useIcon(currItem)}
+        {getIcon(currItem)}
         <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
           {currItem.name}
         </Text>

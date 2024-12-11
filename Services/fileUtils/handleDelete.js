@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 import modalPromise from '../../Actions/modalPromise';
-import useIcon from '../../Hooks/useIcon';
+import getIcon from '../../Hooks/getIcon';
 import SmallGrayText from '../../Common/SmallGrayText/SmallGrayText';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import DeleteProgress from '../../Layout/Modal/ModalBodies/DeleteProgress';
@@ -19,7 +19,7 @@ export default async function handleDelete(dispatch, items) {
           </Text>
           {items.map(item => (
             <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-              {useIcon(item)}
+              {getIcon(item)}
               <View style={[styles.wide]}>
                 <Text
                   ellipsizeMode="tail"

@@ -1,7 +1,7 @@
 import {Pressable, Text, View} from 'react-native';
 import styles from '../../../../styles/styles';
-import useIcon from '../../../../Hooks/useIcon';
-import {memo} from 'react';
+import getIcon from '../../../../Hooks/getIcon';
+import {Suspense, memo, lazy} from 'react';
 import {unixToDate} from '../../../../Services/fileUtils/unixToDate';
 import {bytesToSize} from '../../../../Services/fileUtils/bytesToSize';
 import unixTo12Hour from '../../../../Services/fileUtils/unixTo12Hour';
@@ -28,7 +28,7 @@ function FilesListItem({
       ]}>
       <View
         style={[styles.wide, styles.rowLayout, styles.padding, styles.bigGap]}>
-        {useIcon(item)}
+        <Suspense>{getIcon(item)}</Suspense>
         <View>
           <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.text]}>
             {item.name}

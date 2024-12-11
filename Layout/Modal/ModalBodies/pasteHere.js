@@ -1,6 +1,6 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
-import useIcon from '../../../Hooks/useIcon';
+import getIcon from '../../../Hooks/getIcon';
 import {useDispatch} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
@@ -16,7 +16,7 @@ export default function PasteHere({resolve, onRequestClose, items}) {
     <View style={[styles.bigGap]}>
       {items.map(item => (
         <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-          {useIcon(item)}
+          {getIcon(item)}
           <View style={[styles.wide]}>
             <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
               {item.name}
