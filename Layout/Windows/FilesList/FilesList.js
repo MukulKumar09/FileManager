@@ -5,6 +5,7 @@ import handleFileLongPress from '../../../Actions/handleFileLongPress';
 import navigateItem from '../../../Actions/navigateItem';
 import highlightItemCB from '../../../Actions/highlightItemCB';
 import navigatePath from '../../../Actions/navigatePath';
+import generateBCFromPath from '../../../Services/breadCrumbs/generateBCFromPath';
 
 function FilesList({
   filesList,
@@ -51,11 +52,7 @@ function FilesList({
       if (selectionFlag) {
         callHighlightItemCB(item);
       } else {
-        if (item.isSearched) {
-          navigatePath(dispatch, index, item, setBreadCrumbs);
-        } else {
-          navigateItem(dispatch, index, item, addBreadCrumb);
-        }
+        navigateItem(dispatch, index, item, setBreadCrumbs, addBreadCrumb);
       }
     },
     [selectionFlag, filesList, index],

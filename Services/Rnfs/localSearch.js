@@ -20,6 +20,7 @@ export default async function localSearch(tab, searchString) {
         if (item.name.includes(searchString)) {
           item.ext = getFileExtension(item.name);
           item.isSearched = true;
+          listItems.push(item);
         }
       }
     }

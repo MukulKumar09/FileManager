@@ -1,4 +1,4 @@
-import {memo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import {Text, View, ScrollView} from 'react-native';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
 import styles, {secondaryColor, textColor} from '../../../styles/styles';
@@ -19,10 +19,26 @@ function ToolBar({
 
   const [menu, setMenu] = useState(false);
 
+  useEffect(() => {
+    if (menu) {
+      switch (menu) {
+        case 'clipboard': {
+          setOption('clipboard');
+          break;
+        }
+        case 'recycleBin': {
+          setOption('recycleBin');
+          break;
+        }
+      }
+    }
+  }, [menu]);
   return (
     <>
       <View style={[styles.rowLayout, styles.pill, styles.marginSmall]}>
-        {menu && <Menu setOption={setOption} />}
+        {/* {menu &&  */}
+        <Menu menu={menu} setMenu={setMenu} />
+        {/* } */}
         {tab.path !== 'Home' && searchBar && (
           <SearchBar
             filesList={filesList}

@@ -7,8 +7,7 @@ import selectedItem from './Reducers/SelectedItemReducer';
 import currentTab from './Reducers/CurrentTabReducer';
 import recycleBin from './Reducers/recycleBin';
 import favouriteItems from './Reducers/FavouriteItemsReducer';
-import mediaType from './Reducers/MediaTypeReducer';
-import mediaBox from './Reducers/mediaBox';
+import media from './Reducers/media';
 import tabCounter from './Reducers/TabCounterReducer';
 import tabs from './Reducers/TabsReducer';
 import ToastReducer from './Reducers/ToastReducer';
@@ -23,8 +22,7 @@ const rootReducer = combineReducers({
   currentTab,
   recycleBin,
   favouriteItems,
-  mediaType,
-  mediaBox,
+  media,
   tabCounter,
   tabs,
   ToastReducer,

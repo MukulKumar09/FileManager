@@ -1,7 +1,7 @@
+media player
 properties
 favorites
 sort
-media player
 fix firstPath
 back button
 close tab
