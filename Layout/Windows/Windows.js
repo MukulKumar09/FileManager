@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux';
 import Window from './Window/Window';
-import {Modal, Text, View} from 'react-native';
+import MediaViewer from '../MediaViewer/MediaViewer';
 
 function Windows() {
   //remoe view
@@ -14,11 +14,7 @@ function Windows() {
 
   return (
     <>
-      {/* <Modal transparent={true}>
-        <View style={{backgroundColor: 'white'}}>
-          <Text>Media Player</Text>
-        </View>
-      </Modal> */}
+      {Boolean(state.media) && <MediaViewer media={state.media} />}
       {Object.keys(state.tabs).map(index => {
         return (
           <Window

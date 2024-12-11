@@ -4,8 +4,6 @@ import VirtualizedFilesList from './VirtualizedFilesList';
 import handleFileLongPress from '../../../Actions/handleFileLongPress';
 import navigateItem from '../../../Actions/navigateItem';
 import highlightItemCB from '../../../Actions/highlightItemCB';
-import navigatePath from '../../../Actions/navigatePath';
-import generateBCFromPath from '../../../Services/breadCrumbs/generateBCFromPath';
 
 function FilesList({
   filesList,

@@ -1,9 +1,10 @@
-media player
+media player (resize)
 properties
 favorites
 sort
 fix firstPath
 back button
+text editor
 close tab
 open as
 open in new tab

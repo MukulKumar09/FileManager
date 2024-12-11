@@ -11,8 +11,21 @@ export default function navigateItem(
   const {ext, path, isSearched} = item;
 
   if (ext !== '/') {
-    dispatch({type: 'SETMEDIA', payload: item});
-    useOpenExternally(dispatch, item);
+    switch (ext) {
+      case 'png':
+      case 'jpg':
+      case 'jpeg': {
+        dispatch({type: 'SETMEDIA', payload: {...item, type: 'photo'}});
+        break;
+      }
+      case 'mp4': {
+        dispatch({type: 'SETMEDIA', payload: {...item, type: 'video'}});
+        break;
+      }
+      default: {
+        useOpenExternally(dispatch, item);
+      }
+    }
     return;
   } else {
     if (isSearched) {
