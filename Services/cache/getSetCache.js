@@ -1,6 +1,8 @@
 import buildCache from '../realm/buildCache';
+import realmOpen from '../realm/realmOpen';
 import validateCache from '../realm/validateCache';
-export default async function getSetCache(realm, clickedItem) {
+export default async function getSetCache(clickedItem) {
+  const realm = await realmOpen();
   const {path: clickedItemPath, name: clickedItemName, mtime} = clickedItem;
   if (clickedItemPath == 'Home') {
     const homeData = realm.objects('cache').filtered('type == "Home"');

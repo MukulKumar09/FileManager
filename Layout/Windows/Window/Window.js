@@ -59,9 +59,8 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
 
   useEffect(() => {
     if (isActive) {
-      console.log('sort in', index, ' with ', sort);
-      const sorted = sortFiles(filesList, sort);
-      setFilesList([...sorted]);
+      const sortedFiles = sortFiles(filesList, sort);
+      setFilesList([...sortedFiles]);
     }
   }, [sort]);
 

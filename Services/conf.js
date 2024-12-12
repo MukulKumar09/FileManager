@@ -1,28 +1,23 @@
 export function createConf(realm, dispatch) {
-  let confReturn;
+  let conf;
   realm.write(() => {
-    const conf = realm.objects('conf')[0];
-
-    if (conf.length == 0) {
-      realm.create(
-        'conf',
-        {
-          firstRun: 1,
-          sort: {type: 'extension', sort: 'ascending'},
-        },
-        'modified',
-      );
-    } else {
-      const firstRun = conf.firstRun;
-      confReturn = {...conf, firstRun};
-      if (firstRun) {
+    conf = realm.objects('conf')[0];
+    if (conf) {
+      conf = JSON.parse(JSON.stringify(conf));
+      if (conf.firstRun) {
         conf.firstRun = 0;
       }
+    } else {
+      conf = {
+        firstRun: 1,
+        sort: {type: 'extension', sort: 'ascending'},
+      };
+      realm.create('conf', conf, 'modified');
     }
-    dispatch({
-      type: 'SETCONF',
-      payload: conf,
-    });
   });
-  return confReturn;
+  dispatch({
+    type: 'SETCONF',
+    payload: conf,
+  });
+  return conf;
 }

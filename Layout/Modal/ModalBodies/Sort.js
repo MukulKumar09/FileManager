@@ -3,12 +3,27 @@ import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import {useState} from 'react';
+import realmOpen from '../../../Services/realm/realmOpen';
 
 export default function Sort({onRequestClose}) {
   const dispatch = useDispatch();
   const state = {
     conf: useSelector(state => state.conf),
   };
+
+  async function updateSort() {
+    const payload = {...state.conf, sort: {type, sort}};
+    const realm = await realmOpen();
+    realm.write(() => {
+      realm.create('conf', payload, 'modified');
+    });
+    dispatch({
+      type: 'SETCONF',
+      payload,
+    });
+    onRequestClose();
+  }
+
   const [type, setType] = useState(state.conf.sort.type);
   const [sort, setSort] = useState(state.conf.sort.sort);
   return (
@@ -58,17 +73,7 @@ export default function Sort({onRequestClose}) {
         <BorderButton
           label="Sort"
           isHighlighted={true}
-          onPress={() => {
-            //insert to realm
-            dispatch({
-              type: 'UPDATECONF',
-              payload: {
-                key: 'sort',
-                value: {sort, type},
-              },
-            });
-            onRequestClose();
-          }}
+          onPress={() => updateSort()}
         />
       </View>
     </View>

@@ -38,13 +38,15 @@ function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
           })}
         </View>
       </ScrollView>
-      <Pressable
-        onPress={() => {
-          setBreadCrumbs(goBackBreadCrumb(breadCrumbs));
-        }}
-        style={[styles.smallPill, styles.bordered]}>
-        <Text style={[styles.text, styles.smallText]}>Back</Text>
-      </Pressable>
+      {breadCrumbs.length > 1 && (
+        <Pressable
+          onPress={() => {
+            setBreadCrumbs(goBackBreadCrumb(breadCrumbs));
+          }}
+          style={[styles.smallPill, styles.bordered]}>
+          <Text style={[styles.text, styles.smallText]}>Back</Text>
+        </Pressable>
+      )}
     </>
   );
 }

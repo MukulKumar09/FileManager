@@ -4,9 +4,6 @@ import getSetCache from './getSetCache';
 
 export default async function getFilesList(item, sort) {
   if (!item) return [];
-
-  const realm = await realmOpen();
-
-  const data = await getSetCache(realm, item, sort);
+  const data = await getSetCache(item, sort);
   return sortFiles(data, sort);
 }

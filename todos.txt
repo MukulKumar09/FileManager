@@ -2,7 +2,6 @@ media player (resize)
 properties
 favorites
 sort //insert to realm
-fix firstPath
 text editor
 close tab
 open as
