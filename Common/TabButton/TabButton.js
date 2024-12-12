@@ -1,26 +1,24 @@
 import React from 'react';
-import {ScrollView, Text, Pressable, View} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import Animated, {
-  Easing,
-  FadeInLeft,
-  FadeOutLeft,
-  LinearTransition,
-} from 'react-native-reanimated';
+import {Text, Pressable, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import styles from '../../styles/styles';
 import SmallMaterialIcon from '../SmallMaterialIcon/SmallMaterialIcon';
-import useIcon from '../../Hooks/useIcon';
-import getStorageName from '../../Services/getStorageName';
+import getIcon from '../../Hooks/getIcon';
+import Icon from '../../Layout/Windows/FilesList/FilesListItem/Icon/Icon';
 
-const TabButton = React.memo(({index, isActive, item}) => {
+const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
   const dispatch = useDispatch();
   return (
     <View
+      onLayout={e => {
+        const layout = e.nativeEvent.layout;
+        setTabLayout({index, layout});
+      }}
       style={[
         styles.rowLayout,
         styles.pill,
         isActive && styles.pillHighlight,
-        {overflow: 'hidden', marginHorizontal: 5},
+        {overflow: 'hidden'},
       ]}>
       <Pressable
         onPress={() => {
@@ -29,13 +27,14 @@ const TabButton = React.memo(({index, isActive, item}) => {
             payload: index,
           });
         }}
-        style={[styles.rowLayout, styles.mediumGap, {padding: 15}]}>
-        {useIcon()}
-        <View style={{maxWidth: 100}}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.text]}>
-            {item.name}
-          </Text>
-        </View>
+        style={[styles.rowLayout, styles.padding, styles.mediumGap]}>
+        <Icon path={item.path} ext={item.ext} />
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={[styles.text, styles.oswald, {maxWidth: 100}]}>
+          {item.name}
+        </Text>
       </Pressable>
       {isActive && (
         <Pressable

@@ -1,69 +1,54 @@
-import React, {useRef} from 'react';
-import {Animated, View, PanResponder, Text} from 'react-native';
+import React from 'react';
+import {View, Text} from 'react-native';
 import styles, {textColor, secondaryColor} from '../styles/styles';
+import Animated from 'react-native-reanimated';
 
-const DragNDropIcon = ({dispatch, dragNDropIcon}) => {
-  const {coordinates, items} = dragNDropIcon;
-  const {pageX, pageY} = coordinates;
-  const offset = {x: pageX - 40, y: pageY - 40};
-
-  const animVal = new Animated.ValueXY(offset);
-  const pan = useRef(animVal).current;
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => {
-        pan.extractOffset();
-        return true;
-      },
-      onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
-        useNativeDriver: false,
-      }),
-      onPanResponderRelease: () => {
-        dispatch({type: 'DRAGNDROPICON', payload: 0});
-        pan.extractOffset();
-      },
-    }),
-  ).current;
+const DragNDropIcon = ({animatedStyles, dragNDropIcon}) => {
+  const {items} = dragNDropIcon;
   return (
-    <View style={{position: 'absolute', flex: 1}}>
-      <Animated.View
+    <Animated.View
+      style={[
+        styles.pill,
+        styles.bordered,
+        {
+          position: 'absolute',
+          zIndex: 10,
+          height: 60,
+          width: 60,
+          marginLeft: -30,
+          marginRight: -30,
+          marginTop: -100,
+          pointerEvents: 'none',
+        },
+        animatedStyles,
+      ]}>
+      <View
         style={[
           styles.pill,
-          styles.bordered,
+          styles.whiteBordered,
+          styles.centered,
           {
+            backgroundColor: secondaryColor,
+            position: 'absolute',
+            top: 7,
+            left: 7,
             height: 60,
             width: 60,
-            transform: [{translateX: pan.x}, {translateY: pan.y}],
           },
-        ]}
-        {...panResponder.panHandlers}>
-        <View
+        ]}>
+        <Text
           style={[
-            styles.pill,
-            styles.whiteBordered,
-            styles.centered,
+            styles.oswald,
             {
-              backgroundColor: secondaryColor,
-              position: 'absolute',
-              top: 7,
-              left: 7,
-              height: 60,
-              width: 60,
+              color: textColor,
+              fontSize: 16,
             },
           ]}>
-          <Text
-            style={{
-              color: textColor,
-              fontSize: 15,
-              fontWeight: 'bold',
-            }}>
-            {items.length}
-          </Text>
-          <Text style={[styles.smallText, {color: textColor}]}>items</Text>
-        </View>
-      </Animated.View>
-    </View>
+          {items?.length}
+        </Text>
+        <Text style={[styles.smallText, {color: textColor}]}>items</Text>
+      </View>
+    </Animated.View>
   );
 };
 

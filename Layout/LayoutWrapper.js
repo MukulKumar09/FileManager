@@ -1,43 +1,34 @@
-import {StatusBar, View} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {useEffect} from 'react';
-import styles, {backgroundColor} from '../styles/styles';
-import useAppLaunch from '../Hooks/useAppLaunch';
-import OperationWindow from '../Features/OperationWindow/OperationWindow';
-import MediaViewer from '../Features/MediaViewer/MediaViewer';
+import {useDispatch} from 'react-redux';
+import {View} from 'react-native';
+import {
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import styles from '../styles/styles';
 import Windows from './Windows/Windows';
 import Tabbar from './Tabs/Tabbar';
-import Modals from '../Modals/Modals';
-import DragNDropIcon from './DragNDropIcon';
+import runAppLaunch from '../Hooks/runAppLaunch';
+import {useEffect} from 'react';
+import usePanHandler from '../Hooks/usePanHandler';
+import Modals from './Modal/Modals';
 
-function LayoutWrapper() {
+export default function LayoutWrapper() {
   const dispatch = useDispatch();
-  const state = {
-    operationWindow: useSelector(state => state.operationWindow),
-    mediaBox: useSelector(state => state.mediaBox),
-    dragNDropIcon: useSelector(state => state.dragNDropIcon),
-  };
   useEffect(() => {
-    useAppLaunch(dispatch); //Runs on App Launch
+    runAppLaunch(dispatch); //Runs on App Launch
   }, []);
-
+  const {pan, translationX, translationY} = usePanHandler();
   return (
     <>
-      <StatusBar backgroundColor={backgroundColor} />
-      {Boolean(state.mediaBox) && <MediaViewer />}
-      <View style={[styles.wide]}>
-        <Windows />
-      </View>
       <Modals />
-      {Boolean(state.operationWindow) && <OperationWindow />}
-      <Tabbar />
-      {Boolean(state.dragNDropIcon) && (
-        <DragNDropIcon
-          dispatch={dispatch}
-          dragNDropIcon={state.dragNDropIcon}
-        />
-      )}
+      <GestureHandlerRootView>
+        <GestureDetector gesture={pan}>
+          <View style={[styles.wide]}>
+            <Windows />
+          </View>
+        </GestureDetector>
+      </GestureHandlerRootView>
+      <Tabbar translationX={translationX} translationY={translationY} />
     </>
   );
 }
-export default LayoutWrapper;

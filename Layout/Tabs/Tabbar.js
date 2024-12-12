@@ -1,92 +1,90 @@
-import {Text, Pressable, View, ScrollView, Image} from 'react-native';
-import TabButton from '../../Common/TabButton/TabButton';
-import styles from '../../styles/styles';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {Pressable, View} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import Animated, {
-  Easing,
-  FadeInLeft,
-  FadeOutLeft,
-  LinearTransition,
-} from 'react-native-reanimated';
+import {useAnimatedStyle} from 'react-native-reanimated';
+import styles, {backgroundColor} from '../../styles/styles';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
-import {useRef, useState} from 'react';
+import DragNDropIcon from '../DragNDropIcon';
+import addNewTab from '../../Actions/addNewTab';
+import Tabs from './Tabs/Tabs';
+import detectDropLocation from '../../Actions/detectDropLocation';
 
-export default function Tabbar() {
+export default function Tabbar({translationX, translationY}) {
   const dispatch = useDispatch();
   const state = {
     tabs: useSelector(state => state.tabs),
-    clipboardItems: useSelector(state => state.clipboardItems),
-    operationType: useSelector(state => state.operationType),
     currentTab: useSelector(state => state.currentTab),
     tabCounter: useSelector(state => state.tabCounter),
+    dragNDropIcon: useSelector(state => state.dragNDropIcon),
   };
-  const scrollViewRef = useRef(0);
-  const [position, setPosition] = useState({});
-  // useEffect(() => {
-  //     scrollViewRef.current.scrollTo({ x: position[state.currentTab] })
-  // }, [state.currentTab, position])
+
+  const [tabbarLayout, setTabbarLayout] = useState({});
+  const [tabLayouts, setLayouts] = useState({});
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const scrollTimeoutRef = useRef(null);
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [
+      {translateX: translationX.value},
+      {translateY: translationY.value},
+    ],
+  }));
+  useEffect(() => {
+    state.dragNDropIcon &&
+      detectDropLocation(
+        state.tabs,
+        state.dragNDropIcon,
+        tabbarLayout,
+        tabLayouts,
+        scrollOffset,
+        dispatch,
+      );
+  }, [state.dragNDropIcon]);
+
+  const handleScroll = useCallback(event => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    clearTimeout(scrollTimeoutRef.current);
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      setScrollOffset(offsetX);
+    }, 250);
+  }, []);
+
   return (
-    <View
-      style={[
-        styles.rowLayout,
-        {
-          justifyContent: 'space-between',
-        },
-      ]}>
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}>
-        <View style={[styles.rowLayout]}>
-          {Object.keys(state.tabs).map(index => {
-            return (
-              <TabButton
-                key={index}
-                index={index}
-                item={state.tabs[index]['item']}
-                isActive={index == state.currentTab}
-              />
-            );
-          })}
-        </View>
-      </ScrollView>
-      <>
-        {state.clipboardItems.length > 0 &&
-          [0, 1].includes(state.operationType) && (
-            <Pressable
-              style={[styles.pill, styles.bordered, styles.padding]}
-              onPressIn={() => {
-                dispatch({
-                  type: 'OPERATIONDEST',
-                  payload: state.tabs[state.currentTab]['path'],
-                });
-                dispatch({
-                  type: 'OPERATIONWINDOW',
-                });
-              }}>
-              <SmallMaterialIcon name="content-paste" />
-            </Pressable>
-          )}
+    <>
+      <View
+        onLayout={event => {
+          setTabbarLayout(event.nativeEvent.layout);
+        }}
+        style={[
+          styles.rowLayout,
+          styles.mediumGap,
+          {
+            padding: 5,
+            backgroundColor,
+            justifyContent: 'space-between',
+          },
+        ]}>
+        <Tabs
+          tabs={state.tabs}
+          currentTab={state.currentTab}
+          handleScroll={handleScroll}
+          tabLayouts={tabLayouts}
+          setLayouts={setLayouts}
+        />
         <Pressable
           style={[styles.pill, styles.padding]}
-          onPress={() => {
-            dispatch({
-              type: 'ADDTAB',
-              payload: {
-                counter: state.tabCounter,
-              },
-            });
-            dispatch({
-              type: 'SETCURRENTTAB',
-              payload: state.tabCounter,
-            });
-            dispatch({
-              type: 'INCREASETABCOUNTER',
-            });
-          }}>
+          onPress={() => addNewTab(dispatch, state.tabCounter)}>
           <SmallMaterialIcon name="plus" />
         </Pressable>
-      </>
-    </View>
+      </View>
+      {Boolean(state.dragNDropIcon['isActive']) &&
+        Boolean(state.dragNDropIcon['visible']) && (
+          <DragNDropIcon
+            animatedStyles={animatedStyles}
+            dragNDropIcon={state.dragNDropIcon}
+          />
+        )}
+    </>
   );
 }

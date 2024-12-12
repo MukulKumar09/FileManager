@@ -1,88 +1,94 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView} from 'react-native';
+import {memo, useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import VirtualizedFilesList from './VirtualizedFilesList';
+import handleFileLongPress from '../../../Actions/handleFileLongPress';
 import navigateItem from '../../../Actions/navigateItem';
-import FilesListItem from './FilesListItem/FilesListItem';
-import highlightItem from '../../../Actions/highlightItem';
-import highlightItemsRange from '../../../Actions/highlightItemsRange';
+import highlightItemCB from '../../../Actions/highlightItemCB';
 
-function FilesList({filesList, setFilesList, index, addBreadCrumb}) {
+function FilesList({
+  filesList,
+  refresh,
+  isRefresh,
+  path,
+  setFilesList,
+  index,
+  addBreadCrumb,
+  setBreadCrumbs,
+  selectedItems,
+  setSelectedItems,
+}) {
   const dispatch = useDispatch();
 
   //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
-  const [selectedItems, setSelectedItems] = useState(0);
-  const [lastSelectItem, setLastSelectItem] = useState();
-
-  // useEffect(() => console.log(lastSelectItem), [lastSelectItem]);
+  const [lastClickedItem, setLastClickedItem] = useState({});
+  const [hoveredItem, setHoveredItem] = useState({});
 
   useEffect(() => {
-    if (selectedItems == 0) setSelectionFlag(0);
+    if (selectedItems == 0) {
+      setSelectionFlag(0);
+    }
   }, [selectedItems]);
 
   useEffect(() => {
-    const selected = filesList.filter(item => item.isHighlighted);
-    setSelectedItems(selected.length);
-  }, [filesList]);
+    setSelectionFlag(0);
+    setSelectedItems(0);
+  }, [path, isRefresh]);
+
+  const callHighlightItemCB = item =>
+    highlightItemCB(
+      setSelectionFlag,
+      item,
+      filesList,
+      setLastClickedItem,
+      setSelectedItems,
+      setFilesList,
+    );
 
   const handlePress = useCallback(
     item => {
       if (selectionFlag) {
-        const selectItems = highlightItem(item, filesList, setLastSelectItem);
-        setFilesList(selectItems);
+        callHighlightItemCB(item);
       } else {
-        navigateItem(dispatch, index, item, addBreadCrumb);
+        navigateItem(dispatch, index, item, setBreadCrumbs, addBreadCrumb);
       }
     },
-    [filesList, index, selectionFlag],
+    [selectionFlag, filesList, index],
   );
-
   const handleLongPress = useCallback(
-    (e, item) => {
+    (item, event) => {
       if (selectionFlag) {
-        if (lastSelectItem.isHighlighted && item.isHighlighted) {
-          const {pageX, pageY} = e.nativeEvent;
-          dispatch({
-            type: 'DRAGNDROPICON',
-            payload: {
-              coordinates: {pageX, pageY},
-              items: [...filesList.filter(item => item.isHighlighted)],
-            },
-          });
-        } else {
-          const selectItems = highlightItemsRange(
-            item,
-            lastSelectItem,
-            filesList,
-            setLastSelectItem,
-          );
-          setFilesList(selectItems);
+        const res = handleFileLongPress(
+          dispatch,
+          item,
+          event,
+          lastClickedItem,
+          filesList,
+        );
+        if (res) {
+          setLastClickedItem(res.lastClickedItem);
+          setSelectedItems(prev => prev + res.selectedItems);
+          setFilesList(res.filesList);
         }
       } else {
-        setSelectionFlag(1);
-        const selectItems = highlightItem(item, filesList, setLastSelectItem);
-        setFilesList(selectItems);
+        callHighlightItemCB(item);
       }
     },
-    [lastSelectItem, filesList, selectionFlag],
+    [selectionFlag, filesList, lastClickedItem],
   );
 
   return (
-    <ScrollView>
-      {/* convert to virtualized list */}
-      {filesList.map(item => {
-        return (
-          <FilesListItem
-            key={item.path}
-            item={item}
-            handlePress={handlePress}
-            handleLongPress={handleLongPress}
-            setLastSelectItem={setLastSelectItem}
-            isHighlighted={item.isHighlighted}
-          />
-        );
-      })}
-    </ScrollView>
+    <>
+      <VirtualizedFilesList
+        refresh={refresh}
+        setSelectedItems={setSelectedItems}
+        filesList={filesList}
+        setHoveredItem={setHoveredItem}
+        handlePress={handlePress}
+        handleLongPress={handleLongPress}
+        hoveredItem={hoveredItem}
+      />
+    </>
   );
 }
-export default React.memo(FilesList);
+export default memo(FilesList);

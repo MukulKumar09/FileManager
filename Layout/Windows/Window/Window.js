@@ -1,18 +1,47 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View, Pressable} from 'react-native';
-import {useDispatch} from 'react-redux';
-import styles from '../../../styles/styles';
+import {BackHandler, Text, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
-import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
-import getAndSetFilesList from '../../../Services/getAndSetFilesList';
+import WindowToolBar from '../WindowToolBar/WindowToolBar';
+import ToolBar from '../ToolBar/ToolBar';
+import useHandleToolBar from '../../../Hooks/useHandleToolBar';
+import useBreadCrumb from '../../../Hooks/useBreadCrumb';
+import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
+import SelectedItems from './SelectedItems/SelectedItems';
+import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
+import goBackBreadCrumb from '../../../Services/breadCrumbs/goBackBreadCrumb';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
+  const state = {
+    clipboardItems: useSelector(state => state.clipboardItems),
+    refreshPath: useSelector(state => state.refreshPath),
+  };
   const dispatch = useDispatch();
-
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
   const [breadCrumbs, setBreadCrumbs] = useState([item]);
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
+  const [option, setOption] = useState('');
+  const [selectedItems, setSelectedItems] = useState(0);
+  const [searchBar, setSearchBar] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      const backAction = () => {
+        if (breadCrumbs.length > 1) {
+          setBreadCrumbs(goBackBreadCrumb(breadCrumbs));
+          return true;
+        }
+        return false;
+      };
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+      return () => backHandler.remove();
+    }
+  }, [isActive, item, breadCrumbs]);
 
   const addBreadCrumb = useCallback(
     item => {
@@ -21,14 +50,32 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     [breadCrumbs],
   );
 
+  function refresh(argItem) {
+    if (argItem == 0) {
+      //hard refresh same path
+      getAndSetFilesList(
+        setFilesList,
+        setIsLoading,
+        {...item, mtime: 'latest'},
+        sort,
+      );
+    } else {
+      //navigate to path
+      getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
+    }
+  }
+
+  useFetchThumbnail(filesList, item, setFilesList);
+  useHandleToolBar(option, filesList, item, setOption, setSearchBar, state);
+  useBreadCrumb(breadCrumbs, refresh, index);
+
   useEffect(() => {
     if (isRefresh) {
       if (isActive) {
-        //if refresh recieved for current tab, refresh
-        getAndSetFilesList(setFilesList, setIsLoading, item, sort);
+        refresh({...item, mtime: 'latest'}); //refresh if isRefresh received
+        dispatch({type: 'SETREFRESHPATH', payload: 0});
       } else {
-        //otherwise set flag
-        setShouldBeRefreshed(1);
+        setShouldBeRefreshed(1); //otherwise set flag
       }
     }
   }, [isRefresh]);
@@ -36,42 +83,60 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   useEffect(() => {
     if (isActive) {
       if (shouldBeRefreshed) {
-        //if flag is active, refresh
-        getAndSetFilesList(setFilesList, setIsLoading, item, sort);
+        refresh({...item, mtime: 'latest'}); //refresh on visit if flag is active,
+        dispatch({type: 'SETREFRESHPATH', payload: 0});
         setShouldBeRefreshed(0);
       }
     }
   }, [isActive]);
-
-  //retrieve filesList for last breadcrumb
-  useEffect(() => {
-    const item = breadCrumbs[breadCrumbs.length - 1];
-    getAndSetFilesList(setFilesList, setIsLoading, item, sort);
-    dispatch({
-      type: 'UPDATETAB',
-      payload: {
-        index,
-        item,
-      },
-    });
-  }, [breadCrumbs]);
-
   return (
-    <View style={[styles.wide, {display: isActive ? 'flex' : 'none'}]}>
-      {Boolean(isLoading) && <Text>Loading...{item.name}</Text>}
-      <FilesList
-        index={index}
-        filesList={filesList}
-        setFilesList={setFilesList}
-        addBreadCrumb={addBreadCrumb}
+    <View
+      style={[
+        styles.wide,
+        {backgroundColor, display: isActive ? 'flex' : 'none'},
+      ]}>
+      {Boolean(isLoading) && (
+        <Text style={[styles.text]}>Loading...{item.name}</Text>
+      )}
+
+      <View style={[styles.wide]}>
+        <FilesList
+          index={index}
+          path={item.path}
+          isRefresh={isRefresh}
+          filesList={filesList}
+          selectedItems={selectedItems}
+          refresh={refresh}
+          addBreadCrumb={addBreadCrumb}
+          setBreadCrumbs={setBreadCrumbs}
+          setFilesList={setFilesList}
+          setSelectedItems={setSelectedItems}
+        />
+      </View>
+      {Boolean(selectedItems) && (
+        <SelectedItems
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+          filesList={filesList}
+          setFilesList={setFilesList}
+        />
+      )}
+
+      <WindowToolBar
+        breadCrumbs={breadCrumbs}
+        setBreadCrumbs={setBreadCrumbs}
       />
-      <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
-      <Pressable
-        onPress={() =>
-          getAndSetFilesList(setFilesList, setIsLoading, item, sort)
-        }>
-        <Text>Refresh</Text>
-      </Pressable>
+
+      <ToolBar
+        setOption={setOption}
+        isPathHome={item.path == 'Home'}
+        selectedItems={selectedItems}
+        filesList={filesList}
+        searchBar={searchBar}
+        setSearchBar={setSearchBar}
+        setFilesList={setFilesList}
+        tab={item}
+      />
     </View>
   );
 });
