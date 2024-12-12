@@ -31,7 +31,6 @@ export default function MediaViewer({media}) {
         <Video
           source={{uri: 'file://' + path}}
           controls={true}
-          repeat={true}
           autoPlay={true}
           style={[
             {

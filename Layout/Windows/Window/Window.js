@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Alert, BackHandler, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
@@ -10,6 +10,7 @@ import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
 import SelectedItems from './SelectedItems/SelectedItems';
 import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
+import goBackBreadCrumb from '../../../Services/breadCrumbs/goBackBreadCrumb';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const state = {
@@ -24,6 +25,23 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const [option, setOption] = useState('');
   const [selectedItems, setSelectedItems] = useState(0);
   const [searchBar, setSearchBar] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      const backAction = () => {
+        if (breadCrumbs.length > 1) {
+          setBreadCrumbs(goBackBreadCrumb(breadCrumbs));
+          return true;
+        }
+        return false;
+      };
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+      return () => backHandler.remove();
+    }
+  }, [isActive, item, breadCrumbs]);
 
   const addBreadCrumb = useCallback(
     item => {

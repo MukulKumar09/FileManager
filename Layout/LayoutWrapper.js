@@ -1,5 +1,5 @@
 import {useDispatch} from 'react-redux';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import {
   GestureDetector,
   GestureHandlerRootView,

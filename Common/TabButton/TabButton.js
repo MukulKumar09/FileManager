@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 import styles from '../../styles/styles';
 import SmallMaterialIcon from '../SmallMaterialIcon/SmallMaterialIcon';
 import getIcon from '../../Hooks/getIcon';
+import Icon from '../../Layout/Windows/FilesList/FilesListItem/Icon/Icon';
 
 const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
           });
         }}
         style={[styles.rowLayout, styles.padding, styles.mediumGap]}>
-        {/* {getIcon(item)} */}
+        <Icon path={item.path} ext={item.ext} />
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"

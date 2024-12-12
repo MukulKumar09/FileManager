@@ -4,7 +4,7 @@ export default async function modalPromise(
   compProps,
   templateProps,
 ) {
-  const iscConfirmPaste = await new Promise(resolve => {
+  const promiseWrapper = await new Promise(resolve => {
     const onRequestClose = () => {
       resolve(null);
       dispatch({type: 'POPMODALSTACK'});
@@ -25,5 +25,5 @@ export default async function modalPromise(
     };
     dispatch({type: 'PUSHMODALSTACK', payload});
   });
-  return iscConfirmPaste;
+  return promiseWrapper;
 }

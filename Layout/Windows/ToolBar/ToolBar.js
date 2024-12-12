@@ -36,9 +36,7 @@ function ToolBar({
   return (
     <>
       <View style={[styles.rowLayout, styles.pill, styles.marginSmall]}>
-        {/* {menu &&  */}
         <Menu menu={menu} setMenu={setMenu} />
-        {/* } */}
         {tab.path !== 'Home' && searchBar && (
           <SearchBar
             filesList={filesList}
