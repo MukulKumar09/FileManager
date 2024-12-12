@@ -1,9 +1,8 @@
 media player (resize)
 properties
 favorites
-sort
+sort //insert to realm
 fix firstPath
-back button
 text editor
 close tab
 open as

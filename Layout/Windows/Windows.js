@@ -11,7 +11,6 @@ function Windows() {
     refreshPath: useSelector(state => state.refreshPath),
     media: useSelector(state => state.media),
   };
-
   return (
     <>
       {Boolean(state.media) && <MediaViewer media={state.media} />}
@@ -20,7 +19,7 @@ function Windows() {
           <Window
             key={index}
             index={index}
-            sort={state.conf[0]['sort']}
+            sort={state.conf['sort']}
             item={state.tabs[index]}
             isActive={state.currentTab == index}
             isRefresh={state.tabs[index]['path'] == state.refreshPath}

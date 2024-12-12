@@ -55,20 +55,4 @@ export default async function getSetCache(realm, clickedItem) {
   }
 
   return await fetchFromStorage();
-
-  // if (folderContents.length == 0) {
-  //   //if cache doesnt exists, or directory is empty, build cache
-  //   return await fetchFromStorage();
-  // } else {
-  //   //if exists, validate
-  //   const isCacheValid = await validateCache(realm, folder, clickedItem);
-  //   if (isCacheValid) {
-  //     //if valid, return cache
-  //     console.log('found cache');
-  //     return deepCopy(folderContents);
-  //   } else {
-  //     //otherwise invalidate older and build new cache
-  //     return await fetchFromStorage(folderContents);
-  //   }
-  // }
 }

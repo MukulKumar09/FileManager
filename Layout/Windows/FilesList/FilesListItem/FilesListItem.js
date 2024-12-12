@@ -28,7 +28,7 @@ function FilesListItem({
       ]}>
       <View
         style={[styles.wide, styles.rowLayout, styles.padding, styles.bigGap]}>
-        <Icon path={item.path} ext={item.ext} />
+        <Icon path={item.path} ext={item.ext} type={item.type} />
         <View>
           <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.text]}>
             {item.name}

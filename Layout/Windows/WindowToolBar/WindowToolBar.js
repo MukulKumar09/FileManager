@@ -1,18 +1,36 @@
 import {Pressable, Text, View} from 'react-native';
-import {memo, useState} from 'react';
+import {memo} from 'react';
+import {useDispatch} from 'react-redux';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import styles from '../../../styles/styles';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import FilterBar from './FilterBar/FilterBar';
+import modalPromise from '../../../Actions/modalPromise';
+import Sort from '../../Modal/ModalBodies/Sort';
+import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 
 function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
-  const [filterBar, setFilterBar] = useState(false);
+  // const [filterBar, setFilterBar] = useState(false);
+  const dispatch = useDispatch();
+  async function openSort() {
+    const askSort = await modalPromise(
+      dispatch,
+      Sort,
+      {},
+      {
+        icon: <MaterialIcon name="sort" />,
+        heading: `Sort`,
+      },
+    );
+  }
   return (
     <View style={[styles.rowLayout, styles.marginSmall, styles.mediumGap]}>
-      {Boolean(filterBar) && (
+      {/* {Boolean(filterBar) && (
         <FilterBar filterBar={filterBar} setFilterBar={setFilterBar} />
-      )}
-      <Pressable style={[styles.rowLayout, styles.mediumGap]}>
+      )} */}
+      <Pressable
+        onPress={() => openSort()}
+        style={[styles.rowLayout, styles.mediumGap]}>
         <Text
           style={[
             styles.smallPill,

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {BackHandler, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
@@ -10,7 +10,8 @@ import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
 import SelectedItems from './SelectedItems/SelectedItems';
 import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
-import goBackBreadCrumb from '../../../Services/breadCrumbs/goBackBreadCrumb';
+import useBackHandler from '../../../Hooks/useBackHandler';
+import sortFiles from '../../../Services/fileUtils/sortFiles';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const state = {
@@ -26,23 +27,6 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const [selectedItems, setSelectedItems] = useState(0);
   const [searchBar, setSearchBar] = useState(false);
 
-  useEffect(() => {
-    if (isActive) {
-      const backAction = () => {
-        if (breadCrumbs.length > 1) {
-          setBreadCrumbs(goBackBreadCrumb(breadCrumbs));
-          return true;
-        }
-        return false;
-      };
-      const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        backAction,
-      );
-      return () => backHandler.remove();
-    }
-  }, [isActive, item, breadCrumbs]);
-
   const addBreadCrumb = useCallback(
     item => {
       setBreadCrumbs([...breadCrumbs, item]);
@@ -50,24 +34,36 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
     [breadCrumbs],
   );
 
-  function refresh(argItem) {
-    if (argItem == 0) {
-      //hard refresh same path
-      getAndSetFilesList(
-        setFilesList,
-        setIsLoading,
-        {...item, mtime: 'latest'},
-        sort,
-      );
-    } else {
-      //navigate to path
-      getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
-    }
-  }
+  const refresh = useCallback(
+    function (argItem) {
+      if (argItem == 0) {
+        //hard refresh same path
+        getAndSetFilesList(
+          setFilesList,
+          setIsLoading,
+          {...item, mtime: 'latest'},
+          sort,
+        );
+      } else {
+        //navigate to path
+        getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
+      }
+    },
+    [item.path],
+  );
 
+  useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
   useFetchThumbnail(filesList, item, setFilesList);
   useHandleToolBar(option, filesList, item, setOption, setSearchBar, state);
   useBreadCrumb(breadCrumbs, refresh, index);
+
+  useEffect(() => {
+    if (isActive) {
+      console.log('sort in', index, ' with ', sort);
+      const sorted = sortFiles(filesList, sort);
+      setFilesList([...sorted]);
+    }
+  }, [sort]);
 
   useEffect(() => {
     if (isRefresh) {

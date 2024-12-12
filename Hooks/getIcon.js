@@ -5,12 +5,13 @@ import RNFS from 'react-native-fs';
 import checkExists from '../Services/rnfs/checkExists';
 import {createThumbnail} from 'react-native-create-thumbnail';
 export default async function getIcon(item) {
-  if (item.path == 'Home') {
-    return <MaterialIcon name="home" />;
-  }
   if (item.type == 'Home') {
     return <MaterialIcon name="sd" />;
   }
+  if (item.path == 'Home') {
+    return <MaterialIcon name="home" />;
+  }
+
   switch (item.ext) {
     case '/': {
       return <MaterialIcon name="folder" color="orange" />;
