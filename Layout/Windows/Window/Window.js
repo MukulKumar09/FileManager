@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, BackHandler, Text, View} from 'react-native';
+import {BackHandler, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
