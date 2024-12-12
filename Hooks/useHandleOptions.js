@@ -9,15 +9,19 @@ import handleNewFolder from '../Services/fileUtils/handleNewFolder';
 import handleClipboard from '../Services/fileUtils/handleClipboard';
 import handleRecycleBin from '../Services/fileUtils/handleRecycleBin';
 import addToRecycleBin from '../Services/addToRecycleBin';
+import handleOpenWith from '../Services/fileUtils/handleOpenWith';
+import modalPromise from '../Actions/modalPromise';
+import OpenAs from '../Layout/Modal/ModalBodies/OpenAs';
+import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
+import handleOpenAs from '../Services/fileUtils/handleOpenAs';
 
-export default function useHandleToolBar(
+export default function useHandleOptions(
   option,
   filesList,
   tab,
   setOption,
   setSearchBar,
   state,
-  setMenu,
 ) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -60,11 +64,16 @@ export default function useHandleToolBar(
         break;
       }
       case 'recycleBin': {
-        // case 'favorites': {
         handleRecycleBin(dispatch);
         break;
       }
-      case 'menu': {
+      case 'openWith': {
+        handleOpenWith(dispatch, filesList);
+        break;
+      }
+      case 'openAs': {
+        handleOpenAs(dispatch, filesList);
+        break;
       }
     }
     setOption('');

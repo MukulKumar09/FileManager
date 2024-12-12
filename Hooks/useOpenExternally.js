@@ -9,8 +9,8 @@ export default function useOpenExternally(dispatch, item) {
     })
     .catch(error => {
       dispatch({
-        type: 'OPENASMODAL',
-        payload: item,
+        type: 'TOAST',
+        payload: "Can't find any supported app for this file.",
       });
     });
 }

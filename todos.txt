@@ -1,11 +1,10 @@
+open as
+open in new tab
 media player (resize)
 properties
 favorites
-sort //insert to realm
 text editor
 close tab
-open as
-open in new tab
 about
 fix share
 

@@ -5,7 +5,7 @@ import moveItem from '../rnfs/moveItem';
 
 export default async function handleRename(dispatch, filesList, tab) {
   let lastHighlightedItem = {
-    ...filesList.findLast(item => item.isHighlighted),
+    ...filesList.find(item => item.isHighlighted),
   };
   const {path} = lastHighlightedItem;
   lastHighlightedItem.destFilePath = tab.path;

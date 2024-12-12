@@ -5,7 +5,7 @@ import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
 import WindowToolBar from '../WindowToolBar/WindowToolBar';
 import ToolBar from '../ToolBar/ToolBar';
-import useHandleToolBar from '../../../Hooks/useHandleToolBar';
+import useHandleOptions from '../../../Hooks/useHandleOptions';
 import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
 import SelectedItems from './SelectedItems/SelectedItems';
@@ -54,7 +54,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
 
   useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
   useFetchThumbnail(filesList, item, setFilesList);
-  useHandleToolBar(option, filesList, item, setOption, setSearchBar, state);
+  useHandleOptions(option, filesList, item, setOption, setSearchBar, state);
   useBreadCrumb(breadCrumbs, refresh, index);
 
   useEffect(() => {

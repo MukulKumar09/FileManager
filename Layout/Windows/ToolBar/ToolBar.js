@@ -59,6 +59,18 @@ function ToolBar({
                 <>
                   <CircularButton
                     functionName={() => {
+                      setOption('openWith');
+                    }}
+                    name="file-export-outline"
+                  />
+                  {/* <CircularButton
+                    functionName={() => {
+                      setOption('openAs');
+                    }}
+                    name="file-question-outline"
+                  /> */}
+                  <CircularButton
+                    functionName={() => {
                       setOption('copy');
                     }}
                     name="content-copy"
