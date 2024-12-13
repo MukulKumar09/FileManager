@@ -60,7 +60,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
 
   useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
   useFetchThumbnail(filesList, item, setFilesList);
-  useHandleOptions(option, filesList, item, setOption, setSearchBar);
+  useHandleOptions(option, filesList, item, setOption, setSearchBar, refresh);
   useBreadCrumb(breadCrumbs, refresh, index);
 
   useEffect(() => {
@@ -132,6 +132,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         searchBar={searchBar}
         setSearchBar={setSearchBar}
         setFilesList={setFilesList}
+        refresh={refresh}
         tab={item}
       />
     </View>

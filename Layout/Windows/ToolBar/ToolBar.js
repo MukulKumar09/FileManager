@@ -13,6 +13,7 @@ function ToolBar({
   searchBar,
   setSearchBar,
   setFilesList,
+  refresh,
   tab,
 }) {
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
@@ -30,13 +31,22 @@ function ToolBar({
           setOption('recycleBin');
           break;
         }
+        case 'properties': {
+          setOption('properties');
+          break;
+        }
+        case 'refresh': {
+          setOption('refresh');
+          break;
+        }
       }
+      menu !== true && setMenu(false);
     }
   }, [menu]);
   return (
     <>
       <View style={[styles.rowLayout, styles.pill, styles.marginSmall]}>
-        <Menu menu={menu} setMenu={setMenu} />
+        <Menu menu={menu} setMenu={setMenu} refresh={refresh} />
         {tab.path !== 'Home' && searchBar && (
           <SearchBar
             filesList={filesList}

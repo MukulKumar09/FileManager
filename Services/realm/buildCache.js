@@ -9,6 +9,7 @@ export default async function buildCache(realm, clickedItemPath) {
   const folderContents = await RNFS.readDir(clickedItemPath);
   for (let i in folderContents) {
     const {name, path, size, mtime, isDirectory} = folderContents[i];
+
     const normalizedMtime = normalizeTimestamp(mtime);
 
     if (isDirectory()) {
@@ -30,7 +31,10 @@ export default async function buildCache(realm, clickedItemPath) {
     realm.write(() => {
       realm.create('cache', realmDoc, 'modified');
     });
-    folderContents[i] = {...folderContents[i], ...realmDoc};
+    folderContents[i] = {
+      ...folderContents[i],
+      ...realmDoc,
+    };
   }
 
   return folderContents;

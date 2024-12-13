@@ -1,6 +1,13 @@
 import FileViewer from 'react-native-file-viewer';
 export default function useOpenExternally(dispatch, item) {
-  const {name} = item;
+  const {name, ext} = item;
+  if (ext == 'apk') {
+    dispatch({
+      type: 'TOAST',
+      payload: 'Installing apk is not supported yet.',
+    });
+    return;
+  }
   FileViewer.open(`${item.parent}${name}`, {
     showOpenWithDialog: true,
   }) // absolute-path-to-my-local-file.
@@ -10,7 +17,7 @@ export default function useOpenExternally(dispatch, item) {
     .catch(error => {
       dispatch({
         type: 'TOAST',
-        payload: "Can't find any supported app for this file.",
+        payload: 'No supported apps installed for this file.',
       });
     });
 }

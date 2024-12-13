@@ -2,7 +2,7 @@ import {Modal, Pressable, View} from 'react-native';
 import styles from '../../../../styles/styles';
 import MenuItem from '../../../../Common/MenuItem/MenuItem';
 
-export default function Menu({menu, setMenu}) {
+export default function Menu({menu, setMenu, refresh}) {
   return (
     <Modal
       visible={Boolean(menu)}
@@ -23,6 +23,7 @@ export default function Menu({menu, setMenu}) {
             elevation: 5,
           },
         ]}>
+        <MenuItem title="Refresh" icon="reload" cb={() => setMenu('refresh')} />
         <MenuItem
           title="Recycle Bin"
           icon="delete-empty-outline"
@@ -32,6 +33,11 @@ export default function Menu({menu, setMenu}) {
           title="Clipboard"
           icon="clipboard-outline"
           cb={() => setMenu('clipboard')}
+        />
+        <MenuItem
+          title="Properites"
+          icon="details"
+          cb={() => setMenu('properties')}
         />
         <MenuItem
           title="About"

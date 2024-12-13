@@ -11,6 +11,7 @@ import addToRecycleBin from '../Services/addToRecycleBin';
 import handleOpenWith from '../Services/fileUtils/handleOpenWith';
 import handleOpenAs from '../Services/fileUtils/handleOpenAs';
 import handleOpenInNewTab from '../Services/fileUtils/handleOpenInNewTab';
+import handleProperties from '../Services/handleProperties';
 
 export default function useHandleOptions(
   option,
@@ -18,6 +19,7 @@ export default function useHandleOptions(
   tab,
   setOption,
   setSearchBar,
+  refresh,
 ) {
   const dispatch = useDispatch();
   const state = {
@@ -77,6 +79,20 @@ export default function useHandleOptions(
       }
       case 'openInNewTab': {
         handleOpenInNewTab(dispatch, state.tabCounter, filesList);
+        break;
+      }
+      case 'refresh': {
+        refresh(0);
+        break;
+      }
+      case 'properties': {
+        handleProperties(dispatch, filesList);
+        break;
+      }
+      case 'favorites': {
+        break;
+      }
+      case 'about': {
         break;
       }
     }

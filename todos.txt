@@ -1,11 +1,10 @@
 open as
-open in new tab
 media player (resize)
 properties
 favorites
-text editor
-close tab
 about
+close tab
+text editor
 fix share
 
 
