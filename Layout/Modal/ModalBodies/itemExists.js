@@ -1,11 +1,11 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
-import getIcon from '../../../Hooks/getIcon';
 import {useDispatch} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import askToRename from '../../../Services/askToRename';
+import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
 
 const ItemExists = ({resolve, item, onRequestClose}) => {
   console.log(item);
@@ -19,7 +19,7 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
           styles.mediumGap,
           {alignItems: 'flex-start'},
         ]}>
-        {getIcon(item)}
+        <Icon item={item} />
         <View style={[styles.wide]}>
           <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
             {item.name}

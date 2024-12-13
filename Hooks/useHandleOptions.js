@@ -12,6 +12,9 @@ import handleOpenWith from '../Services/fileUtils/handleOpenWith';
 import handleOpenAs from '../Services/fileUtils/handleOpenAs';
 import handleOpenInNewTab from '../Services/fileUtils/handleOpenInNewTab';
 import handleProperties from '../Services/handleProperties';
+import modalPromise from '../Actions/modalPromise';
+import Favourites from '../Layout/Modal/ModalBodies/Favourites';
+import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 
 export default function useHandleOptions(
   option,
@@ -89,7 +92,19 @@ export default function useHandleOptions(
         handleProperties(dispatch, filesList);
         break;
       }
-      case 'favorites': {
+      case 'favourites': {
+        async function ab() {
+          await modalPromise(
+            dispatch,
+            Favourites,
+            {tab},
+            {
+              icon: <MaterialIcon name="heart" color="#FF5252" />,
+              heading: `Favourites`,
+            },
+          );
+        }
+        ab();
         break;
       }
       case 'about': {

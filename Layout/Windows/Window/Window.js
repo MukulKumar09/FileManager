@@ -120,10 +120,12 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
           setFilesList={setFilesList}
         />
       )}
-      <WindowToolBar
-        breadCrumbs={breadCrumbs}
-        setBreadCrumbs={setBreadCrumbs}
-      />
+      {breadCrumbs.length > 1 && (
+        <WindowToolBar
+          breadCrumbs={breadCrumbs}
+          setBreadCrumbs={setBreadCrumbs}
+        />
+      )}
       <ToolBar
         setOption={setOption}
         isPathHome={item.path == 'Home'}

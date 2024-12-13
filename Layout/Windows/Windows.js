@@ -11,6 +11,7 @@ function Windows() {
     refreshPath: useSelector(state => state.refreshPath),
     media: useSelector(state => state.media),
   };
+
   return (
     <>
       {Boolean(state.media) && <MediaViewer media={state.media} />}

@@ -143,7 +143,7 @@ function ToolBar({
         </ScrollView>
         <Text style={{color: secondaryColor}}> | </Text>
         <CircularButton
-          functionName={() => setOption('favorites')}
+          functionName={() => setOption('favourites')}
           name="heart"
           color="#FF5252"
         />

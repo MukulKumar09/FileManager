@@ -1,11 +1,10 @@
 import {View, Text, ActivityIndicator} from 'react-native';
 import styles, {textColor} from '../../../styles/styles';
-import getIcon from '../../../Hooks/getIcon';
 import {useDispatch} from 'react-redux';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
-import handleFile from '../../../Services/rnfs/handleFile';
 import iterateCollectedItems from '../../../Services/fileUtils/iterateCollectedItems';
+import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
 
 const Progress = ({onRequestClose, items, cb}) => {
   const [currItem, setItem] = useState({name: 'Loading...', ext: '/'});
@@ -28,7 +27,7 @@ const Progress = ({onRequestClose, items, cb}) => {
   return (
     <View style={[styles.bigGap]}>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        {getIcon(currItem)}
+        <Icon item={currItem} />
         <Text ellipsizeMode="tail" numberOfLines={5} style={[styles.text]}>
           {currItem.name}
         </Text>

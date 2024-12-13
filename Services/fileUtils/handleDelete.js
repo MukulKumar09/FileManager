@@ -1,11 +1,11 @@
 import {View, Text} from 'react-native';
 import modalPromise from '../../Actions/modalPromise';
-import getIcon from '../../Hooks/getIcon';
 import SmallGrayText from '../../Common/SmallGrayText/SmallGrayText';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import DeleteProgress from '../../Layout/Modal/ModalBodies/DeleteProgress';
 import Confirm from '../../Layout/Modal/ModalBodies/Confirm';
 import styles from '../../styles/styles';
+import Icon from '../../Layout/Windows/FilesList/FilesListItem/Icon/Icon';
 
 export default async function handleDelete(dispatch, items) {
   const isConfirmDelete = await modalPromise(
@@ -19,7 +19,7 @@ export default async function handleDelete(dispatch, items) {
           </Text>
           {items.map(item => (
             <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-              {getIcon(item)}
+              <Icon item={item} />
               <View style={[styles.wide]}>
                 <Text
                   ellipsizeMode="tail"

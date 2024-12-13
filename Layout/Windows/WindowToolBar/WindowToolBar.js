@@ -13,7 +13,7 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
   // const [filterBar, setFilterBar] = useState(false);
   const dispatch = useDispatch();
   async function openSort() {
-    const askSort = await modalPromise(
+    await modalPromise(
       dispatch,
       Sort,
       {},
