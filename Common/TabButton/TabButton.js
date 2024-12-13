@@ -28,7 +28,7 @@ const TabButton = React.memo(({index, isActive, item, setTabLayout}) => {
           });
         }}
         style={[styles.rowLayout, styles.padding, styles.mediumGap]}>
-        <Icon path={item.path} ext={item.ext} />
+        <Icon item={item} />
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"

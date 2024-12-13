@@ -1,7 +1,6 @@
 import {useEffect} from 'react';
 import copyToClipboard from '../Services/copyToClipboard';
-
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import startPaste from '../Services/rnfs/startPaste';
 import handleRename from '../Services/fileUtils/handleRename';
 import handleNewFile from '../Services/fileUtils/handleNewFile';
@@ -10,10 +9,8 @@ import handleClipboard from '../Services/fileUtils/handleClipboard';
 import handleRecycleBin from '../Services/fileUtils/handleRecycleBin';
 import addToRecycleBin from '../Services/addToRecycleBin';
 import handleOpenWith from '../Services/fileUtils/handleOpenWith';
-import modalPromise from '../Actions/modalPromise';
-import OpenAs from '../Layout/Modal/ModalBodies/OpenAs';
-import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 import handleOpenAs from '../Services/fileUtils/handleOpenAs';
+import handleOpenInNewTab from '../Services/fileUtils/handleOpenInNewTab';
 
 export default function useHandleOptions(
   option,
@@ -21,9 +18,12 @@ export default function useHandleOptions(
   tab,
   setOption,
   setSearchBar,
-  state,
 ) {
   const dispatch = useDispatch();
+  const state = {
+    tabCounter: useSelector(state => state.tabCounter),
+    clipboardItems: useSelector(state => state.clipboardItems),
+  };
   useEffect(() => {
     console.log(option);
     switch (option) {
@@ -73,6 +73,10 @@ export default function useHandleOptions(
       }
       case 'openAs': {
         handleOpenAs(dispatch, filesList);
+        break;
+      }
+      case 'openInNewTab': {
+        handleOpenInNewTab(dispatch, state.tabCounter, filesList);
         break;
       }
     }

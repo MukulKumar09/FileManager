@@ -1,25 +1,9 @@
 import useOpenExternally from '../Hooks/useOpenExternally';
-import generateBCFromPath from '../Services/breadCrumbs/generateBCFromPath';
 
-export default function navigateItem(
-  dispatch,
-  index,
-  item,
-  setBreadCrumbs,
-  addBreadCrumb,
-) {
-  const {ext, path, isSearched} = item;
-
-  switch (ext) {
+export default function navigateItem(dispatch, pushBreadCrumb, index, item) {
+  switch (item.ext) {
     case '/': {
-      if (isSearched) {
-        async function fn() {
-          setBreadCrumbs(await generateBCFromPath(path));
-        }
-        fn();
-      } else {
-        addBreadCrumb(item);
-      }
+      pushBreadCrumb(item);
       dispatch({
         type: 'UPDATETAB',
         payload: {

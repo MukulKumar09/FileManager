@@ -15,7 +15,7 @@ export default async function generateBCFromPath(path) {
   });
 
   breadCrumb.push({name: 'Home', path: 'Home'});
-  const driveCrumb = {name: getStorageName(drive), path: drive};
+  const driveCrumb = {name: getStorageName(drive), type: 'Home', path: drive};
   breadCrumb.push(driveCrumb);
 
   let removeDrive = path.split(drive)[1];

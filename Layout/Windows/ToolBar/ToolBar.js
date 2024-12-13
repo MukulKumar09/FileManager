@@ -59,6 +59,12 @@ function ToolBar({
                 <>
                   <CircularButton
                     functionName={() => {
+                      setOption('openInNewTab');
+                    }}
+                    name="tab-plus"
+                  />
+                  <CircularButton
+                    functionName={() => {
                       setOption('openWith');
                     }}
                     name="file-export-outline"

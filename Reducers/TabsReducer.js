@@ -6,10 +6,14 @@ export default function tabs(state = {}, action) {
         [action.payload.counter]: {name: 'Home', path: 'Home'},
       };
     }
+    case 'ADDTABFROMITEM': {
+      return {
+        ...state,
+        [action.payload.counter]: action.payload.item,
+      };
+    }
     case 'UPDATETAB': {
-      let tempState = {...state};
-      tempState[action.payload.index] = action.payload.item;
-      return tempState;
+      return {...state, [action.payload.index]: action.payload.item};
     }
     case 'DELETETAB': {
       let tempState = {...state};

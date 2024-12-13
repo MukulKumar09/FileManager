@@ -8,7 +8,6 @@ close tab
 about
 fix share
 
-import RNFS from 'react-native-fs';
 
 // Define initial parameters
 const INITIAL_CHUNK_SIZE = 16 * 1024; // 16 KB

@@ -3,10 +3,10 @@ import getIcon from '../../../../../Hooks/getIcon';
 import styles from '../../../../../styles/styles';
 import {Text} from 'react-native';
 
-function Icon({path, ext, type}) {
+function Icon({item}) {
   return (
     <Suspense fallback={<Text style={[styles.text]}>...</Text>}>
-      {getIcon({path, ext, type})}
+      {getIcon(item)}
     </Suspense>
   );
 }

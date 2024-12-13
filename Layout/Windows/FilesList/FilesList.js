@@ -12,14 +12,12 @@ function FilesList({
   path,
   setFilesList,
   index,
-  addBreadCrumb,
-  setBreadCrumbs,
   selectedItems,
   setSelectedItems,
+  pushBreadCrumb,
 }) {
   const dispatch = useDispatch();
 
-  //shift states to window
   const [selectionFlag, setSelectionFlag] = useState(0);
   const [lastClickedItem, setLastClickedItem] = useState({});
   const [hoveredItem, setHoveredItem] = useState({});
@@ -50,7 +48,7 @@ function FilesList({
       if (selectionFlag) {
         callHighlightItemCB(item);
       } else {
-        navigateItem(dispatch, index, item, setBreadCrumbs, addBreadCrumb);
+        navigateItem(dispatch, pushBreadCrumb, index, item);
       }
     },
     [selectionFlag, filesList, index],

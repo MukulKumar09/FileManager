@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
 import FilesList from '../FilesList/FilesList';
 import WindowToolBar from '../WindowToolBar/WindowToolBar';
@@ -12,30 +12,36 @@ import SelectedItems from './SelectedItems/SelectedItems';
 import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
 import useBackHandler from '../../../Hooks/useBackHandler';
 import sortFiles from '../../../Services/fileUtils/sortFiles';
+import generateBCFromPath from '../../../Services/breadCrumbs/generateBCFromPath';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
-  const state = {
-    clipboardItems: useSelector(state => state.clipboardItems),
-    refreshPath: useSelector(state => state.refreshPath),
-  };
   const dispatch = useDispatch();
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
-  const [breadCrumbs, setBreadCrumbs] = useState([item]);
+  const [breadCrumbs, setBreadCrumbs] = useState([]);
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
   const [option, setOption] = useState('');
   const [selectedItems, setSelectedItems] = useState(0);
   const [searchBar, setSearchBar] = useState(false);
 
-  const addBreadCrumb = useCallback(
-    item => {
+  useEffect(() => {
+    pushBreadCrumb(item);
+  }, []);
+
+  const pushBreadCrumb = item => {
+    if (item.isNewTab || item.isSearched) {
+      async function setBCRMBS() {
+        const generatedBC = await generateBCFromPath(item.path);
+        setBreadCrumbs(generatedBC);
+      }
+      setBCRMBS();
+    } else {
       setBreadCrumbs([...breadCrumbs, item]);
-    },
-    [breadCrumbs],
-  );
+    }
+  };
 
   const refresh = useCallback(
-    function (argItem) {
+    argItem => {
       if (argItem == 0) {
         //hard refresh same path
         getAndSetFilesList(
@@ -54,7 +60,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
 
   useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
   useFetchThumbnail(filesList, item, setFilesList);
-  useHandleOptions(option, filesList, item, setOption, setSearchBar, state);
+  useHandleOptions(option, filesList, item, setOption, setSearchBar);
   useBreadCrumb(breadCrumbs, refresh, index);
 
   useEffect(() => {
@@ -93,7 +99,6 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
       {Boolean(isLoading) && (
         <Text style={[styles.text]}>Loading...{item.name}</Text>
       )}
-
       <View style={[styles.wide]}>
         <FilesList
           index={index}
@@ -102,10 +107,9 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
           filesList={filesList}
           selectedItems={selectedItems}
           refresh={refresh}
-          addBreadCrumb={addBreadCrumb}
-          setBreadCrumbs={setBreadCrumbs}
           setFilesList={setFilesList}
           setSelectedItems={setSelectedItems}
+          pushBreadCrumb={pushBreadCrumb}
         />
       </View>
       {Boolean(selectedItems) && (
@@ -116,12 +120,10 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
           setFilesList={setFilesList}
         />
       )}
-
       <WindowToolBar
         breadCrumbs={breadCrumbs}
         setBreadCrumbs={setBreadCrumbs}
       />
-
       <ToolBar
         setOption={setOption}
         isPathHome={item.path == 'Home'}
