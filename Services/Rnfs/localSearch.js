@@ -10,7 +10,7 @@ export default async function localSearch(tab, searchString) {
       ) {
         if (item.name.includes(searchString)) {
           item.ext = '/';
-          item.isSearched = true;
+          item.isCustomItem = true;
           listItems.push(item);
         }
         const dirItems = await RNFS.readDir(item.path);
@@ -19,7 +19,7 @@ export default async function localSearch(tab, searchString) {
       } else {
         if (item.name.includes(searchString)) {
           item.ext = getFileExtension(item.name);
-          item.isSearched = true;
+          item.isCustomItem = true;
           listItems.push(item);
         }
       }

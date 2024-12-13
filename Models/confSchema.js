@@ -4,7 +4,7 @@ export const confSchema = {
     pKey: {type: 'int', default: 1234},
     firstRun: {type: 'int', default: 1},
     sort: 'sort',
-    // favourites: 'cache',
+    favourites: 'cache[]',
   },
   primaryKey: 'pKey',
 };

@@ -3,22 +3,52 @@ import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
-import {Suspense} from 'react';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import realmOpen from '../../../Services/realm/realmOpen';
 
-export default function Favourites({onRequestClose, tab}) {
+export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
   const dispatch = useDispatch();
   const state = {
-    favourites: useSelector(state => state.favourites),
+    conf: useSelector(state => state.conf),
   };
+  console.log('state', state.conf.favourites);
+  async function addFavourite() {
+    const payload = {
+      ...state.conf,
+      favourites: [...state.conf.favourites, tab],
+    };
+    const realm = await realmOpen();
+    realm.write(() => {
+      realm.create('conf', payload, 'modified');
+    });
+    dispatch({type: 'SETCONF', payload});
+  }
+  async function deleteFavourite(item) {
+    const payload = {
+      ...state.conf,
+      favourites: [
+        ...state.conf.favourites.filter(favItem => favItem.path !== item.path),
+      ],
+    };
+    const realm = await realmOpen();
+    realm.write(() => {
+      realm.create('conf', payload, 'modified');
+    });
+    dispatch({type: 'SETCONF', payload});
+  }
   return (
     <View style={[styles.bigGap]}>
-      {state.favourites.map(item => (
+      {state.conf.favourites.map(item => (
         <View
           key={item.path}
           style={[styles.rowLayout, {justifyContent: 'space-between'}]}>
-          <View style={[styles.rowLayout, styles.mediumGap]}>
+          <Pressable
+            onPress={() => {
+              pushBreadCrumb({...item, isCustom: true});
+              onRequestClose();
+            }}
+            style={[styles.rowLayout, styles.mediumGap, styles.wide]}>
             <Icon item={item} />
             <View>
               <Text
@@ -31,9 +61,8 @@ export default function Favourites({onRequestClose, tab}) {
                 {item.path}
               </SmallGrayText>
             </View>
-          </View>
-          <Pressable
-            onPress={() => dispatch({type: 'REMOVEFAVORITE', payload: item})}>
+          </Pressable>
+          <Pressable onPress={() => deleteFavourite(item)}>
             <SmallMaterialIcon name="close" color="#ffffff" />
           </Pressable>
         </View>
@@ -46,7 +75,7 @@ export default function Favourites({onRequestClose, tab}) {
           styles.bordered,
           styles.padding,
         ]}
-        onPress={() => dispatch({type: 'ADDFAVORITE', payload: tab})}>
+        onPress={() => addFavourite()}>
         <Text style={[styles.text]}>Add Current Directory</Text>
         <MaterialIcon name="plus-circle-outline" />
       </Pressable>

@@ -18,18 +18,14 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const dispatch = useDispatch();
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
-  const [breadCrumbs, setBreadCrumbs] = useState([]);
+  const [breadCrumbs, setBreadCrumbs] = useState([item]);
   const [shouldBeRefreshed, setShouldBeRefreshed] = useState(0);
   const [option, setOption] = useState('');
   const [selectedItems, setSelectedItems] = useState(0);
   const [searchBar, setSearchBar] = useState(false);
 
-  useEffect(() => {
-    pushBreadCrumb(item);
-  }, []);
-
   const pushBreadCrumb = item => {
-    if (item.isNewTab || item.isSearched) {
+    if (item.isCustomItem) {
       async function setBCRMBS() {
         const generatedBC = await generateBCFromPath(item.path);
         setBreadCrumbs(generatedBC);
@@ -60,7 +56,15 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
 
   useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
   useFetchThumbnail(filesList, item, setFilesList);
-  useHandleOptions(option, filesList, item, setOption, setSearchBar, refresh);
+  useHandleOptions(
+    option,
+    filesList,
+    item,
+    setOption,
+    setSearchBar,
+    refresh,
+    pushBreadCrumb,
+  );
   useBreadCrumb(breadCrumbs, refresh, index);
 
   useEffect(() => {

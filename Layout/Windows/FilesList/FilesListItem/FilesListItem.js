@@ -36,7 +36,7 @@ function FilesListItem({
           {item.ext !== '/' && (
             <SmallGrayText>{bytesToSize(item.size)}</SmallGrayText>
           )}
-          {item.isSearched && <SmallGrayText>{item.path}</SmallGrayText>}
+          {item.isCustomItem && <SmallGrayText>{item.path}</SmallGrayText>}
         </View>
       </View>
       <View style={[styles.padding, {alignItems: 'flex-end'}]}>

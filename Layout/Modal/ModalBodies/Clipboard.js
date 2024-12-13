@@ -17,7 +17,7 @@ export default function Clipboard({onRequestClose}) {
       </Text>
       {state.clipboardItems.items.map(item => (
         <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-          <Icon item={item}>
+          <Icon item={item} />
           <View style={[styles.wide]}>
             <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
               {item.name}

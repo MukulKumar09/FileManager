@@ -11,6 +11,7 @@ export function createConf(realm, dispatch) {
       conf = {
         firstRun: 1,
         sort: {type: 'extension', sort: 'ascending'},
+        favourites: [],
       };
       realm.create('conf', conf, 'modified');
     }
