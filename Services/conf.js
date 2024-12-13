@@ -1,3 +1,5 @@
+import handleAbout from './fileUtils/handleAbout';
+
 export function createConf(realm, dispatch) {
   let conf;
   realm.write(() => {
@@ -8,6 +10,7 @@ export function createConf(realm, dispatch) {
         conf.firstRun = 0;
       }
     } else {
+      handleAbout(dispatch);
       conf = {
         firstRun: 1,
         sort: {type: 'extension', sort: 'ascending'},

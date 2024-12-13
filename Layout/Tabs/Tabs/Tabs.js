@@ -2,7 +2,14 @@ import {ScrollView, View} from 'react-native';
 import styles from '../../../styles/styles';
 import TabButton from '../../../Common/TabButton/TabButton';
 import {memo, useEffect, useState} from 'react';
-function Tabs({tabs, handleScroll, currentTab, tabLayouts, setLayouts}) {
+function Tabs({
+  tabs,
+  handleScroll,
+  currentTab,
+  tabLayouts,
+  setLayouts,
+  handleDeleteTab,
+}) {
   const [tabLayout, setTabLayout] = useState(0);
   useEffect(() => {
     if (tabLayout) {
@@ -30,6 +37,7 @@ function Tabs({tabs, handleScroll, currentTab, tabLayouts, setLayouts}) {
             item={tabs[index]}
             isActive={index == currentTab}
             setTabLayout={setTabLayout}
+            handleDeleteTab={handleDeleteTab}
           />
         ))}
       </View>

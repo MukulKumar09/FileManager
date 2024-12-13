@@ -32,6 +32,7 @@ export default StyleSheet.create({
   },
   headingText: {
     fontSize: 25,
+    includeFontPadding: false,
   },
   textDisabled: {
     color: 'grey',

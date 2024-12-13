@@ -1,8 +1,4 @@
-suspense on all geticon
 media player (resize)
-favourites
-about
-close tab
 text editor
 open as
 fix share

@@ -22,19 +22,17 @@ function ModalTemplate({
       <View style={[styles.pill, styles.bigGap, styles.padding, styles.modal]}>
         <View>
           {heading && (
-            <View style={[styles.wide, styles.rowLayout, styles.bigGap]}>
+            <View style={[styles.wide, styles.rowLayout, styles.mediumGap]}>
               {icon && icon}
               <View style={[styles.wide]}>
-                <Text
-                  style={[
-                    styles.text,
-                    styles.wide,
-                    styles.headingText,
-                    styles.oswald,
-                  ]}>
+                <Text style={[styles.text, styles.headingText, styles.oswald]}>
                   {heading}
                 </Text>
-                {subHeading && <SmallGrayText>{subHeading}</SmallGrayText>}
+                {subHeading && (
+                  <SmallGrayText style={styles.wide}>
+                    {subHeading}
+                  </SmallGrayText>
+                )}
               </View>
             </View>
           )}

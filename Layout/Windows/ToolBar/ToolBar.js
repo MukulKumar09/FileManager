@@ -39,6 +39,10 @@ function ToolBar({
           setOption('refresh');
           break;
         }
+        case 'about': {
+          setOption('about');
+          break;
+        }
       }
       menu !== true && setMenu(false);
     }

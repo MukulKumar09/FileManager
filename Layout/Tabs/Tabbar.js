@@ -50,6 +50,27 @@ export default function Tabbar({translationX, translationY}) {
     }, 250);
   }, []);
 
+  const handleDeleteTab = () => {
+    let tempTabs = Object.keys(state.tabs);
+    let currentTab = state.currentTab;
+    let curTabKey = tempTabs.indexOf(state.currentTab.toString());
+    if (tempTabs[curTabKey + 1]) {
+      currentTab = tempTabs[curTabKey + 1];
+    } else if (tempTabs[curTabKey - 1]) {
+      currentTab = tempTabs[curTabKey - 1];
+    }
+    if (tempTabs.length > 1) {
+      dispatch({
+        type: 'SETCURRENTTAB',
+        payload: currentTab,
+      });
+      dispatch({
+        type: 'DELETETAB',
+        payload: state.currentTab,
+      });
+    }
+  };
+
   return (
     <>
       <View
@@ -69,6 +90,7 @@ export default function Tabbar({translationX, translationY}) {
           tabs={state.tabs}
           currentTab={state.currentTab}
           handleScroll={handleScroll}
+          handleDeleteTab={handleDeleteTab}
           tabLayouts={tabLayouts}
           setLayouts={setLayouts}
         />

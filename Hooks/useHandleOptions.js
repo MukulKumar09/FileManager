@@ -13,6 +13,7 @@ import handleOpenAs from '../Services/fileUtils/handleOpenAs';
 import handleOpenInNewTab from '../Services/fileUtils/handleOpenInNewTab';
 import handleProperties from '../Services/handleProperties';
 import handleFavourites from '../Services/fileUtils/handleFavourites';
+import handleAbout from '../Services/fileUtils/handleAbout';
 
 export default function useHandleOptions(
   option,
@@ -96,6 +97,7 @@ export default function useHandleOptions(
         break;
       }
       case 'about': {
+        handleAbout(dispatch);
         break;
       }
     }
