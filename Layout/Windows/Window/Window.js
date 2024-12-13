@@ -13,8 +13,10 @@ import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
 import useBackHandler from '../../../Hooks/useBackHandler';
 import sortFiles from '../../../Services/fileUtils/sortFiles';
 import generateBCFromPath from '../../../Services/breadCrumbs/generateBCFromPath';
+import Home from '../FilesList/Home/Home';
 
 const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
+  const {path, name} = item;
   const dispatch = useDispatch();
   const [filesList, setFilesList] = useState([]);
   const [isLoading, setIsLoading] = useState(0);
@@ -24,34 +26,34 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
   const [selectedItems, setSelectedItems] = useState(0);
   const [searchBar, setSearchBar] = useState(false);
 
-  const pushBreadCrumb = item => {
-    if (item.isCustomItem) {
+  const pushBreadCrumb = itemToPush => {
+    if (itemToPush.isCustomItem) {
       async function setBCRMBS() {
-        const generatedBC = await generateBCFromPath(item.path);
+        const generatedBC = await generateBCFromPath(itemToPush.path);
         setBreadCrumbs(generatedBC);
       }
       setBCRMBS();
     } else {
-      setBreadCrumbs([...breadCrumbs, item]);
+      setBreadCrumbs([...breadCrumbs, itemToPush]);
     }
   };
 
   const refresh = useCallback(
-    argItem => {
-      if (argItem == 0) {
+    itemToRefresh => {
+      if (itemToRefresh == 0) {
         //hard refresh same path
         getAndSetFilesList(
           setFilesList,
           setIsLoading,
-          {...item, mtime: 'latest'},
+          {...itemToRefresh, mtime: 'latest'},
           sort,
         );
       } else {
         //navigate to path
-        getAndSetFilesList(setFilesList, setIsLoading, argItem, sort);
+        getAndSetFilesList(setFilesList, setIsLoading, itemToRefresh, sort);
       }
     },
-    [item.path],
+    [path],
   );
 
   useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
@@ -101,20 +103,24 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         {backgroundColor, display: isActive ? 'flex' : 'none'},
       ]}>
       {Boolean(isLoading) && (
-        <Text style={[styles.text]}>Loading...{item.name}</Text>
+        <Text style={[styles.text]}>Loading...{name}</Text>
       )}
       <View style={[styles.wide]}>
-        <FilesList
-          index={index}
-          path={item.path}
-          isRefresh={isRefresh}
-          filesList={filesList}
-          selectedItems={selectedItems}
-          refresh={refresh}
-          setFilesList={setFilesList}
-          setSelectedItems={setSelectedItems}
-          pushBreadCrumb={pushBreadCrumb}
-        />
+        {path == 'Home' ? (
+          <Home filesList={filesList} pushBreadCrumb={pushBreadCrumb} />
+        ) : (
+          <FilesList
+            index={index}
+            path={path}
+            isRefresh={isRefresh}
+            filesList={filesList}
+            selectedItems={selectedItems}
+            refresh={refresh}
+            setFilesList={setFilesList}
+            setSelectedItems={setSelectedItems}
+            pushBreadCrumb={pushBreadCrumb}
+          />
+        )}
       </View>
       {Boolean(selectedItems) && (
         <SelectedItems
@@ -132,7 +138,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
       )}
       <ToolBar
         setOption={setOption}
-        isPathHome={item.path == 'Home'}
+        isPathHome={path == 'Home'}
         selectedItems={selectedItems}
         filesList={filesList}
         searchBar={searchBar}

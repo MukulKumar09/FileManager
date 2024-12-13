@@ -81,7 +81,6 @@ export default StyleSheet.create({
   pill: {
     backgroundColor: primaryColor,
     borderRadius: 10,
-    justifyContent: 'center',
   },
   centered: {
     alignItems: 'center',
