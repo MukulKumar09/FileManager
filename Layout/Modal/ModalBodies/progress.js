@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import iterateCollectedItems from '../../../Services/fileUtils/iterateCollectedItems';
-import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Icon/Icon';
 
 const Progress = ({onRequestClose, items, cb}) => {
   const [currItem, setItem] = useState({name: 'Loading...', ext: '/'});

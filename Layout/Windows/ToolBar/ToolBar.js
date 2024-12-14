@@ -48,6 +48,7 @@ function ToolBar({
               />
               {Boolean(selectedItems) && (
                 <>
+                  <Text style={{color: secondaryColor}}> | </Text>
                   <CircularButton
                     functionName={() => {
                       setOption('openInNewTab');
@@ -60,6 +61,7 @@ function ToolBar({
                     }}
                     name="file-export-outline"
                   />
+                  <Text style={{color: secondaryColor}}> | </Text>
                   {/* <CircularButton
                     functionName={() => {
                       setOption('openAs');

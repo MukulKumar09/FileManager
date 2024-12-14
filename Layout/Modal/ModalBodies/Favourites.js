@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
-import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Icon/Icon';
 import realmOpen from '../../../Services/realm/realmOpen';
 
 export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
@@ -40,7 +40,7 @@ export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
   return (
     <View style={[styles.bigGap]}>
       {state.conf.favourites.length == 0 && (
-        <Text style={[styles.text]}>No items.</Text>
+        <Text style={[styles.text, styles.textGreyed]}>No items.</Text>
       )}
       {state.conf.favourites.map(item => (
         <View
@@ -80,8 +80,8 @@ export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
           styles.padding,
         ]}
         onPress={() => addFavourite()}>
-        <Text style={[styles.text]}>Add Current Directory</Text>
         <MaterialIcon name="plus-circle-outline" />
+        <Text style={[styles.text]}>Add Current Directory</Text>
       </Pressable>
     </View>
   );

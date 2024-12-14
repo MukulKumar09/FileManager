@@ -3,7 +3,7 @@ import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
-import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Icon/Icon';
 
 export default function Clipboard({onRequestClose}) {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ export default function Clipboard({onRequestClose}) {
   };
   return (
     <View style={[styles.bigGap]}>
-      <Text style={[styles.text, styles.smallText]}>
+      <Text style={[styles.text, styles.textGreyed]}>
         {state.clipboardItems.items.length} items
       </Text>
       {state.clipboardItems.items.map(item => (

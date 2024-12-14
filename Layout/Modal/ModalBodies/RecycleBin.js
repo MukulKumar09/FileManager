@@ -5,7 +5,7 @@ import BorderButton from '../../../Common/BorderButton/BorderButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 import handleDelete from '../../../Services/fileUtils/handleDelete';
-import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Icon/Icon';
 
 export default function RecycleBin({onRequestClose}) {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ export default function RecycleBin({onRequestClose}) {
   };
   return (
     <View style={[styles.bigGap]}>
-      <Text style={[styles.text, styles.smallText]}>
+      <Text style={[styles.text, styles.textGreyed]}>
         {state.recycleBin.length} items
       </Text>
       {state.recycleBin.map(item => (

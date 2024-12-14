@@ -22,17 +22,17 @@ function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
                 onPress={() => {
                   setBreadCrumbs(updateBreadCrumbs(breadCrumbs, i));
                 }}
-                style={[styles.rowLayout, styles.mediumGap]}>
+                style={[styles.rowLayout, styles.smallGap]}>
                 <Text
                   style={[
                     styles.smallPill,
                     styles.text,
-                    styles.textDisabled,
+                    styles.textGreyed,
                     styles.smallText,
                   ]}>
                   {item.name}
                 </Text>
-                <Text style={[styles.text, styles.textDisabled]}>›</Text>
+                <Text style={[styles.text, styles.textGreyed]}>›</Text>
               </Pressable>
             );
           })}

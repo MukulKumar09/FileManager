@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import styles from '../../../styles/styles';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
-import FilterBar from './FilterBar/FilterBar';
+// import FilterBar from './FilterBar/FilterBar';
 import modalPromise from '../../../Actions/modalPromise';
 import Sort from '../../Modal/ModalBodies/Sort';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
@@ -35,7 +35,7 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
           style={[
             styles.smallPill,
             styles.text,
-            styles.textDisabled,
+            styles.textGreyed,
             styles.smallText,
           ]}>
           <SmallMaterialIcon name="sort" color />
@@ -48,13 +48,13 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
           style={[
             styles.smallPill,
             styles.text,
-            styles.textDisabled,
+            styles.textGreyed,
             styles.smallText,
           ]}>
           <SmallMaterialIcon name="filter" color />
         </Text>
       </Pressable> */}
-      <Text style={[styles.textDisabled]}>|</Text>
+      <Text style={[styles.textGreyed]}>|</Text>
       <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
     </View>
   );

@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
-import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Icon/Icon';
 
 export default function PasteHere({resolve, onRequestClose, items}) {
   const dispatch = useDispatch();

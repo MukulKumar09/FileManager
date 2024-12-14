@@ -13,12 +13,12 @@ export default function About({onRequestClose}) {
           \n I want to keep it free of any ads/paywalls. However this won't be possible without your support! You can contribute by rating and leaving a feedback on Play Store.`}
         </Text>
         <View
-          style={[styles.rowLayout, styles.mediumGap, {paddingVertical: 10}]}>
+          style={[styles.rowLayout, styles.mediumGap, styles.paddingVertical]}>
           <Pressable
             onPress={() => Linking.openURL('mailto:mukulyashi@gmail.com')}
             style={[styles.rowLayout, styles.mediumGap, styles.smallPill]}>
             <SmallMaterialIcon name="gmail" color={grey} />
-            <Text style={[styles.text, styles.smallText, styles.textDisabled]}>
+            <Text style={[styles.text, styles.smallText, styles.textGreyed]}>
               Mail
             </Text>
           </Pressable>
@@ -28,7 +28,7 @@ export default function About({onRequestClose}) {
             }
             style={[styles.rowLayout, styles.mediumGap, styles.smallPill]}>
             <SmallMaterialIcon name="web" color={grey} />
-            <Text style={[styles.text, styles.smallText, styles.textDisabled]}>
+            <Text style={[styles.text, styles.smallText, styles.textGreyed]}>
               Privacy Policy
             </Text>
           </Pressable>

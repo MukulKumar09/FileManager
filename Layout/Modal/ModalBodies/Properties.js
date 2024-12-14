@@ -13,7 +13,9 @@ export default function Properties({resolve, onRequestClose, items}) {
   if (items.length == 1) {
     name = items[0].name;
     type = items[0].type;
-    type == 'dir' ? (size = null) : (size = items[0].size);
+    type == 'dir'
+      ? ((size = null), (type = 'directory'))
+      : (size = items[0].size);
     mtime = items[0].mtime;
   } else {
     name = '[Multiple items...]';
@@ -25,29 +27,28 @@ export default function Properties({resolve, onRequestClose, items}) {
 
   return (
     <View style={[styles.bigGap]}>
-      <Text style={[styles.text]}>{items.length} items selected</Text>
       <View style={[styles.rowLayout]}>
-        <Text style={[styles.text, styles.textDisabled, {width: '40%'}]}>
+        <Text style={[styles.text, styles.textGreyed, {width: '40%'}]}>
           Name:
         </Text>
         <Text style={[styles.text, styles.wide]}>{name}</Text>
       </View>
       <View style={[styles.rowLayout]}>
-        <Text style={[styles.text, styles.textDisabled, {width: '40%'}]}>
+        <Text style={[styles.text, styles.textGreyed, {width: '40%'}]}>
           Type:
         </Text>
         <Text style={[styles.text, styles.wide]}>{type}</Text>
       </View>
       {Boolean(size) && (
         <View style={[styles.rowLayout]}>
-          <Text style={[styles.text, styles.textDisabled, {width: '40%'}]}>
+          <Text style={[styles.text, styles.textGreyed, {width: '40%'}]}>
             Size:
           </Text>
           <Text style={[styles.text, styles.wide]}>{bytesToSize(size)}</Text>
         </View>
       )}
       <View style={[styles.rowLayout]}>
-        <Text style={[styles.text, styles.textDisabled, {width: '40%'}]}>
+        <Text style={[styles.text, styles.textGreyed, {width: '40%'}]}>
           Path:
           {/* <Pressable>
             <SmallMaterialIcon name="content-copy" color={grey} />
@@ -57,7 +58,7 @@ export default function Properties({resolve, onRequestClose, items}) {
       </View>
       {Boolean(mtime) && (
         <View style={[styles.rowLayout]}>
-          <Text style={[styles.text, styles.textDisabled, {width: '40%'}]}>
+          <Text style={[styles.text, styles.textGreyed, {width: '40%'}]}>
             Modified Date:
           </Text>
           <Text style={[styles.text, styles.wide]}>{unixToDate(mtime)}</Text>

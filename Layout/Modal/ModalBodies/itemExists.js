@@ -5,7 +5,7 @@ import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import askToRename from '../../../Services/askToRename';
-import Icon from '../../Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Icon/Icon';
 
 const ItemExists = ({resolve, item, onRequestClose}) => {
   console.log(item);

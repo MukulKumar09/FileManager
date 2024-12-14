@@ -3,7 +3,7 @@ import {Text, Pressable, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import styles from '../../styles/styles';
 import SmallMaterialIcon from '../SmallMaterialIcon/SmallMaterialIcon';
-import Icon from '../../Layout/Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Layout/Icon/Icon';
 
 const TabButton = React.memo(
   ({index, isActive, item, setTabLayout, handleDeleteTab}) => {

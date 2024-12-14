@@ -9,25 +9,25 @@ export default function OpenAs({resolve, onRequestClose}) {
     <View>
       <Pressable
         onPress={() => {}}
-        style={[styles.rowLayout, styles.bigGap, {paddingVertical: 15}]}>
+        style={[styles.rowLayout, styles.bigGap, styles.paddingVertical]}>
         <MaterialIcon name="text-box-outline" />
         <Text style={[styles.text]}>Text</Text>
       </Pressable>
       <Pressable
         onPress={() => {}}
-        style={[styles.rowLayout, styles.bigGap, {paddingVertical: 15}]}>
+        style={[styles.rowLayout, styles.bigGap, styles.paddingVertical]}>
         <MaterialIcon name="image" />
         <Text style={[styles.text]}>Image</Text>
       </Pressable>
       <Pressable
         onPress={() => {}}
-        style={[styles.rowLayout, styles.bigGap, {paddingVertical: 15}]}>
+        style={[styles.rowLayout, styles.bigGap, styles.paddingVertical]}>
         <MaterialIcon name="video-outline" />
         <Text style={[styles.text]}>Video</Text>
       </Pressable>
       <Pressable
         onPress={() => {}}
-        style={[styles.rowLayout, styles.bigGap, {paddingVertical: 15}]}>
+        style={[styles.rowLayout, styles.bigGap, styles.paddingVertical]}>
         <MaterialIcon name="music" />
         <Text style={[styles.text]}>Audio</Text>
       </Pressable>

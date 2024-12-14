@@ -1,6 +1,6 @@
 import {Suspense, memo} from 'react';
-import getIcon from '../../../../../Hooks/getIcon';
-import styles from '../../../../../styles/styles';
+import getIcon from '../../Services/getIcon';
+import styles from '../../styles/styles';
 import {Text} from 'react-native';
 
 function Icon({item}) {

@@ -5,6 +5,7 @@ export default async function handleOpenAs(dispatch, filesList) {
   const lastHighlightedItem = {
     ...filesList.find(item => item.isHighlighted),
   };
+
   await modalPromise(
     dispatch,
     OpenAs,

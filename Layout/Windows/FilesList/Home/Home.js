@@ -1,10 +1,10 @@
 import {View, Pressable, Text} from 'react-native';
 import {memo} from 'react';
 import {useSelector} from 'react-redux';
-import Icon from '../FilesListItem/Icon/Icon';
 import SmallGrayText from '../../../../Common/SmallGrayText/SmallGrayText';
 import styles from '../../../../styles/styles';
 import MaterialIcon from '../../../../Common/MaterialIcon/MaterialIcon';
+import Icon from '../../../Icon/Icon';
 
 function Home({filesList, pushBreadCrumb}) {
   const state = {
@@ -41,9 +41,7 @@ function Home({filesList, pushBreadCrumb}) {
         </View>
         <View style={[styles.divider]} />
         {state.conf.favourites.length == 0 && (
-          <Text style={[styles.text, styles.textDisabled, styles.smallText]}>
-            No items.
-          </Text>
+          <Text style={[styles.text, styles.textGreyed]}>No items.</Text>
         )}
         {state.conf.favourites.map(item => (
           <Pressable

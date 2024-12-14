@@ -2,7 +2,7 @@ import {Image, Text} from 'react-native';
 import styles from '../styles/styles';
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
 import RNFS from 'react-native-fs';
-import checkExists from '../Services/rnfs/checkExists';
+import checkExists from './rnfs/checkExists';
 import {createThumbnail} from 'react-native-create-thumbnail';
 export default async function getIcon(item) {
   if (item.type == 'Home') {

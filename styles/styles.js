@@ -14,28 +14,32 @@ export default StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
   },
+  //text
   oswald: {
+    includeFontPadding: false,
     fontFamily: 'Oswald-Regular',
   },
   text: {
     color: textColor,
-    fontSize: 15,
-  },
-  imageIcon: {
-    maxHeight: 20,
-    width: 20,
-    resizeMode: 'contain',
-  },
-  smallImageIcon: {
-    height: 20,
-    resizeMode: 'contain',
+    fontSize: 16,
   },
   headingText: {
     fontSize: 25,
-    includeFontPadding: false,
   },
-  textDisabled: {
+  textGreyed: {
     color: 'grey',
+  },
+  smallText: {
+    fontSize: 10,
+  },
+  smallDarkText: {
+    color: '#979899',
+    fontSize: 10,
+  },
+  //flexbox
+  rowLayout: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   marginSmall: {
     margin: 5,
@@ -43,29 +47,17 @@ export default StyleSheet.create({
   padding: {
     padding: 15,
   },
-  paddingTop: {
-    paddingTop: 10,
+  paddingVertical: {
+    paddingVertical: 15,
   },
-  paddingCloseLeft: {
-    padding: 20,
-    paddingStart: 0,
-  },
-  paddingCloseBottom: {
-    margin: 10,
-    marginBottom: 0,
-  },
-  listItemHighlight: {
-    backgroundColor: secondaryColor,
-  },
-  listItemSelected: {
-    borderWidth: 1,
-    borderStyle: 'dashed',
-    borderColor: 'white',
-  },
-  rowLayout: {
-    flexDirection: 'row',
+  centered: {
+    justifyContent: 'center',
     alignItems: 'center',
   },
+  wide: {
+    flex: 1,
+  },
+  //flex gaps
   largeGap: {
     gap: 40,
   },
@@ -78,20 +70,23 @@ export default StyleSheet.create({
   smallGap: {
     gap: 5,
   },
+  //list item
+  listItemHighlighted: {
+    backgroundColor: secondaryColor,
+  },
+  listItemHovererd: {
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: 'white',
+  },
+  //rounded box
   pill: {
     backgroundColor: primaryColor,
     borderRadius: 10,
   },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   pillHighlight: {
     backgroundColor: secondaryColor,
     color: 'whiter',
-  },
-  wide: {
-    flex: 1,
   },
   smallPill: {
     padding: 10,
@@ -99,6 +94,17 @@ export default StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  //icon
+  imageIcon: {
+    maxHeight: 20,
+    width: 20,
+    resizeMode: 'contain',
+  },
+  smallImageIcon: {
+    height: 20,
+    resizeMode: 'contain',
+  },
+  //utils
   input: {
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
@@ -108,9 +114,6 @@ export default StyleSheet.create({
     bottom: 15,
     left: 15,
     right: 15,
-    // alignItems: 'flex-start',
-    // justifyContent: 'flex-start',
-    // flexDirection: 'column',
   },
   modalBackground: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
@@ -124,17 +127,10 @@ export default StyleSheet.create({
     padding: 10,
     backgroundColor: secondaryColor,
   },
-  smallAlert: {
-    justifyContent: 'space-between',
-    backgroundColor: primaryColor,
-    borderRadius: 20,
-  },
-  smallText: {
-    fontSize: 10,
-  },
-  smallDarkText: {
-    color: '#979899',
-    fontSize: 10,
+  divider: {
+    height: 2,
+    backgroundColor: backgroundColor,
+    width: '100%',
   },
   bordered: {
     borderColor: secondaryColor,
@@ -145,10 +141,5 @@ export default StyleSheet.create({
     borderColor: 'white',
     borderWidth: 2,
     borderStyle: 'solid',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: secondaryColor,
-    width: '100%',
   },
 });

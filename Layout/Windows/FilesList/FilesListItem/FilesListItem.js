@@ -1,11 +1,11 @@
 import {Pressable, Text, View} from 'react-native';
 import styles from '../../../../styles/styles';
-import {Suspense, memo, lazy} from 'react';
+import {memo} from 'react';
 import {unixToDate} from '../../../../Services/fileUtils/unixToDate';
 import {bytesToSize} from '../../../../Services/fileUtils/bytesToSize';
 import unixTo12Hour from '../../../../Services/fileUtils/unixTo12Hour';
 import SmallGrayText from '../../../../Common/SmallGrayText/SmallGrayText';
-import Icon from './Icon/Icon';
+import Icon from '../../../Icon/Icon';
 
 function FilesListItem({
   item,
@@ -22,8 +22,8 @@ function FilesListItem({
       style={[
         styles.rowLayout,
         styles.largeGap,
-        isHighlighted && styles.listItemHighlight,
-        isHovered && styles.listItemSelected,
+        isHighlighted && styles.listItemHighlighted,
+        isHovered && styles.listItemHovererd,
         {justifyContent: 'space-between'},
       ]}>
       <View

@@ -19,8 +19,8 @@ function ModalTemplate({
         onPress={isStatic ? undefined : onRequestClose}
         style={[styles.modalBackground]}
       />
-      <View style={[styles.pill, styles.bigGap, styles.padding, styles.modal]}>
-        <View>
+      <View style={[styles.pill, styles.modal]}>
+        <View style={[styles.padding]}>
           {heading && (
             <View style={[styles.wide, styles.rowLayout, styles.mediumGap]}>
               {icon && icon}
@@ -38,7 +38,7 @@ function ModalTemplate({
           )}
         </View>
         <View style={[styles.divider]} />
-        <View style={{maxHeight: 500}}>
+        <View style={[styles.padding, {maxHeight: 500}]}>
           <ScrollView>{children}</ScrollView>
         </View>
       </View>

@@ -8,6 +8,13 @@ export default async function handleOpenInNewTab(
   const lastHighlightedItem = {
     ...filesList.find(item => item.isHighlighted),
   };
-  lastHighlightedItem.isCustomItem = true;
-  addNewTabFromItem(dispatch, tabCounter, lastHighlightedItem);
+  if (lastHighlightedItem.type == 'dir') {
+    lastHighlightedItem.isCustomItem = true;
+    addNewTabFromItem(dispatch, tabCounter, lastHighlightedItem);
+  } else {
+    dispatch({
+      type: 'TOAST',
+      payload: 'Only Folders can be opened in New Tab.',
+    });
+  }
 }

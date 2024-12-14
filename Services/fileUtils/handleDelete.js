@@ -5,7 +5,7 @@ import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import DeleteProgress from '../../Layout/Modal/ModalBodies/DeleteProgress';
 import Confirm from '../../Layout/Modal/ModalBodies/Confirm';
 import styles from '../../styles/styles';
-import Icon from '../../Layout/Windows/FilesList/FilesListItem/Icon/Icon';
+import Icon from '../../Layout/Icon/Icon';
 
 export default async function handleDelete(dispatch, items) {
   const isConfirmDelete = await modalPromise(
