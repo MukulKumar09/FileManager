@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {lazy, Suspense, memo, useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
@@ -8,14 +8,14 @@ import ToolBar from '../ToolBar/ToolBar';
 import useHandleOptions from '../../../Hooks/useHandleOptions';
 import useBreadCrumb from '../../../Hooks/useBreadCrumb';
 import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
-import SelectedItems from './SelectedItems/SelectedItems';
+const SelectedItems = lazy(() => import('./SelectedItems/SelectedItems'));
 import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
 import useBackHandler from '../../../Hooks/useBackHandler';
 import sortFiles from '../../../Services/fileUtils/sortFiles';
 import generateBCFromPath from '../../../Services/breadCrumbs/generateBCFromPath';
 import Home from '../FilesList/Home/Home';
 
-const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
+const Window = memo(({index, sort, item, isActive, isRefresh}) => {
   const {path, name} = item;
   const dispatch = useDispatch();
   const [filesList, setFilesList] = useState([]);
@@ -45,7 +45,7 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         getAndSetFilesList(
           setFilesList,
           setIsLoading,
-          {...itemToRefresh, mtime: 'latest'},
+          {...item, mtime: 'latest'},
           sort,
         );
       } else {
@@ -123,12 +123,14 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         )}
       </View>
       {Boolean(selectedItems) && (
-        <SelectedItems
-          selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
-          filesList={filesList}
-          setFilesList={setFilesList}
-        />
+        <Suspense>
+          <SelectedItems
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+            filesList={filesList}
+            setFilesList={setFilesList}
+          />
+        </Suspense>
       )}
       {breadCrumbs.length > 1 && (
         <WindowToolBar
@@ -144,7 +146,6 @@ const Window = React.memo(({index, sort, item, isActive, isRefresh}) => {
         searchBar={searchBar}
         setSearchBar={setSearchBar}
         setFilesList={setFilesList}
-        refresh={refresh}
         tab={item}
       />
     </View>

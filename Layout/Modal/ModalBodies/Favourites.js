@@ -39,6 +39,9 @@ export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
   }
   return (
     <View style={[styles.bigGap]}>
+      {state.conf.favourites.length == 0 && (
+        <Text style={[styles.text]}>No items.</Text>
+      )}
       {state.conf.favourites.map(item => (
         <View
           key={item.path}
@@ -72,6 +75,7 @@ export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
           styles.pill,
           styles.rowLayout,
           styles.mediumGap,
+          styles.centered,
           styles.bordered,
           styles.padding,
         ]}

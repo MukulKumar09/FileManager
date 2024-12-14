@@ -2,7 +2,7 @@ import {Modal, Pressable, View} from 'react-native';
 import styles from '../../../../styles/styles';
 import MenuItem from '../../../../Common/MenuItem/MenuItem';
 
-export default function Menu({menu, setMenu, refresh}) {
+export default function Menu({menu, setMenu, setOption}) {
   return (
     <Modal
       visible={Boolean(menu)}
@@ -23,26 +23,33 @@ export default function Menu({menu, setMenu, refresh}) {
             elevation: 5,
           },
         ]}>
-        <MenuItem title="Refresh" icon="reload" cb={() => setMenu('refresh')} />
+        <MenuItem
+          title="Refresh"
+          icon="reload"
+          cb={() => {
+            setMenu(false);
+            setOption('refresh');
+          }}
+        />
         <MenuItem
           title="Recycle Bin"
           icon="delete-empty-outline"
-          cb={() => setMenu('recycleBin')}
+          cb={() => setOption('recycleBin')}
         />
         <MenuItem
           title="Clipboard"
           icon="clipboard-outline"
-          cb={() => setMenu('clipboard')}
+          cb={() => setOption('clipboard')}
         />
         <MenuItem
           title="Properites"
           icon="details"
-          cb={() => setMenu('properties')}
+          cb={() => setOption('properties')}
         />
         <MenuItem
           title="About"
           icon="information-outline"
-          cb={() => setMenu('about')}
+          cb={() => setOption('about')}
         />
       </View>
     </Modal>

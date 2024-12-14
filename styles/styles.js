@@ -83,6 +83,7 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
   centered: {
+    justifyContent: 'center',
     alignItems: 'center',
   },
   pillHighlight: {

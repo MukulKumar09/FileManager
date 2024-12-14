@@ -1,10 +1,10 @@
-import {memo, useEffect, useState} from 'react';
+import {memo, lazy, useState, Suspense} from 'react';
 import {Text, View, ScrollView} from 'react-native';
 import CircularButton from '../../../Common/CircularButton/CircularButton';
 import styles, {secondaryColor, textColor} from '../../../styles/styles';
 import {useSelector} from 'react-redux';
-import SearchBar from './SearchBar/SearchBar';
-import Menu from './Menu/Menu';
+const Menu = lazy(() => import('./Menu/Menu'));
+const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
 function ToolBar({
   setOption,
   isPathHome,
@@ -13,52 +13,29 @@ function ToolBar({
   searchBar,
   setSearchBar,
   setFilesList,
-  refresh,
   tab,
 }) {
   const state = {clipboardItems: useSelector(state => state.clipboardItems)};
 
   const [menu, setMenu] = useState(false);
-
-  useEffect(() => {
-    if (menu) {
-      switch (menu) {
-        case 'clipboard': {
-          setOption('clipboard');
-          break;
-        }
-        case 'recycleBin': {
-          setOption('recycleBin');
-          break;
-        }
-        case 'properties': {
-          setOption('properties');
-          break;
-        }
-        case 'refresh': {
-          setOption('refresh');
-          break;
-        }
-        case 'about': {
-          setOption('about');
-          break;
-        }
-      }
-      menu !== true && setMenu(false);
-    }
-  }, [menu]);
   return (
     <>
       <View style={[styles.rowLayout, styles.pill, styles.marginSmall]}>
-        <Menu menu={menu} setMenu={setMenu} refresh={refresh} />
+        {Boolean(menu) && (
+          <Suspense>
+            <Menu setOption={setOption} setMenu={setMenu} menu={menu} />
+          </Suspense>
+        )}
         {tab.path !== 'Home' && searchBar && (
-          <SearchBar
-            filesList={filesList}
-            searchBar={searchBar}
-            setSearchBar={setSearchBar}
-            setFilesList={setFilesList}
-            tab={tab}
-          />
+          <Suspense>
+            <SearchBar
+              filesList={filesList}
+              searchBar={searchBar}
+              setSearchBar={setSearchBar}
+              setFilesList={setFilesList}
+              tab={tab}
+            />
+          </Suspense>
         )}
         <ScrollView horizontal>
           {!isPathHome && (

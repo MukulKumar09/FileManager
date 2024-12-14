@@ -1,5 +1,6 @@
+import {lazy, Suspense} from 'react';
 import {useSelector} from 'react-redux';
-import ModalTemplate from './ModalTemplate';
+const ModalTemplate = lazy(() => import('./ModalTemplate'));
 export default function Modals() {
   const state = {
     modalStack: useSelector(state => state.modalStack),
@@ -7,9 +8,9 @@ export default function Modals() {
   return (
     <>
       {state.modalStack.map(({templateProps, modal}, index) => (
-        <ModalTemplate key={index} {...templateProps}>
-          {modal}
-        </ModalTemplate>
+        <Suspense key={index}>
+          <ModalTemplate {...templateProps}>{modal}</ModalTemplate>
+        </Suspense>
       ))}
     </>
   );

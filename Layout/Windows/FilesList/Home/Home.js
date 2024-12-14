@@ -11,7 +11,7 @@ function Home({filesList, pushBreadCrumb}) {
     conf: useSelector(state => state.conf),
   };
   return (
-    <View style={[styles.wide, styles.padding, styles.largeGap]}>
+    <View style={[styles.wide, styles.padding, styles.bigGap]}>
       <View style={[styles.mediumGap]}>
         {filesList.map(item => (
           <Pressable
@@ -32,13 +32,19 @@ function Home({filesList, pushBreadCrumb}) {
           </Pressable>
         ))}
       </View>
-      <View style={[styles.bigGap]}>
+      <View style={[styles.pill, styles.padding, styles.bigGap]}>
         <View style={[styles.rowLayout, styles.mediumGap]}>
           <MaterialIcon name="heart" color="#FF5252" />
           <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
             Favourites
           </Text>
         </View>
+        <View style={[styles.divider]} />
+        {state.conf.favourites.length == 0 && (
+          <Text style={[styles.text, styles.textDisabled, styles.smallText]}>
+            No items.
+          </Text>
+        )}
         {state.conf.favourites.map(item => (
           <Pressable
             key={item.path}

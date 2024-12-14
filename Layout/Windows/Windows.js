@@ -1,7 +1,7 @@
+import {lazy, Suspense} from 'react';
 import {useSelector} from 'react-redux';
 import Window from './Window/Window';
-import MediaViewer from '../MediaViewer/MediaViewer';
-
+const MediaViewer = lazy(() => import('../MediaViewer/MediaViewer'));
 function Windows() {
   //remoe view
   const state = {
@@ -14,7 +14,11 @@ function Windows() {
 
   return (
     <>
-      {Boolean(state.media) && <MediaViewer media={state.media} />}
+      {Boolean(state.media) && (
+        <Suspense>
+          <MediaViewer media={state.media} />
+        </Suspense>
+      )}
       {Object.keys(state.tabs).map(index => {
         return (
           <Window
