@@ -3,7 +3,7 @@ import styles, {textColor} from '../../../styles/styles';
 import {useEffect, useState, useRef} from 'react';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import deleteItem from '../../../Services/rnfs/deleteItem';
-import Icon from '../../Icon/Icon';
+import Icon from '../../../Common/Icon/Icon';
 
 const DeleteProgress = ({onRequestClose, items}) => {
   const [currItem, setItem] = useState({name: 'Loading...', ext: '/'});

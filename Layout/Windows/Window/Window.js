@@ -1,19 +1,19 @@
-import {lazy, Suspense, memo, useCallback, useEffect, useState} from 'react';
+import {Suspense, memo, useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import styles, {backgroundColor} from '../../../styles/styles';
-import FilesList from '../FilesList/FilesList';
-import WindowToolBar from '../WindowToolBar/WindowToolBar';
-import ToolBar from '../ToolBar/ToolBar';
-import useHandleOptions from '../../../Hooks/useHandleOptions';
-import useBreadCrumb from '../../../Hooks/useBreadCrumb';
-import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
-const SelectedItems = lazy(() => import('./SelectedItems/SelectedItems'));
-import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
 import useBackHandler from '../../../Hooks/useBackHandler';
-import sortFiles from '../../../Services/fileUtils/sortFiles';
+import useBreadCrumb from '../../../Hooks/useBreadCrumb';
+import useFetchThumbnail from '../../../Hooks/useFetchThumbnail';
+import useHandleOptions from '../../../Hooks/useHandleOptions';
 import generateBCFromPath from '../../../Services/breadCrumbs/generateBCFromPath';
-import Home from '../FilesList/Home/Home';
+import getAndSetFilesList from '../../../Services/cache/getAndSetFilesList';
+import sortFiles from '../../../Services/fileUtils/sortFiles';
+import ToolBar from '../ToolBar/ToolBar';
+import FilesList from './FilesList/FilesList';
+import Home from './Home/Home';
+import SelectedItems from './SelectedItems/SelectedItems';
+import WindowToolBar from './WindowToolBar/WindowToolBar';
 
 const Window = memo(({index, sort, item, isActive, isRefresh}) => {
   const {path, name} = item;

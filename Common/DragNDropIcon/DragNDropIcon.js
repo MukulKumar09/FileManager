@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import styles, {textColor, secondaryColor} from '../styles/styles';
+import styles, {textColor, secondaryColor} from '../../styles/styles';
 import Animated from 'react-native-reanimated';
 
 const DragNDropIcon = ({animatedStyles, dragNDropIcon}) => {

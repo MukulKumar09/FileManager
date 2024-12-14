@@ -1,9 +1,9 @@
 import {memo, useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import VirtualizedFilesList from './VirtualizedFilesList';
-import handleFileLongPress from '../../../Actions/handleFileLongPress';
-import navigateItem from '../../../Actions/navigateItem';
-import highlightItemCB from '../../../Actions/highlightItemCB';
+import handleFileLongPress from '../../../../Actions/handleFileLongPress';
+import navigateItem from '../../../../Actions/navigateItem';
+import highlightItemCB from '../../../../Actions/highlightItemCB';
+import VirtualizedFilesList from './VirtualizedFilesList/VirtualizedFilesList';
 
 function FilesList({
   filesList,
@@ -76,17 +76,15 @@ function FilesList({
   );
 
   return (
-    <>
-      <VirtualizedFilesList
-        refresh={refresh}
-        setSelectedItems={setSelectedItems}
-        filesList={filesList}
-        setHoveredItem={setHoveredItem}
-        handlePress={handlePress}
-        handleLongPress={handleLongPress}
-        hoveredItem={hoveredItem}
-      />
-    </>
+    <VirtualizedFilesList
+      refresh={refresh}
+      setSelectedItems={setSelectedItems}
+      filesList={filesList}
+      setHoveredItem={setHoveredItem}
+      handlePress={handlePress}
+      handleLongPress={handleLongPress}
+      hoveredItem={hoveredItem}
+    />
   );
 }
 export default memo(FilesList);

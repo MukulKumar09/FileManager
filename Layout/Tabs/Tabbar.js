@@ -4,10 +4,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useAnimatedStyle} from 'react-native-reanimated';
 import styles, {backgroundColor} from '../../styles/styles';
 import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
-import DragNDropIcon from '../DragNDropIcon';
 import addNewTab from '../../Actions/addNewTab';
 import Tabs from './Tabs/Tabs';
 import detectDropLocation from '../../Actions/detectDropLocation';
+import DragNDropIcon from '../../Common/DragNDropIcon/DragNDropIcon';
 
 export default function Tabbar({translationX, translationY}) {
   const dispatch = useDispatch();

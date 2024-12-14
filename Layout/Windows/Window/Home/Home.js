@@ -1,10 +1,10 @@
-import {View, Pressable, Text} from 'react-native';
 import {memo} from 'react';
+import {Pressable, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import SmallGrayText from '../../../../Common/SmallGrayText/SmallGrayText';
-import styles from '../../../../styles/styles';
+import FileItem from '../../../../Common/FileItem/FileItem';
+import Icon from '../../../../Common/Icon/Icon';
 import MaterialIcon from '../../../../Common/MaterialIcon/MaterialIcon';
-import Icon from '../../../Icon/Icon';
+import styles from '../../../../styles/styles';
 
 function Home({filesList, pushBreadCrumb}) {
   const state = {
@@ -50,18 +50,7 @@ function Home({filesList, pushBreadCrumb}) {
               pushBreadCrumb({...item, isCustom: true});
             }}
             style={[styles.rowLayout, styles.mediumGap]}>
-            <Icon item={item} />
-            <View>
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={[styles.text]}>
-                {item.name}
-              </Text>
-              <SmallGrayText ellipsizeMode="tail" numberOfLines={2}>
-                {item.path}
-              </SmallGrayText>
-            </View>
+            <FileItem key={item.path} item={item} showPath={true} />
           </Pressable>
         ))}
       </View>

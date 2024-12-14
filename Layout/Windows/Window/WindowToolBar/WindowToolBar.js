@@ -1,13 +1,13 @@
 import {Pressable, Text, View} from 'react-native';
 import {memo} from 'react';
 import {useDispatch} from 'react-redux';
-import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
-import styles from '../../../styles/styles';
-import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
+import BreadCrumbs from '../../BreadCrumbs/BreadCrumbs';
+import styles from '../../../../styles/styles';
+import SmallMaterialIcon from '../../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 // import FilterBar from './FilterBar/FilterBar';
-import modalPromise from '../../../Actions/modalPromise';
-import Sort from '../../Modal/ModalBodies/Sort';
-import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
+import modalPromise from '../../../../Actions/modalPromise';
+import Sort from '../../../Modal/ModalBodies/Sort';
+import MaterialIcon from '../../../../Common/MaterialIcon/MaterialIcon';
 
 function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
   // const [filterBar, setFilterBar] = useState(false);

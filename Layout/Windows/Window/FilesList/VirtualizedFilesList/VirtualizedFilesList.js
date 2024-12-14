@@ -1,4 +1,4 @@
-import FilesListItem from './FilesListItem/FilesListItem';
+import VirtualizedFilesListItem from './VirtualizedFilesListItem/VirtualizedFilesListItem';
 import {VirtualizedList} from 'react-native';
 import {memo, useState, useEffect} from 'react';
 
@@ -24,7 +24,7 @@ function VirtualizedFilesList({
   }, [detectPressType]);
   const renderItem = ({item}) => {
     return (
-      <FilesListItem
+      <VirtualizedFilesListItem
         key={item.path}
         item={item}
         setDetectPressType={setDetectPressType}

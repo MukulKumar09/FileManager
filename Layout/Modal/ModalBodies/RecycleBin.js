@@ -2,10 +2,9 @@ import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
-import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
 import handleDelete from '../../../Services/fileUtils/handleDelete';
-import Icon from '../../Icon/Icon';
+import FileItem from '../../../Common/FileItem/FileItem';
 
 export default function RecycleBin({onRequestClose}) {
   const dispatch = useDispatch();
@@ -19,15 +18,7 @@ export default function RecycleBin({onRequestClose}) {
       </Text>
       {state.recycleBin.map(item => (
         <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-          <Icon item={item} />
-          <View style={[styles.wide]}>
-            <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
-              {item.name}
-            </Text>
-            <SmallGrayText ellipsizeMode="tail" numberOfLines={2}>
-              {item.path}
-            </SmallGrayText>
-          </View>
+          <FileItem key={item.path} item={item} showSize={true} />
         </View>
       ))}
       <View style={[styles.rowLayout, styles.mediumGap]}>

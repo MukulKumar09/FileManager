@@ -1,10 +1,9 @@
-import {Text, View, Pressable} from 'react-native';
+import {View} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch} from 'react-redux';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
-import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
-import Icon from '../../Icon/Icon';
+import FilesList from '../../../Common/FileItem/FileItem';
 
 export default function PasteHere({resolve, onRequestClose, items}) {
   const dispatch = useDispatch();
@@ -16,15 +15,7 @@ export default function PasteHere({resolve, onRequestClose, items}) {
     <View style={[styles.bigGap]}>
       {items.map(item => (
         <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-          <Icon item={item} />
-          <View style={[styles.wide]}>
-            <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
-              {item.name}
-            </Text>
-            <SmallGrayText ellipsizeMode="tail" numberOfLines={2}>
-              {item.path}
-            </SmallGrayText>
-          </View>
+          <FilesList key={item.path} item={item} showSize={true} />
         </View>
       ))}
       <View style={[styles.rowLayout, styles.mediumGap]}>

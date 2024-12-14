@@ -3,7 +3,7 @@ import {Text, Pressable, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import styles from '../../styles/styles';
 import SmallMaterialIcon from '../SmallMaterialIcon/SmallMaterialIcon';
-import Icon from '../../Layout/Icon/Icon';
+import FileItem from '../FileItem/FileItem';
 
 const TabButton = React.memo(
   ({index, isActive, item, setTabLayout, handleDeleteTab}) => {
@@ -28,13 +28,7 @@ const TabButton = React.memo(
             });
           }}
           style={[styles.rowLayout, styles.padding, styles.mediumGap]}>
-          <Icon item={item} />
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={[styles.text, styles.oswald, {maxWidth: 100}]}>
-            {item.name}
-          </Text>
+          <FileItem item={item} fontStyle={true} />
         </Pressable>
         {isActive && (
           <Pressable

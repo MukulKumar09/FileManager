@@ -1,11 +1,10 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
-import Icon from '../../Icon/Icon';
 import realmOpen from '../../../Services/realm/realmOpen';
+import FilesListIte from '../../../Common/FileItem/FileItem';
 
 export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
   const dispatch = useDispatch();
@@ -52,18 +51,7 @@ export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
               onRequestClose();
             }}
             style={[styles.rowLayout, styles.mediumGap, styles.wide]}>
-            <Icon item={item} />
-            <View>
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={[styles.text]}>
-                {item.name}
-              </Text>
-              <SmallGrayText ellipsizeMode="tail" numberOfLines={2}>
-                {item.path}
-              </SmallGrayText>
-            </View>
+            <FilesListIte key={item.path} item={item} showPath={true} />
           </Pressable>
           <Pressable onPress={() => deleteFavourite(item)}>
             <SmallMaterialIcon name="close" color="#ffffff" />
