@@ -1,7 +1,7 @@
 import {Linking, Pressable, Text, View} from 'react-native';
 import styles, {grey} from '../../../styles/styles';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
-import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
+import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 
 export default function About({onRequestClose}) {
   return (
@@ -17,7 +17,7 @@ export default function About({onRequestClose}) {
           <Pressable
             onPress={() => Linking.openURL('mailto:mukulyashi@gmail.com')}
             style={[styles.rowLayout, styles.mediumGap, styles.smallPill]}>
-            <SmallMaterialIcon name="gmail" color={grey} />
+            <MaterialIcon name="gmail" isSmall={true} color={grey} />
             <Text style={[styles.text, styles.smallText, styles.textGreyed]}>
               Mail
             </Text>
@@ -27,7 +27,7 @@ export default function About({onRequestClose}) {
               Linking.openURL('https://tabber-privacy-policy.vercel.app/')
             }
             style={[styles.rowLayout, styles.mediumGap, styles.smallPill]}>
-            <SmallMaterialIcon name="web" color={grey} />
+            <MaterialIcon name="web" isSmall={true} color={grey} />
             <Text style={[styles.text, styles.smallText, styles.textGreyed]}>
               Privacy Policy
             </Text>

@@ -1,6 +1,6 @@
 import {useDispatch} from 'react-redux';
 import {Image, Pressable, Text, View} from 'react-native';
-import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
+import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import styles, {primaryColor, secondaryColor} from '../../styles/styles';
 import Video from 'react-native-video';
 export default function MediaViewer({media}) {
@@ -10,9 +10,10 @@ export default function MediaViewer({media}) {
     <View
       style={{
         position: 'absolute',
+        zIndex: 10,
         left: 0,
         right: 0,
-        zIndex: 10,
+        top: 0,
         backgroundColor: primaryColor,
       }}>
       {type == 'photo' && (
@@ -53,7 +54,7 @@ export default function MediaViewer({media}) {
         <Pressable
           style={[styles.padding]}
           onPress={() => dispatch({type: 'SETMEDIA', payload: false})}>
-          <SmallMaterialIcon name="close" color="#ffffff" />
+          <MaterialIcon name="close" isSmall={true} color="#ffffff" />
         </Pressable>
       </View>
     </View>

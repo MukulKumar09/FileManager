@@ -4,6 +4,7 @@ const ModalTemplate = lazy(() => import('./ModalTemplate'));
 export default function Modals() {
   const state = {
     modalStack: useSelector(state => state.modalStack),
+    media: useSelector(state => state.media),
   };
   return (
     <>

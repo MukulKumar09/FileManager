@@ -10,8 +10,7 @@ export default async function handleNewFile(dispatch, tab) {
     {item: {name: '', destFilePath: tab.path}},
     {
       icon: <MaterialIcon name="file-edit-outline" />,
-      heading: `Enter New Name`,
-      subHeading: `For New File`,
+      heading: `Enter File Name`,
     },
   );
   if (askNewFileName) {

@@ -24,7 +24,7 @@ export default StyleSheet.create({
     fontSize: 16,
   },
   headingText: {
-    fontSize: 25,
+    fontSize: 28,
   },
   textGreyed: {
     color: 'grey',

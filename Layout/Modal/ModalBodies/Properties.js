@@ -12,8 +12,8 @@ export default function Properties({resolve, onRequestClose, items}) {
     path = items[0].parent;
   if (items.length == 1) {
     name = items[0].name;
-    type = items[0].type;
-    type == 'dir'
+    type = items[0].ext;
+    type == '/'
       ? ((size = null), (type = 'directory'))
       : (size = items[0].size);
     mtime = items[0].mtime;

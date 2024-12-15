@@ -5,6 +5,7 @@ import FileItem from '../../../../Common/FileItem/FileItem';
 import Icon from '../../../../Common/Icon/Icon';
 import MaterialIcon from '../../../../Common/MaterialIcon/MaterialIcon';
 import styles from '../../../../styles/styles';
+import MediaStore from './MediaStore/MediaStore';
 
 function Home({filesList, pushBreadCrumb}) {
   const state = {
@@ -12,6 +13,9 @@ function Home({filesList, pushBreadCrumb}) {
   };
   return (
     <View style={[styles.wide, styles.padding, styles.bigGap]}>
+      <Text style={[styles.text, styles.textGreyed]}>Your Device</Text>
+      <MediaStore pushBreadCrumb={pushBreadCrumb} />
+      <Text style={[styles.text, styles.textGreyed]}>Storage</Text>
       <View style={[styles.mediumGap]}>
         {filesList.map(item => (
           <Pressable
@@ -35,9 +39,7 @@ function Home({filesList, pushBreadCrumb}) {
       <View style={[styles.pill, styles.padding, styles.bigGap]}>
         <View style={[styles.rowLayout, styles.mediumGap]}>
           <MaterialIcon name="heart" color="#FF5252" />
-          <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.text]}>
-            Favourites
-          </Text>
+          <Text style={[styles.text]}>Favourites</Text>
         </View>
         <View style={[styles.divider]} />
         {state.conf.favourites.length == 0 && (

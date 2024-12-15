@@ -4,6 +4,8 @@ import handleFileLongPress from '../../../../Actions/handleFileLongPress';
 import navigateItem from '../../../../Actions/navigateItem';
 import highlightItemCB from '../../../../Actions/highlightItemCB';
 import VirtualizedFilesList from './VirtualizedFilesList/VirtualizedFilesList';
+import styles from '../../../../styles/styles';
+import {Text, View} from 'react-native';
 
 function FilesList({
   filesList,
@@ -74,17 +76,36 @@ function FilesList({
     },
     [selectionFlag, filesList, lastClickedItem],
   );
-
+  const TitleComp = () => {
+    switch (path) {
+      case 'Photos':
+      case 'Videos':
+      case 'Audio':
+      case 'Documents':
+      case 'Downloads': {
+        return (
+          <View style={[styles.padding]}>
+            <Text style={[styles.text, styles.oswald, {fontSize: 40}]}>
+              {path}
+            </Text>
+          </View>
+        );
+      }
+    }
+  };
   return (
-    <VirtualizedFilesList
-      refresh={refresh}
-      setSelectedItems={setSelectedItems}
-      filesList={filesList}
-      setHoveredItem={setHoveredItem}
-      handlePress={handlePress}
-      handleLongPress={handleLongPress}
-      hoveredItem={hoveredItem}
-    />
+    <>
+      <TitleComp />
+      <VirtualizedFilesList
+        refresh={refresh}
+        setSelectedItems={setSelectedItems}
+        filesList={filesList}
+        setHoveredItem={setHoveredItem}
+        handlePress={handlePress}
+        handleLongPress={handleLongPress}
+        hoveredItem={hoveredItem}
+      />
+    </>
   );
 }
 export default memo(FilesList);

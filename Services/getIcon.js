@@ -5,6 +5,9 @@ import RNFS from 'react-native-fs';
 import checkExists from './rnfs/checkExists';
 import {createThumbnail} from 'react-native-create-thumbnail';
 export default async function getIcon(item) {
+  if (item.useDefaultIcon) {
+    return <MaterialIcon name={item.ext} />;
+  }
   if (item.type == 'Home') {
     return <MaterialIcon name="sd" />;
   }

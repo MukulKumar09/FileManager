@@ -2,9 +2,8 @@ import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
-import SmallMaterialIcon from '../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 import realmOpen from '../../../Services/realm/realmOpen';
-import FilesListIte from '../../../Common/FileItem/FileItem';
+import FileItem from '../../../Common/FileItem/FileItem';
 
 export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
   const dispatch = useDispatch();
@@ -51,10 +50,10 @@ export default function Favourites({onRequestClose, tab, pushBreadCrumb}) {
               onRequestClose();
             }}
             style={[styles.rowLayout, styles.mediumGap, styles.wide]}>
-            <FilesListIte key={item.path} item={item} showPath={true} />
+            <FileItem key={item.path} item={item} showPath={true} />
           </Pressable>
           <Pressable onPress={() => deleteFavourite(item)}>
-            <SmallMaterialIcon name="close" color="#ffffff" />
+            <MaterialIcon name="close" isSmall={true} color="#ffffff" />
           </Pressable>
         </View>
       ))}

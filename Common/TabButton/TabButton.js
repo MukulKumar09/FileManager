@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, Pressable, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import styles from '../../styles/styles';
-import SmallMaterialIcon from '../SmallMaterialIcon/SmallMaterialIcon';
+import MaterialIcon from '../MaterialIcon/MaterialIcon';
 import FileItem from '../FileItem/FileItem';
 
 const TabButton = React.memo(
@@ -34,7 +34,7 @@ const TabButton = React.memo(
           <Pressable
             onPress={handleDeleteTab}
             style={[{padding: 15, paddingStart: 0}]}>
-            <SmallMaterialIcon name="close" color="#ffffff" />
+            <MaterialIcon name="close" isSmall={true} color="#ffffff" />
           </Pressable>
         )}
       </View>

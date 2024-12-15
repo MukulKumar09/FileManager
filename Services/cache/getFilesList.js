@@ -1,4 +1,3 @@
-import realmOpen from '../realm/realmOpen';
 import sortFiles from '../fileUtils/sortFiles';
 import getSetCache from './getSetCache';
 

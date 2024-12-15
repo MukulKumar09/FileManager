@@ -1,10 +1,7 @@
-import {Pressable, View} from 'react-native';
+import {Pressable} from 'react-native';
 import styles from '../../../../../../styles/styles';
 import {memo} from 'react';
-import {unixToDate} from '../../../../../../Services/fileUtils/unixToDate';
-import unixTo12Hour from '../../../../../../Services/fileUtils/unixTo12Hour';
-import SmallGrayText from '../../../../../../Common/SmallGrayText/SmallGrayText';
-import FilesListIte from '../../../../../../Common/FileItem/FileItem';
+import FileItem from '../../../../../../Common/FileItem/FileItem';
 
 function VirtualizedFilesListItem({
   item,
@@ -26,15 +23,13 @@ function VirtualizedFilesListItem({
         isHovered && styles.listItemHovererd,
         {justifyContent: 'space-between'},
       ]}>
-      <View style={[styles.wide, styles.rowLayout, styles.bigGap]}>
-        <FilesListIte key={item.path} item={item} showSize={true} />
-      </View>
-      <View style={{alignItems: 'flex-end'}}>
-        <SmallGrayText>{unixToDate(item.mtime)}</SmallGrayText>
-        {item.ext !== '/' && (
-          <SmallGrayText>{unixTo12Hour(item.mtime)}</SmallGrayText>
-        )}
-      </View>
+      <FileItem
+        key={item.path}
+        item={item}
+        showSize={item.isMedia ? false : true}
+        showPath={item.isMedia ? true : false}
+        showDate={item.isMedia ? false : true}
+      />
     </Pressable>
   );
 }

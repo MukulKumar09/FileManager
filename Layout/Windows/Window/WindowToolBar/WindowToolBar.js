@@ -3,7 +3,6 @@ import {memo} from 'react';
 import {useDispatch} from 'react-redux';
 import BreadCrumbs from '../../BreadCrumbs/BreadCrumbs';
 import styles from '../../../../styles/styles';
-import SmallMaterialIcon from '../../../../Common/SmallMaterialIcon/SmallMaterialIcon';
 // import FilterBar from './FilterBar/FilterBar';
 import modalPromise from '../../../../Actions/modalPromise';
 import Sort from '../../../Modal/ModalBodies/Sort';
@@ -38,7 +37,7 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
             styles.textGreyed,
             styles.smallText,
           ]}>
-          <SmallMaterialIcon name="sort" color />
+          <MaterialIcon name="sort" isSmall={true} />
         </Text>
       </Pressable>
       {/* <Pressable

@@ -3,7 +3,11 @@ export default function tabs(state = {}, action) {
     case 'ADDTAB': {
       return {
         ...state,
-        [action.payload.counter]: {name: 'Home', path: 'Home'},
+        [action.payload.counter]: {
+          name: 'Home',
+          path: 'Home',
+          isTabberPath: true,
+        },
       };
     }
     case 'ADDTABFROMITEM': {
@@ -26,7 +30,7 @@ export default function tabs(state = {}, action) {
       };
     case 'RESETTABS':
       return {
-        0: {name: 'Home', path: 'Home'},
+        0: {name: 'Home', path: 'Home', isTabberPath: true},
       };
     default:
       return state;

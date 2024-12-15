@@ -7,7 +7,6 @@ const Menu = lazy(() => import('./Menu/Menu'));
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
 function ToolBar({
   setOption,
-  isPathHome,
   selectedItems,
   filesList,
   searchBar,
@@ -26,7 +25,7 @@ function ToolBar({
             <Menu setOption={setOption} setMenu={setMenu} menu={menu} />
           </Suspense>
         )}
-        {tab.path !== 'Home' && searchBar && (
+        {!tab.isTabberPath && searchBar && (
           <Suspense>
             <SearchBar
               filesList={filesList}
@@ -38,7 +37,7 @@ function ToolBar({
           </Suspense>
         )}
         <ScrollView horizontal>
-          {!isPathHome && (
+          {!tab.isTabberPath && (
             <View style={[styles.rowLayout]}>
               <CircularButton
                 functionName={() => {

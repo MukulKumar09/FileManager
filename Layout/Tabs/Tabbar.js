@@ -3,7 +3,7 @@ import {Pressable, View} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {useAnimatedStyle} from 'react-native-reanimated';
 import styles, {backgroundColor} from '../../styles/styles';
-import SmallMaterialIcon from '../../Common/SmallMaterialIcon/SmallMaterialIcon';
+import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import addNewTab from '../../Actions/addNewTab';
 import Tabs from './Tabs/Tabs';
 import detectDropLocation from '../../Actions/detectDropLocation';
@@ -97,7 +97,7 @@ export default function Tabbar({translationX, translationY}) {
         <Pressable
           style={[styles.pill, styles.padding]}
           onPress={() => addNewTab(dispatch, state.tabCounter)}>
-          <SmallMaterialIcon name="plus" />
+          <MaterialIcon name="plus" isSmall={true} />
         </Pressable>
       </View>
       {Boolean(state.dragNDropIcon['isActive']) &&

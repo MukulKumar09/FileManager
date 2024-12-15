@@ -140,7 +140,6 @@ const Window = memo(({index, sort, item, isActive, isRefresh}) => {
       )}
       <ToolBar
         setOption={setOption}
-        isPathHome={path == 'Home'}
         selectedItems={selectedItems}
         filesList={filesList}
         searchBar={searchBar}

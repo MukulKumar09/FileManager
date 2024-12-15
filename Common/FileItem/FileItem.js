@@ -2,12 +2,15 @@ import {Text, View} from 'react-native';
 import styles from '../../styles/styles';
 import {memo} from 'react';
 import {bytesToSize} from '../../Services/fileUtils/bytesToSize';
+import {unixToDate} from '../../Services/fileUtils/unixToDate';
+import unixTo12Hour from '../../Services/fileUtils/unixTo12Hour';
 import SmallGrayText from '../SmallGrayText/SmallGrayText';
 import Icon from '../Icon/Icon';
 
-function FilesListIte({item, showSize, showPath, fontStyle}) {
+function FileItem({item, showSize, showPath, showDate, fontStyle}) {
+  // console.log(item);
   return (
-    <>
+    <View style={[styles.rowLayout, styles.bigGap]}>
       <Icon item={item} />
       <View>
         <Text
@@ -21,7 +24,15 @@ function FilesListIte({item, showSize, showPath, fontStyle}) {
         )}
         {showPath && <SmallGrayText>{item.path}</SmallGrayText>}
       </View>
-    </>
+      {showDate && (
+        <View style={[styles.wide, {alignItems: 'flex-end'}]}>
+          <SmallGrayText>{unixToDate(item.mtime)}</SmallGrayText>
+          {item.ext !== '/' && (
+            <SmallGrayText>{unixTo12Hour(item.mtime)}</SmallGrayText>
+          )}
+        </View>
+      )}
+    </View>
   );
 }
-export default memo(FilesListIte);
+export default memo(FileItem);

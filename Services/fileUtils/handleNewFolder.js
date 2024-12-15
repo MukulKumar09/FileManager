@@ -10,8 +10,7 @@ export default async function handleNewFolder(dispatch, tab) {
     {item: {name: '', destFilePath: tab.path}},
     {
       icon: <MaterialIcon name="file-edit-outline" />,
-      heading: `Enter New Name`,
-      subHeading: `For New Folder`,
+      heading: `Enter Folder Name`,
     },
   );
   if (askNewFolderName) {

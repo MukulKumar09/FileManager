@@ -11,6 +11,7 @@ import runAppLaunch from '../Hooks/runAppLaunch';
 import {useEffect} from 'react';
 import usePanHandler from '../Hooks/usePanHandler';
 import Modals from './Modal/Modals';
+import MediaViewerWrapper from './MediaViewerWrapper/MediaViewerWrapper';
 
 export default function LayoutWrapper() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function LayoutWrapper() {
           </View>
         </GestureDetector>
       </GestureHandlerRootView>
+      <MediaViewerWrapper />
       <Tabbar translationX={translationX} translationY={translationY} />
     </>
   );
