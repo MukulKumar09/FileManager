@@ -17,7 +17,7 @@ function FileItem({item, showSize, showPath, showDate, fontStyle}) {
           numberOfLines={3}
           ellipsizeMode="tail"
           style={[styles.text, fontStyle && styles.oswald]}>
-          {item.name}
+          {item.name ? item.name : item.title}
         </Text>
         {showSize && item.ext !== '/' && (
           <SmallGrayText>{bytesToSize(item.size)}</SmallGrayText>

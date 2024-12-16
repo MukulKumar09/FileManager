@@ -1,13 +1,33 @@
 import buildCache from '../realm/buildCache';
 import realmOpen from '../realm/realmOpen';
 import validateCache from '../realm/validateCache';
+import {NativeModules} from 'react-native';
 export default async function getSetCache(clickedItem) {
+  const {CustomModule} = NativeModules;
   const realm = await realmOpen();
-  const {path: clickedItemPath, name: clickedItemName, mtime} = clickedItem;
+  const {path: clickedItemPath, id, name: clickedItemName, mtime} = clickedItem;
   if (clickedItemPath == 'Home') {
     const homeData = realm.objects('cache').filtered('type == "Home"');
     return homeData;
   }
+  const data = await new Promise(res => {
+    CustomModule.getAllFiles(
+      0,
+      mediaFiles => {
+        mediaFiles = mediaFiles.map(item => ({
+          ...item,
+          ext: '/',
+          size: 10000,
+        }));
+        res(mediaFiles);
+      },
+      error => {
+        console.error('Error fetching media files:', error);
+        res([]);
+      },
+    );
+  });
+  return data;
 
   function deepCopy(data) {
     //otherwise all object will reference to realm live objects

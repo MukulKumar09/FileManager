@@ -30,6 +30,58 @@ public class CustomModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getAllFiles(int folderId,Callback successCallback, Callback errorCallback) {
+        try {
+            ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
+            // Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri imageUri = MediaStore.Files.getContentUri("external");
+            List<WritableMap> imagesList = new ArrayList<>();
+
+            // Query the MediaStore for images
+            String selection = MediaStore.Files.FileColumns.PARENT + " = '"+folderId+"'";
+            // String[] selectionArgs = new String[]{folderId }; 
+            Cursor cursor = contentResolver.query(imageUri, null,selection, null,null);
+
+            if (cursor != null) {
+                int idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID);
+                int titleColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE);
+                int nameColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
+                int pathColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
+                int mimeTypeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE);
+                int parentColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
+
+                while (cursor.moveToNext()) {
+                    WritableMap image = Arguments.createMap();
+                    long id = cursor.getLong(idColumn);
+                    String title = cursor.getString(titleColumn);
+                    String name = cursor.getString(nameColumn);
+                    String path = cursor.getString(pathColumn);
+                    String mimeType = cursor.getString(mimeTypeColumn);
+                    String parent = cursor.getString(parentColumn);
+                    image.putString("id", String.valueOf(id));
+                    image.putString("title", title);
+                    image.putString("name", name);
+                    image.putString("path", path);
+                    image.putString("mimeType", mimeType);
+                    image.putString("parent", parent);
+
+                    imagesList.add(image);
+                }
+                cursor.close();
+            }
+
+            // Return the list of images to React Native
+            WritableArray imagesArray = Arguments.createArray();
+            for (WritableMap image : imagesList) {
+                imagesArray.pushMap(image);
+            }
+            successCallback.invoke(imagesArray);
+        } catch (Exception e) {
+            errorCallback.invoke(e.getMessage());
+        }
+    }
+
+    @ReactMethod
     public void getImages(Callback successCallback, Callback errorCallback) {
         try {
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();

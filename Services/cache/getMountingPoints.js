@@ -16,7 +16,7 @@ export default async function getMountingPoints() {
       mountingPoints[i] = {
         name: getStorageName(basePath),
         path: basePath,
-        parent: '',
+        parent: '0',
         size: -1,
         type: 'Home',
         ext: '/',

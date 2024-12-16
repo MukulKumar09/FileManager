@@ -1,4 +1,5 @@
 export default function getFileExtension(name) {
   const extension = name.split('.');
-  return extension[extension.length - 1];
+  const ext = extension[extension.length - 1];
+  return ext ? ext : '/';
 }

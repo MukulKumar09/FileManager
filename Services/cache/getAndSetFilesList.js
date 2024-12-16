@@ -8,6 +8,7 @@ export default async function getAndSetFilesList(
   item,
   sort,
 ) {
+  console.log('item', item);
   const {CustomModule} = NativeModules;
   async function getMedia() {
     return await new Promise(res => {
