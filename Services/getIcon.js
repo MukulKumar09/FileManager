@@ -1,9 +1,7 @@
-import {Image, Text} from 'react-native';
+import {Text} from 'react-native';
 import styles from '../styles/styles';
 import MaterialIcon from '../Common/MaterialIcon/MaterialIcon';
-import RNFS from 'react-native-fs';
-import checkExists from './rnfs/checkExists';
-import {createThumbnail} from 'react-native-create-thumbnail';
+import retrieveIcon from './native/retrieveIcon';
 export default async function getIcon(item) {
   if (item.useDefaultIcon) {
     return <MaterialIcon name={item.ext} />;
@@ -31,65 +29,21 @@ export default async function getIcon(item) {
     }
     case 'jpeg':
     case 'jpg':
-    case 'png': {
-      const isThumbExists = await checkExists(
-        `file://${RNFS.ExternalDirectoryPath}/thumbnails`,
-        `${btoa(item.path)}.jpeg`,
-      );
-      if (!isThumbExists) {
-        console.log('photo thumb created');
-        await createThumbnail({
-          url: `file://${item.path}`,
-          timeStamp: 100,
-          mediaType: 'photo',
-          dirSize: 1000,
-          cacheName: btoa(item.path),
-          maxHeight: 50,
-          maxWidth: 50,
-        });
-      }
+    case 'png':
       return (
-        <Image
-          source={{
-            uri: `file://${RNFS.ExternalDirectoryPath}/thumbnails/${btoa(
-              item.path,
-            )}.jpeg`,
-          }}
-          style={{width: 50, height: 50, resizeMode: 'contain'}}
-        />
+        (await retrieveIcon(item, 'image')) || (
+          <MaterialIcon name="file-image-outline" />
+        )
       );
-    }
     case 'mp4':
     case 'avi':
     case '3gp':
-    case 'wmv': {
-      const isThumbExists = await checkExists(
-        `file://${RNFS.ExternalDirectoryPath}/thumbnails`,
-        `${btoa(item.path)}.jpeg`,
-      );
-      if (!isThumbExists) {
-        console.log('video thumb created');
-        await createThumbnail({
-          url: `file://${item.path}`,
-          timeStamp: 100,
-          mediaType: 'video',
-          dirSize: 1000,
-          cacheName: btoa(item.path),
-          maxHeight: 50,
-          maxWidth: 50,
-        });
-      }
+    case 'wmv':
       return (
-        <Image
-          source={{
-            uri: `file://${RNFS.ExternalDirectoryPath}/thumbnails/${btoa(
-              item.path,
-            )}.jpeg`,
-          }}
-          style={{width: 50, height: 50, resizeMode: 'contain'}}
-        />
+        (await retrieveIcon(item, 'video')) || (
+          <MaterialIcon name="file-video-outline" />
+        )
       );
-    }
     case 'apk':
       return <MaterialIcon name="android" color="#A4C639" />;
     case 'pdf':

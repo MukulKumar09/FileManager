@@ -12,12 +12,12 @@ function FileItem({item, showSize, showPath, showDate, fontStyle}) {
   return (
     <View style={[styles.rowLayout, styles.bigGap]}>
       <Icon item={item} />
-      <View>
+      <View style={[styles.wide]}>
         <Text
           numberOfLines={3}
           ellipsizeMode="tail"
           style={[styles.text, fontStyle && styles.oswald]}>
-          {item.name ? item.name : item.title}
+          {item.name}
         </Text>
         {showSize && item.ext !== '/' && (
           <SmallGrayText>{bytesToSize(item.size)}</SmallGrayText>
@@ -25,7 +25,7 @@ function FileItem({item, showSize, showPath, showDate, fontStyle}) {
         {showPath && <SmallGrayText>{item.path}</SmallGrayText>}
       </View>
       {showDate && (
-        <View style={[styles.wide, {alignItems: 'flex-end'}]}>
+        <View style={[{alignItems: 'flex-end'}]}>
           <SmallGrayText>{unixToDate(item.mtime)}</SmallGrayText>
           {item.ext !== '/' && (
             <SmallGrayText>{unixTo12Hour(item.mtime)}</SmallGrayText>

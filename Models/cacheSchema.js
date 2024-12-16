@@ -4,6 +4,7 @@ export const cacheSchema = {
     name: 'string',
     path: 'string',
     parent: 'string?',
+    id: 'int',
     size: 'int?',
     type: 'string',
     ext: 'string',

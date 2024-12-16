@@ -1,6 +1,6 @@
 import VirtualizedFilesListItem from './VirtualizedFilesListItem/VirtualizedFilesListItem';
 import {VirtualizedList} from 'react-native';
-import {memo, useState, useEffect} from 'react';
+import {memo, useState, useEffect, useDeferredValue} from 'react';
 
 function VirtualizedFilesList({
   filesList,
@@ -40,13 +40,14 @@ function VirtualizedFilesList({
         refresh(0);
         setSelectedItems(0);
       }}
+      removeClippedSubviews={true}
       refreshing={false} //refresh flag
       data={filesList}
       keyExtractor={item => item.path}
       getItemCount={data => data.length}
       getItem={(data, index) => data[index]}
       initialNumToRender={15}
-      // maxToRenderPerBatch={5}
+      maxToRenderPerBatch={5}
       windowSize={5}
       renderItem={renderItem}
       // getItemLayout={(data, index) => ({

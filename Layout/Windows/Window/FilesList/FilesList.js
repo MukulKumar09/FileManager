@@ -6,6 +6,7 @@ import highlightItemCB from '../../../../Actions/highlightItemCB';
 import VirtualizedFilesList from './VirtualizedFilesList/VirtualizedFilesList';
 import styles from '../../../../styles/styles';
 import {Text, View} from 'react-native';
+import React from 'react';
 
 function FilesList({
   filesList,
@@ -96,15 +97,17 @@ function FilesList({
   return (
     <>
       <TitleComp />
-      <VirtualizedFilesList
-        refresh={refresh}
-        setSelectedItems={setSelectedItems}
-        filesList={filesList}
-        setHoveredItem={setHoveredItem}
-        handlePress={handlePress}
-        handleLongPress={handleLongPress}
-        hoveredItem={hoveredItem}
-      />
+      <React.StrictMode>
+        <VirtualizedFilesList
+          refresh={refresh}
+          setSelectedItems={setSelectedItems}
+          filesList={filesList}
+          setHoveredItem={setHoveredItem}
+          handlePress={handlePress}
+          handleLongPress={handleLongPress}
+          hoveredItem={hoveredItem}
+        />
+      </React.StrictMode>
     </>
   );
 }

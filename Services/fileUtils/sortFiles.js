@@ -31,11 +31,7 @@ export default function sortFiles(data, sort) {
       const directories = [
         ...data
           .filter(item => item.ext == '/')
-          .sort((a, b) => {
-            const titleA = a.title || '';
-            const titleB = b.title || '';
-            titleA.localeCompare(titleB);
-          }),
+          .sort((a, b) => a.name.localeCompare(b.name)),
       ];
       let files;
       if (sort.sort == 'ascending') {

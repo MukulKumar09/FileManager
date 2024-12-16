@@ -1,3 +1,4 @@
+import getFileExtension from '../fileUtils/getFileExtension';
 import buildCache from '../realm/buildCache';
 import realmOpen from '../realm/realmOpen';
 import validateCache from '../realm/validateCache';
@@ -5,20 +6,23 @@ import {NativeModules} from 'react-native';
 export default async function getSetCache(clickedItem) {
   const {CustomModule} = NativeModules;
   const realm = await realmOpen();
-  const {path: clickedItemPath, id, name: clickedItemName, mtime} = clickedItem;
+  const {id, mtime, path: clickedItemPath, name: clickedItemName} = clickedItem;
   if (clickedItemPath == 'Home') {
     const homeData = realm.objects('cache').filtered('type == "Home"');
     return homeData;
   }
   const data = await new Promise(res => {
     CustomModule.getAllFiles(
-      0,
+      parseInt(id),
       mediaFiles => {
         mediaFiles = mediaFiles.map(item => ({
           ...item,
-          ext: '/',
+          name: item.name || item.title || '<UnknownFile>',
+          ext: getFileExtension(item.name || item.title || '<UnknownFile>'),
+          parent: clickedItemPath,
           size: 10000,
         }));
+        // console.log(mediaFiles);
         res(mediaFiles);
       },
       error => {

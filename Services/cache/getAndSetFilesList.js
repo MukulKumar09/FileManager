@@ -10,6 +10,7 @@ export default async function getAndSetFilesList(
 ) {
   console.log('item', item);
   const {CustomModule} = NativeModules;
+  setFilesList([]);
   async function getMedia() {
     return await new Promise(res => {
       CustomModule.getImages(

@@ -30,6 +30,22 @@ public class CustomModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getMountingPoints(String path,Callback successCallback, Callback errorCallback) {
+        try{
+            ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
+            Uri imageUri = MediaStore.Files.getContentUri("external");
+            String selection = MediaStore.MediaColumns.DATA + " = '"+path+"'";
+            Cursor cursor = contentResolver.query(imageUri, null,selection, null,null);
+            cursor.moveToFirst();
+            int idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID);
+            long id = cursor.getLong(idColumn);
+            successCallback.invoke(String.valueOf(id));
+        }catch (Exception e) {
+            errorCallback.invoke(e.getMessage());
+        }
+    }
+
+    @ReactMethod
     public void getAllFiles(int folderId,Callback successCallback, Callback errorCallback) {
         try {
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
@@ -38,6 +54,7 @@ public class CustomModule extends ReactContextBaseJavaModule {
             List<WritableMap> imagesList = new ArrayList<>();
 
             // Query the MediaStore for images
+            // String selection = MediaStore.MediaColumns.DATA + " = '/storage/emulated/0'";
             String selection = MediaStore.Files.FileColumns.PARENT + " = '"+folderId+"'";
             // String[] selectionArgs = new String[]{folderId }; 
             Cursor cursor = contentResolver.query(imageUri, null,selection, null,null);
@@ -64,7 +81,6 @@ public class CustomModule extends ReactContextBaseJavaModule {
                     image.putString("path", path);
                     image.putString("mimeType", mimeType);
                     image.putString("parent", parent);
-
                     imagesList.add(image);
                 }
                 cursor.close();
@@ -82,20 +98,19 @@ public class CustomModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getImages(Callback successCallback, Callback errorCallback) {
+    public void getImages(Callback successCallback, Callback errorCallback){
         try {
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
             Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             List<WritableMap> imagesList = new ArrayList<>();
-
-            // Query the MediaStore for images
-            Cursor cursor = contentResolver.query(imageUri, null, null, null, null);
+            Cursor cursor = contentResolver.query(imageUri, null,null, null,null);
 
             if (cursor != null) {
                 int idColumn = cursor.getColumnIndex(MediaStore.Images.Media._ID);
                 int titleColumn = cursor.getColumnIndex(MediaStore.Images.Media.TITLE);
                 int nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
                 int pathColumn = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                int mimeTypeColumn = cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE);
 
                 while (cursor.moveToNext()) {
                     WritableMap image = Arguments.createMap();
@@ -103,11 +118,15 @@ public class CustomModule extends ReactContextBaseJavaModule {
                     String title = cursor.getString(titleColumn);
                     String name = cursor.getString(nameColumn);
                     String path = cursor.getString(pathColumn);
+                    String mimeType = cursor.getString(mimeTypeColumn);
                     image.putString("id", String.valueOf(id));
                     image.putString("title", title);
                     image.putString("name", name);
                     image.putString("path", path);
-
+                    image.putString("mimeType", mimeType);
+                    int lastSlashIndex = path.lastIndexOf("/");
+                    String parent = path.substring(0, lastSlashIndex);
+                    image.putString("parent", parent);
                     imagesList.add(image);
                 }
                 cursor.close();
@@ -123,4 +142,49 @@ public class CustomModule extends ReactContextBaseJavaModule {
             errorCallback.invoke(e.getMessage());
         }
     }
+    
+    
+    
+    
+    // {
+    //     try {
+    //         ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
+    //         Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    //         List<WritableMap> imagesList = new ArrayList<>();
+
+    //         // Query the MediaStore for images
+    //         Cursor cursor = contentResolver.query(imageUri, null, null, null, null);
+
+    //         if (cursor != null) {
+    //             int idColumn = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+    //             int titleColumn = cursor.getColumnIndex(MediaStore.Images.Media.TITLE);
+    //             int nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+    //             int pathColumn = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+
+    //             while (cursor.moveToNext()) {
+    //                 WritableMap image = Arguments.createMap();
+    //                 long id = cursor.getLong(idColumn);
+    //                 String title = cursor.getString(titleColumn);
+    //                 String name = cursor.getString(nameColumn);
+    //                 String path = cursor.getString(pathColumn);
+    //                 image.putString("id", String.valueOf(id));
+    //                 image.putString("title", title);
+    //                 image.putString("name", name);
+    //                 image.putString("path", path);
+
+    //                 imagesList.add(image);
+    //             }
+    //             cursor.close();
+    //         }
+
+    //         // Return the list of images to React Native
+    //         WritableArray imagesArray = Arguments.createArray();
+    //         for (WritableMap image : imagesList) {
+    //             imagesArray.pushMap(image);
+    //         }
+    //         successCallback.invoke(imagesArray);
+    //     } catch (Exception e) {
+    //         errorCallback.invoke(e.getMessage());
+    //     }
+    // }
 }

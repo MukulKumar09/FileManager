@@ -13,8 +13,6 @@ export default async function runAppLaunch(dispatch) {
     //Step 2: Create/Read Conf
     const conf = createConf(realm, dispatch);
 
-    console.log('conf', conf);
-
     if (conf.firstRun) {
       //Step * Clear existing mounting points
       deleteMountingPoints(realm);

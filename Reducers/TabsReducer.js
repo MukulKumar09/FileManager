@@ -6,7 +6,7 @@ export default function tabs(state = {}, action) {
         [action.payload.counter]: {
           name: 'Home',
           path: 'Home',
-          parent: '0',
+          id: '0',
           isTabberPath: true,
         },
       };
@@ -31,7 +31,7 @@ export default function tabs(state = {}, action) {
       };
     case 'RESETTABS':
       return {
-        0: {name: 'Home', path: 'Home', parent: '0', isTabberPath: true},
+        0: {name: 'Home', path: 'Home', id: '0', isTabberPath: true},
       };
     default:
       return state;

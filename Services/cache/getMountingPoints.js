@@ -1,7 +1,9 @@
 import RNFS from 'react-native-fs';
 import normalizeTimestamp from '../fileUtils/normalizeTimestamp';
 import getStorageName from '../fileUtils/getStorageName';
+import {NativeModules} from 'react-native';
 export default async function getMountingPoints() {
+  const {CustomModule} = NativeModules;
   //get all mounting points
   try {
     let mountingPoints = await RNFS.getAllExternalFilesDirs();
@@ -16,7 +18,17 @@ export default async function getMountingPoints() {
       mountingPoints[i] = {
         name: getStorageName(basePath),
         path: basePath,
-        parent: '0',
+        id: await new Promise(res => {
+          CustomModule.getMountingPoints(
+            basePath,
+            id => res(parseInt(id)),
+            error => {
+              console.error('Error fetching media files:', error);
+              res([]);
+            },
+          );
+        }),
+        parent: 'Home',
         size: -1,
         type: 'Home',
         ext: '/',
