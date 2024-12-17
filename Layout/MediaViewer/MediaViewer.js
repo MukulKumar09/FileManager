@@ -28,20 +28,21 @@ export default function MediaViewer({media}) {
           resizeMode="contain"
         />
       )}
-      {type == 'video' && (
-        <Video
-          source={{uri: 'file://' + path}}
-          controls={true}
-          autoPlay={true}
-          style={[
-            {
-              height: 200,
-              width: '100%',
-              resizeMode: 'contain',
-            },
-          ]}
-        />
-      )}
+      {type == 'video' ||
+        (type == 'audio' && (
+          <Video
+            source={{uri: 'file://' + path}}
+            controls={true}
+            autoPlay={true}
+            style={[
+              {
+                height: 200,
+                width: '100%',
+                resizeMode: 'contain',
+              },
+            ]}
+          />
+        ))}
       <View
         style={[
           styles.rowLayout,
@@ -50,7 +51,11 @@ export default function MediaViewer({media}) {
             justifyContent: 'space-between',
           },
         ]}>
-        <Text style={[styles.padding, styles.text]}>{name}</Text>
+        <Text
+          numberOfLines={2}
+          style={[styles.wide, styles.padding, styles.text]}>
+          {name}
+        </Text>
         <Pressable
           style={[styles.padding]}
           onPress={() => dispatch({type: 'SETMEDIA', payload: false})}>

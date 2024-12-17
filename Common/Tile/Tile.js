@@ -6,13 +6,7 @@ export default function Tile({name, icon, onPress}) {
   return (
     <Pressable
       onPress={onPress}
-      style={[
-        styles.pill,
-        // styles.wide,
-        styles.padding,
-        styles.mediumGap,
-        styles.centered,
-      ]}>
+      style={[styles.pill, styles.padding, styles.mediumGap, styles.centered]}>
       <MaterialIcon name={icon} color="white" />
       <Text style={[styles.text, styles.textGreyed, styles.oswald]}>
         {name}

@@ -1,6 +1,6 @@
 import FileViewer from 'react-native-file-viewer';
 export default function useOpenExternally(dispatch, item) {
-  const {name, ext} = item;
+  const {ext, path} = item;
   if (ext == 'apk') {
     dispatch({
       type: 'TOAST',
@@ -8,7 +8,7 @@ export default function useOpenExternally(dispatch, item) {
     });
     return;
   }
-  FileViewer.open(`${item.parent}${name}`, {
+  FileViewer.open(path, {
     showOpenWithDialog: true,
   }) // absolute-path-to-my-local-file.
     .then(() => {

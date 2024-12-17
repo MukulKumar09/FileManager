@@ -10,7 +10,7 @@ export default async function getAndSetFilesList(
 ) {
   console.log('item', item);
   const {TabberModule} = NativeModules;
-  setFilesList([]);
+  setFilesList([]); //clearing to prevent virtualizedlist to fire all items before updating
   async function getMediaFilesList() {
     return await new Promise(res => {
       TabberModule.getMedia(

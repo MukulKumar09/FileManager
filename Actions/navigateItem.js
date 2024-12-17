@@ -23,6 +23,13 @@ export default function navigateItem(dispatch, pushBreadCrumb, index, item) {
       dispatch({type: 'SETMEDIA', payload: {...item, type: 'video'}});
       break;
     }
+    case 'wav':
+    case 'mid':
+    case 'ogg':
+    case 'mp3': {
+      dispatch({type: 'SETMEDIA', payload: {...item, type: 'audio'}});
+      break;
+    }
     default: {
       useOpenExternally(dispatch, item);
     }

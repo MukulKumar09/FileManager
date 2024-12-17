@@ -1,8 +1,7 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
-import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import handleDelete from '../../../Services/fileUtils/handleDelete';
 import FileItem from '../../../Common/FileItem/FileItem';
 
@@ -18,19 +17,19 @@ export default function RecycleBin({onRequestClose}) {
       </Text>
       {state.recycleBin.map(item => (
         <View key={item.path} style={[styles.rowLayout, styles.mediumGap]}>
-          <FileItem key={item.path} item={item} showSize={true} />
+          <FileItem key={item.path} item={item} showPath={true} />
         </View>
       ))}
       <View style={[styles.rowLayout, styles.mediumGap]}>
         {state.recycleBin.length > 0 && (
           <>
-            <BorderButton
+            <DefaultButton
               label="Delete"
               onPress={() => {
                 handleDelete(dispatch, state.recycleBin);
               }}
             />
-            <BorderButton
+            <DefaultButton
               label="Clear"
               onPress={() => {
                 dispatch({type: 'SETRECYCLEBIN', payload: []});
@@ -38,7 +37,11 @@ export default function RecycleBin({onRequestClose}) {
             />
           </>
         )}
-        <HighlightButton label="Cancel" onPress={onRequestClose} />
+        <DefaultButton
+          isHighlighted={true}
+          label="Cancel"
+          onPress={onRequestClose}
+        />
       </View>
     </View>
   );

@@ -1,6 +1,6 @@
 import {Linking, Pressable, Text, View} from 'react-native';
 import styles, {grey} from '../../../styles/styles';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import MaterialIcon from '../../../Common/MaterialIcon/MaterialIcon';
 
 export default function About({onRequestClose}) {
@@ -35,8 +35,8 @@ export default function About({onRequestClose}) {
         </View>
       </View>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton label="Close" onPress={onRequestClose} />
-        <BorderButton
+        <DefaultButton label="Close" onPress={onRequestClose} />
+        <DefaultButton
           isHighlighted={true}
           label="⭐ Rate"
           onPress={onRequestClose}

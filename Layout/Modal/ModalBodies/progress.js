@@ -2,7 +2,7 @@ import {View, Text, ActivityIndicator} from 'react-native';
 import styles, {textColor} from '../../../styles/styles';
 import {useDispatch} from 'react-redux';
 import {useEffect, useState, useRef} from 'react';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import iterateCollectedItems from '../../../Services/fileUtils/iterateCollectedItems';
 import Icon from '../../../Common/Icon/Icon';
 
@@ -66,7 +66,7 @@ const Progress = ({onRequestClose, items, cb}) => {
             style={[styles.text, styles.smallText]}>{`${totalProgress}%`}</Text>
         </View>
       </View>
-      <BorderButton
+      <DefaultButton
         label="Cancel"
         onPress={() => {
           isRunning.current = 0;

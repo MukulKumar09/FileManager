@@ -1,7 +1,7 @@
 import {Text, View} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import {useState} from 'react';
 import realmOpen from '../../../Services/realm/realmOpen';
 
@@ -30,24 +30,24 @@ export default function Sort({onRequestClose}) {
     <View style={[styles.bigGap]}>
       <Text style={[styles.text]}>Type</Text>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton
+        <DefaultButton
           label="Name"
           isHighlighted={type == 'name' && true}
           onPress={() => setType('name')}
         />
-        <BorderButton
+        <DefaultButton
           label="Size"
           isHighlighted={type == 'size' && true}
           onPress={() => setType('size')}
         />
       </View>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton
+        <DefaultButton
           label="Extension"
           isHighlighted={type == 'extension' && true}
           onPress={() => setType('extension')}
         />
-        <BorderButton
+        <DefaultButton
           label="Date"
           isHighlighted={type == 'date' && true}
           onPress={() => setType('date')}
@@ -56,12 +56,12 @@ export default function Sort({onRequestClose}) {
       <View style={[styles.divider]} />
       <Text style={[styles.text]}>Sort</Text>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton
+        <DefaultButton
           label="Ascending"
           isHighlighted={sort == 'ascending' && true}
           onPress={() => setSort('ascending')}
         />
-        <BorderButton
+        <DefaultButton
           label="Descending"
           isHighlighted={sort == 'descending' && true}
           onPress={() => setSort('descending')}
@@ -69,8 +69,8 @@ export default function Sort({onRequestClose}) {
       </View>
       <View style={[styles.divider]} />
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton label="Cancel" onPress={onRequestClose} />
-        <BorderButton
+        <DefaultButton label="Cancel" onPress={onRequestClose} />
+        <DefaultButton
           label="Sort"
           isHighlighted={true}
           onPress={() => updateSort()}

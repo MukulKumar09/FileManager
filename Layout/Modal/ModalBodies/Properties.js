@@ -1,6 +1,6 @@
 import {Text, View} from 'react-native';
 import styles from '../../../styles/styles';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import {bytesToSize} from '../../../Services/fileUtils/bytesToSize';
 import unixToDate from '../../../Services/fileUtils/unixToDate';
 
@@ -65,7 +65,7 @@ export default function Properties({resolve, onRequestClose, items}) {
         </View>
       )}
 
-      <BorderButton label="Close" onPress={onRequestClose} />
+      <DefaultButton label="Close" onPress={onRequestClose} />
     </View>
   );
 }

@@ -2,8 +2,7 @@ import {TextInput, View, Pressable, Text} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch} from 'react-redux';
 import {useCallback, useState} from 'react';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
-import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import checkNameValid from '../../../Services/fileUtils/checkNameValid';
 
 const InputValue = ({resolve, item, onRequestClose}) => {
@@ -38,8 +37,12 @@ const InputValue = ({resolve, item, onRequestClose}) => {
         ]}
       />
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton label="Cancel" onPress={() => onRequestClose()} />
-        <HighlightButton label="Confirm" onPress={() => verifyName()} />
+        <DefaultButton label="Cancel" onPress={() => onRequestClose()} />
+        <DefaultButton
+          isHighlighted={true}
+          label="Confirm"
+          onPress={() => verifyName()}
+        />
       </View>
     </View>
   );

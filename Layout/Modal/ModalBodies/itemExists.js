@@ -1,8 +1,7 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch} from 'react-redux';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
-import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 import SmallGrayText from '../../../Common/SmallGrayText/SmallGrayText';
 import askToRename from '../../../Services/askToRename';
 import Icon from '../../../Common/Icon/Icon';
@@ -30,15 +29,16 @@ const ItemExists = ({resolve, item, onRequestClose}) => {
         </View>
       </View>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton label="Skip" onPress={() => onRequestClose()} />
-        <BorderButton
+        <DefaultButton label="Skip" onPress={() => onRequestClose()} />
+        <DefaultButton
           label="Overwrite"
           onPress={() => {
             resolve('/overwrite');
             dispatch({type: 'POPMODALSTACK'});
           }}
         />
-        <HighlightButton
+        <DefaultButton
+          isHighlighted={true}
           label="Rename"
           onPress={async () => resolve(askToRename(dispatch, item, resolve))}
         />

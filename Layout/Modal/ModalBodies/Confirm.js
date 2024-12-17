@@ -1,8 +1,7 @@
 import {Text, View, Pressable} from 'react-native';
 import styles from '../../../styles/styles';
 import {useDispatch} from 'react-redux';
-import BorderButton from '../../../Common/BorderButton/BorderButton';
-import HighlightButton from '../../../Common/HighlightButton/HighlightButton';
+import DefaultButton from '../../../Common/DefaultButton/DefaultButton';
 
 export default function Confirm({resolve, onRequestClose, description}) {
   const dispatch = useDispatch();
@@ -14,8 +13,12 @@ export default function Confirm({resolve, onRequestClose, description}) {
     <View style={[styles.bigGap]}>
       <Text style={[styles.text]}>{description}</Text>
       <View style={[styles.rowLayout, styles.mediumGap]}>
-        <BorderButton label="Cancel" onPress={onRequestClose} />
-        <HighlightButton label="Confirm" onPress={() => handleConfirm()} />
+        <DefaultButton label="Cancel" onPress={onRequestClose} />
+        <DefaultButton
+          isHighlighted={true}
+          label="Confirm"
+          onPress={() => handleConfirm()}
+        />
       </View>
     </View>
   );
