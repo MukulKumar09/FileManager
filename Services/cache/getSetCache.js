@@ -20,7 +20,6 @@ export default async function getSetCache(clickedItem) {
           name: item.name || item.title || '<UnknownFile>',
           ext: getFileExtension(item.name || item.title || '<UnknownFile>'),
           parent: clickedItemPath,
-          size: 10000,
         }));
         // console.log(mediaFiles);
         res(mediaFiles);

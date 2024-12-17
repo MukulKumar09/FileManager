@@ -2,7 +2,7 @@ import {Text, View} from 'react-native';
 import styles from '../../styles/styles';
 import {memo} from 'react';
 import {bytesToSize} from '../../Services/fileUtils/bytesToSize';
-import {unixToDate} from '../../Services/fileUtils/unixToDate';
+import unixToDate from '../../Services/fileUtils/unixToDate';
 import unixTo12Hour from '../../Services/fileUtils/unixTo12Hour';
 import SmallGrayText from '../SmallGrayText/SmallGrayText';
 import Icon from '../Icon/Icon';

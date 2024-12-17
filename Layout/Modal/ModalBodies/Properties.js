@@ -2,7 +2,7 @@ import {Text, View} from 'react-native';
 import styles from '../../../styles/styles';
 import BorderButton from '../../../Common/BorderButton/BorderButton';
 import {bytesToSize} from '../../../Services/fileUtils/bytesToSize';
-import {unixToDate} from '../../../Services/fileUtils/unixToDate';
+import unixToDate from '../../../Services/fileUtils/unixToDate';
 
 export default function Properties({resolve, onRequestClose, items}) {
   let size = 0,

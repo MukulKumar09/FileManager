@@ -65,22 +65,37 @@ public class TabberModule extends ReactContextBaseJavaModule {
                 int titleColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE);
                 int nameColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
                 int pathColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
-                int mimeTypeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE);
+                int ctimeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED);
+                int mtimeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED);
+                int sizeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE);
+                
                 int parentColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
 
                 while (cursor.moveToNext()) {
                     WritableMap image = Arguments.createMap();
+
                     long id = cursor.getLong(idColumn);
-                    String title = cursor.getString(titleColumn);
-                    String name = cursor.getString(nameColumn);
-                    String path = cursor.getString(pathColumn);
-                    String mimeType = cursor.getString(mimeTypeColumn);
-                    String parent = cursor.getString(parentColumn);
                     image.putString("id", String.valueOf(id));
+
+                    String title = cursor.getString(titleColumn);
                     image.putString("title", title);
+
+                    String name = cursor.getString(nameColumn);
                     image.putString("name", name);
+
+                    String path = cursor.getString(pathColumn);
                     image.putString("path", path);
-                    image.putString("mimeType", mimeType);
+
+                    String ctime = cursor.getString(ctimeColumn);
+                    image.putString("ctime", ctime);
+
+                    String mtime = cursor.getString(mtimeColumn);
+                    image.putString("mtime", mtime);
+
+                    String size = cursor.getString(sizeColumn);
+                    image.putString("size", size);
+                    
+                    String parent = cursor.getString(parentColumn);
                     image.putString("parent", parent);
                     imagesList.add(image);
                 }
@@ -122,7 +137,6 @@ public class TabberModule extends ReactContextBaseJavaModule {
                 int titleColumn = cursor.getColumnIndex(MediaStore.MediaColumns.TITLE);
                 int nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
                 int pathColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-                int mimeTypeColumn = cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE);
 
                 while (cursor.moveToNext()) {
                     WritableMap mediaMap = Arguments.createMap();
@@ -138,9 +152,6 @@ public class TabberModule extends ReactContextBaseJavaModule {
 
                     String path = cursor.getString(pathColumn);
                     mediaMap.putString("path", path);
-
-                    String mimeType = cursor.getString(mimeTypeColumn);
-                    mediaMap.putString("mimeType", mimeType);
 
                     int lastSlashIndex = path.lastIndexOf("/");
                     String parent = path.substring(0, lastSlashIndex);
