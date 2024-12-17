@@ -20,7 +20,7 @@ public class MyAppPackage implements ReactPackage {
            ReactApplicationContext reactContext) {
        List<NativeModule> modules = new ArrayList<>();
 
-       modules.add(new CustomModule(reactContext));
+       modules.add(new TabberModule(reactContext));
 
        return modules;
    }

@@ -48,19 +48,23 @@ function ToolBar({
               {Boolean(selectedItems) && (
                 <>
                   <Text style={{color: secondaryColor}}> | </Text>
-                  <CircularButton
-                    functionName={() => {
-                      setOption('openInNewTab');
-                    }}
-                    name="tab-plus"
-                  />
-                  <CircularButton
-                    functionName={() => {
-                      setOption('openWith');
-                    }}
-                    name="file-export-outline"
-                  />
-                  <Text style={{color: secondaryColor}}> | </Text>
+                  {selectedItems == 1 && (
+                    <>
+                      <CircularButton
+                        functionName={() => {
+                          setOption('openInNewTab');
+                        }}
+                        name="tab-plus"
+                      />
+                      <CircularButton
+                        functionName={() => {
+                          setOption('openWith');
+                        }}
+                        name="file-export-outline"
+                      />
+                      <Text style={{color: secondaryColor}}> | </Text>
+                    </>
+                  )}
                   {/* <CircularButton
                     functionName={() => {
                       setOption('openAs');

@@ -3,7 +3,7 @@ import normalizeTimestamp from '../fileUtils/normalizeTimestamp';
 import getStorageName from '../fileUtils/getStorageName';
 import {NativeModules} from 'react-native';
 export default async function getMountingPoints() {
-  const {CustomModule} = NativeModules;
+  const {TabberModule} = NativeModules;
   //get all mounting points
   try {
     let mountingPoints = await RNFS.getAllExternalFilesDirs();
@@ -19,7 +19,7 @@ export default async function getMountingPoints() {
         name: getStorageName(basePath),
         path: basePath,
         id: await new Promise(res => {
-          CustomModule.getMountingPoints(
+          TabberModule.getMountingPoints(
             basePath,
             id => res(parseInt(id)),
             error => {

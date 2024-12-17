@@ -133,9 +133,10 @@ export default StyleSheet.create({
     width: '100%',
   },
   bordered: {
-    borderColor: secondaryColor,
-    borderWidth: 2,
-    borderStyle: 'solid',
+    backgroundColor: backgroundColor,
+    // borderColor: highlightColor,
+    // borderWidth: 1,
+    // borderStyle: 'solid',
   },
   whiteBordered: {
     borderColor: 'white',

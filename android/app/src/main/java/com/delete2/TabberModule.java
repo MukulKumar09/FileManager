@@ -18,15 +18,15 @@ import java.util.List;
 
 
 
-public class CustomModule extends ReactContextBaseJavaModule {
+public class TabberModule extends ReactContextBaseJavaModule {
 
-    public CustomModule(ReactApplicationContext reactContext) {
+    public TabberModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     @Override
     public String getName() {
-        return "CustomModule";
+        return "TabberModule";
     }
 
     @ReactMethod
@@ -39,6 +39,7 @@ public class CustomModule extends ReactContextBaseJavaModule {
             cursor.moveToFirst();
             int idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID);
             long id = cursor.getLong(idColumn);
+            cursor.close();
             successCallback.invoke(String.valueOf(id));
         }catch (Exception e) {
             errorCallback.invoke(e.getMessage());
@@ -98,93 +99,66 @@ public class CustomModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getImages(Callback successCallback, Callback errorCallback){
+    public void getMedia(String mediaType,Callback successCallback, Callback errorCallback){
         try {
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
-            Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            List<WritableMap> imagesList = new ArrayList<>();
-            Cursor cursor = contentResolver.query(imageUri, null,null, null,null);
 
+            Uri mediaUri=null;
+            if(mediaType.equals("Photos")){
+                mediaUri=MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            }else if(mediaType.equals("Videos")){
+                mediaUri=MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            }else if(mediaType.equals("Audio")){
+                mediaUri=MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+            else if(mediaType.equals("Downloads")){
+                mediaUri=MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+            }
+            Cursor cursor = contentResolver.query(mediaUri, null,null, null,null);
+            
+            List<WritableMap> mediaList = new ArrayList<>();
             if (cursor != null) {
-                int idColumn = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-                int titleColumn = cursor.getColumnIndex(MediaStore.Images.Media.TITLE);
-                int nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
-                int pathColumn = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                int mimeTypeColumn = cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE);
+                int idColumn = cursor.getColumnIndex(MediaStore.MediaColumns._ID);
+                int titleColumn = cursor.getColumnIndex(MediaStore.MediaColumns.TITLE);
+                int nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+                int pathColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+                int mimeTypeColumn = cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE);
 
                 while (cursor.moveToNext()) {
-                    WritableMap image = Arguments.createMap();
+                    WritableMap mediaMap = Arguments.createMap();
+
                     long id = cursor.getLong(idColumn);
+                    mediaMap.putString("id", String.valueOf(id));
+
                     String title = cursor.getString(titleColumn);
+                    mediaMap.putString("title", title);
+
                     String name = cursor.getString(nameColumn);
+                    mediaMap.putString("name", name);
+
                     String path = cursor.getString(pathColumn);
+                    mediaMap.putString("path", path);
+
                     String mimeType = cursor.getString(mimeTypeColumn);
-                    image.putString("id", String.valueOf(id));
-                    image.putString("title", title);
-                    image.putString("name", name);
-                    image.putString("path", path);
-                    image.putString("mimeType", mimeType);
+                    mediaMap.putString("mimeType", mimeType);
+
                     int lastSlashIndex = path.lastIndexOf("/");
                     String parent = path.substring(0, lastSlashIndex);
-                    image.putString("parent", parent);
-                    imagesList.add(image);
+                    mediaMap.putString("parent", parent);
+                    
+                    mediaList.add(mediaMap);
                 }
                 cursor.close();
             }
 
             // Return the list of images to React Native
-            WritableArray imagesArray = Arguments.createArray();
-            for (WritableMap image : imagesList) {
-                imagesArray.pushMap(image);
+            WritableArray finalArray = Arguments.createArray();
+            for (WritableMap media : mediaList) {
+                finalArray.pushMap(media);
             }
-            successCallback.invoke(imagesArray);
+            successCallback.invoke(finalArray);
         } catch (Exception e) {
             errorCallback.invoke(e.getMessage());
         }
     }
-    
-    
-    
-    
-    // {
-    //     try {
-    //         ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
-    //         Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-    //         List<WritableMap> imagesList = new ArrayList<>();
-
-    //         // Query the MediaStore for images
-    //         Cursor cursor = contentResolver.query(imageUri, null, null, null, null);
-
-    //         if (cursor != null) {
-    //             int idColumn = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-    //             int titleColumn = cursor.getColumnIndex(MediaStore.Images.Media.TITLE);
-    //             int nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
-    //             int pathColumn = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-
-    //             while (cursor.moveToNext()) {
-    //                 WritableMap image = Arguments.createMap();
-    //                 long id = cursor.getLong(idColumn);
-    //                 String title = cursor.getString(titleColumn);
-    //                 String name = cursor.getString(nameColumn);
-    //                 String path = cursor.getString(pathColumn);
-    //                 image.putString("id", String.valueOf(id));
-    //                 image.putString("title", title);
-    //                 image.putString("name", name);
-    //                 image.putString("path", path);
-
-    //                 imagesList.add(image);
-    //             }
-    //             cursor.close();
-    //         }
-
-    //         // Return the list of images to React Native
-    //         WritableArray imagesArray = Arguments.createArray();
-    //         for (WritableMap image : imagesList) {
-    //             imagesArray.pushMap(image);
-    //         }
-    //         successCallback.invoke(imagesArray);
-    //     } catch (Exception e) {
-    //         errorCallback.invoke(e.getMessage());
-    //     }
-    // }
 }

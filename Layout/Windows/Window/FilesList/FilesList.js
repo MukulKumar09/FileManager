@@ -97,17 +97,15 @@ function FilesList({
   return (
     <>
       <TitleComp />
-      <React.StrictMode>
-        <VirtualizedFilesList
-          refresh={refresh}
-          setSelectedItems={setSelectedItems}
-          filesList={filesList}
-          setHoveredItem={setHoveredItem}
-          handlePress={handlePress}
-          handleLongPress={handleLongPress}
-          hoveredItem={hoveredItem}
-        />
-      </React.StrictMode>
+      <VirtualizedFilesList
+        refresh={refresh}
+        setSelectedItems={setSelectedItems}
+        filesList={filesList}
+        setHoveredItem={setHoveredItem}
+        handlePress={handlePress}
+        handleLongPress={handleLongPress}
+        hoveredItem={hoveredItem}
+      />
     </>
   );
 }

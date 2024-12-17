@@ -12,6 +12,7 @@ function VirtualizedFilesList({
   hoveredItem,
 }) {
   const [detectPressType, setDetectPressType] = useState(0);
+  const [data, setData] = useState(0);
   useEffect(() => {
     if (detectPressType.type == 1) {
       //onPress
@@ -19,9 +20,11 @@ function VirtualizedFilesList({
     }
     if (detectPressType.type == 2) {
       //onLongPress
-      handleLongPress(detectPressType.item, detectPressType.event);
+      !detectPressType.item.isMedia &&
+        handleLongPress(detectPressType.item, detectPressType.event);
     }
   }, [detectPressType]);
+
   const renderItem = ({item}) => {
     return (
       <VirtualizedFilesListItem
@@ -34,6 +37,7 @@ function VirtualizedFilesList({
       />
     );
   };
+
   return (
     <VirtualizedList
       onRefresh={() => {
@@ -43,6 +47,7 @@ function VirtualizedFilesList({
       removeClippedSubviews={true}
       refreshing={false} //refresh flag
       data={filesList}
+      extraData={data}
       keyExtractor={item => item.path}
       getItemCount={data => data.length}
       getItem={(data, index) => data[index]}

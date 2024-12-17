@@ -8,7 +8,7 @@ function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
     <>
       <ScrollView
         horizontal={true}
-        style={[styles.wide, styles.smallGap, {transform: [{scaleX: -1}]}]}>
+        style={[styles.wide, {transform: [{scaleX: -1}]}]}>
         <View
           style={[
             styles.rowLayout,
@@ -43,7 +43,7 @@ function BreadCrumbs({breadCrumbs, setBreadCrumbs}) {
         onPress={() => {
           setBreadCrumbs(goBackBreadCrumb(breadCrumbs));
         }}
-        style={[styles.smallPill, styles.bordered]}>
+        style={[styles.smallPill, styles.pillHighlight]}>
         <Text style={[styles.text, styles.smallText]}>Back</Text>
       </Pressable>
     </>

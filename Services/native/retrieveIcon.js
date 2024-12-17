@@ -5,7 +5,7 @@ import {Image} from 'react-native';
 export default async function retrieveIcon(item, mediaType) {
   const thumbDir = `file://${RNFS.ExternalDirectoryPath}/thumbnails`;
   const file = item.ext == 'png' ? `${item.path}.png` : `${item.path}.jpg`;
-  const isThumbExists = await checkExists(thumbDir, file);
+  const isThumbExists = await checkExists(thumbDir, file.substring(1));
   let thumbStatus = {status: 'success'};
   if (!isThumbExists) {
     thumbStatus = await createThumbnail({
@@ -21,7 +21,7 @@ export default async function retrieveIcon(item, mediaType) {
         source={{
           uri: thumbDir + '/' + file,
         }}
-        style={{width: 50, height: 50, resizeMode: 'contain'}}
+        style={{width: 60, height: 60, resizeMode: 'contain'}}
       />
     );
   }

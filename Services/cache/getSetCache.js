@@ -4,7 +4,7 @@ import realmOpen from '../realm/realmOpen';
 import validateCache from '../realm/validateCache';
 import {NativeModules} from 'react-native';
 export default async function getSetCache(clickedItem) {
-  const {CustomModule} = NativeModules;
+  const {TabberModule} = NativeModules;
   const realm = await realmOpen();
   const {id, mtime, path: clickedItemPath, name: clickedItemName} = clickedItem;
   if (clickedItemPath == 'Home') {
@@ -12,7 +12,7 @@ export default async function getSetCache(clickedItem) {
     return homeData;
   }
   const data = await new Promise(res => {
-    CustomModule.getAllFiles(
+    TabberModule.getAllFiles(
       parseInt(id),
       mediaFiles => {
         mediaFiles = mediaFiles.map(item => ({

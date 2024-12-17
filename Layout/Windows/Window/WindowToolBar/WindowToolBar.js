@@ -23,7 +23,7 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
     );
   }
   return (
-    <View style={[styles.rowLayout, styles.marginSmall, styles.mediumGap]}>
+    <View style={[styles.rowLayout, styles.marginSmall, styles.smallGap]}>
       {/* {Boolean(filterBar) && (
         <FilterBar filterBar={filterBar} setFilterBar={setFilterBar} />
       )} */}
@@ -53,7 +53,6 @@ function WindowToolBar({breadCrumbs, setBreadCrumbs}) {
           <SmallMaterialIcon name="filter" color />
         </Text>
       </Pressable> */}
-      <Text style={[styles.textGreyed]}>|</Text>
       <BreadCrumbs breadCrumbs={breadCrumbs} setBreadCrumbs={setBreadCrumbs} />
     </View>
   );

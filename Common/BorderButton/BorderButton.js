@@ -14,8 +14,8 @@ export default function BorderButton({
       style={[
         btnStyle,
         styles.pill,
-        isHighlighted && styles.pillHighlight,
         styles.bordered,
+        isHighlighted && styles.pillHighlight,
         styles.wide,
         styles.centered,
         styles.padding,

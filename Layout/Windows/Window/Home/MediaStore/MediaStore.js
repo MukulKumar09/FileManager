@@ -8,13 +8,13 @@ export default function MediaStore({pushBreadCrumb}) {
       path: name,
       ext,
       useDefaultIcon: true,
-      isMedia: true,
+      isMedia: name,
       isTabberPath: true,
     });
   };
   return (
     <>
-      <View style={[styles.rowLayout, styles.bigGap]}>
+      <View style={[styles.rowLayout, styles.centered, styles.mediumGap]}>
         <Tile
           onPress={() => {
             pushBreadCrumbCB('Photos', 'camera-outline');
@@ -29,22 +29,20 @@ export default function MediaStore({pushBreadCrumb}) {
           icon="video-outline"
           name="Videos"
         />
-      </View>
-      <View style={[styles.rowLayout, styles.bigGap]}>
         <Tile
           onPress={() => {
             pushBreadCrumbCB('Audio', 'headphones');
           }}
           icon="headphones"
-          name="Audio"
+          name="Audios"
         />
-        <Tile
+        {/* <Tile
           onPress={() => {
             pushBreadCrumbCB('Documents', 'file-document-outline');
           }}
           icon="file-document-outline"
-          name="Documents"
-        />
+          name="Docs"
+        /> */}
         <Tile
           onPress={() => {
             pushBreadCrumbCB('Downloads', 'download-outline');

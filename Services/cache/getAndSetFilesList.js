@@ -9,18 +9,19 @@ export default async function getAndSetFilesList(
   sort,
 ) {
   console.log('item', item);
-  const {CustomModule} = NativeModules;
+  const {TabberModule} = NativeModules;
   setFilesList([]);
-  async function getMedia() {
+  async function getMediaFilesList() {
     return await new Promise(res => {
-      CustomModule.getImages(
-        mediaFiles => {
-          mediaFiles = mediaFiles.map(item => ({
-            ...item,
-            ext: getFileExtension(item.name),
+      TabberModule.getMedia(
+        item.isMedia,
+        images => {
+          images = images.map(image => ({
+            ...image,
+            ext: getFileExtension(image.name),
             isMedia: true,
           }));
-          res(mediaFiles);
+          res(images);
         },
         error => {
           console.error('Error fetching media files:', error);
@@ -31,11 +32,9 @@ export default async function getAndSetFilesList(
   }
   let filesCache;
   setIsLoading(1);
-  if (item.isMedia) {
-    filesCache = await getMedia();
-  } else {
-    filesCache = await getFilesList(item, sort);
-  }
+  filesCache = item.isMedia
+    ? await getMediaFilesList(item.isMedia)
+    : await getFilesList(item, sort);
   setFilesList(filesCache);
   setIsLoading(0);
 }

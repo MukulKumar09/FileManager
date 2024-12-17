@@ -7,9 +7,8 @@ export default function Tile({name, icon, onPress}) {
     <Pressable
       onPress={onPress}
       style={[
-        styles.rowLayout,
         styles.pill,
-        styles.wide,
+        // styles.wide,
         styles.padding,
         styles.mediumGap,
         styles.centered,
