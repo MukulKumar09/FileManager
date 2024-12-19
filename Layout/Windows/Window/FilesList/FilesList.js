@@ -58,21 +58,24 @@ function FilesList({
   );
   const handleLongPress = useCallback(
     (item, event) => {
-      if (selectionFlag) {
-        const res = handleFileLongPress(
-          dispatch,
-          item,
-          event,
-          lastClickedItem,
-          filesList,
-        );
-        if (res) {
-          setLastClickedItem(res.lastClickedItem);
-          setSelectedItems(prev => prev + res.selectedItems);
-          setFilesList(res.filesList);
+      console.log(item);
+      if (!item.mediaType) {
+        if (selectionFlag) {
+          const res = handleFileLongPress(
+            dispatch,
+            item,
+            event,
+            lastClickedItem,
+            filesList,
+          );
+          if (res) {
+            setLastClickedItem(res.lastClickedItem);
+            setSelectedItems(prev => prev + res.selectedItems);
+            setFilesList(res.filesList);
+          }
+        } else {
+          callHighlightItemCB(item);
         }
-      } else {
-        callHighlightItemCB(item);
       }
     },
     [selectionFlag, filesList, lastClickedItem],

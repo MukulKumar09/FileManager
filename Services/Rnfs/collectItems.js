@@ -1,5 +1,5 @@
-import RNFS from 'react-native-fs';
 import getFileExtension from '../fileUtils/getFileExtension';
+import getAllFilesFromId from '../native/getAllFilesFromId';
 
 export default async function collectItems(clipboardItems, destTab) {
   const {source, items} = clipboardItems;
@@ -9,11 +9,8 @@ export default async function collectItems(clipboardItems, destTab) {
   async function recurseCB(items, destination) {
     let listItems = [];
     for (let item of items) {
-      if (
-        item.type == 'dir' ||
-        (item.isDirectory && item.isDirectory() == true)
-      ) {
-        let dirItems = await RNFS.readDir(item.path);
+      if (item.ext == '/') {
+        const dirItems = await getAllFilesFromId(item);
         const destPath = destination + '/' + item.name;
         const subChilds = await recurseCB(dirItems, destPath);
         collectedItems[item.path] = subChilds;

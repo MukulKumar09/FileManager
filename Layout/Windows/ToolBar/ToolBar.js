@@ -45,9 +45,9 @@ function ToolBar({
                 }}
                 name="magnify"
               />
+              <Text style={{color: secondaryColor}}> | </Text>
               {Boolean(selectedItems) && (
                 <>
-                  <Text style={{color: secondaryColor}}> | </Text>
                   {selectedItems == 1 && (
                     <>
                       <CircularButton
@@ -71,6 +71,19 @@ function ToolBar({
                     }}
                     name="file-question-outline"
                   /> */}
+                </>
+              )}
+              {state.clipboardItems.items.length > 0 && (
+                <CircularButton
+                  functionName={() => {
+                    setOption('paste');
+                  }}
+                  name="content-paste"
+                  color={textColor}
+                />
+              )}
+              {Boolean(selectedItems) && (
+                <>
                   <CircularButton
                     functionName={() => {
                       setOption('copy');
@@ -84,15 +97,6 @@ function ToolBar({
                     }}
                     name="content-cut"
                   />
-                  {state.clipboardItems.items.length > 0 && (
-                    <CircularButton
-                      functionName={() => {
-                        setOption('paste');
-                      }}
-                      name="content-paste"
-                      color={textColor}
-                    />
-                  )}
 
                   <CircularButton
                     functionName={() => {

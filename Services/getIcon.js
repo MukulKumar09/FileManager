@@ -69,7 +69,7 @@ export default async function getIcon(item) {
       style={[
         styles.text,
         styles.oswald,
-        styles.smallDarkText,
+        styles.textGreyed,
         {width: 30, textAlign: 'center'},
       ]}>
       {item.ext}

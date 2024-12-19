@@ -8,7 +8,7 @@ export default async function handleOpenInNewTab(
   const lastHighlightedItem = {
     ...filesList.find(item => item.isHighlighted),
   };
-  if (lastHighlightedItem.type == 'dir') {
+  if (lastHighlightedItem.ext == '/') {
     lastHighlightedItem.isCustomItem = true;
     addNewTabFromItem(dispatch, tabCounter, lastHighlightedItem);
   } else {

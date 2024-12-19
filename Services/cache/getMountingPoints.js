@@ -35,6 +35,7 @@ export default async function getMountingPoints() {
         mtime: normalizeTimestamp(stat.mtime),
       };
     }
+    console.log(mountingPoints);
     return mountingPoints;
   } catch (error) {
     throw new Error('Error getting Mounting Points', error.message);

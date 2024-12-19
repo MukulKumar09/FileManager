@@ -29,8 +29,8 @@ export default function LayoutWrapper() {
           </View>
         </GestureDetector>
       </GestureHandlerRootView>
-      <MediaViewerWrapper />
       <Tabbar translationX={translationX} translationY={translationY} />
+      <MediaViewerWrapper />
     </>
   );
 }

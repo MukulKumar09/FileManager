@@ -3,8 +3,10 @@ import {Image, Pressable, Text, View} from 'react-native';
 import MaterialIcon from '../../Common/MaterialIcon/MaterialIcon';
 import styles, {primaryColor, secondaryColor} from '../../styles/styles';
 import Video from 'react-native-video';
+import {useState} from 'react';
 export default function MediaViewer({media}) {
   const dispatch = useDispatch();
+  const [isMaximize, setIsMaximize] = useState(false);
   const {path, type, name} = media;
   return (
     <View
@@ -14,35 +16,37 @@ export default function MediaViewer({media}) {
         left: 0,
         right: 0,
         top: 0,
+        bottom: isMaximize ? 0 : null,
         backgroundColor: primaryColor,
       }}>
-      {type == 'photo' && (
-        <Image
-          source={{uri: 'file://' + path}}
-          style={[
-            {
-              height: 200,
-              width: '100%',
-            },
-          ]}
-          resizeMode="contain"
-        />
-      )}
-      {type == 'video' ||
-        (type == 'audio' && (
+      <View style={[styles.wide, {height: isMaximize ? '100%' : 200}]}>
+        {type == 'photo' && (
+          <Image
+            source={{uri: 'file://' + path}}
+            style={[
+              styles.wide,
+              {
+                resizeMode: 'contain',
+              },
+            ]}
+            resizeMode="contain"
+          />
+        )}
+        {(type == 'video' || type == 'audio') && (
           <Video
+            onError={e => console.log(e)}
             source={{uri: 'file://' + path}}
             controls={true}
             autoPlay={true}
             style={[
+              styles.wide,
               {
-                height: 200,
-                width: '100%',
                 resizeMode: 'contain',
               },
             ]}
           />
-        ))}
+        )}
+      </View>
       <View
         style={[
           styles.rowLayout,
@@ -56,11 +60,22 @@ export default function MediaViewer({media}) {
           style={[styles.wide, styles.padding, styles.text]}>
           {name}
         </Text>
-        <Pressable
-          style={[styles.padding]}
-          onPress={() => dispatch({type: 'SETMEDIA', payload: false})}>
-          <MaterialIcon name="close" isSmall={true} color="#ffffff" />
-        </Pressable>
+        <View style={[styles.rowLayout]}>
+          <Pressable
+            style={[styles.padding]}
+            onPress={() => setIsMaximize(prev => !prev)}>
+            <MaterialIcon
+              name={isMaximize ? 'window-minimize' : 'window-maximize'}
+              isSmall={true}
+              color="#ffffff"
+            />
+          </Pressable>
+          <Pressable
+            style={[styles.padding]}
+            onPress={() => dispatch({type: 'SETMEDIA', payload: false})}>
+            <MaterialIcon name="close" isSmall={true} color="#ffffff" />
+          </Pressable>
+        </View>
       </View>
     </View>
   );

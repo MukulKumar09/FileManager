@@ -101,7 +101,7 @@ export default StyleSheet.create({
     resizeMode: 'contain',
   },
   smallImageIcon: {
-    height: 20,
+    maxHeight: 20,
     resizeMode: 'contain',
   },
   //utils

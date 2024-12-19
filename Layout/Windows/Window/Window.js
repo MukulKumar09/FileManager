@@ -57,7 +57,7 @@ const Window = memo(({index, sort, item, isActive, isRefresh}) => {
   );
 
   useBackHandler(isActive, item, breadCrumbs, setBreadCrumbs);
-  useFetchThumbnail(filesList, item, setFilesList);
+  useBreadCrumb(breadCrumbs, refresh, index);
   useHandleOptions(
     option,
     filesList,
@@ -67,7 +67,6 @@ const Window = memo(({index, sort, item, isActive, isRefresh}) => {
     refresh,
     pushBreadCrumb,
   );
-  useBreadCrumb(breadCrumbs, refresh, index);
 
   useEffect(() => {
     if (isActive) {

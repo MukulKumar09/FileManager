@@ -26,9 +26,9 @@ function VirtualizedFilesListItem({
       <FileItem
         key={item.path}
         item={item}
-        showSize={item.isMedia ? false : true}
-        showPath={item.isMedia ? true : false}
-        showDate={item.isMedia ? false : true}
+        showSize={item.mediaType ? false : true}
+        showPath={item.mediaType ? true : false}
+        showDate={item.mediaType ? false : true}
       />
     </Pressable>
   );

@@ -2,10 +2,7 @@ package com.tabber;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Thumbnails;
-import androidx.annotation.NonNull;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -33,9 +30,9 @@ public class TabberModule extends ReactContextBaseJavaModule {
     public void getMountingPoints(String path,Callback successCallback, Callback errorCallback) {
         try{
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
-            Uri imageUri = MediaStore.Files.getContentUri("external");
-            String selection = MediaStore.MediaColumns.DATA + " = '"+path+"'";
-            Cursor cursor = contentResolver.query(imageUri, null,selection, null,null);
+            Uri mediaStoreUri = MediaStore.Files.getContentUri("external");
+            String filter = MediaStore.MediaColumns.DATA + " = '"+path+"'";
+            Cursor cursor = contentResolver.query(mediaStoreUri, null,filter, null,null);
             cursor.moveToFirst();
             int idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID);
             long id = cursor.getLong(idColumn);
@@ -47,96 +44,79 @@ public class TabberModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getAllFiles(int folderId,Callback successCallback, Callback errorCallback) {
-        try {
+    public void getThumbnailPath(String path,Callback successCallback, Callback errorCallback) {
+        try{
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
-            // Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            Uri imageUri = MediaStore.Files.getContentUri("external");
-            List<WritableMap> imagesList = new ArrayList<>();
+            
+            Uri mediaStoreUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            String mediaFilter = "_data = '"+path+"'";
+            Cursor mediaCursor = contentResolver.query(mediaStoreUri, null,mediaFilter, null,null);
+            mediaCursor.moveToFirst();
+            int mediaIdColumn = mediaCursor.getColumnIndex("_id");
+            int mediaId = mediaCursor.getInt(mediaIdColumn);
 
-            // Query the MediaStore for images
-            // String selection = MediaStore.MediaColumns.DATA + " = '/storage/emulated/0'";
-            String selection = MediaStore.Files.FileColumns.PARENT + " = '"+folderId+"'";
-            // String[] selectionArgs = new String[]{folderId }; 
-            Cursor cursor = contentResolver.query(imageUri, null,selection, null,null);
+            // String thumbFilter = "image_id = "+mediaId;
+            String thumbFilter = null;
+            Cursor thumbCursor = contentResolver.query(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, null,null, null,null);
 
-            if (cursor != null) {
-                int idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID);
-                int titleColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE);
-                int nameColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
-                int pathColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
-                int ctimeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED);
-                int mtimeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED);
-                int sizeColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE);
-                
-                int parentColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
-
-                while (cursor.moveToNext()) {
-                    WritableMap image = Arguments.createMap();
-
-                    long id = cursor.getLong(idColumn);
-                    image.putString("id", String.valueOf(id));
-
-                    String title = cursor.getString(titleColumn);
-                    image.putString("title", title);
-
-                    String name = cursor.getString(nameColumn);
-                    image.putString("name", name);
-
-                    String path = cursor.getString(pathColumn);
-                    image.putString("path", path);
-
-                    String ctime = cursor.getString(ctimeColumn);
-                    image.putString("ctime", ctime);
-
-                    String mtime = cursor.getString(mtimeColumn);
-                    image.putString("mtime", mtime);
-
-                    String size = cursor.getString(sizeColumn);
-                    image.putString("size", size);
-                    
-                    String parent = cursor.getString(parentColumn);
-                    image.putString("parent", parent);
-                    imagesList.add(image);
-                }
-                cursor.close();
+            if (thumbCursor != null && thumbCursor.moveToFirst()) {
+                int thumbIdColumn = thumbCursor.getColumnIndex("_data");
+                String thumbPath = thumbCursor.getString(thumbIdColumn);
+                successCallback.invoke(thumbPath);
+                mediaCursor.close();
+                thumbCursor.close();
+            } else {
+                successCallback.invoke(String.valueOf(thumbCursor.getCount()));
+                mediaCursor.close();
+                thumbCursor.close();
             }
-
-            // Return the list of images to React Native
-            WritableArray imagesArray = Arguments.createArray();
-            for (WritableMap image : imagesList) {
-                imagesArray.pushMap(image);
-            }
-            successCallback.invoke(imagesArray);
-        } catch (Exception e) {
+            
+            
+        }catch (Exception e) {
             errorCallback.invoke(e.getMessage());
         }
     }
 
+     public static String getExtension(String name){
+        String[] extension = name.split("\\."); 
+        String ext = extension[extension.length - 1];
+        String result = extension.length > 1 ? ext : name;
+        return result;
+    };
+
     @ReactMethod
-    public void getMedia(String mediaType,Callback successCallback, Callback errorCallback){
+    public void getAllFiles(int folderId,String mediaType,Callback successCallback, Callback errorCallback){
         try {
             ContentResolver contentResolver = getReactApplicationContext().getContentResolver();
 
-            Uri mediaUri=null;
-            if(mediaType.equals("Photos")){
-                mediaUri=MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri mediaStoreUri=null;
+            String filter=null;
+
+            if(mediaType==null){
+                mediaStoreUri=MediaStore.Files.getContentUri("external");
+                filter = MediaStore.Files.FileColumns.PARENT + " = '"+folderId+"'";
+            }else if(mediaType.equals("Photos")){
+                mediaStoreUri=MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             }else if(mediaType.equals("Videos")){
-                mediaUri=MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                mediaStoreUri=MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             }else if(mediaType.equals("Audio")){
-                mediaUri=MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                mediaStoreUri=MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }else if(mediaType.equals("Downloads")){
+                mediaStoreUri=MediaStore.Downloads.EXTERNAL_CONTENT_URI;
             }
-            else if(mediaType.equals("Downloads")){
-                mediaUri=MediaStore.Downloads.EXTERNAL_CONTENT_URI;
-            }
-            Cursor cursor = contentResolver.query(mediaUri, null,null, null,null);
+
+            Cursor cursor = contentResolver.query(mediaStoreUri, null,filter, null,null);
             
             List<WritableMap> mediaList = new ArrayList<>();
             if (cursor != null) {
-                int idColumn = cursor.getColumnIndex(MediaStore.MediaColumns._ID);
-                int titleColumn = cursor.getColumnIndex(MediaStore.MediaColumns.TITLE);
-                int nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-                int pathColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+                int idColumn = cursor.getColumnIndex("_id");
+                int titleColumn = cursor.getColumnIndex("title");
+                int nameColumn = cursor.getColumnIndex("_display_name");
+                int pathColumn = cursor.getColumnIndex("_data");
+                int ctimeColumn = cursor.getColumnIndex("date_added");
+                int mtimeColumn = cursor.getColumnIndex("date_modified");
+                int sizeColumn = cursor.getColumnIndex("_size");
+                int mimeTypeColumn = cursor.getColumnIndex("mime_type");
 
                 while (cursor.moveToNext()) {
                     WritableMap mediaMap = Arguments.createMap();
@@ -147,11 +127,27 @@ public class TabberModule extends ReactContextBaseJavaModule {
                     String title = cursor.getString(titleColumn);
                     mediaMap.putString("title", title);
 
-                    String name = cursor.getString(nameColumn);
+                    String nameVal = cursor.getString(nameColumn);
+                    String name =(nameVal != null ? nameVal : (title != null ? title : "<Unknown Item>"));
                     mediaMap.putString("name", name);
+
+                    String mimeType=cursor.getString(mimeTypeColumn);
+                    mediaMap.putString("mimeType", mimeType);
+
+                    String ext=mimeType==null ? "/" : getExtension(name);
+                    mediaMap.putString("ext", ext);
 
                     String path = cursor.getString(pathColumn);
                     mediaMap.putString("path", path);
+
+                    String ctime = cursor.getString(ctimeColumn);
+                    mediaMap.putString("ctime", ctime);
+
+                    String mtime = cursor.getString(mtimeColumn);
+                    mediaMap.putString("mtime", mtime);
+
+                    String size = cursor.getString(sizeColumn);
+                    mediaMap.putString("size", size);
 
                     int lastSlashIndex = path.lastIndexOf("/");
                     String parent = path.substring(0, lastSlashIndex);
@@ -159,8 +155,8 @@ public class TabberModule extends ReactContextBaseJavaModule {
                     
                     mediaList.add(mediaMap);
                 }
-                cursor.close();
             }
+            cursor.close();
 
             // Return the list of images to React Native
             WritableArray finalArray = Arguments.createArray();

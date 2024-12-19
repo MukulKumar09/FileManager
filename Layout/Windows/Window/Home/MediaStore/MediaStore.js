@@ -8,7 +8,7 @@ export default function MediaStore({pushBreadCrumb}) {
       path: name,
       ext,
       useDefaultIcon: true,
-      isMedia: name,
+      mediaType: name,
       isTabberPath: true,
     });
   };

@@ -20,7 +20,7 @@ function VirtualizedFilesList({
     }
     if (detectPressType.type == 2) {
       //onLongPress
-      !detectPressType.item.isMedia &&
+      !detectPressType.item.mediaType &&
         handleLongPress(detectPressType.item, detectPressType.event);
     }
   }, [detectPressType]);
